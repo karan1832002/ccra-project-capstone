@@ -1,0 +1,87 @@
+{
+  "slug": "board-of-directors",
+  "title": "Board of Directors",
+
+  "members": [
+    {
+      "role": "President",
+      "name": "Joe Fisher",
+      "photo": "",
+      "phone": "(403) 404-8079"
+    },
+    {
+      "role": "Vice President / Secretary",
+      "name": "Sandy Creasey",
+      "photo": ""
+    },
+    {
+      "role": "Barrel Racing/Treasurer",
+      "name": "Charity Aneca",
+      "photo": "",
+      "phone": "(403) 892-9786"
+    },
+    {
+      "role": "Office Manager",
+      "name": "Aimee Cripps",
+      "photo": ""
+    },
+    {
+      "role": "Ladies Breakaway Roping",
+      "name": "Glynnis Turcato",
+      "photo": "",
+      "phone": "(403) 308-7266"
+    },
+    {
+      "role": "Team Roping",
+      "name": "Wanda McKenna",
+      "photo": "",
+      "phone": "(403)548-0996"
+    },
+    {
+      "role": "Barrel Racing",
+      "name": "Marina Eckert",
+      "photo": "",
+      "phone": "(403) 330-6116"
+    },
+    {
+      "role": "Tie Down Roping",
+      "name": "Greg Henry",
+      "photo": ""
+    },
+    {
+      "role": "Ribbon Roping- Runners",
+      "name": "Connie Lemoine",
+      "photo": "",
+      "phone": "(403) 815-0080"
+    },
+    {
+      "role": "Ribbon Roping- Ropers",
+      "name": "Mark Hendricks",
+      "photo": "",
+      "phone": "(403) 540-9242"
+    },
+    {
+      "role": "Committee / US Representative",
+      "name": "Gina Icenoggle",
+      "photo": ""
+    },
+    {
+      "role": "Tie Down Roping",
+      "name": "Nathan Block",
+      "photo": "",
+      "phone": "(780) 728-2207"
+    },
+    {
+      "role": "Men’s Breakaway Roping",
+      "name": "Tim Bevans",
+      "photo": "",
+      "phone": "(403)308-9152"
+    },
+    {
+      "role": "Team Roping",
+      "name": "Kenny Ullery",
+      "photo": "",
+      "phone": "(403)801-2792"
+    }
+  ]
+}

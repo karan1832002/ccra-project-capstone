@@ -1,0 +1,53 @@
+{
+  "slug": "home",
+  "title": "Home",
+
+  "hero": {
+    "headline": "Welcome to the Canadian Classic Rodeo Association.",
+    "subheadline": "The 2026 Season kicks off in a few short months. Please see the Membership Application Tab to get your membership to be ready to hit the trail in May.",
+    "image": "",
+    "ctaText": "Click to View the Membership Listing",
+    "ctaLink": ""
+  },
+
+  "introSection": {
+    "body": "This year marks the 41st anniversary of the Canadian Classic Rodeo Association. The Association was founded in 1985. Originally known as the Canadian Senior Pro Rodeo Association, it was created  to provide opportunities to rodeo for competitors aged 40 and up. Today the CCRA is comprised of all levels of skill from beginner to professional. Their common ground lies in their love of the sport, appreciation of western values and lifestyles, and their desire to pursue this active western sport."
+  },
+
+  "alertBanner": {
+    "text": "THE NORTH RUN HAS BEEN POSTPONED DUE TO THE CURRENT WEATHER FORECAST",
+    "detail": "Stay tuned for rescheduled dates"
+  },
+
+  "entryFormat": {
+    "heading": "Entry Format",
+    "methods": [
+      {
+        "label": "Online Entries",
+        "text": "Open on a Wednesday at 7 am close at 9 pm the following Wednesday"
+      },
+      {
+        "label": "Phone in Entries",
+        "text": "The Wednesday that entries close from 4-7 pm 403-875-3242"
+      }
+    ],
+    "paymentInfo": "Online payments will be available the Friday after entries close until the Thursday before the rodeo at 5 pm. Online payments are not available at the rodeo. If you have not paid your fees online by Thursday at 5 pm, you will have to pay cash or cheque at the rodeo.",
+    "drawInfo": "The Draw will be posted the Friday after entries close. If you see an issue with the draw (wrong event, you are missed in the draw, etc.) you must contact the office on that Friday with your confirmation number to have the issue dealt with. After Friday the draw is set and will not be changed."
+  },
+
+  "fees": {
+    "heading": "Fees",
+    "intro": "The fees for each rodeo (each day is a new rodeo)",
+    "items": [
+      "$55.00 per event into the payout",
+      "$17.00 per person admin fee independent of how many events they enter goes to association",
+      "$25.00 event fee per event entered (Tie-down roping, Breakaway roping, Steer wrestlers) goes to the committee hosting the rodeo",
+      "$15.00 event fee per event entered (Ribbon roping, Team roping, Barrel racing) goes to the committee hosting the rodeo"
+    ]
+  },
+
+  "newsFeed": {
+    "heading": "Current News & Events",
+    "collectionRef": "news-posts"
+  }
+}

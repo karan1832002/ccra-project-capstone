@@ -1,0 +1,23 @@
+{
+  "slug": "contact-us",
+  "title": "Contact Us",
+
+  "contactMethods": [
+    {
+      "label": "Office Contact:",
+      "text": "Aimee Cripps"
+    },
+    {
+      "label": "Email:",
+      "text": "canclassicrodeo@gmail.com *please send e-transfers to this email address"
+    },
+    {
+      "label": "Phone:",
+      "text": "403-875-3242 – please leave a message and your call will be returned within 24 hours"
+    },
+    {
+      "label": "Address:",
+      "text": "RR 1 Site 16 Box 11, Ponoka, AB, T4J 1R1"
+    }
+  ]
+}
