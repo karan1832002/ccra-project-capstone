@@ -1,0 +1,19 @@
+{
+  "slug": "rulebook",
+  "title": "Rulebook",
+
+  "rulebooks": [
+    {
+    "title": "CCRA-2025-Rulebook PDF",
+    "url": "https://canadianclassicrodeo.ca/wp-content/uploads/sites/7/2026/04/CCRA-2025-Rulebook-PDF-1.pdf"
+    },
+    {
+    "title": "CCRA Bylaws (003)",
+    "url": "https://canadianclassicrodeo.ca/wp-content/uploads/sites/7/2025/04/CCRA-Bylaws-003.pdf"
+    },
+    {
+    "title": "Rule Change Form",
+    "url": "https://canadianclassicrodeo.ca/wp-content/uploads/sites/7/2025/04/Rule-Change-Form.pdf"
+    }
+  ]
+}
