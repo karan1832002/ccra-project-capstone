@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: ccra-project   # your Azure Web App name
+  AZURE_WEBAPP_NAME: ccra-project   # Azure Web App name
   NODE_VERSION: '22.x'
 
 jobs:
@@ -32,14 +32,6 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
-
-      # Uncomment once you add Jest to package.json scripts (e.g. "test": "jest")
-      # - name: Run Jest unit tests
-      #   run: npm test
-
-      # Uncomment once you add Cypress/Playwright tests
-      # - name: Run Cypress/Playwright e2e tests
-      #   run: npx cypress run
 
       - name: Build Next.js app
         run: npm run build
