@@ -4,7 +4,13 @@ import { db } from "./db/client";
 import * as schema from "./db/schema";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resendClient: Resend | null = null;
+function getResend() {
+  if (!resendClient) {
+    resendClient = new Resend(process.env.RESEND_API_KEY);
+  }
+  return resendClient;
+}
 
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
@@ -28,7 +34,7 @@ export const auth = betterAuth({
     sendResetPassword: async ({ user, url }) => {
       console.log(`[auth] Password reset requested for existing user: ${user.email}`);
       try {
-        await resend.emails.send({
+        await getResend().emails.send({
           from: "CCRA Rodeo <onboarding@resend.dev>",
           to: user.email,
           subject: "Reset your CCRA Rodeo password",
@@ -55,7 +61,7 @@ export const auth = betterAuth({
     sendVerificationEmail: async ({ user, url }) => {
       console.log(`[auth] Verification email requested for: ${user.email}`);
       try {
-        await resend.emails.send({
+        await getResend().emails.send({
           from: "CCRA Rodeo <onboarding@resend.dev>",
           to: user.email,
           subject: "Verify your CCRA Rodeo account",
