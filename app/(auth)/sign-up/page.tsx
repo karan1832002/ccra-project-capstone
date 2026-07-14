@@ -35,6 +35,7 @@ export default function SignUpPage() {
       name: `${firstName.trim()} ${lastName.trim()}`,
       email: signupEmail.trim().toLowerCase(),
       password: signupPassword,
+      callbackURL: "/verify-email",
     });
 
     if (error) {
