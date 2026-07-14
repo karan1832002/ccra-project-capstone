@@ -24,3 +24,51 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Custom design system utilities */
+.leather-shadow {
+  box-shadow: 0 4px 12px rgba(62, 39, 35, 0.08), 0 1px 3px rgba(62, 39, 35, 0.12);
+}
+
+.input-bleached {
+  background-color: #fff8f5;
+  border: 1px solid #e9e1dc;
+  border-bottom: 2px solid #897268;
+  transition: all 0.2s ease;
+}
+
+.input-bleached:focus {
+  outline: none;
+  border-bottom-color: #933d04;
+  background-color: #ffffff;
+}
+
+@keyframes authFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-fade-in {
+  animation: authFadeIn 0.35s ease-out;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+/* Hide Edge/IE's built-in password reveal icon so it doesn't duplicate our custom one */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
