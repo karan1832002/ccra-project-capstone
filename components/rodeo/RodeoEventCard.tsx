@@ -11,10 +11,10 @@ interface RodeoEventCardProps {
 
 export function RodeoEventCard({ event, children }: RodeoEventCardProps) {
   return (
-    <div className="rounded-lg border border-gray-200 shadow-sm bg-white p-4 mb-3">
+    <div className="rounded-md border border-stone-200 shadow-sm bg-white p-6 mb-3">
       <div className="flex justify-between items-baseline mb-3 flex-wrap gap-1">
-        <span className="font-semibold text-base text-gray-900">{event.name}</span>
-        <span className="text-sm text-gray-500">
+        <span className="font-semibold text-xl text-stone-950">{event.name}</span>
+        <span className="text-sm text-stone-400">
           {event.dateLabel}
           {event.location ? ` · ${event.location}` : ""}
         </span>

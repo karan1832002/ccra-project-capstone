@@ -35,7 +35,7 @@ function formatTimeOrScore(entry: ResultEntry): string {
 // records into the plain row objects the existing Table component expects.
 export function ResultsTable({ entries }: ResultsTableProps) {
   if (entries.length === 0) {
-    return <p className="text-sm text-gray-400">No results posted yet.</p>;
+    return <p className="text-sm text-stone-400">No results posted yet.</p>;
   }
 
   // Property insertion order here must mirror `columns` above.
