@@ -28,18 +28,19 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Photo Gallery", path: "/about/photo-gallery" },
     ],
   },
+  { label: "Schedule", path: "/schedule" },
   {
     label: "Events",
     path: "/events",
     subItems: [
-      { label: "Rodeo Draw", path: "/events/rodeo-draw" },
       { label: "Enter Rodeo", path: "/events/rodeo-entries" },
+      { label: "Rodeo Entries", path: "/events/current-entries" },
+      { label: "Rodeo Draws", path: "/events/rodeo-draws" },
       { label: "Rodeo Approval Form", path: "/events/rodeo-approval" },
       { label: "Rulebook", path: "/events/rulebook" },
       { label: "Partner Search Page", path: "/events/partner-search" },
     ],
   },
-  { label: "Schedule", path: "/schedule" },
   {
     label: "Results",
     path: "/results",
