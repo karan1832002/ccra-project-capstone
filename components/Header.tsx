@@ -66,7 +66,7 @@ export default function Header() {
           className="flex min-w-0 items-center gap-3 text-stone-950"
           aria-label="Go to homepage"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-md bg-orange-600 text-sm font-bold text-white">
+          <span className="flex h-10 w-10 items-center justify-center rounded-md bg-orange-600 text-sm font-semibold text-white">
             CCRA
           </span>
           <span className="hidden min-w-0 text-sm font-semibold leading-tight sm:block">
@@ -111,7 +111,7 @@ export default function Header() {
           ) : (
             <Link
               href="/sign-in"
-              className="inline-flex items-center gap-2 rounded-md bg-orange-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-orange-700"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-orange-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
             >
               <LogIn className="h-4 w-4" />
               Sign In

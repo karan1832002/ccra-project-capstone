@@ -103,8 +103,8 @@ export default function ProfileMenu() {
               id="profile-sidebar"
               className={
                 isOpen
-                  ? "absolute right-0 top-0 h-full w-[85%] max-w-sm translate-x-0 overflow-y-auto bg-white p-5 shadow-2xl transition-transform duration-300"
-                  : "absolute right-0 top-0 h-full w-[85%] max-w-sm translate-x-full overflow-y-auto bg-white p-5 shadow-2xl transition-transform duration-300"
+                  ? "absolute right-0 top-0 h-full w-[85%] max-w-sm translate-x-0 overflow-y-auto bg-white p-5 shadow-lg transition-transform duration-300"
+                  : "absolute right-0 top-0 h-full w-[85%] max-w-sm translate-x-full overflow-y-auto bg-white p-5 shadow-2lg transition-transform duration-300"
               }
             >
               <div className="flex items-center justify-between">
@@ -139,7 +139,7 @@ export default function ProfileMenu() {
                         <button
                           type="button"
                           onClick={() => toggleSection(item.label)}
-                          className="flex w-full items-center justify-between rounded-md px-3 py-3 text-left text-base font-medium text-stone-800 transition hover:bg-stone-100"
+                          className="flex w-full items-center justify-between rounded-md px-3 py-3 text-left text-sm font-medium text-stone-800 transition hover:bg-stone-100"
                           aria-expanded={isExpanded}
                         >
                           {item.label}
@@ -175,7 +175,7 @@ export default function ProfileMenu() {
                       key={item.label}
                       href={item.path ?? "#"}
                       onClick={closeMenu}
-                      className="rounded-md px-3 py-3 text-base font-medium text-stone-800 transition hover:bg-stone-100"
+                      className="rounded-md px-3 py-3 text-sm font-medium text-stone-800 transition hover:bg-stone-100"
                     >
                       {item.label}
                     </Link>

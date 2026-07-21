@@ -17,7 +17,7 @@ export function SearchInput({ value, onChange, placeholder, className }: SearchI
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder ?? "Search"}
-      className={`w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${className ?? ""}`}
+      className={`w-full rounded-md border border-stone-200 px-3 h-12 text-sm text-stone-600 placeholder-stone-400 outline-none transition focus:border-orange-600 ${className ?? ""}`}
     />
   );
 }

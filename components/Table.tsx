@@ -10,8 +10,8 @@ function Table<T extends Record<string, React.ReactNode>>({
   data,
 }: TableProps<T>) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm inline-block">
-      <table className="divide-y divide-gray-200">
+    <div className="overflow-x-auto rounded-md border border-stone-200 shadow-sm inline-block">
+      <table className="divide-y divide-stone-200">
         {/* Table Headers */}
         <thead className="bg-orange-600">
           <tr>
@@ -27,13 +27,16 @@ function Table<T extends Record<string, React.ReactNode>>({
           </tr>
         </thead>
         {/* Table Data */}
-        <tbody className="divide-y divide-gray-200 bg-white">
+        <tbody className="divide-y divide-stone-200">
           {data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="hover:bg-gray-50">
+            <tr
+              key={rowIndex}
+              className={`${rowIndex % 2 === 0 ? "bg-white" : "bg-stone-50"} hover:bg-orange-50`}
+            >
               {Object.values(row).map((cell, cellIndex) => (
                 <td
                   key={cellIndex}
-                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                  className="px-6 py-4 whitespace-nowrap text-sm text-stone-600"
                 >
                   {cell}
                 </td>
