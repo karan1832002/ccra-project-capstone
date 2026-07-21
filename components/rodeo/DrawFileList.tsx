@@ -1,0 +1,48 @@
+import React from "react";
+import { SheetFile } from "@/types/rodeo";
+
+interface DrawFileListProps {
+  files: SheetFile[];
+}
+
+// Human-readable labels for the two sheet types, shown next to each file link.
+const typeLabel: Record<SheetFile["type"], string> = {
+  draw: "Draw sheet",
+  day: "Day sheet",
+};
+
+// Small text badge indicating file format. Swap for an actual icon component
+// (e.g. Tabler, Heroicons) if you want something more visual than "PDF"/"XLS".
+function fileIcon(fileType: SheetFile["fileType"]) {
+  return fileType === "xlsx" ? "XLS" : "PDF";
+}
+
+// Draws-specific body content for a RodeoEventCard: renders each file as a
+// clickable chip linking straight to the PDF/XLSX (no intermediate page).
+export function DrawFileList({ files }: DrawFileListProps) {
+  if (files.length === 0) {
+    return <p className="text-sm text-gray-400">No sheets posted yet.</p>;
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {files.map((file) => (
+        <a
+          key={file.id}
+          href={file.url}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-2 text-sm px-3 py-1.5 rounded-md border border-gray-200 text-gray-800 hover:bg-gray-50"
+        >
+          <span className="text-xs font-semibold text-gray-400">
+            {fileIcon(file.fileType)}
+          </span>
+          <span>{file.label}</span>
+          <span className="text-xs text-gray-400">({typeLabel[file.type]})</span>
+        </a>
+      ))}
+    </div>
+  );
+}
+
+export default DrawFileList;
