@@ -22,17 +22,19 @@ export default function RodeoDrawsPage() {
   // database later means this effect keeps working unchanged, since both
   // functions already return Promises.
   useEffect(() => {
-    Promise.all([getRodeoEvents(), getAllSheetFiles()]).then(([evts, sheetFiles]) => {
-      setEvents(evts);
-      setFiles(sheetFiles);
-      setLoading(false);
-    });
+    Promise.all([getRodeoEvents(), getAllSheetFiles()]).then(
+      ([evts, sheetFiles]) => {
+        setEvents(evts);
+        setFiles(sheetFiles);
+        setLoading(false);
+      },
+    );
   }, []);
 
   // Distinct years present in the data, newest first — feeds the year dropdown.
   const years = useMemo(
     () => Array.from(new Set(events.map((e) => e.year))).sort((a, b) => b - a),
-    [events]
+    [events],
   );
 
   // Group sheet files by event id, applying the document-type filter (draw/day)
@@ -59,7 +61,7 @@ export default function RodeoDrawsPage() {
   }, [events, year, search, filesByEvent]);
 
   if (loading) {
-    return <p className="text-sm text-gray-400">Loading draw sheets...</p>;
+    return <p className="text-sm text-stone-400">Loading draw sheets...</p>;
   }
 
   // Tracks the last year header printed, so we only show "2026" / "2025" once
@@ -68,7 +70,9 @@ export default function RodeoDrawsPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
-      <h1 className="text-2xl font-semibold text-gray-900 mb-4">Rodeo Draws</h1>
+      <h1 className="text-3xl font-semibold text-stone-950 mb-4">
+        Rodeo Draws
+      </h1>
 
       {/* Filter bar is fully controlled — it just displays these values and
           reports changes back up via the on*Change callbacks. */}
@@ -84,7 +88,7 @@ export default function RodeoDrawsPage() {
       />
 
       {visibleEvents.length === 0 && (
-        <p className="text-sm text-gray-400 py-6">No matching draw sheets.</p>
+        <p className="text-sm text-stone-400 py-6">No matching draw sheets.</p>
       )}
 
       {visibleEvents.map((event) => {
@@ -95,7 +99,9 @@ export default function RodeoDrawsPage() {
         return (
           <React.Fragment key={event.id}>
             {showYearHeader && (
-              <div className="text-sm font-medium text-gray-400 mt-5 mb-2">{event.year}</div>
+              <div className="text-xs font-semibold text-stone-400 mt-5 mb-2">
+                {event.year}
+              </div>
             )}
             {/* RodeoEventCard is the shared shell (name/date header + card
                 styling); DrawFileList is the draws-specific body content. */}
