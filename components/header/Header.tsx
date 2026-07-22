@@ -1,17 +1,39 @@
+/**
+ * Header
+ * ------
+ * Site header: logo, top-level nav, cart, and sign-in/profile.
+ *
+ * Responsive nav strategy:
+ * - >= lg: full DropdownMenu row (hover flyouts), MobileNav's hamburger
+ *   button is hidden.
+ * - <  lg: DropdownMenu row is hidden; MobileNav's hamburger opens the same
+ *   NAV_ITEMS in a slide-in drawer instead.
+ *
+ * Logo subtitle and "Sign In" label hide together at the same breakpoint
+ * (lg) so the header doesn't end up half-collapsed.
+ */
 "use client";
 
 import Link from "next/link";
 import DropdownMenu from "./DropdownMenu";
 import ProfileMenu from "./ProfileMenu";
+import MobileNav from "./MobileNav";
 import { LogIn, ShoppingCart } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 
-export interface NavItem {
+// A sub-item is always a simple link — no further nesting, path required.
+export interface NavSubItem {
   label: string;
   path: string;
+}
+
+export interface NavItem {
+  label: string;
+  path?: string;
   // Optional submenu items, e.g. About Us -> Contact Information, Board of Directors.
   // Omit this field entirely for menus that don't have submenus.
-  subItems?: NavItem[];
+  // An item has either a path OR subItems, never both.
+  subItems?: NavSubItem[];
 }
 
 // Update this list any time the site's top-level sections change.
@@ -20,7 +42,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Home", path: "/" },
   {
     label: "About Us",
-    path: "/about",
     subItems: [
       { label: "Contact Information", path: "/about/contact" },
       { label: "Board of Directors", path: "/about/board-of-directors" },
@@ -31,7 +52,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Schedule", path: "/schedule" },
   {
     label: "Events",
-    path: "/events",
     subItems: [
       { label: "Enter Rodeo", path: "/events/rodeo-entries" },
       { label: "Rodeo Entries", path: "/events/current-entries" },
@@ -43,7 +63,6 @@ const NAV_ITEMS: NavItem[] = [
   },
   {
     label: "Results",
-    path: "/results",
     subItems: [
       { label: "Rodeo Results", path: "/results/rodeo-results" },
       { label: "Standings", path: "/results/standings" },
@@ -59,26 +78,29 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/95 backdrop-blur">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-2 px-4 sm:px-6 lg:px-8">
         {/* Logo — links back to homepage */}
         <Link
           href="/"
-          className="flex min-w-0 items-center gap-3 text-stone-950"
+          className="flex shrink-0 items-center gap-3 text-stone-950"
           aria-label="Go to homepage"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-md bg-orange-600 text-sm font-semibold text-white">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-orange-600 text-sm font-semibold text-white">
             CCRA
           </span>
-          <span className="hidden min-w-0 text-sm font-semibold leading-tight sm:block">
+          <span className="hidden whitespace-nowrap text-sm font-semibold leading-tight lg:block">
             Canadian Classic
             <br />
             Rodeo Association
           </span>
         </Link>
 
-        {/* Dropdown nav menus — actual dropdown contents built out in DropdownMenu.tsx */}
-        <nav className="flex items-center gap-1" aria-label="Main navigation">
-          <ul className="flex list-none items-center gap-6 m-0 p-0">
+        {/* Dropdown nav menus — hidden below lg in favor of the MobileNav hamburger */}
+        <nav
+          className="hidden items-center gap-1 lg:flex"
+          aria-label="Main navigation"
+        >
+          <ul className="m-0 flex list-none items-center gap-6 p-0">
             {NAV_ITEMS.map((item) => (
               <li key={item.label}>
                 <DropdownMenu
@@ -91,8 +113,9 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* Cart + profile/sign-in */}
-        <div className="flex items-center gap-2">
+        {/* Hamburger (mobile) + cart + profile/sign-in */}
+        <div className="flex shrink-0 items-center gap-2">
+          <MobileNav items={NAV_ITEMS} />
           <Link
             href="/cart"
             className="inline-flex h-10 w-10 items-center justify-center rounded-md text-stone-700 transition hover:bg-stone-100"
@@ -111,10 +134,11 @@ export default function Header() {
           ) : (
             <Link
               href="/sign-in"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-orange-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-orange-600 px-3 text-sm font-semibold text-white transition hover:bg-orange-700 lg:px-5 lg:py-3"
+              aria-label="Sign In"
             >
-              <LogIn className="h-4 w-4" />
-              Sign In
+              <LogIn className="h-4 w-4 shrink-0" />
+              <span className="hidden whitespace-nowrap lg:inline">Sign In</span>
             </Link>
           )}
         </div>
