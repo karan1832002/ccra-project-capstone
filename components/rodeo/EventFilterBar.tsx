@@ -1,11 +1,22 @@
+/**
+ * EventFilterBar
+ * --------------
+ * The search + year (+ optional sheet-type) filter row shown above a list of
+ * rodeo events. Holds no state itself — the parent page owns all filter
+ * values and change handlers, so this component is just a layout of
+ * SearchInput + FilterSelect.
+ *
+ * The sheet-type filter ("Draw sheets" / "Day sheets") is opt-in via
+ * `showTypeFilter`, since it only makes sense on the draws page — the
+ * results page reuses this bar without it.
+ */
+
 import React from "react";
-import SearchInput from "@/components/SearchInput";
-import FilterSelect from "@/components/FilterSelect";
+import SearchInput from "@/components/ui/SearchInput";
+import FilterSelect from "@/components/ui/FilterSelect";
 
 interface EventFilterBarProps {
-  // All values and change handlers are passed in — this component holds no
-  // state of its own. The parent page owns the filter state and decides what
-  // "search"/"year"/"sheetType" mean for its own data.
+  // Owned by the parent page — see file comment above.
   search: string;
   onSearchChange: (value: string) => void;
   year: string;
@@ -13,8 +24,7 @@ interface EventFilterBarProps {
   years: number[];
   sheetType?: string;
   onSheetTypeChange?: (value: string) => void;
-  // The results page can reuse this bar with showTypeFilter left off, since
-  // "draw vs day" doesn't apply to results.
+  // Opt-in — see file comment above.
   showTypeFilter?: boolean;
 }
 

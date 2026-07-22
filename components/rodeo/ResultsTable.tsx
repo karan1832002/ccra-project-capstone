@@ -1,5 +1,16 @@
+/**
+ * ResultsTable
+ * ------------
+ * Results-specific body content for a RodeoEventCard. Reshapes an event's
+ * ResultEntry[] into the plain row objects the generic Table component
+ * expects, and formats currency/time-or-score along the way.
+ *
+ * Rough stock events are scored, timed events have a time — only one of
+ * `entry.time` / `entry.score` will be set per entry.
+ */
+
 import React from "react";
-import Table from "@/components/Table";
+import Table from "@/components/ui/Table";
 import { ResultEntry } from "@/types/rodeo";
 
 interface ResultsTableProps {

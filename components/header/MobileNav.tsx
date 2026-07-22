@@ -13,8 +13,8 @@
 
 import { useState } from "react";
 import { Menu } from "lucide-react";
-import Sidebar from "../Sidebar";
-import NavList from "../NavList";
+import Sidebar from "../ui/Sidebar";
+import NavList from "../ui/NavList";
 import type { NavItem } from "./Header";
 
 export interface MobileNavProps {

@@ -1,3 +1,14 @@
+/**
+ * FilterSelect
+ * ------------
+ * A plain, domain-agnostic dropdown. Doesn't know what "years" or "sheet
+ * types" mean — the caller supplies `options` and decides what the value
+ * represents. Same reuse intent as SearchInput.
+ *
+ * Used by:
+ * - components/rodeo/EventFilterBar.tsx
+ */
+
 import React from "react";
 
 // A single dropdown option. `value` is what's stored in state;
@@ -7,9 +18,8 @@ export interface FilterOption {
   value: string;
 }
 
-// Low-level, domain-agnostic dropdown — same reuse intent as SearchInput.
-// The component knows nothing about "years" or "sheet types"; the caller
-// decides what options mean.
+// Controlled dropdown props. `value`/`onChange` follow the standard
+// controlled-input pattern; `className` lets callers tweak sizing per use.
 interface FilterSelectProps {
   value: string;
   onChange: (value: string) => void;
