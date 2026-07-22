@@ -1,3 +1,11 @@
+/**
+ * DrawFileList
+ * ------------
+ * Draws-specific body content for a RodeoEventCard. Renders each posted
+ * sheet (draw or day) as a clickable chip linking straight to the file —
+ * no intermediate viewer page.
+ */
+
 import React from "react";
 import { SheetFile } from "@/types/rodeo";
 
@@ -11,8 +19,7 @@ const typeLabel: Record<SheetFile["type"], string> = {
   day: "Day sheet",
 };
 
-// Small text badge indicating file format. Swap for an actual icon component
-// (e.g. Tabler, Heroicons) if you want something more visual than "PDF"/"XLS".
+// Small text badge indicating file format ("PDF"/"XLS").
 function fileIcon(fileType: SheetFile["fileType"]) {
   return fileType === "xlsx" ? "XLS" : "PDF";
 }

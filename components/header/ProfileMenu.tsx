@@ -12,8 +12,8 @@
 
 import { useState } from "react";
 import { UserRound } from "lucide-react";
-import Sidebar from "../Sidebar";
-import NavList, { type NavListItem } from "../NavList";
+import Sidebar from "../ui/Sidebar";
+import NavList, { type NavListItem } from "../ui/NavList";
 
 // TODO: replace with real links as pages are created.
 // Structure supports plain links (just a path) and collapsible parents (a subItems array instead of a path).

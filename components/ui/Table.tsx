@@ -1,3 +1,19 @@
+/**
+ * Table
+ * -----
+ * A generic table shell: renders whatever `columns` and `data` it's given,
+ * with zebra-striped rows and an orange header. Has no idea what domain the
+ * data belongs to — callers reshape their own records into plain row
+ * objects before passing them in.
+ *
+ * IMPORTANT: `data` rows are rendered positionally via Object.values(row),
+ * not matched by key name — so each row object's property insertion order
+ * must exactly match the `columns` array order.
+ *
+ * Used by:
+ * - components/rodeo/ResultsTable.tsx
+ */
+
 import React from "react";
 
 interface TableProps<T extends Record<string, React.ReactNode>> {

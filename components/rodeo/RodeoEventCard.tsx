@@ -1,11 +1,20 @@
+/**
+ * RodeoEventCard
+ * --------------
+ * The shared card shell for a single rodeo event: event name, date, and
+ * location in a header row, with arbitrary body content below.
+ *
+ * This component only renders the shell — it has no idea what `children`
+ * contains. That's what lets the same card wrap DrawFileList on the draws
+ * page and ResultsTable on the results page.
+ */
+
 import React from "react";
 import { RodeoEvent } from "@/types/rodeo";
 
 interface RodeoEventCardProps {
   event: RodeoEvent;
-  // Whatever body content this card wraps — DrawFileList on the draws page,
-  // ResultsTable on the results page. This component only renders the shared
-  // header/card shell and has no idea what's inside `children`.
+  // Body content the card wraps (e.g. a file list or results table).
   children: React.ReactNode;
 }
 
