@@ -4,6 +4,76 @@ import { useState, useRef, useEffect } from "react";
 
 type Message = { role: "user" | "assistant"; content: string };
 
+//** A galloping horse shown while the assistant is thinking. */
+function ThinkingHorse() {
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 8,
+        padding: "8px 14px",
+        borderRadius: 8,
+        background: "#f1f1f1",
+        overflow: "hidden",
+      }}
+      aria-label="Assistant is thinking"
+      role="status"
+    >
+      <span style={{ position: "relative", width: 46, height: 26 }}>
+        {/* dust puffs kicked up behind the horse */}
+        {[0, 1, 2].map((i) => (
+          <span
+            key={i}
+            style={{
+              position: "absolute",
+              left: 2,
+              bottom: 3,
+              width: 5,
+              height: 5,
+              borderRadius: "50%",
+              background: "#c9c2b8",
+              animation: "ccraDust 0.9s infinite ease-out",
+              animationDelay: `${i * 0.3}s`,
+            }}
+          />
+        ))}
+
+        {/* the horse itself: gallops in place with a bob and slight tilt */}
+        <span
+          style={{
+            position: "absolute",
+            right: 0,
+            bottom: 0,
+            fontSize: 22,
+            lineHeight: 1,
+            display: "inline-block",
+            animation: "ccraGallop 0.55s infinite ease-in-out",
+          }}
+        >
+          🐎
+        </span>
+
+        {/* ground line streaking past, to sell the motion */}
+        <span
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: 2,
+            background:
+              "repeating-linear-gradient(90deg,#cfc8bd 0 8px,transparent 8px 16px)",
+            animation: "ccraGround 0.45s infinite linear",
+          }}
+        />
+      </span>
+
+      <span style={{ fontSize: 13, color: "#777" }}>thinking…</span>
+    </span>
+  );
+}
+
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -12,8 +82,11 @@ export default function ChatWidget() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages]);
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages, loading]);
 
   async function sendMessage() {
     const text = input.trim();
@@ -36,18 +109,36 @@ export default function ChatWidget() {
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let assistantText = "";
-
-      setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+      let started = false;
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
+
         assistantText += decoder.decode(value, { stream: true });
-        setMessages((prev) => {
-          const updated = [...prev];
-          updated[updated.length - 1] = { role: "assistant", content: assistantText };
-          return updated;
-        });
+
+        // Only add the assistant bubble once the first content arrives, so the
+        // thinking dots stay visible for the whole wait instead of being
+        // replaced by an empty bubble.
+        if (!started) {
+          started = true;
+          setLoading(false);
+          setMessages((prev) => [...prev, { role: "assistant", content: assistantText }]);
+        } else {
+          setMessages((prev) => {
+            const updated = [...prev];
+            updated[updated.length - 1] = { role: "assistant", content: assistantText };
+            return updated;
+          });
+        }
+      }
+
+      // Empty response guard.
+      if (!started) {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: "Sorry, I didn't get a response. Please try again." },
+        ]);
       }
     } catch (err) {
       console.error(err);
@@ -62,6 +153,23 @@ export default function ChatWidget() {
 
   return (
     <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}>
+      {/* Keyframes for the thinking horse. Inline styles can't declare these. */}
+      <style>{`
+  @keyframes ccraGallop {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    30%      { transform: translateY(-5px) rotate(-6deg); }
+    60%      { transform: translateY(-1px) rotate(3deg); }
+  }
+  @keyframes ccraDust {
+    0%   { transform: translate(0,0) scale(0.6); opacity: 0.75; }
+    100% { transform: translate(-14px,-7px) scale(1.5); opacity: 0; }
+  }
+  @keyframes ccraGround {
+    0%   { background-position-x: 0; }
+    100% { background-position-x: -16px; }
+  }
+`}</style>
+
       {open && (
         <div
           style={{
@@ -77,15 +185,24 @@ export default function ChatWidget() {
             overflow: "hidden",
           }}
         >
-          <div style={{ padding: "10px 14px", background: "#1a1a1a", color: "#fff", fontWeight: 600 }}>
+          <div
+            style={{
+              padding: "10px 14px",
+              background: "#1a1a1a",
+              color: "#fff",
+              fontWeight: 600,
+            }}
+          >
             CCRA Assistant
           </div>
+
           <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", padding: 12 }}>
-            {messages.length === 0 && (
+            {messages.length === 0 && !loading && (
               <p style={{ color: "#888", fontSize: 14 }}>
                 Ask me about events, standings, the rulebook, or the store.
               </p>
             )}
+
             {messages.map((m, i) => (
               <div
                 key={i}
@@ -103,31 +220,54 @@ export default function ChatWidget() {
                     color: m.role === "user" ? "#fff" : "#111",
                     fontSize: 14,
                     maxWidth: 220,
+                    whiteSpace: "pre-wrap",
                   }}
                 >
-                  {m.content || "…"}
+                  {m.content}
                 </span>
               </div>
             ))}
+
+            {loading && (
+              <div style={{ marginBottom: 8, textAlign: "left" }}>
+                <ThinkingHorse />
+              </div>
+            )}
           </div>
+
           <div style={{ display: "flex", borderTop: "1px solid #eee" }}>
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               placeholder="Type a message…"
-              style={{ flex: 1, border: "none", padding: 10, fontSize: 14, outline: "none" }}
+              disabled={loading}
+              style={{
+                flex: 1,
+                border: "none",
+                padding: 10,
+                fontSize: 14,
+                outline: "none",
+                background: loading ? "#fafafa" : "#fff",
+              }}
             />
             <button
               onClick={sendMessage}
               disabled={loading}
-              style={{ border: "none", background: "#1a1a1a", color: "#fff", padding: "0 16px", cursor: "pointer" }}
+              style={{
+                border: "none",
+                background: loading ? "#666" : "#1a1a1a",
+                color: "#fff",
+                padding: "0 16px",
+                cursor: loading ? "default" : "pointer",
+              }}
             >
               Send
             </button>
           </div>
         </div>
       )}
+
       <button
         onClick={() => setOpen((o) => !o)}
         style={{
