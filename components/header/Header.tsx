@@ -53,7 +53,7 @@ const NAV_ITEMS: NavItem[] = [
   {
     label: "Events",
     subItems: [
-      { label: "Enter Rodeo", path: "/events/rodeo-entries" },
+      { label: "Enter Rodeo", path: "/events/enter-rodeo" },
       { label: "Rodeo Entries", path: "/events/current-entries" },
       { label: "Rodeo Draws", path: "/events/rodeo-draws" },
       { label: "Rodeo Approval Form", path: "/events/rodeo-approval" },
