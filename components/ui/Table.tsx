@@ -31,9 +31,9 @@ function Table<T extends Record<string, React.ReactNode>>({
         {/* Table Headers */}
         <thead className="bg-orange-600">
           <tr>
-            {columns.map((col) => (
+            {columns.map((col, index) => (
               <th
-                key={col}
+                key={index}
                 scope="col"
                 className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
               >
