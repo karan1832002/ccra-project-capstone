@@ -235,6 +235,25 @@ export async function getRodeosOpenForEntries(
   );
 }
 
+// Used by the standings page — only rodeos that have already happened
+// (every performance date in the past) contribute to season standings. An
+// upcoming or in-progress rodeo hasn't posted final results yet, so its
+// entries (if any exist as placeholders) shouldn't count.
+export async function getCompletedRodeoEvents(
+  referenceDate: Date = new Date()
+): Promise<RodeoEvent[]> {
+  const todayIso = toIsoDate(referenceDate);
+  return delay(
+    events.filter((e) => {
+      const lastPerformanceDate = e.performances.reduce(
+        (latest, p) => (p.date > latest ? p.date : latest),
+        e.startDate
+      );
+      return lastPerformanceDate < todayIso;
+    })
+  );
+}
+
 export async function getSheetFilesForEvent(eventId: string): Promise<SheetFile[]> {
   return delay(sheetFiles.filter((f) => f.eventId === eventId));
 }
