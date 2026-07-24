@@ -107,13 +107,47 @@ const sheetFiles: SheetFile[] = [
   { id: "sf12", eventId: "magrath-2025", label: "Sun draw", type: "draw", fileType: "pdf", url: "#" },
 ];
 
-// Sample scoring data — only a couple of events have results filled in, since
-// this is just enough to exercise ResultsTable once it's wired into a page.
+// Sample scoring data. Covers every competition category the association
+// currently runs (barrel racing, breakaway roping, team roping, ribbon
+// roping, steer wrestling, tie down roping — each split into its own
+// age/weight divisions), so ResultsTable has at least one entry per category
+// to render a table for. Stettler's entries are spread across both of its
+// performances (see `performanceId`) to also exercise the case where a
+// single category ran on more than one day.
 const results: ResultEntry[] = [
-  { id: "r1", eventId: "stettler-2025", eventName: "Ladies Barrel Racing 40-59", placing: 1, time: 17.824, competitor: "Aimee Cripps", money: 250.8, groundMoney: 0, points: 71 },
-  { id: "r2", eventId: "stettler-2025", eventName: "Ladies Barrel Racing 40-59", placing: 2, time: 18.324, competitor: "Jill Flynn", money: 188.1, groundMoney: 0, points: 61 },
-  { id: "r3", eventId: "magrath-2025", eventName: "Ladies Barrel Racing 40-59", placing: 1, time: 15.218, competitor: "Jackie Hoover", money: 250.8, groundMoney: 0, points: 72 },
-  { id: "r4", eventId: "magrath-2025", eventName: "Team Roping 40-59", placing: 1, time: 6.1, competitor: "Trina Marshall", partner: "Lorna Hodge", money: 209, groundMoney: 0, points: 65 },
+  // --- Stettler 2025 (2 performances: p1 = Jul 21, p2 = Jul 22) ---------
+  { id: "r1", eventId: "stettler-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "stettler-2025-p1", placing: 1, time: 17.824, competitor: "Aimee Cripps", money: 250.8, groundMoney: 0, points: 71 },
+  { id: "r2", eventId: "stettler-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "stettler-2025-p1", placing: 2, time: 18.324, competitor: "Jill Flynn", money: 188.1, groundMoney: 0, points: 61 },
+  { id: "r5", eventId: "stettler-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "stettler-2025-p2", placing: 1, time: 17.981, competitor: "Jill Flynn", money: 235, groundMoney: 0, points: 69 },
+  { id: "r6", eventId: "stettler-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "stettler-2025-p2", placing: 2, time: 18.502, competitor: "Aimee Cripps", money: 175, groundMoney: 0, points: 59 },
+  { id: "r7", eventId: "stettler-2025", eventName: "Ladies Barrel Racing 60+", performanceId: "stettler-2025-p1", placing: 1, time: 15.159, competitor: "Connie LeMoine", money: 271.7, groundMoney: 0, points: 73 },
+  { id: "r8", eventId: "stettler-2025", eventName: "Ladies Barrel Racing 60+", performanceId: "stettler-2025-p1", placing: 2, time: 15.237, competitor: "Bev Welsh", money: 203.78, groundMoney: 0, points: 63 },
+  { id: "r9", eventId: "stettler-2025", eventName: "Ladies Breakaway Roping", performanceId: "stettler-2025-p1", placing: 1, time: 3.5, competitor: "Trina Marshall", money: 250.8, groundMoney: 0, points: 72 },
+  { id: "r10", eventId: "stettler-2025", eventName: "Ladies Breakaway Roping", performanceId: "stettler-2025-p1", placing: 2, time: 4.5, competitor: "Gina Icenoggle", money: 188.1, groundMoney: 0, points: 62 },
+  { id: "r11", eventId: "stettler-2025", eventName: "Men's Breakaway Roping 40-64", performanceId: "stettler-2025-p1", placing: 1, time: 2.7, competitor: "Kelly Creasy", money: 125.4, groundMoney: 0, points: 64 },
+  { id: "r12", eventId: "stettler-2025", eventName: "Men's Breakaway Roping 40-64", performanceId: "stettler-2025-p1", placing: 2, time: 2.9, competitor: "Kirk Hall", money: 83.6, groundMoney: 0, points: 54 },
+  { id: "r13", eventId: "stettler-2025", eventName: "Men's Breakaway Roping 65+", performanceId: "stettler-2025-p1", placing: 1, time: 1.8, competitor: "Kent Mosher", money: 271.7, groundMoney: 0, points: 73 },
+  { id: "r14", eventId: "stettler-2025", eventName: "Men's Breakaway Roping 65+", performanceId: "stettler-2025-p1", placing: 2, time: 2.6, competitor: "Glen Adie", money: 203.78, groundMoney: 0, points: 63 },
+  // Team roping categories post one row per partner (Header + Heeler) so
+  // each competitor sees their own name under "Competitor" — both rows
+  // describe the same run.
+  { id: "r15", eventId: "stettler-2025", eventName: "Mixed Team Roping", performanceId: "stettler-2025-p1", placing: 1, time: 25.5, competitor: "Millie Archer", partner: "Doug Craik", money: 104.5, groundMoney: 0, points: 62 },
+  { id: "r16", eventId: "stettler-2025", eventName: "Mixed Team Roping Heeler", performanceId: "stettler-2025-p1", placing: 1, time: 25.5, competitor: "Doug Craik", partner: "Millie Archer", money: 104.5, groundMoney: 0, points: 62 },
+  { id: "r17", eventId: "stettler-2025", eventName: "Ribbon Roping 40-59", performanceId: "stettler-2025-p1", placing: 1, time: 9.9, competitor: "Greg Henry", partner: "Trina Marshall", money: 94.05, groundMoney: 0, points: 63 },
+  { id: "r18", eventId: "stettler-2025", eventName: "Ribbon Roping 40-59 Runner", performanceId: "stettler-2025-p1", placing: 1, time: 9.9, competitor: "Trina Marshall", partner: "Greg Henry", money: 94.05, groundMoney: 0, points: 63 },
+  { id: "r19", eventId: "stettler-2025", eventName: "Ribbon Roping 60+", performanceId: "stettler-2025-p1", placing: 1, time: 10.8, competitor: "Greg Dell", partner: "Connie LeMoine", money: 125.4, groundMoney: 0, points: 64 },
+  { id: "r20", eventId: "stettler-2025", eventName: "Ribbon Roping 60+ Runner", performanceId: "stettler-2025-p1", placing: 1, time: 10.8, competitor: "Connie LeMoine", partner: "Greg Dell", money: 125.4, groundMoney: 0, points: 64 },
+  { id: "r21", eventId: "stettler-2025", eventName: "Steer Wrestling", performanceId: "stettler-2025-p1", placing: 1, time: 13.8, competitor: "Jeff Heggie", money: 94.05, groundMoney: 62.7, points: 63 },
+  { id: "r22", eventId: "stettler-2025", eventName: "Team Roping 40-59", performanceId: "stettler-2025-p1", placing: 1, time: 15.6, competitor: "Tim Bevans", partner: "Traci Aipperspach", money: 104.5, groundMoney: 0, points: 62 },
+  { id: "r23", eventId: "stettler-2025", eventName: "Team Roping 40-59 Heeler", performanceId: "stettler-2025-p1", placing: 1, time: 15.6, competitor: "Traci Aipperspach", partner: "Tim Bevans", money: 104.5, groundMoney: 0, points: 62 },
+  { id: "r24", eventId: "stettler-2025", eventName: "Team Roping 60+", performanceId: "stettler-2025-p1", placing: 1, time: 15.3, competitor: "Mike Tucker", partner: "Rick Martine", money: 188.1, groundMoney: 70.54, points: 69 },
+  { id: "r25", eventId: "stettler-2025", eventName: "Team Roping 60+ Heeler", performanceId: "stettler-2025-p1", placing: 1, time: 15.3, competitor: "Rick Martine", partner: "Mike Tucker", money: 188.1, groundMoney: 70.54, points: 69 },
+  { id: "r26", eventId: "stettler-2025", eventName: "Tie Down Roping 40-59", performanceId: "stettler-2025-p1", placing: 1, time: 16.1, competitor: "Kirk Hall", money: 94.05, groundMoney: 0, points: 63 },
+  { id: "r27", eventId: "stettler-2025", eventName: "Tie Down Roping 60+", performanceId: "stettler-2025-p1", placing: 1, time: 12.3, competitor: "Lynn Turcato", money: 125.4, groundMoney: 0, points: 64 },
+  { id: "r28", eventId: "stettler-2025", eventName: "Tie Down Roping 68+", performanceId: "stettler-2025-p1", placing: 1, time: 12.1, competitor: "Everett Morton", money: 156.75, groundMoney: 0, points: 65 },
+  // --- Magrath 2025 (2 performances: p1 = Jul 12, p2 = Jul 13) ----------
+  { id: "r3", eventId: "magrath-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "magrath-2025-p1", placing: 1, time: 15.218, competitor: "Jackie Hoover", money: 250.8, groundMoney: 0, points: 72 },
+  { id: "r4", eventId: "magrath-2025", eventName: "Team Roping 40-59", performanceId: "magrath-2025-p1", placing: 1, time: 6.1, competitor: "Trina Marshall", partner: "Lorna Hodge", money: 209, groundMoney: 0, points: 65 },
 ];
 
 // Competition events an entrant can sign up for on the Enter Rodeo page.
@@ -177,6 +211,13 @@ function delay<T>(value: T, ms = 150): Promise<T> {
 
 export async function getRodeoEvents(): Promise<RodeoEvent[]> {
   return delay(events);
+}
+
+// Used by the results detail page (/results/rodeo-results/[eventId]) to look
+// up the single rodeo it's displaying. Returns null rather than throwing so
+// the caller can render a "not found" state instead of an error boundary.
+export async function getRodeoEvent(eventId: string): Promise<RodeoEvent | null> {
+  return delay(events.find((e) => e.id === eventId) ?? null);
 }
 
 // Used by the Enter Rodeo page's "Rodeo" dropdown — only rodeos currently

@@ -47,6 +47,7 @@ export interface ResultEntry {
   id: string;
   eventId: string; // foreign key back to RodeoEvent.id
   eventName: string; // the competition category, e.g. "Ladies Barrel Racing 40-59"
+  performanceId: string; // foreign key back to RodeoEvent.performances[].id — which specific day/time this placing happened at
   placing: number;
   time?: number; // for timed events
   score?: number; // for judged/rough stock events

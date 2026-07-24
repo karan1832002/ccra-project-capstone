@@ -66,7 +66,8 @@ const NAV_ITEMS: NavItem[] = [
     subItems: [
       { label: "Rodeo Results", path: "/results/rodeo-results" },
       { label: "Standings", path: "/results/standings" },
-      { label: "past-champions", path: "/results/past-champions" },
+      { label: "Finals", path: "/results/finals" },
+      { label: "Past Champions", path: "/results/past-champions" },
     ],
   },
   { label: "Store", path: "/store" },
