@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/header/Header";
-import ChatWidget from "./components/ChatWidget";
+import ChatWidget from "../components/ui/ChatWidget";
 
 export const metadata: Metadata = {
   title: "CCRA Rodeo",
