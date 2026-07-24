@@ -41,12 +41,12 @@ export interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { label: "Home", path: "/" },
   {
-    label: "About Us",
+    label: "About Us", path: "/about-us",
     subItems: [
-      { label: "Contact Information", path: "/about/contact" },
-      { label: "Board of Directors", path: "/about/board-of-directors" },
-      { label: "Meeting Minutes", path: "/about/minutes" },
-      { label: "Photo Gallery", path: "/about/photo-gallery" },
+      { label: "Contact Information", path: "/about-us/contact" },
+      { label: "Board of Directors", path: "/about-us/board-of-directors" },
+      { label: "Meeting Minutes", path: "/about-us/minutes" },
+      { label: "Photo Gallery", path: "/about-us/photo-gallery" },
     ],
   },
   { label: "Schedule", path: "/schedule" },
