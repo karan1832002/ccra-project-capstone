@@ -88,6 +88,33 @@ const events: RodeoEvent[] = [
       { id: "magrath-2025-p2", date: "2025-07-13", time: "9 am" },
     ],
   },
+  {
+    // The season-ending finals rodeo. Its id always follows the
+    // "ccra-finals-<year>" pattern so getLatestFinalsEvent() can find the
+    // most recent one without any other lookup table.
+    //
+    // Its performances list holds the 4 go-rounds *plus* a 5th performance
+    // (id ending in "-avg") representing the average/aggregate placing
+    // across all 4 rounds. That 5th performance isn't a "round" a
+    // competitor enters separately — it's how the association posts the
+    // overall placing (and its points) once all 4 rounds are scored, so it
+    // gets its own ResultEntry rows just like a normal performance would.
+    id: "ccra-finals-2025",
+    name: "CCRA Finals",
+    location: "Ponoka, AB",
+    year: 2025,
+    dateLabel: "Sep 5-6",
+    startDate: "2025-09-05",
+    entriesOpenDate: "2025-08-15",
+    entriesCloseDate: "2025-08-29",
+    performances: [
+      { id: "ccra-finals-2025-r1", date: "2025-09-05", time: "10 am" },
+      { id: "ccra-finals-2025-r2", date: "2025-09-05", time: "2 pm" },
+      { id: "ccra-finals-2025-r3", date: "2025-09-06", time: "10 am" },
+      { id: "ccra-finals-2025-r4", date: "2025-09-06", time: "2 pm" },
+      { id: "ccra-finals-2025-avg", date: "2025-09-06", time: "2 pm" },
+    ],
+  },
 ];
 
 // Each entry links back to an event via eventId — mirrors how a "sheet_files"
@@ -148,6 +175,29 @@ const results: ResultEntry[] = [
   // --- Magrath 2025 (2 performances: p1 = Jul 12, p2 = Jul 13) ----------
   { id: "r3", eventId: "magrath-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "magrath-2025-p1", placing: 1, time: 15.218, competitor: "Jackie Hoover", money: 250.8, groundMoney: 0, points: 72 },
   { id: "r4", eventId: "magrath-2025", eventName: "Team Roping 40-59", performanceId: "magrath-2025-p1", placing: 1, time: 6.1, competitor: "Trina Marshall", partner: "Lorna Hodge", money: 209, groundMoney: 0, points: 65 },
+  // --- CCRA Finals 2025 (4 go-rounds + 1 average/aggregate placing) -----
+  // Ladies Barrel Racing 40-59 — timed event, lower total time wins.
+  { id: "f1", eventId: "ccra-finals-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "ccra-finals-2025-r1", placing: 1, time: 17.502, competitor: "Aimee Cripps", money: 300, groundMoney: 0, points: 20 },
+  { id: "f2", eventId: "ccra-finals-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "ccra-finals-2025-r1", placing: 2, time: 17.89, competitor: "Jill Flynn", money: 225, groundMoney: 0, points: 18 },
+  { id: "f3", eventId: "ccra-finals-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "ccra-finals-2025-r2", placing: 1, time: 17.398, competitor: "Aimee Cripps", money: 300, groundMoney: 0, points: 20 },
+  { id: "f4", eventId: "ccra-finals-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "ccra-finals-2025-r2", placing: 2, time: 17.755, competitor: "Jill Flynn", money: 225, groundMoney: 0, points: 18 },
+  { id: "f5", eventId: "ccra-finals-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "ccra-finals-2025-r3", placing: 2, time: 17.611, competitor: "Aimee Cripps", money: 225, groundMoney: 0, points: 18 },
+  { id: "f6", eventId: "ccra-finals-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "ccra-finals-2025-r3", placing: 1, time: 17.502, competitor: "Jill Flynn", money: 300, groundMoney: 0, points: 20 },
+  { id: "f7", eventId: "ccra-finals-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "ccra-finals-2025-r4", placing: 1, time: 17.45, competitor: "Aimee Cripps", money: 300, groundMoney: 0, points: 20 },
+  { id: "f8", eventId: "ccra-finals-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "ccra-finals-2025-r4", placing: 2, time: 17.8, competitor: "Jill Flynn", money: 225, groundMoney: 0, points: 18 },
+  { id: "f9", eventId: "ccra-finals-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "ccra-finals-2025-avg", placing: 1, time: 69.961, competitor: "Aimee Cripps", money: 500, groundMoney: 0, points: 40 },
+  { id: "f10", eventId: "ccra-finals-2025", eventName: "Ladies Barrel Racing 40-59", performanceId: "ccra-finals-2025-avg", placing: 2, time: 71.947, competitor: "Jill Flynn", money: 375, groundMoney: 0, points: 30 },
+  // Saddle Bronc — judged event, higher total score wins.
+  { id: "f11", eventId: "ccra-finals-2025", eventName: "Saddle Bronc", performanceId: "ccra-finals-2025-r1", placing: 1, score: 78, competitor: "Jace Dunn", money: 300, groundMoney: 0, points: 20 },
+  { id: "f12", eventId: "ccra-finals-2025", eventName: "Saddle Bronc", performanceId: "ccra-finals-2025-r1", placing: 2, score: 75, competitor: "Trey Wilkins", money: 225, groundMoney: 0, points: 18 },
+  { id: "f13", eventId: "ccra-finals-2025", eventName: "Saddle Bronc", performanceId: "ccra-finals-2025-r2", placing: 1, score: 82, competitor: "Jace Dunn", money: 300, groundMoney: 0, points: 20 },
+  { id: "f14", eventId: "ccra-finals-2025", eventName: "Saddle Bronc", performanceId: "ccra-finals-2025-r2", placing: 2, score: 77, competitor: "Trey Wilkins", money: 225, groundMoney: 0, points: 18 },
+  { id: "f15", eventId: "ccra-finals-2025", eventName: "Saddle Bronc", performanceId: "ccra-finals-2025-r3", placing: 2, score: 79, competitor: "Jace Dunn", money: 225, groundMoney: 0, points: 18 },
+  { id: "f16", eventId: "ccra-finals-2025", eventName: "Saddle Bronc", performanceId: "ccra-finals-2025-r3", placing: 1, score: 80, competitor: "Trey Wilkins", money: 300, groundMoney: 0, points: 20 },
+  { id: "f17", eventId: "ccra-finals-2025", eventName: "Saddle Bronc", performanceId: "ccra-finals-2025-r4", placing: 1, score: 81, competitor: "Jace Dunn", money: 300, groundMoney: 0, points: 20 },
+  { id: "f18", eventId: "ccra-finals-2025", eventName: "Saddle Bronc", performanceId: "ccra-finals-2025-r4", placing: 2, score: 76, competitor: "Trey Wilkins", money: 225, groundMoney: 0, points: 18 },
+  { id: "f19", eventId: "ccra-finals-2025", eventName: "Saddle Bronc", performanceId: "ccra-finals-2025-avg", placing: 1, score: 320, competitor: "Jace Dunn", money: 500, groundMoney: 0, points: 40 },
+  { id: "f20", eventId: "ccra-finals-2025", eventName: "Saddle Bronc", performanceId: "ccra-finals-2025-avg", placing: 2, score: 308, competitor: "Trey Wilkins", money: 375, groundMoney: 0, points: 30 },
 ];
 
 // Competition events an entrant can sign up for on the Enter Rodeo page.
@@ -220,6 +270,20 @@ export async function getRodeoEvent(eventId: string): Promise<RodeoEvent | null>
   return delay(events.find((e) => e.id === eventId) ?? null);
 }
 
+// Used by the finals page (/results/finals) — finds the most recent CCRA
+// Finals rodeo. Finals events always use the "ccra-finals-<year>" id
+// pattern, so the most recent one is just whichever has the latest
+// startDate. Returns null (rather than throwing) if a finals rodeo hasn't
+// been added yet, same convention as getRodeoEvent.
+export async function getLatestFinalsEvent(): Promise<RodeoEvent | null> {
+  const finalsEvents = events.filter((e) => e.id.startsWith("ccra-finals-"));
+  if (finalsEvents.length === 0) return delay(null);
+  const latest = finalsEvents.reduce((latestSoFar, e) =>
+    e.startDate > latestSoFar.startDate ? e : latestSoFar
+  );
+  return delay(latest);
+}
+
 // Used by the Enter Rodeo page's "Rodeo" dropdown — only rodeos currently
 // within their entries-open window should be selectable. A rodeo whose
 // entries haven't opened yet, or have already closed, shouldn't show up as
@@ -232,6 +296,25 @@ export async function getRodeosOpenForEntries(
     events.filter(
       (e) => todayIso >= e.entriesOpenDate && todayIso <= e.entriesCloseDate
     )
+  );
+}
+
+// Used by the standings page — only rodeos that have already happened
+// (every performance date in the past) contribute to season standings. An
+// upcoming or in-progress rodeo hasn't posted final results yet, so its
+// entries (if any exist as placeholders) shouldn't count.
+export async function getCompletedRodeoEvents(
+  referenceDate: Date = new Date()
+): Promise<RodeoEvent[]> {
+  const todayIso = toIsoDate(referenceDate);
+  return delay(
+    events.filter((e) => {
+      const lastPerformanceDate = e.performances.reduce(
+        (latest, p) => (p.date > latest ? p.date : latest),
+        e.startDate
+      );
+      return lastPerformanceDate < todayIso;
+    })
   );
 }
 
