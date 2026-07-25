@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/header/Header";
-import ChatWidget from "../components/ui/ChatWidget";
+import ChatWidget from "@/components/ui/ChatWidget";
+import { CartProvider } from "@/app/context/CartContext";
 
 export const metadata: Metadata = {
   title: "CCRA Rodeo",
@@ -28,10 +29,13 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         />
       </head>
+
       <body>
-        <Header />
-        {children}
-        <ChatWidget />
+        <CartProvider>
+          <Header />
+          {children}
+          <ChatWidget />
+        </CartProvider>
       </body>
     </html>
   );

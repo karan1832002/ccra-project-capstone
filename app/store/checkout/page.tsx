@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import ButtonPrimary from "@/components/ui/ButtonPrimary";
 
 export default function CheckoutPage() {
   const [success, setSuccess] = useState(false);
@@ -12,18 +11,28 @@ export default function CheckoutPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="text-3xl font-semibold text-stone-950 mb-6">Checkout</h1>
 
+      {/* Page Heading */}
+      <h1 className="text-5xl font-semibold text-stone-950 mb-6">
+        Checkout
+      </h1>
+
+      {/* Success Banner */}
       {success && (
-        <div className="flex items-start gap-2 rounded-md bg-green-50 px-4 py-3 text-sm text-green-800 mb-6 shadow-sm transition duration-200">
+        <div className="flex items-start gap-2 rounded-md bg-green-50 px-4 py-3 text-sm text-green-800 mb-6 shadow-sm">
           <span className="text-lg">✅</span>
           <p>Your purchase was successful! Thank you for supporting CCRA.</p>
         </div>
       )}
 
+      {/* Checkout Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
+
+        {/* Full Name */}
         <div>
-          <label className="block text-sm font-medium text-stone-950 mb-2">Full Name</label>
+          <label className="block text-sm font-medium text-stone-950 mb-2">
+            Full Name
+          </label>
           <input
             type="text"
             className="h-12 w-full rounded-md border border-stone-200 px-3 outline-none transition focus:border-orange-600"
@@ -32,8 +41,11 @@ export default function CheckoutPage() {
           />
         </div>
 
+        {/* Address */}
         <div>
-          <label className="block text-sm font-medium text-stone-950 mb-2">Shipping Address</label>
+          <label className="block text-sm font-medium text-stone-950 mb-2">
+            Shipping Address
+          </label>
           <input
             type="text"
             className="h-12 w-full rounded-md border border-stone-200 px-3 outline-none transition focus:border-orange-600"
@@ -42,8 +54,11 @@ export default function CheckoutPage() {
           />
         </div>
 
+        {/* Payment Method */}
         <div>
-          <label className="block text-sm font-medium text-stone-950 mb-2">Payment Method</label>
+          <label className="block text-sm font-medium text-stone-950 mb-2">
+            Payment Method
+          </label>
           <select
             className="h-12 w-full rounded-md border border-stone-200 px-3 outline-none transition focus:border-orange-600"
             required
@@ -54,8 +69,22 @@ export default function CheckoutPage() {
           </select>
         </div>
 
-        <ButtonPrimary label="Complete Purchase" />
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="inline-flex items-center justify-center gap-2 rounded-md bg-orange-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
+        >
+          Complete Purchase
+        </button>
       </form>
+
+      {/* Footer */}
+      <footer className="mt-20 border-t border-stone-200 pt-12">
+        <p className="text-sm text-stone-600 text-center">
+          © 2026 Canadian Classic Rodeo Association. All Rights Reserved.
+        </p>
+      </footer>
+
     </div>
   );
 }
