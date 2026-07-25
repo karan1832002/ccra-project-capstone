@@ -12,8 +12,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-// A single sub-item shown in the flyout (always a plain link — no further nesting).
+// A single sub-item shown in the flyout
 export interface DropdownMenuItem {
   label: string;
   path: string;
@@ -24,17 +25,19 @@ export interface DropdownMenuProps {
   label: string;
   path?: string;
   subItems?: DropdownMenuItem[];
+  active?: boolean; // ⭐ ADD THIS
 }
 
 export default function DropdownMenu({
   label,
   path,
   subItems,
+  active = false, // ⭐ default value
 }: DropdownMenuProps) {
-  // Whether the flyout is currently visible (opened by hover, or by tapping
-  // the heading when it has no path of its own — see below).
   const [isOpen, setIsOpen] = useState(false);
   const hasSubItems = Boolean(subItems && subItems.length > 0);
+
+  const pathname = usePathname();
 
   return (
     <div
@@ -42,12 +45,17 @@ export default function DropdownMenu({
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
-      {/* Heading — links to its own path when it has one, otherwise acts as a
-          click/tap toggle for the submenu (hover already opens it on desktop) */}
+      {/* Top-level heading */}
       {path ? (
         <Link
           href={path}
-          className="inline-flex items-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium text-stone-600 transition hover:bg-orange-50 hover:text-stone-950"
+          className={`inline-flex items-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition
+            ${
+              active
+                ? "text-orange-600 font-semibold"
+                : "text-stone-600 hover:bg-orange-50 hover:text-stone-950"
+            }
+          `}
         >
           {label}
         </Link>
@@ -55,7 +63,13 @@ export default function DropdownMenu({
         <button
           type="button"
           onClick={() => setIsOpen((open) => !open)}
-          className="inline-flex items-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium text-stone-600 transition hover:bg-orange-50 hover:text-stone-950"
+          className={`inline-flex items-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition
+            ${
+              active
+                ? "text-orange-600 font-semibold"
+                : "text-stone-600 hover:bg-orange-50 hover:text-stone-950"
+            }
+          `}
           aria-haspopup={hasSubItems ? "true" : undefined}
           aria-expanded={hasSubItems ? isOpen : undefined}
         >
@@ -63,20 +77,30 @@ export default function DropdownMenu({
         </button>
       )}
 
-      {/* Dropdown Menu - only displays if submenu items exist */}
+      {/* Dropdown flyout */}
       {hasSubItems && isOpen && (
         <div className="absolute top-full left-0 min-w-[180px] rounded-md border border-stone-200 bg-white p-2 shadow-lg z-20">
           <ul className="m-0 list-none p-0">
-            {subItems!.map((subItem) => (
-              <li key={subItem.label}>
-                <Link
-                  href={subItem.path}
-                  className="block rounded-md px-3 py-2 text-sm text-stone-600 transition hover:bg-orange-50 hover:text-stone-950"
-                >
-                  {subItem.label}
-                </Link>
-              </li>
-            ))}
+            {subItems!.map((subItem) => {
+              const subActive = pathname.startsWith(subItem.path);
+
+              return (
+                <li key={subItem.label}>
+                  <Link
+                    href={subItem.path}
+                    className={`block rounded-md px-3 py-2 text-sm transition
+                      ${
+                        subActive
+                          ? "text-orange-600 font-semibold bg-orange-50"
+                          : "text-stone-600 hover:bg-orange-50 hover:text-stone-950"
+                      }
+                    `}
+                  >
+                    {subItem.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

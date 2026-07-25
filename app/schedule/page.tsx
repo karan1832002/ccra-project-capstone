@@ -12,17 +12,6 @@ export default function SchedulePage() {
         Stay up to date with event dates, entry windows, and performance times for the 2026 rodeo season.
       </p>
 
-      {/* Callback Notice */}
-      <div className="rounded-md border border-stone-200 bg-orange-50 p-6 shadow-sm mb-12">
-        <h2 className="text-xl font-semibold text-stone-950 mb-2">
-          Important Call Back Instructions
-        </h2>
-        <p className="text-sm text-stone-600">
-          If you notice an issue with the draw (wrong event, missing entry, etc.), contact the office on Friday with your
-          confirmation number. After Friday, the draw is final and cannot be changed.
-        </p>
-      </div>
-
       {/* Schedule Table */}
       <div className="rounded-md border border-stone-200 bg-white shadow-sm overflow-hidden">
         <table className="w-full text-sm text-stone-600">

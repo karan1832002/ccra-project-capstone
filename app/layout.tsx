@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/header/Header";
 import ChatWidget from "@/components/ui/ChatWidget";
 import { CartProvider } from "@/app/context/CartContext";
+import Footer from "@/components/footer/footer";
 
 export const metadata: Metadata = {
   title: "CCRA Rodeo",
@@ -35,6 +36,7 @@ export default function RootLayout({
           <Header />
           {children}
           <ChatWidget />
+          <Footer />
         </CartProvider>
       </body>
     </html>

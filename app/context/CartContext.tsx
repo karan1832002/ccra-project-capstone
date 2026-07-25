@@ -1,61 +1,110 @@
 "use client";
-import { createContext, useContext, useState } from "react";
 
-const CartContext = createContext();
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+} from "react";
 
-export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState([]);
+type CartItem = {
+  title: string;
+  price: number;
+  image?: string;
+  qty: number;
+};
 
-  // ADD ITEM (with quantity)
-  const addToCart = (item) => {
+type NewCartItem = Omit<CartItem, "qty">;
+
+type CartContextType = {
+  cartItems: CartItem[];
+  addToCart: (item: NewCartItem) => void;
+  removeItem: (index: number) => void;
+  increaseQty: (index: number) => void;
+  decreaseQty: (index: number) => void;
+  clearCart: () => void;
+};
+
+const CartContext = createContext<CartContextType | undefined>(undefined);
+
+export function CartProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  const addToCart = (item: NewCartItem) => {
     setCartItems((prev) => {
       const existing = prev.find((p) => p.title === item.title);
+
       if (existing) {
         return prev.map((p) =>
-          p.title === item.title ? { ...p, qty: p.qty + 1 } : p
+          p.title === item.title
+            ? { ...p, qty: p.qty + 1 }
+            : p
         );
       }
+
       return [...prev, { ...item, qty: 1 }];
     });
   };
 
-  // REMOVE ITEM
-  const removeItem = (index) => {
+  const removeItem = (index: number) => {
     setCartItems((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // INCREASE QUANTITY
-  const increaseQty = (index) => {
-    setCartItems((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, qty: item.qty + 1 } : item
-      )
-    );
-  };
-
-  // DECREASE QUANTITY
-  const decreaseQty = (index) => {
+  const increaseQty = (index: number) => {
     setCartItems((prev) =>
       prev.map((item, i) =>
         i === index
-          ? { ...item, qty: item.qty > 1 ? item.qty - 1 : 1 }
+          ? { ...item, qty: item.qty + 1 }
           : item
       )
     );
   };
 
-  // CLEAR CART
+  const decreaseQty = (index: number) => {
+    setCartItems((prev) =>
+      prev.map((item, i) =>
+        i === index
+          ? {
+              ...item,
+              qty: item.qty > 1 ? item.qty - 1 : 1,
+            }
+          : item
+      )
+    );
+  };
+
   const clearCart = () => {
     setCartItems([]);
   };
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeItem, increaseQty, decreaseQty, clearCart }}
+      value={{
+        cartItems,
+        addToCart,
+        removeItem,
+        increaseQty,
+        decreaseQty,
+        clearCart,
+      }}
     >
       {children}
     </CartContext.Provider>
   );
 }
 
-export const useCart = () => useContext(CartContext);
+export function useCart() {
+  const context = useContext(CartContext);
+
+  if (context === undefined) {
+    throw new Error(
+      "useCart must be used within a CartProvider"
+    );
+  }
+
+  return context;
+}
