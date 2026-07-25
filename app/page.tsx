@@ -1,21 +1,243 @@
-export default function Home() {
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import ImageCarousel, { CarouselImage } from "@/components/ui/ImageCarousel";
+import { Calendar, ShoppingCart, Trophy, Camera, ArrowRight } from "lucide-react";
+
+const heroImages: CarouselImage[] = [
+  {
+    src: "/images/home/hero-1.jpg",
+    alt: "Barrel racing at CCRA",
+    caption: "Ladies Barrel Racing – 2025 Finals",
+  },
+  {
+    src: "/images/home/hero-2.jpg",
+    alt: "Team Roping action",
+    caption: "Team Roping – Championship Round",
+  },
+  {
+    src: "/images/home/hero-3.jpg",
+    alt: "Steer Wrestling",
+    caption: "Steer Wrestling – Magrath CCRA Rodeo",
+  },
+];
+
+export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-1 items-center justify-center bg-zinc-50 px-6 font-sans dark:bg-black">
-      <main className="flex flex-col items-center text-center">
-        <span className="mb-6 rounded-full border border-zinc-200 bg-white px-4 py-1 text-sm font-medium text-zinc-500 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
-          CCRA
-        </span>
+    <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
+      {/* ================= HERO ================= */}
+      <section className="relative">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8 pb-16">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-md bg-orange-50 px-4 py-1 text-sm font-semibold text-orange-600 mb-6 dark:bg-orange-950/40 dark:text-orange-400">
+                EST. 1985 • 41ST ANNIVERSARY
+              </div>
 
-        <h1 className="max-w-2xl bg-gradient-to-br from-zinc-900 via-zinc-700 to-zinc-400 bg-clip-text text-5xl font-bold leading-tight tracking-tight text-transparent dark:from-white dark:via-zinc-300 dark:to-zinc-600 sm:text-6xl">
-          Welcome to CCRA!
-        </h1>
+              <h1 className="text-5xl sm:text-6xl font-semibold tracking-tight text-stone-950 dark:text-stone-100 leading-tight">
+                Canadian Classic<br />
+                Rodeo Association
+              </h1>
 
-        <p className="mt-6 max-w-md text-lg leading-relaxed text-zinc-500 dark:text-zinc-400">
-          The page is loaded. The database is connected. Now its upto you.
-        </p>
+              <p className="mt-6 text-xl text-stone-600 dark:text-stone-300 max-w-lg leading-relaxed">
+                Preserving Western heritage through competitive rodeo for athletes of all ages and skill levels.
+              </p>
 
-        <div className="mt-10 h-px w-24 bg-gradient-to-r from-transparent via-zinc-300 to-transparent dark:via-zinc-700" />
-      </main>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <Link
+                  href="/sign-up"
+                  className="inline-flex items-center justify-center rounded-md bg-orange-600 px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-orange-700"
+                >
+                  Join the CCRA
+                </Link>
+                <Link
+                  href="/schedule"
+                  className="inline-flex items-center justify-center rounded-md border border-stone-200 bg-white px-8 py-3.5 text-sm font-semibold text-stone-950 transition hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:hover:bg-stone-800"
+                >
+                  2026 Schedule
+                </Link>
+              </div>
+            </div>
+
+            {/* Right - Hero Image / Carousel */}
+            <div className="relative">
+              <ImageCarousel
+                images={heroImages}
+                autoPlay
+                interval={5000}
+                showCaptions
+                aspectRatio="video"
+                className="shadow-lg"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= QUICK LINKS ================= */}
+      <section className="border-y border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-900">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { href: "/schedule", icon: Calendar, label: "Schedule", desc: "2026 Events" },
+              { href: "/store", icon: ShoppingCart, label: "Store", desc: "CCRA Merchandise" },
+              { href: "/results/standings", icon: Trophy, label: "Standings", desc: "Current Rankings" },
+              { href: "/about-us/photo-gallery", icon: Camera, label: "Gallery", desc: "Photo Moments" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group flex flex-col items-center text-center p-6 rounded-md border border-stone-200 bg-stone-50 transition hover:border-orange-300 hover:shadow-md dark:border-stone-700 dark:bg-stone-950 dark:hover:border-orange-700"
+              >
+                <div className="w-12 h-12 rounded-md bg-orange-100 flex items-center justify-center text-orange-600 mb-4 group-hover:bg-orange-600 group-hover:text-white transition dark:bg-orange-950/40 dark:text-orange-400">
+                  <item.icon className="w-6 h-6" />
+                </div>
+                <span className="font-semibold text-stone-950 dark:text-stone-100">{item.label}</span>
+                <span className="text-sm text-stone-500 mt-1 dark:text-stone-400">{item.desc}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= ABOUT TEASER ================= */}
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-4 dark:text-stone-500">
+                OUR STORY
+              </div>
+              <h2 className="text-4xl font-semibold text-stone-950 dark:text-stone-100 mb-6">
+                A Legacy of Western Spirit
+              </h2>
+              <p className="text-lg text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
+                Founded in 1985 as the Canadian Senior Pro Rodeo Association, the CCRA has grown into a vibrant community of competitors from beginner to professional. We celebrate the love of the sport, Western values, and the active lifestyle that brings us together.
+              </p>
+              <Link
+                href="/about-us"
+                className="inline-flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300"
+              >
+                Learn more about us
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            <div className="relative aspect-[4/3] rounded-md overflow-hidden border border-stone-200 dark:border-stone-700">
+              <Image
+                src="/images/home/about-teaser.jpg"
+                alt="CCRA competitors"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= UPCOMING / HIGHLIGHTS ================= */}
+      {/* will be populated with dynamic content based off of what events are scheduled and upcoming */}
+      <section className="py-20 bg-white dark:bg-stone-900 border-y border-stone-200 dark:border-stone-800">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-3 dark:text-stone-500">
+              2026 SEASON
+            </div>
+            <h2 className="text-4xl font-semibold text-stone-950 dark:text-stone-100">
+              What’s Coming Up
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Card 1 */}
+            <div className="rounded-md border border-stone-200 bg-stone-50 p-8 shadow-sm dark:border-stone-700 dark:bg-stone-950">
+              <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mb-2">
+                Date: MM DD–DD or "TBD"
+              </div>
+              <h3 className="text-xl font-semibold text-stone-950 dark:text-stone-100 mb-3">
+                Event Title 
+              </h3>
+              <p className="text-stone-600 dark:text-stone-300 text-sm mb-6">
+                Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.
+              </p>
+              <Link
+                href="/"
+                className="text-sm font-semibold text-orange-600 hover:underline dark:text-orange-400"
+              >
+                View details →
+              </Link>
+            </div>
+
+            {/* Card 2 */}
+            <div className="rounded-md border border-stone-200 bg-stone-50 p-8 shadow-sm dark:border-stone-700 dark:bg-stone-950">
+              <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mb-2">
+                Date: MM DD–DD or "TBD"
+              </div>
+              <h3 className="text-xl font-semibold text-stone-950 dark:text-stone-100 mb-3">
+                Event Title
+              </h3>
+              <p className="text-stone-600 dark:text-stone-300 text-sm mb-6">
+                 Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.
+              </p>
+              <Link
+                href="/"
+                className="text-sm font-semibold text-orange-600 hover:underline dark:text-orange-400"
+              >
+                View details →
+              </Link>
+            </div>
+
+            {/* Card 3 */}
+            <div className="rounded-md border border-stone-200 bg-stone-50 p-8 shadow-sm dark:border-stone-700 dark:bg-stone-950">
+              <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mb-2">
+                Date: MM DD–DD or "TBD"
+              </div>
+              <h3 className="text-xl font-semibold text-stone-950 dark:text-stone-100 mb-3">
+                Event Title
+              </h3>
+              <p className="text-stone-600 dark:text-stone-300 text-sm mb-6">
+                 Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.
+              </p>
+              <Link
+                href="/"
+                className="text-sm font-semibold text-orange-600 hover:underline dark:text-orange-400"
+              >
+                View details →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= CTA BANNER ================= */}
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-md bg-orange-600 px-8 py-14 text-center text-white">
+            <h2 className="text-3xl sm:text-4xl font-semibold mb-4">
+              Ready to Hit the Grounds?
+            </h2>
+            <p className="text-orange-100 text-lg max-w-2xl mx-auto mb-8">
+              Get your 2026 membership today and be part of the Canadian Classic Rodeo family.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                href="/events/enter-rodeo"
+                className="inline-flex items-center justify-center rounded-md bg-white px-8 py-3.5 text-sm font-semibold text-orange-700 transition hover:bg-orange-50"
+              >
+                Enter Rodeo 
+              </Link>
+              <Link
+                href="/about-us/contact"
+                className="inline-flex items-center justify-center rounded-md border border-white/40 px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
+              >
+                Contact Us
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

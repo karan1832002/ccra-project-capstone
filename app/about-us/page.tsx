@@ -40,7 +40,7 @@ export default function AboutUsPage() {
 
               <div className="mt-10 flex items-center gap-4">
                 <a 
-                  href="/membership" 
+                  href="/sign-up" 
                   className="inline-flex items-center justify-center rounded-md bg-orange-600 px-8 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
                 >
                   Join the CCRA
