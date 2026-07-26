@@ -2,17 +2,23 @@
 
 import { useState } from "react";
 
+interface RodeoApprovalForm {
+  rodeoType: string;
+  payment: string;
+  [key: string]: string | undefined;
+}
+
 export default function RodeoApprovalForm() {
-  const [form, setForm] = useState<any>({
+  const [form, setForm] = useState<RodeoApprovalForm>({
     rodeoType: "Full Rodeo",
     payment: "",
   });
 
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
-  const update = (field: string, value: any) => {
-    setForm((prev: any) => ({ ...prev, [field]: value }));
+  const update = (field: string, value: string) => {
+    setForm((prev: RodeoApprovalForm) => ({ ...prev, [field]: value }));
   };
 
   const eventFields: Record<string, string[]> = {
@@ -41,7 +47,7 @@ export default function RodeoApprovalForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newErrors: any = {};
+    const newErrors: Record<string, string> = {};
 
     if (!form.payment) newErrors.payment = "Please select a payment method.";
 
