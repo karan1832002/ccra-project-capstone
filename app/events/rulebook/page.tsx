@@ -1,7 +1,7 @@
-export defualt function MinutesPage() {
+export default function RulebookPage() {
   return (
     <main>
-      <h1>Minutes</h1>
+      <h1>Rulebook</h1>
     </main>
   );
 }
