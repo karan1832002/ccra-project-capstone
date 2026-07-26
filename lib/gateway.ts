@@ -30,10 +30,10 @@ type Options = {
 
 /**
  * Calls a public gateway route. Use this for anything a signed-out visitor
- * can see (events list, standings, products...).
+ * can see (rodeos, events, standings, products...).
  *
  * For ADMIN actions use callGateway() in lib/gateway-client.ts instead —
- * that one attaches the verified session role.
+ * that one attaches the verified session role/id.
  */
 export async function fetchFromGateway<T>(
   path: string,
@@ -47,10 +47,7 @@ export async function fetchFromGateway<T>(
   });
 
   if (!res.ok && res.status >= 500) {
-    throw new GatewayError(
-      "GATEWAY_UNAVAILABLE",
-      `Gateway returned ${res.status}`
-    );
+    throw new GatewayError("GATEWAY_UNAVAILABLE", `Gateway returned ${res.status}`);
   }
 
   const json = (await res.json()) as ApiResponse<T>;
@@ -62,16 +59,40 @@ export async function fetchFromGateway<T>(
   return json.data;
 }
 
-// --- Types matching what the backend services return --------------------
+// ==========================================================================
+// TYPES — match the backend AFTER the rodeo/event schema redesign
+// ==========================================================================
 
+// A rodeo is the top-level container (multi-day, with an entry window).
+export type Rodeo = {
+  id: string;
+  rodeoTitle: string;
+  entriesOpen: string | null;   // ISO date "YYYY-MM-DD"
+  phoneInEntries: string | null;
+  entriesClose: string | null;
+  entryFee: number | null;
+  location: string;
+  image: string | null;
+  description: string | null;
+  capacity: number | null;
+  createdAt: string;
+};
+
+// An event is a single competition inside a rodeo.
 export type Event = {
   id: string;
-  title: string;
-  date: string;
-  location: string;
-  description: string | null;
-  category: string | null;
-  capacity: number | null;
+  rodeoId: string;
+  eventTitle: string;
+  eventDate: string | null;
+  eventTime: string | null;
+  eventFee: number | null;
+};
+
+// GET /api/events/rodeos/:id returns a rodeo with these nested.
+export type RodeoDetail = Rodeo & {
+  dates: { id: string; rodeoId: string; date: string; startTime: string | null }[];
+  events: Event[];
+  draws: { id: string; rodeoId: string; drawFile: string | null }[];
 };
 
 export type Product = {
@@ -83,16 +104,41 @@ export type Product = {
   imageUrl: string | null;
 };
 
-// --- Convenience wrappers -----------------------------------------------
+// Standings are COMPUTED from results (no standings table anymore).
+export type Standing = {
+  rank: number;
+  userId: string;
+  totalPoints: number | string; // Postgres SUM returns a string
+  totalMoney: number;
+  entries: number | string;
+};
 
+// ==========================================================================
+// CONVENIENCE WRAPPERS
+// ==========================================================================
+
+// Rodeos
+export function getRodeos() {
+  return fetchFromGateway<Rodeo[]>("/api/events/rodeos");
+}
+export function getRodeo(id: string) {
+  return fetchFromGateway<RodeoDetail>(`/api/events/rodeos/${id}`);
+}
+
+// Events (individual competitions)
 export function getEvents() {
   return fetchFromGateway<Event[]>("/api/events");
 }
-
 export function getEvent(id: string) {
   return fetchFromGateway<Event>(`/api/events/${id}`);
 }
 
+// Store
 export function getProducts() {
   return fetchFromGateway<Product[]>("/api/store/products");
+}
+
+// Standings
+export function getStandings(category: string) {
+  return fetchFromGateway<Standing[]>(`/api/results/standings/${category}`);
 }
