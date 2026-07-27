@@ -15,7 +15,6 @@ export default function RodeoFinalsPage() {
   // This page always shows the most recent CCRA Finals rodeo — there's no
   // eventId in the route, unlike the results detail page.
   useEffect(() => {
-    setLoading(true);
     getLatestFinalsEvent().then((evt) => {
       if (!evt) {
         setEventMissing(true);

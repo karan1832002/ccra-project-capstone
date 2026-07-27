@@ -1,4 +1,4 @@
-export default function ButtonSecondary({ label, onClick }) {
+export default function ButtonSecondary({ label, onClick }: { label: string; onClick: () => void }) {
   return (
     <button
       onClick={onClick}

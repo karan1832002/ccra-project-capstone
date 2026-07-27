@@ -14,7 +14,6 @@ export default function RodeoStandingsPage() {
   // pull the list of completed events first, then keep only the results
   // that belong to one of them.
   useEffect(() => {
-    setLoading(true);
     Promise.all([getCompletedRodeoEvents(), getAllResults()]).then(
       ([completedEvents, allResults]) => {
         const completedEventIds = new Set(completedEvents.map((e) => e.id));

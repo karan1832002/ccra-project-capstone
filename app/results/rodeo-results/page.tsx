@@ -54,13 +54,20 @@ export default function RodeoResultsPage() {
       .sort((a, b) => (a.startDate < b.startDate ? 1 : -1));
   }, [events, year, search, resultsByEvent]);
 
+  // Tag each event with whether it starts a new year group. Compare each
+  // event to the previous one in the sorted list — no variable tracking.
+  const eventsWithYearHeaders = useMemo(
+    () =>
+      visibleEvents.map((event, i) => ({
+        event,
+        showYearHeader: i === 0 || event.year !== visibleEvents[i - 1].year,
+      })),
+    [visibleEvents],
+  );
+
   if (loading) {
     return <p className="text-sm text-stone-400">Loading rodeo results...</p>;
   }
-
-  // Tracks the last year header printed, so we only show "2026" / "2025" once
-  // per group rather than on every card.
-  let lastYear: number | null = null;
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
@@ -82,30 +89,21 @@ export default function RodeoResultsPage() {
         <p className="text-sm text-stone-400 py-6">No matching rodeos.</p>
       )}
 
-      {visibleEvents.map((event) => {
-        // Insert a year header whenever we cross into a new year while
-        // iterating the already-sorted list.
-        const showYearHeader = event.year !== lastYear;
-        lastYear = event.year;
-        return (
-          <React.Fragment key={event.id}>
-            {showYearHeader && (
-              <div className="text-xs font-semibold text-stone-400 mt-5 mb-2">
-                {event.year}
-              </div>
-            )}
-            {/* RodeoEventCard is the shared shell (name/date/location
-                header); ResultsPreview is the results-specific body —
-                summary stats + a link through to the full results page. */}
-            <RodeoEventCard event={event}>
-              <ResultsPreview
-                eventId={event.id}
-                entries={resultsByEvent.get(event.id) ?? []}
-              />
-            </RodeoEventCard>
-          </React.Fragment>
-        );
-      })}
+      {eventsWithYearHeaders.map(({ event, showYearHeader }) => (
+        <React.Fragment key={event.id}>
+          {showYearHeader && (
+            <div className="text-xs font-semibold text-stone-400 mt-5 mb-2">
+              {event.year}
+            </div>
+          )}
+          <RodeoEventCard event={event}>
+            <ResultsPreview
+              eventId={event.id}
+              entries={resultsByEvent.get(event.id) ?? []}
+            />
+          </RodeoEventCard>
+        </React.Fragment>
+      ))}
     </div>
   );
 }

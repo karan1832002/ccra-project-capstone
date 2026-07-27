@@ -15,7 +15,7 @@
  */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
@@ -38,13 +38,13 @@ export default function Sidebar({
   id = "sidebar-panel",
   children,
 }: SidebarProps) {
-  const [mounted, setMounted] = useState(false);
-
   // document.body doesn't exist during server rendering, so only create the
   // portal once the component has mounted in the browser.
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {}, // no-op subscribe — nothing to unsubscribe from
+    () => true, // client snapshot — we're mounted
+    () => false, // server snapshot — we're not mounted
+  );
 
   if (!mounted) return null;
 

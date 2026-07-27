@@ -39,7 +39,6 @@ export default function RodeoResultsDetailPage({
   // any rodeo (bad link, typo'd URL), skip straight to the "not found" state
   // instead of trying to fetch results for nothing.
   useEffect(() => {
-    setLoading(true);
     getRodeoEvent(eventId).then((evt) => {
       if (!evt) {
         setEventMissing(true);
