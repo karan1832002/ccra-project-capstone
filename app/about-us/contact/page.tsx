@@ -73,10 +73,10 @@ export default function ContactInformationPage() {
               <div className="mt-12 pt-8 border-t border-stone-200 dark:border-stone-700">
                 <p className="text-sm font-semibold text-stone-400 mb-4 dark:text-stone-500">QUICK LINKS</p>
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                  <a href="/membership" className="text-stone-600 hover:text-orange-600 transition dark:text-stone-300 dark:hover:text-orange-400">Membership</a>
+                  <a href="/store" className="text-stone-600 hover:text-orange-600 transition dark:text-stone-300 dark:hover:text-orange-400">Membership</a>
                   <a href="/schedule" className="text-stone-600 hover:text-orange-600 transition dark:text-stone-300 dark:hover:text-orange-400">2026 Schedule</a>
-                  <a href="/standings" className="text-stone-600 hover:text-orange-600 transition dark:text-stone-300 dark:hover:text-orange-400">Current Standings</a>
-                  <a href="/past-champions" className="text-stone-600 hover:text-orange-600 transition dark:text-stone-300 dark:hover:text-orange-400">Past Champions</a>
+                  <a href="/results/standings" className="text-stone-600 hover:text-orange-600 transition dark:text-stone-300 dark:hover:text-orange-400">Current Standings</a>
+                  <a href="/results/past-champions" className="text-stone-600 hover:text-orange-600 transition dark:text-stone-300 dark:hover:text-orange-400">Past Champions</a>
                 </div>
               </div>
             </div>
