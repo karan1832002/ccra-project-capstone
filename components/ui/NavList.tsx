@@ -1,33 +1,18 @@
-/**
- * NavList
- * -------
- * A vertical list of nav links, some of which can expand in place to reveal
- * sub-links (e.g. "About Us" -> "Contact Information", "Board of Directors").
- *
- * This component only knows about rendering links — it has no idea it's
- * usually shown inside a `Sidebar`. That's intentional: it could just as
- * easily be dropped into a footer or any other plain container.
- *
- * Used by:
- * - components/header/MobileNav.tsx   (renders NAV_ITEMS)
- * - components/header/ProfileMenu.tsx (renders PROFILE_LINKS)
- */
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export interface NavListItem {
   label: string;
-  // An item has either a path (plain link) or subItems (expandable), never both.
   path?: string;
   subItems?: NavListItem[];
 }
 
 export interface NavListProps {
   items: NavListItem[];
-  // Called whenever a link is clicked, so the parent can close the sidebar.
   onNavigate: () => void;
   className?: string;
 }
@@ -37,17 +22,16 @@ export default function NavList({
   onNavigate,
   className,
 }: NavListProps) {
-  // Tracks which top-level labels currently have their sub-items expanded.
   const [expandedLabels, setExpandedLabels] = useState<Set<string>>(new Set());
+  const pathname = usePathname();
+
+  const isActive = (path?: string) =>
+    path && pathname.startsWith(path);
 
   function toggleSection(label: string) {
     setExpandedLabels((prev) => {
       const next = new Set(prev);
-      if (next.has(label)) {
-        next.delete(label);
-      } else {
-        next.add(label);
-      }
+      next.has(label) ? next.delete(label) : next.add(label);
       return next;
     });
   }
@@ -55,25 +39,26 @@ export default function NavList({
   return (
     <nav className={className ?? "grid gap-1"}>
       {items.map((item) => {
-        const hasSubItems = Boolean(item.subItems && item.subItems.length > 0);
+        const hasSubItems = Boolean(item.subItems?.length);
         const isExpanded = expandedLabels.has(item.label);
 
-        // Plain item: just a link, no expand/collapse behavior.
         if (!hasSubItems) {
           return (
             <Link
               key={item.label}
               href={item.path ?? "#"}
               onClick={onNavigate}
-              className="rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+              className={
+                isActive(item.path)
+                  ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
+                  : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+              }
             >
               {item.label}
             </Link>
           );
         }
 
-        // Expandable item: a toggle button for the label, plus an indented
-        // list of sub-links that only renders once expanded.
         return (
           <div key={item.label}>
             <button
@@ -94,16 +79,24 @@ export default function NavList({
 
             {isExpanded && (
               <div className="ml-3 grid gap-1 border-l border-stone-200 pl-3">
-                {item.subItems!.map((subItem) => (
-                  <Link
-                    key={subItem.label}
-                    href={subItem.path ?? "#"}
-                    onClick={onNavigate}
-                    className="rounded-md px-3 py-2 text-sm text-stone-650 transition hover:bg-orange-50 hover:text-stone-950"
-                  >
-                    {subItem.label}
-                  </Link>
-                ))}
+                {item.subItems!.map((subItem) => {
+                  const subActive = isActive(subItem.path);
+
+                  return (
+                    <Link
+                      key={subItem.label}
+                      href={subItem.path ?? "#"}
+                      onClick={onNavigate}
+                      className={
+                        subActive
+                          ? "rounded-md px-3 py-2 text-sm font-semibold text-orange-600 underline underline-offset-4"
+                          : "rounded-md px-3 py-2 text-sm text-stone-650 transition hover:bg-orange-50 hover:text-stone-950"
+                      }
+                    >
+                      {subItem.label}
+                    </Link>
+                  );
+                })}
               </div>
             )}
           </div>
