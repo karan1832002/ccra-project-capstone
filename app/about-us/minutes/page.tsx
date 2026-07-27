@@ -153,7 +153,7 @@ export default function MinutesPage() {
             Minutes are published after approval by the Board.  
             For older records or official copies, please{" "}
             <a
-              href="/contact"
+              href="/about-us/contact"
               className="text-orange-600 hover:underline dark:text-orange-400"
             >
               contact the office
