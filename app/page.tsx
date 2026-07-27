@@ -24,19 +24,19 @@ const heroImages: CarouselImage[] = [
 ];
 
 const sponsorImages: CarouselImage[] = [
-  { src: "/images/sponsors/sponsor-1.png", alt: "Sponsor 1" },
-  { src: "/images/sponsors/sponsor-2.png", alt: "Sponsor 2" },
-  { src: "/images/sponsors/sponsor-3.png", alt: "Sponsor 3" },
-  { src: "/images/sponsors/sponsor-4.png", alt: "Sponsor 4" },
-  { src: "/images/sponsors/sponsor-5.png", alt: "Sponsor 5" },
-  { src: "/images/sponsors/sponsor-6.png", alt: "Sponsor 6" },
-  { src: "/images/sponsors/sponsor-7.png", alt: "Sponsor 7" },
-  { src: "/images/sponsors/sponsor-8.png", alt: "Sponsor 8" },
-  { src: "/images/sponsors/sponsor-9.png", alt: "Sponsor 9" },
-  { src: "/images/sponsors/sponsor-10.png", alt: "Sponsor 10" },
-  { src: "/images/sponsors/sponsor-11.png", alt: "Sponsor 11" },
-  { src: "/images/sponsors/sponsor-12.png", alt: "Sponsor 12" },
-  { src: "/images/sponsors/sponsor-13.png", alt: "Sponsor 13" },
+  { src: "/images/sponsors/sponsor1-strathmorestampede.png", alt: "Sponsor 1" },
+  { src: "/images/sponsors/sponsor2-uncommonciderco.png", alt: "Sponsor 2" },
+  { src: "/images/sponsors/sponsor3-ufa.webp", alt: "Sponsor 3" },
+  { src: "/images/sponsors/sponsor4-summitmotorsltd.jpg", alt: "Sponsor 4" },
+  { src: "/images/sponsors/sponsor5-lesfermescavendishfarms.png", alt: "Sponsor 5" },
+  { src: "/images/sponsors/sponsor6-statsgroup.png", alt: "Sponsor 6" },
+  { src: "/images/sponsors/sponsor7-vaneelivestocktrucking.png", alt: "Sponsor 7" },
+  { src: "/images/sponsors/sponsor8-vantage.png", alt: "Sponsor 8" },
+  { src: "/images/sponsors/sponsor9-troyfischersilverworks.jpg", alt: "Sponsor 9" },
+  { src: "/images/sponsors/sponsor10.jpg", alt: "Sponsor 10" },
+  { src: "/images/sponsors/sponsor11.jpg", alt: "Sponsor 11" },
+  { src: "/images/sponsors/sponsor12-townoftaber.jpg", alt: "Sponsor 12" },
+  { src: "/images/sponsors/sponsor13.jpg", alt: "Sponsor 13" },
 ];
 
 export default function HomePage() {
@@ -119,33 +119,32 @@ export default function HomePage() {
       </section>
 
       {/* ================= SPONSORS (Auto Carousel) ================= */}
-      <section className="py-20">
+      <section className="py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-3 dark:text-stone-500">
               SUPPORTING THE CCRA
             </div>
-            <h2 className="text-3xl font-semibold text-stone-950 dark:text-stone-100">
+            <h2 className="text-2xl font-semibold text-stone-950 dark:text-stone-100">
               Our Sponsors
             </h2>
-            <p className="mt-3 text-stone-600 dark:text-stone-300 max-w-xl mx-auto">
+            <p className="mt-2 text-sm text-stone-600 dark:text-stone-300 max-w-xl mx-auto">
               Thank you to the businesses and individuals who help keep classic rodeo alive in Canada.
             </p>
           </div>
 
           {/* Auto-playing sponsor carousel */}
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-2xl mx-auto">
             <ImageCarousel
               images={sponsorImages}
               autoPlay={true}
-              interval={3500}          // slightly faster for logos
+              interval={3500}
               showCaptions={false}
-              aspectRatio="video"      // or "square" if your logos are more square
-              className="bg-white dark:bg-stone-900"
+              aspectRatio="square"
+              className="bg-white dark:bg-stone-900 [&_img]:object-contain"
             />
           </div>
-
-          <div className="mt-10 text-center">
+          <div className="mt-6 text-center">
             <Link
               href="/about-us/contact"
               className="inline-flex items-center gap-2 text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400"
