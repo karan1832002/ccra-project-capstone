@@ -7,17 +7,17 @@ import { Calendar, ShoppingCart, Trophy, Camera, ArrowRight } from "lucide-react
 
 const heroImages: CarouselImage[] = [
   {
-    src: "/images/home/hero-1.jpg",
+    src: "/images/barrelracer.jpg",
     alt: "Barrel racing at CCRA",
     caption: "Ladies Barrel Racing – 2025 Finals",
   },
   {
-    src: "/images/home/hero-2.jpg",
+    src: "/images/steerwrestling.jpg",
     alt: "Team Roping action",
     caption: "Team Roping – Championship Round",
   },
   {
-    src: "/images/home/hero-3.jpg",
+    src: "/images/barrelracing.jpg",
     alt: "Steer Wrestling",
     caption: "Steer Wrestling – Magrath CCRA Rodeo",
   },
@@ -127,7 +127,7 @@ export default function HomePage() {
 
             <div className="relative aspect-[4/3] rounded-md overflow-hidden border border-stone-200 dark:border-stone-700">
               <Image
-                src="/images/home/about-teaser.jpg"
+                src="/images/cowwrestler.jpg"
                 alt="CCRA competitors"
                 fill
                 className="object-cover"
