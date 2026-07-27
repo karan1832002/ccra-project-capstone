@@ -57,7 +57,7 @@ export default function AboutUsPage() {
             {/* Visual / Image Placeholder */}
             <div className="relative rounded-md shadow-sm overflow-hidden aspect-[16/10] bg-stone-200 dark:bg-stone-800">
               <Image 
-                src="/images/about-hero.jpg" // Replace with actual image path later
+                src="/images/ccralineup.jpg" 
                 alt="Canadian Classic Rodeo action" 
                 fill 
                 className="object-cover"
