@@ -14,10 +14,12 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Environment variables must be present at build time for Next.js if embedded
+# Build-time arguments (pass via --build-arg, not hardcoded)
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV DATABASE_URL="postgresql://neondb_owner:npg_9j4XYOlUeyQz@ep-solitary-star-aupl1yag-pooler.c-10.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
-ENV BETTER_AUTH_SECRET="1536d2a7faf288eb84f830311cbd7829e7015a3e35b29eda4c5d2a78042a3fcf"
+ARG DATABASE_URL
+ARG BETTER_AUTH_SECRET
+ENV DATABASE_URL=${DATABASE_URL}
+ENV BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
 
 RUN npm run build
 
@@ -25,8 +27,15 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV DATABASE_URL=""
+ENV BETTER_AUTH_SECRET=""
+ENV BETTER_AUTH_URL=""
+ENV NEXT_PUBLIC_APP_URL=""
+ENV RESEND_API_KEY=""
+ENV FRONTEND_GATEWAY_KEY=""
+ENV GATEWAY_URL=""
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -42,7 +51,7 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["npm", "run", "start"]
