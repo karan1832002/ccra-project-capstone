@@ -26,8 +26,8 @@ function Table<T extends Record<string, React.ReactNode>>({
   data,
 }: TableProps<T>) {
   return (
-    <div className="overflow-x-auto rounded-md border border-stone-200 shadow-sm inline-block">
-      <table className="divide-y divide-stone-200">
+    <div className="overflow-x-auto rounded-md border border-stone-200 shadow-sm w-full">
+      <table className="w-full divide-y divide-stone-200">
         {/* Table Headers */}
         <thead className="bg-orange-600">
           <tr>
@@ -35,7 +35,7 @@ function Table<T extends Record<string, React.ReactNode>>({
               <th
                 key={index}
                 scope="col"
-                className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+                className="px-6 py-3 text-center text-sm font-semibold text-white uppercase tracking-wider"
               >
                 {col}
               </th>

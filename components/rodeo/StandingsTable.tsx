@@ -43,7 +43,7 @@ export function StandingsTable({ entries }: StandingsTableProps) {
   const columns = ["Rank", "Competitor", "Rodeo Count", "Points"];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 w-full flex flex-col items-center">
       {Array.from(entriesByCategory.entries()).map(([eventName, categoryEntries]) => {
         // Roll every placing up into one running total per competitor:
         // total points across the season, and the number of distinct
@@ -77,9 +77,45 @@ export function StandingsTable({ entries }: StandingsTableProps) {
         }));
 
         return (
-          <div key={eventName}>
+          <div key={eventName} className="w-full max-w-6xl">
             <h2 className="text-lg font-semibold text-stone-900 mb-2">{eventName}</h2>
-            <Table columns={columns} data={data} />
+
+            <div className="w-full flex justify-center">
+              <div className="w-full max-w-6xl">
+                <div className="bg-white shadow-md rounded-lg p-6">
+                  <h2 className="text-xl font-bold text-stone-900 mb-4">{eventName}</h2>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse">
+                        <thead>
+                          <tr className="bg-orange-600 text-white">
+                          <th className="px-4 py-2 text-left">Rank</th>
+                          <th className="px-4 py-2 text-left">Competitor</th>
+                          <th className="px-4 py-2 text-left">Rodeo Count</th>
+                          <th className="px-4 py-2 text-left">Points</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          {ranked.map((row, index) => (
+                            <tr
+                              key={row.competitor}
+                              className={index % 2 === 0 ? "bg-stone-50" : "bg-white"}
+                            >
+                              <td className="px-4 py-2 border-b">{index + 1}</td>
+                              <td className="px-4 py-2 border-b">{row.competitor}</td>
+                              <td className="px-4 py-2 border-b">{row.rodeoIds.size}</td>
+                              <td className="px-4 py-2 border-b font-semibold">
+                              {row.points}
+                              </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+              </div>
+            </div>
           </div>
         );
       })}

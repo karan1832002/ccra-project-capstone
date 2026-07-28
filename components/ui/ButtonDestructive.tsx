@@ -1,4 +1,4 @@
-export default function ButtonDestructive({ label, onClick }) {
+export default function ButtonDestructive({ label, onClick }: { label: string; onClick: () => void }) {
   return (
     <button
       onClick={onClick}

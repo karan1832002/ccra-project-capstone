@@ -215,7 +215,7 @@ export default function StorePage() {
   );
 }
 
-/* PRODUCT CARD */
+/* PRODUCT-CARD */
 function ProductCard({
   image,
   title,

@@ -4,7 +4,7 @@ import { useState } from "react";
 export default function CheckoutPage() {
   const [success, setSuccess] = useState(false);
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>){
     e.preventDefault();
     setSuccess(true);
   }
