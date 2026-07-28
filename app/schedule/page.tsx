@@ -1,8 +1,3 @@
-// app/schedule/page.tsx
-//
-// Server Component: fetches rodeos from the gateway and renders them as a
-// polished schedule. Uses the site's stone/orange palette and leather-shadow.
-
 import { getRodeos, GatewayError, type Rodeo } from "@/lib/gateway";
 
 export const metadata = { title: "Rodeo Schedule | CCRA" };
@@ -17,7 +12,6 @@ function fmtLong(dateStr: string | null): string {
   });
 }
 
-// Entry status derived from today vs the open/close window.
 function entryStatus(open: string | null, close: string | null) {
   const today = new Date().toISOString().slice(0, 10);
   if (open && today < open) return { label: "Opens soon", tone: "upcoming" };
@@ -45,19 +39,16 @@ export default async function SchedulePage() {
 
   return (
     <div className="min-h-screen bg-stone-50">
-      {/* Hero band */}
-      <header className="border-b border-stone-200 bg-gradient-to-b from-white to-stone-50">
-        <div className="mx-auto max-w-7xl px-6 py-16">
-          <p className="text-sm font-medium uppercase tracking-widest text-orange-600 mb-3">
-            2026 Season
-          </p>
-          <h1 className="text-5xl font-bold tracking-tight text-stone-950">
-            Rodeo Schedule
+
+      {/* Header */}
+      <header className="border-b border-stone-200 bg-white">
+        <div className="mx-auto max-w-5xl px-4 py-10 text-center">
+          <h1 className="text-3xl font-bold text-orange-700 mb-4">
+            2026 Season Rodeo Schedule
           </h1>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-stone-600">
-            Event dates, entry windows, and performance times for the upcoming
-            CCRA season. Entries close automatically after each rodeo&apos;s
-            deadline.
+          <p className="text-gray-600 mb-6">
+            View official dates, entry windows, and performance times for all
+            Canadian Classic Rodeo Association sanctioned rodeos.
           </p>
         </div>
       </header>
@@ -80,11 +71,11 @@ export default async function SchedulePage() {
           </div>
         ) : (
           <>
-            {/* Desktop: table. Mobile: cards. */}
-            <div className="hidden overflow-hidden rounded-2xl border border-stone-200 bg-white leather-shadow md:block">
+            {/* Desktop Table */}
+            <div className="hidden overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-md md:block">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-stone-200 bg-stone-50/80">
+                  <tr className="border-b border-stone-200 bg-stone-50">
                     <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-stone-500">
                       Rodeo
                     </th>
@@ -102,11 +93,12 @@ export default async function SchedulePage() {
                     </th>
                   </tr>
                 </thead>
+
                 <tbody className="divide-y divide-stone-100">
                   {rodeos.map((r) => {
                     const status = entryStatus(r.entriesOpen, r.entriesClose);
                     return (
-                      <tr key={r.id} className="group transition-colors hover:bg-orange-50/40">
+                      <tr key={r.id} className="transition-colors hover:bg-orange-50/40">
                         <td className="px-6 py-5">
                           <div className="font-semibold text-stone-950">{r.rodeoTitle}</div>
                           {r.entryFee != null && (
@@ -132,12 +124,12 @@ export default async function SchedulePage() {
               </table>
             </div>
 
-            {/* Mobile cards */}
+            {/* Mobile Cards */}
             <div className="space-y-4 md:hidden">
               {rodeos.map((r) => {
                 const status = entryStatus(r.entriesOpen, r.entriesClose);
                 return (
-                  <div key={r.id} className="rounded-2xl border border-stone-200 bg-white p-5 leather-shadow">
+                  <div key={r.id} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-md">
                     <div className="flex items-start justify-between gap-3">
                       <h2 className="text-lg font-semibold text-stone-950">{r.rodeoTitle}</h2>
                       <span
@@ -146,7 +138,9 @@ export default async function SchedulePage() {
                         {status.label}
                       </span>
                     </div>
+
                     <p className="mt-1 text-sm text-stone-500">{r.location}</p>
+
                     <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <dt className="text-xs uppercase tracking-wide text-stone-400">Opens</dt>
@@ -157,6 +151,7 @@ export default async function SchedulePage() {
                         <dd className="mt-0.5 text-stone-700">{fmtLong(r.entriesClose)}</dd>
                       </div>
                     </dl>
+
                     {r.entryFee != null && (
                       <p className="mt-3 text-xs text-stone-500">Entry fee ${r.entryFee}</p>
                     )}
@@ -171,12 +166,6 @@ export default async function SchedulePage() {
           Showing {rodeos.length} {rodeos.length === 1 ? "rodeo" : "rodeos"} for the 2026 season
         </p>
       </main>
-
-      <footer className="border-t border-stone-200 py-10">
-        <p className="text-center text-sm text-stone-500">
-          © 2026 Canadian Classic Rodeo Association. All Rights Reserved.
-        </p>
-      </footer>
     </div>
   );
 }

@@ -66,62 +66,87 @@ export default function RodeoApprovalForm() {
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 space-y-10">
+       {/* Header */}
+<section className="mb-10">
+  <h1 className="text-center text-4xl font-bold text-orange-700">
+    Committee Rodeo Approval Form
+  </h1>
 
-    {/* HEADER SECTION — PASTE HERE */}
-    <section className="w-full">
-      <h1 className="text-3xl font-bold text-stone-900">
-        Committee Rodeo Approval Form
-      </h1>
+  <p className="mt-4 max-w-3xl mx-auto text-center text-stone-600">
+    The Canadian Classic Rodeo Association (CCRA) welcomes communities
+    interested in hosting high-quality rodeo events. Complete the form
+    below to submit your rodeo for approval.
+  </p>
+</section>
 
-      <p className="mt-3 text-stone-700 leading-relaxed max-w-3xl">
-        The Canadian Classic Rodeo Association (CCRA) welcomes communities interested 
-        in hosting high‑quality rodeo events. Please complete the form below to submit 
-        your rodeo for approval. Our team will review your application and contact you 
-        with next steps.
-      </p>
+{/* Top Section */}
+<section className="mb-10">
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+    {/* LEFT */}
+    <div className="lg:col-span-2">
 
-        {/* Left: Rodeo Type Buttons */}
-        <div className="md:col-span-2 space-y-4">
-          <h2 className="text-lg font-semibold text-stone-900">
-            Hosting Format
-          </h2>
+      <h2 className="text-3xl font-bold mb-6 text-stone-700">
+        Hosting Format
+      </h2>
 
-          <div className="flex flex-wrap gap-3">
-            {["Full Rodeo", "Timed Events Only", "Roughstock Only"].map((type) => (
-              <button
-                key={type}
-                type="button"
-                onClick={() => update("rodeoType", type)}
-                className={`rounded-md px-4 py-2 text-sm font-semibold border transition
-                  ${
-                    form.rodeoType === type
-                      ? "bg-orange-600 text-white border-orange-600"
-                      : "bg-white text-stone-800 border-stone-300 hover:bg-stone-100"
-                  }
-                `}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-        </div>
+      <div className="space-y-3">
 
-        {/* Right: Assistance Box */}
-        <div className="rounded-md border border-stone-200 bg-stone-50 p-4 space-y-1 text-sm">
-          <p className="font-semibold text-stone-800">Need Assistance?</p>
-          <p className="text-stone-700">
-            For questions regarding the approval process or CCRA regulations, 
-            please contact:
-          </p>
-          <p className="text-stone-800 font-medium">Gina Icenoggle</p>
-          <p className="text-stone-700">(403) 555‑0123</p>
-          <p className="text-stone-700">office@canadianclassicrodeo.com</p>
-        </div>
+        {[
+          "Full Rodeo",
+          "Timed Events Only",
+          "Roughstock Only",
+        ].map((type) => (
+          <button
+            key={type}
+            type="button"
+            onClick={() => update("rodeoType", type)}
+            className={`group flex w-[275px] items-center justify-between rounded-xl border px-6 py-5 transition-all duration-200
+              ${
+                form.rodeoType === type
+                  ? "bg-orange-400 border-orange-400 text-white"
+                  : "bg-white border-stone-200 hover:border-orange-20"
+              }
+            `}
+          >
+
+            <span className="font-semibold text-">
+              {type}
+            </span>
+          </button>
+        ))}
 
       </div>
-    </section>
+
+    </div>
+
+    {/* RIGHT */}
+    <div className="rounded-xl border border-orange-200 bg-orange-50 p-6 sticky top-24">
+
+      <h3 className="text-2xl font-bold mb-4">
+        Need Assistance?
+      </h3>
+
+      <p className="text-stone-700 leading-7">
+        Questions about the approval process or CCRA regulations?
+      </p>
+
+      <div className="mt-6 space-y-2 text-stone-800">
+        <p className="font-semibold">
+          Gina Icenoggle
+        </p>
+
+        <p>(403) 555-0123</p>
+
+        <p>office@canadianclassicrodeo.com</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+        
+      
             
       {/* FORM */}
       <form onSubmit={handleSubmit} className="space-y-10">
