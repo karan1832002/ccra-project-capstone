@@ -74,26 +74,34 @@ export default function RodeoDrawsPage() {
   if (loading) {
     return <p className="text-sm text-stone-400">Loading draw sheets...</p>;
   }
-
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4">
-      <h1 className="text-3xl font-semibold text-stone-950 mb-4">
+  <div className="max-w-6xl mx-auto px-6 py-10">
+
+    {/* Page Header */}
+    <section className="text-center mb-10">
+      <h1 className="text-5xl font-bold text-orange-700">
         Rodeo Draws
       </h1>
+    </section>
 
-      {/* Callback Notice */}
-    <div className="rounded-md border border-stone-200 bg-orange-50 p-6 shadow-sm mb-6">
-      <h2 className="text-xl font-semibold text-stone-950 mb-2">
-        Important Call Back Instructions
-      </h2>
-      <p className="text-sm text-stone-600">
-        If you notice an issue with the draw (wrong event, missing entry, etc.), contact the office on Friday with your
-        confirmation number. After Friday, the draw is final and cannot be changed.
-      </p>
-    </div>
+    {/* Notice */}
+    <section className="mb-8 rounded-xl border border-orange-200 bg-orange-50 shadow-sm">
+      <div className="p-8">
+        <h2 className="text-2xl font-bold text-stone-900 mb-3">
+          Important Call Back Instructions
+        </h2>
 
-      {/* Filter bar is fully controlled — it just displays these values and
-          reports changes back up via the on*Change callbacks. */}
+        <p className="text-stone-700 leading-7">
+          If you notice an issue with the draw (wrong event, missing entry,
+          etc.), contact the office on <strong>Friday</strong> with your
+          confirmation number. After Friday, the draw is final and cannot be
+          changed.
+        </p>
+      </div>
+    </section>
+
+    {/* Filters */}
+    <section className="mb-8">
       <EventFilterBar
         search={search}
         onSearchChange={setSearch}
@@ -104,6 +112,7 @@ export default function RodeoDrawsPage() {
         onSheetTypeChange={setSheetType}
         showTypeFilter
       />
+    </section>
 
       {visibleEvents.length === 0 && (
         <p className="text-sm text-stone-400 py-6">No matching draw sheets.</p>

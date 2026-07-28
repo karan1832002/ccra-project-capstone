@@ -42,18 +42,17 @@ export default function StorePage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 bg-stone-50">
 
-      {/* HERO */}
+      {/* HERO — Rulebook Style */}
       <section className="py-12 text-center">
-        <h1 className="text-5xl font-semibold text-stone-950 mb-4">
+        <h1 className="text-3xl font-bold text-orange-700 mb-4">
           The Frontier Collection
         </h1>
 
-        <p className="text-stone-600 max-w-3xl mx-auto mb-6">
-          Handcrafted leather saddles and premium rodeo gear built for riders
-          who demand excellence.
+        <p className="text-gray-600 max-w-2xl mx-auto mb-6">
+          Handcrafted leather saddles and premium rodeo gear built for riders who demand excellence.
         </p>
 
-        <p className="text-stone-500 max-w-xl mx-auto mb-8 text-base leading-relaxed">
+        <p className="text-gray-500 max-w-xl mx-auto mb-8 text-base leading-relaxed">
           Crafting the standard for rodeo excellence since 1974.
         </p>
 
@@ -279,26 +278,18 @@ function MembershipCard({
       </p>
 
       <ul className="text-stone-500 text-sm mb-6 space-y-2 min-h-[110px]">
-  {benefits.map((benefit) => (
-    <li key={benefit}>
-      • {benefit}
-    </li>
-  ))}
-</ul>
+        {benefits.map((benefit) => (
+          <li key={benefit}>• {benefit}</li>
+        ))}
+      </ul>
 
-<div className="mt-auto pt-4">
-  {primary ? (
-    <ButtonPrimary
-      label={buttonLabel}
-      onClick={onClick}
-    />
-  ) : (
-    <ButtonSecondary
-      label={buttonLabel}
-      onClick={onClick}
-    />
-  )}
-</div>
+      <div className="mt-auto pt-4">
+        {primary ? (
+          <ButtonPrimary label={buttonLabel} onClick={onClick} />
+        ) : (
+          <ButtonSecondary label={buttonLabel} onClick={onClick} />
+        )}
+      </div>
     </div>
   );
 }

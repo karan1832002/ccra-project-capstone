@@ -27,23 +27,17 @@ type CartContextType = {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export function CartProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export function CartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const addToCart = (item: NewCartItem) => {
     setCartItems((prev) => {
-      const existing = prev.find((p) => p.title === item.title);
+      const existingIndex = prev.findIndex((p) => p.title === item.title);
 
-      if (existing) {
-        return prev.map((p) =>
-          p.title === item.title
-            ? { ...p, qty: p.qty + 1 }
-            : p
-        );
+      if (existingIndex !== -1) {
+        const updated = [...prev];
+        updated[existingIndex].qty += 1;
+        return updated;
       }
 
       return [...prev, { ...item, qty: 1 }];
@@ -57,9 +51,7 @@ export function CartProvider({
   const increaseQty = (index: number) => {
     setCartItems((prev) =>
       prev.map((item, i) =>
-        i === index
-          ? { ...item, qty: item.qty + 1 }
-          : item
+        i === index ? { ...item, qty: item.qty + 1 } : item
       )
     );
   };
@@ -68,10 +60,7 @@ export function CartProvider({
     setCartItems((prev) =>
       prev.map((item, i) =>
         i === index
-          ? {
-              ...item,
-              qty: item.qty > 1 ? item.qty - 1 : 1,
-            }
+          ? { ...item, qty: item.qty > 1 ? item.qty - 1 : 1 }
           : item
       )
     );
@@ -101,9 +90,7 @@ export function useCart() {
   const context = useContext(CartContext);
 
   if (context === undefined) {
-    throw new Error(
-      "useCart must be used within a CartProvider"
-    );
+    throw new Error("useCart must be used within a CartProvider");
   }
 
   return context;

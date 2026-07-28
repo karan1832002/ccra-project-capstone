@@ -146,7 +146,11 @@ export default function EnterRodeoPage() {
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10">
-      <h1 className="mb-6 text-3xl font-semibold text-stone-950">Enter Rodeo</h1>
+      <div className="mb-10 text-center">
+        <h1 className="mb-4 text-3xl font-bold text-orange-700">
+          Enter Rodeo
+        </h1>
+      </div>
 
       {confirmationNumber ? (
         // --- Confirmation view -------------------------------------------

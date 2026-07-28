@@ -8,13 +8,10 @@ import { ResultsPreview } from "@/components/rodeo/ResultsPreview";
 import { EventFilterBar } from "@/components/rodeo/EventFilterBar";
 
 export default function RodeoResultsPage() {
-  // Raw data fetched from the data layer, unfiltered.
   const [events, setEvents] = useState<RodeoEvent[]>([]);
   const [results, setResults] = useState<ResultEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Current filter selections, controlled here and passed down to
-  // EventFilterBar. No sheet-type filter here — that only applies to draws.
   const [search, setSearch] = useState("");
   const [year, setYear] = useState("all");
 
@@ -26,14 +23,11 @@ export default function RodeoResultsPage() {
     });
   }, []);
 
-  // Distinct years present in the data, newest first — feeds the year dropdown.
   const years = useMemo(
     () => Array.from(new Set(events.map((e) => e.year))).sort((a, b) => b - a),
     [events],
   );
 
-  // Group results by event id so each card's preview can look up its own
-  // rodeo's entries without re-scanning the full results list on every render.
   const resultsByEvent = useMemo(() => {
     const map = new Map<string, ResultEntry[]>();
     for (const entry of results) {
@@ -44,8 +38,6 @@ export default function RodeoResultsPage() {
     return map;
   }, [results]);
 
-  // Events to render: matches the year and search filters, has at least one
-  // result posted, sorted most recent first.
   const visibleEvents = useMemo(() => {
     return events
       .filter((e) => year === "all" || String(e.year) === year)
@@ -54,8 +46,6 @@ export default function RodeoResultsPage() {
       .sort((a, b) => (a.startDate < b.startDate ? 1 : -1));
   }, [events, year, search, resultsByEvent]);
 
-  // Tag each event with whether it starts a new year group. Compare each
-  // event to the previous one in the sorted list — no variable tracking.
   const eventsWithYearHeaders = useMemo(
     () =>
       visibleEvents.map((event, i) => ({
@@ -71,12 +61,16 @@ export default function RodeoResultsPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
-      <h1 className="text-3xl font-semibold text-stone-950 mb-4">
+
+      {/* RULEBOOK STYLE HEADING */}
+      <h1 className="text-3xl font-bold text-orange-700 mb-4 text-center">
         Rodeo Results
       </h1>
 
-      {/* Filter bar is fully controlled — it just displays these values and
-          reports changes back up via the on*Change callbacks. */}
+      <p className="text-gray-600 text-center mb-8">
+        Search payouts, standings, and event results from past rodeos.
+      </p>
+
       <EventFilterBar
         search={search}
         onSearchChange={setSearch}

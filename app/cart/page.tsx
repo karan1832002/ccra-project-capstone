@@ -10,9 +10,14 @@ export default function CartPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12">
 
-      <h1 className="text-5xl font-semibold text-stone-950 mb-6 text-center">
+      {/* RULEBOOK STYLE HEADING */}
+      <h1 className="text-3xl font-bold text-orange-700 mb-4 text-center">
         Your Cart
       </h1>
+
+      <p className="text-gray-600 text-center mb-8">
+        Review your items before checkout.
+      </p>
 
       {cartItems.length === 0 ? (
         <div className="rounded-md border border-stone-200 bg-white shadow-sm p-12 text-center">
@@ -108,12 +113,6 @@ export default function CartPage() {
           </a>
         </div>
       )}
-
-      <footer className="mt-20 border-t border-stone-200 pt-12">
-        <p className="text-sm text-stone-600 text-center">
-          © 2026 Canadian Classic Rodeo Association. All Rights Reserved.
-        </p>
-      </footer>
 
     </div>
   );
