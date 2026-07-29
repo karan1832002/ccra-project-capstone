@@ -21,7 +21,6 @@ import {
 // Mock data – replace with real user data from your auth/session + API
 const user = {
   name: "Tammy Clemmer",
-  membershipNumber: "CCRA-2026-0487",
   status: "Active",
   memberSince: "2018",
   email: "tammy.clemmer@example.com",
@@ -90,9 +89,6 @@ export default function ProfilePage() {
                 <h2 className="text-2xl font-semibold text-stone-950 dark:text-stone-100">
                   {user.name}
                 </h2>
-                <p className="text-sm text-stone-500 mt-1 dark:text-stone-400">
-                  {user.membershipNumber}
-                </p>
 
                 {/* Status Badge */}
                 <div className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-green-50 px-3 py-1 text-xs font-semibold text-green-700 dark:bg-green-950/40 dark:text-green-400">
@@ -130,94 +126,10 @@ export default function ProfilePage() {
                 </Link>
               </div>
             </div>
-
-            {/* Contact Snapshot */}
-            <div className="rounded-md border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-700 dark:bg-stone-900">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-stone-400 mb-5 dark:text-stone-500">
-                Contact
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <Mail className="w-4 h-4 text-orange-600 mt-0.5 shrink-0 dark:text-orange-400" />
-                  <div>
-                    <div className="text-xs text-stone-500 dark:text-stone-400">Email</div>
-                    <a
-                      href={`mailto:${user.email}`}
-                      className="text-sm font-medium text-stone-950 hover:text-orange-600 dark:text-stone-100 dark:hover:text-orange-400"
-                    >
-                      {user.email}
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="w-4 h-4 text-orange-600 mt-0.5 shrink-0 dark:text-orange-400" />
-                  <div>
-                    <div className="text-xs text-stone-500 dark:text-stone-400">Phone</div>
-                    <a
-                      href={`tel:${user.phone}`}
-                      className="text-sm font-medium text-stone-950 hover:text-orange-600 dark:text-stone-100 dark:hover:text-orange-400"
-                    >
-                      {user.phone}
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-orange-600 mt-0.5 shrink-0 dark:text-orange-400" />
-                  <div>
-                    <div className="text-xs text-stone-500 dark:text-stone-400">Location</div>
-                    <div className="text-sm font-medium text-stone-950 dark:text-stone-100">
-                      {user.address}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* ================= RIGHT COLUMN – Details & Stats ================= */}
           <div className="lg:col-span-8 space-y-6">
-
-            {/* Season Snapshot */}
-            <div className="rounded-md border border-stone-200 bg-white p-8 shadow-sm dark:border-stone-700 dark:bg-stone-900">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-1 dark:text-stone-500">
-                    2026 SEASON
-                  </div>
-                  <h3 className="text-2xl font-semibold text-stone-950 dark:text-stone-100">
-                    Season Snapshot
-                  </h3>
-                </div>
-                <Link
-                  href="/results/standings"
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400"
-                >
-                  Full Standings
-                  <ChevronRight className="w-4 h-4" />
-                </Link>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div className="rounded-md border border-stone-200 bg-stone-50 p-5 text-center dark:border-stone-700 dark:bg-stone-950">
-                  <div className="text-3xl font-semibold text-orange-600 dark:text-orange-400">
-                    {user.currentSeason.points}
-                  </div>
-                  <div className="text-sm text-stone-500 mt-1 dark:text-stone-400">Points</div>
-                </div>
-                <div className="rounded-md border border-stone-200 bg-stone-50 p-5 text-center dark:border-stone-700 dark:bg-stone-950">
-                  <div className="text-3xl font-semibold text-stone-950 dark:text-stone-100">
-                    #{user.currentSeason.rank}
-                  </div>
-                  <div className="text-sm text-stone-500 mt-1 dark:text-stone-400">Rank</div>
-                </div>
-                <div className="rounded-md border border-stone-200 bg-stone-50 p-5 text-center dark:border-stone-700 dark:bg-stone-950">
-                  <div className="text-3xl font-semibold text-stone-950 dark:text-stone-100">
-                    {user.currentSeason.rodeosEntered}
-                  </div>
-                  <div className="text-sm text-stone-500 mt-1 dark:text-stone-400">Rodeos</div>
-                </div>
-              </div>
-            </div>
 
             {/* Events / Categories */}
             <div className="rounded-md border border-stone-200 bg-white p-8 shadow-sm dark:border-stone-700 dark:bg-stone-900">
@@ -237,71 +149,6 @@ export default function ProfilePage() {
                     {event}
                   </span>
                 ))}
-              </div>
-            </div>
-
-            {/* Membership Details */}
-            <div className="rounded-md border border-stone-200 bg-white p-8 shadow-sm dark:border-stone-700 dark:bg-stone-900">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-1 dark:text-stone-500">
-                    MEMBERSHIP
-                  </div>
-                  <h3 className="text-xl font-semibold text-stone-950 dark:text-stone-100">
-                    Membership Details
-                  </h3>
-                </div>
-                <Link
-                  href="/membership"
-                  className="text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400"
-                >
-                  Manage →
-                </Link>
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-6">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-md bg-orange-50 flex items-center justify-center shrink-0 dark:bg-orange-950/40">
-                    <Calendar className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-stone-500 dark:text-stone-400">Season</div>
-                    <div className="font-semibold text-stone-950 dark:text-stone-100">2026</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-md bg-orange-50 flex items-center justify-center shrink-0 dark:bg-orange-950/40">
-                    <Shield className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-stone-500 dark:text-stone-400">Status</div>
-                    <div className="font-semibold text-stone-950 dark:text-stone-100">
-                      {user.status}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-md bg-orange-50 flex items-center justify-center shrink-0 dark:bg-orange-950/40">
-                    <User className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-stone-500 dark:text-stone-400">Age Group</div>
-                    <div className="font-semibold text-stone-950 dark:text-stone-100">
-                      {user.ageGroup}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-md bg-orange-50 flex items-center justify-center shrink-0 dark:bg-orange-950/40">
-                    <Award className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-stone-500 dark:text-stone-400">Member #</div>
-                    <div className="font-semibold text-stone-950 dark:text-stone-100">
-                      {user.membershipNumber}
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -336,17 +183,6 @@ export default function ProfilePage() {
                   </div>
                 </div>
               </Link>
-            </div>
-
-            {/* Sign Out */}
-            <div className="pt-4">
-              <button
-                type="button"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-stone-500 hover:text-red-600 transition dark:text-stone-400 dark:hover:text-red-400"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign out
-              </button>
             </div>
           </div>
         </div>
