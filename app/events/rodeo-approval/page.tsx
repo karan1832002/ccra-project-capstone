@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Hero from "@/components/ui/Hero";
 
 interface RodeoApprovalForm {
   rodeoType: string;
@@ -66,91 +67,65 @@ export default function RodeoApprovalForm() {
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 space-y-10">
-       {/* Header */}
-<section className="mb-10">
-  <h1 className="text-center text-4xl font-bold text-orange-700">
-    Committee Rodeo Approval Form
-  </h1>
+      {/* Header */}
+      <Hero
+        badge="HOST A RODEO"
+        title="Committee Rodeo Approval Form"
+        description="The Canadian Classic Rodeo Association (CCRA) welcomes communities interested in hosting high-quality rodeo events. Complete the form below to submit your rodeo for approval."
+      />
 
-  <p className="mt-4 max-w-3xl mx-auto text-center text-stone-600">
-    The Canadian Classic Rodeo Association (CCRA) welcomes communities
-    interested in hosting high-quality rodeo events. Complete the form
-    below to submit your rodeo for approval.
-  </p>
-</section>
+      {/* Top Section */}
+      <section className="mb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {/* LEFT */}
+          <div className="lg:col-span-2">
+            <h2 className="text-3xl font-bold mb-6 text-stone-700">
+              Hosting Format
+            </h2>
 
-{/* Top Section */}
-<section className="mb-10">
-  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-
-    {/* LEFT */}
-    <div className="lg:col-span-2">
-
-      <h2 className="text-3xl font-bold mb-6 text-stone-700">
-        Hosting Format
-      </h2>
-
-      <div className="space-y-3">
-
-        {[
-          "Full Rodeo",
-          "Timed Events Only",
-          "Roughstock Only",
-        ].map((type) => (
-          <button
-            key={type}
-            type="button"
-            onClick={() => update("rodeoType", type)}
-            className={`group flex w-[275px] items-center justify-between rounded-xl border px-6 py-5 transition-all duration-200
+            <div className="space-y-3">
+              {["Full Rodeo", "Timed Events Only", "Roughstock Only"].map(
+                (type) => (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => update("rodeoType", type)}
+                    className={`group flex w-[275px] items-center justify-between rounded-xl border px-6 py-5 transition-all duration-200
               ${
                 form.rodeoType === type
                   ? "bg-orange-400 border-orange-400 text-white"
                   : "bg-white border-stone-200 hover:border-orange-20"
               }
             `}
-          >
+                  >
+                    <span className="font-semibold text-">{type}</span>
+                  </button>
+                ),
+              )}
+            </div>
+          </div>
 
-            <span className="font-semibold text-">
-              {type}
-            </span>
-          </button>
-        ))}
+          {/* RIGHT */}
+          <div className="rounded-xl border border-orange-200 bg-orange-50 p-6 sticky top-24">
+            <h3 className="text-2xl font-bold mb-4">Need Assistance?</h3>
 
-      </div>
+            <p className="text-stone-700 leading-7">
+              Questions about the approval process or CCRA regulations?
+            </p>
 
-    </div>
+            <div className="mt-6 space-y-2 text-stone-800">
+              <p className="font-semibold">Gina Icenoggle</p>
 
-    {/* RIGHT */}
-    <div className="rounded-xl border border-orange-200 bg-orange-50 p-6 sticky top-24">
+              <p>(403) 555-0123</p>
 
-      <h3 className="text-2xl font-bold mb-4">
-        Need Assistance?
-      </h3>
+              <p>office@canadianclassicrodeo.com</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <p className="text-stone-700 leading-7">
-        Questions about the approval process or CCRA regulations?
-      </p>
-
-      <div className="mt-6 space-y-2 text-stone-800">
-        <p className="font-semibold">
-          Gina Icenoggle
-        </p>
-
-        <p>(403) 555-0123</p>
-
-        <p>office@canadianclassicrodeo.com</p>
-      </div>
-
-    </div>
-
-  </div>
-</section>
-        
-      
-            
       {/* FORM */}
       <form onSubmit={handleSubmit} className="space-y-10">
-
         {/* 1. Basic Rodeo Info */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-stone-900">
@@ -164,7 +139,7 @@ export default function RodeoApprovalForm() {
               </label>
               <input
                 required
-                className= "w-full h-[42px] border border-stone-300 rounded-md px-3 py-2 bg-white"
+                className="w-full h-[42px] border border-stone-300 rounded-md px-3 py-2 bg-white"
                 onChange={(e) => update("rodeoName", e.target.value)}
               />
             </div>
@@ -175,34 +150,32 @@ export default function RodeoApprovalForm() {
                 Location *
               </label>
 
-                <select
-                  required
-                  className= "w-full h-[42px] border border-stone-300 rounded-md px-3 py-2 bg-white"
-                  onChange={(e) => update("city", e.target.value)}
-                >
-                  <option value="">Select City</option>
-                   <option>Calgary</option>
-                  <option>Edmonton</option>
-                  <option>Red Deer</option>
-                  <option>Lethbridge</option>
-                  <option>Medicine Hat</option>
-                  <option>Grande Prairie</option>
-                  <option>Fort McMurray</option>
-                  <option>Brooks</option>
-                  <option>Okotoks</option>
-                  <option>Airdrie</option>
-                  <option>Cochrane</option>
-                  <option>Strathmore</option>
-                  <option>Olds</option>
-                  <option>Innisfail</option>
-                  <option>Wetaskiwin</option>
-                  <option>Lloydminster</option>
-                  <option>Camrose</option>
-
-                </select>
-
-              </div>
+              <select
+                required
+                className="w-full h-[42px] border border-stone-300 rounded-md px-3 py-2 bg-white"
+                onChange={(e) => update("city", e.target.value)}
+              >
+                <option value="">Select City</option>
+                <option>Calgary</option>
+                <option>Edmonton</option>
+                <option>Red Deer</option>
+                <option>Lethbridge</option>
+                <option>Medicine Hat</option>
+                <option>Grande Prairie</option>
+                <option>Fort McMurray</option>
+                <option>Brooks</option>
+                <option>Okotoks</option>
+                <option>Airdrie</option>
+                <option>Cochrane</option>
+                <option>Strathmore</option>
+                <option>Olds</option>
+                <option>Innisfail</option>
+                <option>Wetaskiwin</option>
+                <option>Lloydminster</option>
+                <option>Camrose</option>
+              </select>
             </div>
+          </div>
 
           <div>
             <label className="text-sm font-medium text-stone-800">
@@ -343,7 +316,9 @@ export default function RodeoApprovalForm() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-stone-800">Stalls</label>
+              <label className="text-sm font-medium text-stone-800">
+                Stalls
+              </label>
               <div className="flex flex-col gap-1 mt-1 text-sm">
                 <label className="flex items-center gap-2">
                   <input
@@ -501,8 +476,8 @@ export default function RodeoApprovalForm() {
           </h2>
 
           <p className="text-sm text-stone-700">
-            "I, the undersigned, represent the aforementioned Committee and agree
-            to abide by all Canadian Classic Rodeo Association rules and
+            "I, the undersigned, represent the aforementioned Committee and
+            agree to abide by all Canadian Classic Rodeo Association rules and
             regulations. We understand that this application is subject to CCRA
             board approval."
           </p>
@@ -569,12 +544,11 @@ export default function RodeoApprovalForm() {
               <p className="text-red-600 text-sm mt-1">{errors.payment}</p>
             )}
           </div>
-
         </section>
 
         {/* Submit Button */}
         <div className="flex items-center justify-between border-t border-stone-200 pt-6">
-                    <button
+          <button
             type="submit"
             disabled={submitting}
             className="inline-flex items-center justify-center rounded-md bg-orange-600 px-6 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-700 disabled:opacity-60 disabled:cursor-not-allowed"
@@ -582,7 +556,6 @@ export default function RodeoApprovalForm() {
             {submitting ? "Submitting..." : "Submit Approval Request"}
           </button>
         </div>
-
       </form>
     </main>
   );

@@ -6,6 +6,7 @@ import { getRodeoEvents, getAllResults } from "@/lib/sampleRodeoData";
 import { RodeoEventCard } from "@/components/rodeo/RodeoEventCard";
 import { ResultsPreview } from "@/components/rodeo/ResultsPreview";
 import { EventFilterBar } from "@/components/rodeo/EventFilterBar";
+import Hero from "@/components/ui/Hero";
 
 export default function RodeoResultsPage() {
   const [events, setEvents] = useState<RodeoEvent[]>([]);
@@ -61,15 +62,11 @@ export default function RodeoResultsPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
-
-      {/* RULEBOOK STYLE HEADING */}
-      <h1 className="text-3xl font-bold text-orange-700 mb-4 text-center">
-        Rodeo Results
-      </h1>
-
-      <p className="text-gray-600 text-center mb-8">
-        Search payouts, standings, and event results from past rodeos.
-      </p>
+      <Hero
+        badge="OFFICIAL RESULTS"
+        title="Rodeo Results"
+        description="Review results from completed rodeos, including event standings and competitor performances. Select a rodeo to view the full results breakdown."
+      />
 
       <EventFilterBar
         search={search}
