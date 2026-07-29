@@ -1,13 +1,18 @@
-import Table from "@/components/ui/Table";
-import { columns, data } from "@/lib/sampleTableData";
+import { CurrentEntriesTable } from "@/components/rodeo/CurrentEntriesTable";
+import { getCurrentEntriesForUpcomingRodeos, getRodeoEvents } from "@/lib/sampleRodeoData";
 
-export default function CurrentEntriesPage() {
+export default async function CurrentEntriesPage() {
+  const [entries, rodeos] = await Promise.all([
+    getCurrentEntriesForUpcomingRodeos(),
+    getRodeoEvents(),
+  ]);
+
   return (
     <main className="p-8 flex flex-col items-center">
       <h1 className="text-3xl font-semibold text-stone-950 mb-6">
         Current Entries
       </h1>
-      <Table columns={columns} data={data} />
+      <CurrentEntriesTable entries={entries} rodeos={rodeos} />
     </main>
   );
 }
