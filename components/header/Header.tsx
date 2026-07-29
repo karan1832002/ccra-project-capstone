@@ -90,11 +90,6 @@ export default function Header() {
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-orange-600 text-sm font-semibold text-white">
             CCRA
           </span>
-          <span className="hidden whitespace-nowrap text-sm font-semibold leading-tight lg:block">
-            Canadian Classic
-            <br />
-            Rodeo Association
-          </span>
         </Link>
 
         {/* Dropdown nav menus — hidden below lg in favor of the MobileNav hamburger */}
