@@ -1,4 +1,4 @@
-import { RodeoEvent, SheetFile, ResultEntry, CompetitionEvent, RodeoEntry } from "@/types/rodeo";
+import { RodeoEvent, SheetFile, ResultEntry, CompetitionEvent, RodeoEntry, CurrentEntry } from "@/types/rodeo";
 import { toIsoDate } from "@/lib/rodeoDateUtils";
 
 // Sample data below stands in for the database. Once the DB is ready, swap the
@@ -251,6 +251,21 @@ const competitionEvents: CompetitionEvent[] = [
 // the same way they will once they're calling a real API — e.g. loading
 // states in the page won't just disappear instantly like they would with a
 // synchronous in-memory return.
+// Sample "already submitted" entries for the Current Entries table. Unlike
+// `results`, these aren't tied to a specific performance — a competitor
+// enters a rodeo weekend and picks their performance later/at check-in — so
+// each row just links back to the rodeo and competition category.
+const currentEntries: CurrentEntry[] = [
+  { id: "ce1", rodeoId: "pincher-creek-2026", rodeoName: "Pincher Creek", eventName: "Ladies Barrel Racing 40-59", competitor: "Aimee Cripps" },
+  { id: "ce2", rodeoId: "pincher-creek-2026", rodeoName: "Pincher Creek", eventName: "Ladies Barrel Racing 40-59", competitor: "Jill Flynn" },
+  { id: "ce3", rodeoId: "pincher-creek-2026", rodeoName: "Pincher Creek", eventName: "Pole Bending", competitor: "Connie LeMoine" },
+  { id: "ce4", rodeoId: "standoff-2026", rodeoName: "Standoff", eventName: "Team Roping 40-59", competitor: "Kelly Creasy", partner: "Kirk Hall" },
+  { id: "ce5", rodeoId: "standoff-2026", rodeoName: "Standoff", eventName: "Ladies Breakaway Roping", competitor: "Trina Marshall" },
+  { id: "ce6", rodeoId: "dunmore-2026", rodeoName: "Dunmore", eventName: "Men's Breakaway Roping 65+", competitor: "Kent Mosher" },
+  { id: "ce7", rodeoId: "dunmore-2026", rodeoName: "Dunmore", eventName: "Men's Breakaway Roping 65+", competitor: "Glen Adie" },
+  { id: "ce8", rodeoId: "dunmore-2026", rodeoName: "Dunmore", eventName: "Pole Bending", competitor: "Bev Welsh" },
+];
+
 function delay<T>(value: T, ms = 150): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
 }
@@ -316,6 +331,28 @@ export async function getCompletedRodeoEvents(
       return lastPerformanceDate < todayIso;
     })
   );
+}
+
+// Used by the Current Entries page — every submitted entry for a rodeo that
+// hasn't happened yet (mirrors getCompletedRodeoEvents' "last performance
+// date" check, just inverted, so a rodeo counts as upcoming until its final
+// performance has passed).
+export async function getCurrentEntriesForUpcomingRodeos(
+  referenceDate: Date = new Date()
+): Promise<CurrentEntry[]> {
+  const todayIso = toIsoDate(referenceDate);
+  const upcomingRodeoIds = new Set(
+    events
+      .filter((e) => {
+        const lastPerformanceDate = e.performances.reduce(
+          (latest, p) => (p.date > latest ? p.date : latest),
+          e.startDate
+        );
+        return lastPerformanceDate >= todayIso;
+      })
+      .map((e) => e.id)
+  );
+  return delay(currentEntries.filter((entry) => upcomingRodeoIds.has(entry.rodeoId)));
 }
 
 export async function getSheetFilesForEvent(eventId: string): Promise<SheetFile[]> {

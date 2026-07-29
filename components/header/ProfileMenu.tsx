@@ -22,13 +22,12 @@ const PROFILE_LINKS: NavListItem[] = [
   {
     label: "Membership",
     subItems: [
-      { label: "Membership Application", path: "/profile" },
-      { label: "Pay Fees", path: "/profile" },
+      { label: "Membership Application", path: "/profile/membership" },
+      { label: "Pay Fees", path: "/profile/membership" },
     ],
   },
-  { label: "Payment Methods", path: "/profile" },
-  { label: "Current Entries", path: "/profile" },
-  { label: "Purchase History", path: "/profile" },
+  { label: "Current Entries", path: "/profile/user-entries" },
+  { label: "Purchase History", path: "/profile/purchase-history" },
   { label: "Sign Out", path: "/" },
 ];
 

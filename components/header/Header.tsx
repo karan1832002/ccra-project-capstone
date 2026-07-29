@@ -59,7 +59,6 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Rodeo Draws", path: "/events/rodeo-draws" },
       { label: "Rodeo Approval Form", path: "/events/rodeo-approval" },
       { label: "Rulebook", path: "/events/rulebook" },
-      { label: "Partner Search Page", path: "/events/partner-search" },
     ],
   },
   {
@@ -67,7 +66,6 @@ const NAV_ITEMS: NavItem[] = [
     subItems: [
       { label: "Rodeo Results", path: "/results/rodeo-results" },
       { label: "Standings", path: "/results/standings" },
-      { label: "Finals", path: "/results/finals" },
       { label: "Past Champions", path: "/results/past-champions" },
     ],
   },

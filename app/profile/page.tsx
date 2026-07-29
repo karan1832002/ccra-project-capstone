@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -16,12 +17,12 @@ import {
   ChevronRight,
   Award,
   LogOut,
+  X,
 } from "lucide-react";
 
 // Mock data – replace with real user data from your auth/session + API
 const user = {
   name: "Tammy Clemmer",
-  membershipNumber: "CCRA-2026-0487",
   status: "Active",
   memberSince: "2018",
   email: "tammy.clemmer@example.com",
@@ -38,6 +39,17 @@ const user = {
 };
 
 export default function ProfilePage() {
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
+
+  const handleSignOut = () => {
+    // Replace with your actual sign-out logic (e.g. NextAuth signOut(), Clerk signOut(), etc.)
+    // Example with NextAuth:
+    // import { signOut } from "next-auth/react";
+    // signOut({ callbackUrl: "/" });
+    console.log("Signing out...");
+    setShowSignOutConfirm(false);
+  };
+
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
@@ -90,9 +102,6 @@ export default function ProfilePage() {
                 <h2 className="text-2xl font-semibold text-stone-950 dark:text-stone-100">
                   {user.name}
                 </h2>
-                <p className="text-sm text-stone-500 mt-1 dark:text-stone-400">
-                  {user.membershipNumber}
-                </p>
 
                 {/* Status Badge */}
                 <div className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-green-50 px-3 py-1 text-xs font-semibold text-green-700 dark:bg-green-950/40 dark:text-green-400">
@@ -128,96 +137,25 @@ export default function ProfilePage() {
                   </span>
                   <ChevronRight className="w-4 h-4 text-stone-400" />
                 </Link>
-              </div>
-            </div>
 
-            {/* Contact Snapshot */}
-            <div className="rounded-md border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-700 dark:bg-stone-900">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-stone-400 mb-5 dark:text-stone-500">
-                Contact
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <Mail className="w-4 h-4 text-orange-600 mt-0.5 shrink-0 dark:text-orange-400" />
-                  <div>
-                    <div className="text-xs text-stone-500 dark:text-stone-400">Email</div>
-                    <a
-                      href={`mailto:${user.email}`}
-                      className="text-sm font-medium text-stone-950 hover:text-orange-600 dark:text-stone-100 dark:hover:text-orange-400"
-                    >
-                      {user.email}
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="w-4 h-4 text-orange-600 mt-0.5 shrink-0 dark:text-orange-400" />
-                  <div>
-                    <div className="text-xs text-stone-500 dark:text-stone-400">Phone</div>
-                    <a
-                      href={`tel:${user.phone}`}
-                      className="text-sm font-medium text-stone-950 hover:text-orange-600 dark:text-stone-100 dark:hover:text-orange-400"
-                    >
-                      {user.phone}
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-orange-600 mt-0.5 shrink-0 dark:text-orange-400" />
-                  <div>
-                    <div className="text-xs text-stone-500 dark:text-stone-400">Location</div>
-                    <div className="text-sm font-medium text-stone-950 dark:text-stone-100">
-                      {user.address}
-                    </div>
-                  </div>
-                </div>
+                {/* Sign Out Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowSignOutConfirm(true)}
+                  className="flex items-center justify-between w-full rounded-md border border-stone-200 bg-stone-50 px-4 py-3 text-sm font-semibold text-red transition hover:border-red-300 hover:bg-red-50 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 dark:hover:border-red-700 dark:hover:bg-red-950/20"
+                >
+                  <span className="flex items-center gap-2">
+                    <LogOut className="w-4 h-4 text-red-600 dark:text-red-400" />
+                    Sign Out
+                  </span>
+                  <ChevronRight className="w-4 h-4 text-stone-400" />
+                </button>
               </div>
             </div>
           </div>
 
           {/* ================= RIGHT COLUMN – Details & Stats ================= */}
           <div className="lg:col-span-8 space-y-6">
-
-            {/* Season Snapshot */}
-            <div className="rounded-md border border-stone-200 bg-white p-8 shadow-sm dark:border-stone-700 dark:bg-stone-900">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-1 dark:text-stone-500">
-                    2026 SEASON
-                  </div>
-                  <h3 className="text-2xl font-semibold text-stone-950 dark:text-stone-100">
-                    Season Snapshot
-                  </h3>
-                </div>
-                <Link
-                  href="/results/standings"
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400"
-                >
-                  Full Standings
-                  <ChevronRight className="w-4 h-4" />
-                </Link>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div className="rounded-md border border-stone-200 bg-stone-50 p-5 text-center dark:border-stone-700 dark:bg-stone-950">
-                  <div className="text-3xl font-semibold text-orange-600 dark:text-orange-400">
-                    {user.currentSeason.points}
-                  </div>
-                  <div className="text-sm text-stone-500 mt-1 dark:text-stone-400">Points</div>
-                </div>
-                <div className="rounded-md border border-stone-200 bg-stone-50 p-5 text-center dark:border-stone-700 dark:bg-stone-950">
-                  <div className="text-3xl font-semibold text-stone-950 dark:text-stone-100">
-                    #{user.currentSeason.rank}
-                  </div>
-                  <div className="text-sm text-stone-500 mt-1 dark:text-stone-400">Rank</div>
-                </div>
-                <div className="rounded-md border border-stone-200 bg-stone-50 p-5 text-center dark:border-stone-700 dark:bg-stone-950">
-                  <div className="text-3xl font-semibold text-stone-950 dark:text-stone-100">
-                    {user.currentSeason.rodeosEntered}
-                  </div>
-                  <div className="text-sm text-stone-500 mt-1 dark:text-stone-400">Rodeos</div>
-                </div>
-              </div>
-            </div>
 
             {/* Events / Categories */}
             <div className="rounded-md border border-stone-200 bg-white p-8 shadow-sm dark:border-stone-700 dark:bg-stone-900">
@@ -237,71 +175,6 @@ export default function ProfilePage() {
                     {event}
                   </span>
                 ))}
-              </div>
-            </div>
-
-            {/* Membership Details */}
-            <div className="rounded-md border border-stone-200 bg-white p-8 shadow-sm dark:border-stone-700 dark:bg-stone-900">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-1 dark:text-stone-500">
-                    MEMBERSHIP
-                  </div>
-                  <h3 className="text-xl font-semibold text-stone-950 dark:text-stone-100">
-                    Membership Details
-                  </h3>
-                </div>
-                <Link
-                  href="/membership"
-                  className="text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400"
-                >
-                  Manage →
-                </Link>
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-6">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-md bg-orange-50 flex items-center justify-center shrink-0 dark:bg-orange-950/40">
-                    <Calendar className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-stone-500 dark:text-stone-400">Season</div>
-                    <div className="font-semibold text-stone-950 dark:text-stone-100">2026</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-md bg-orange-50 flex items-center justify-center shrink-0 dark:bg-orange-950/40">
-                    <Shield className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-stone-500 dark:text-stone-400">Status</div>
-                    <div className="font-semibold text-stone-950 dark:text-stone-100">
-                      {user.status}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-md bg-orange-50 flex items-center justify-center shrink-0 dark:bg-orange-950/40">
-                    <User className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-stone-500 dark:text-stone-400">Age Group</div>
-                    <div className="font-semibold text-stone-950 dark:text-stone-100">
-                      {user.ageGroup}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-md bg-orange-50 flex items-center justify-center shrink-0 dark:bg-orange-950/40">
-                    <Award className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-stone-500 dark:text-stone-400">Member #</div>
-                    <div className="font-semibold text-stone-950 dark:text-stone-100">
-                      {user.membershipNumber}
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -337,20 +210,62 @@ export default function ProfilePage() {
                 </div>
               </Link>
             </div>
+          </div>
+        </div>
+      </div>
 
-            {/* Sign Out */}
-            <div className="pt-4">
+      {/* ================= SIGN OUT CONFIRMATION MODAL ================= */}
+      {showSignOutConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-stone-950/60 backdrop-blur-sm"
+            onClick={() => setShowSignOutConfirm(false)}
+          />
+
+          {/* Dialog */}
+          <div className="relative w-full max-w-md rounded-md border border-stone-200 bg-white p-6 shadow-xl dark:border-stone-700 dark:bg-stone-900">
+            <button
+              type="button"
+              onClick={() => setShowSignOutConfirm(false)}
+              className="absolute right-4 top-4 rounded-md p-1 text-stone-400 transition hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-stone-800 dark:hover:text-stone-200"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-md bg-red-100 flex items-center justify-center text-red-600 dark:bg-red-950/40 dark:text-red-400">
+                <LogOut className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-semibold text-stone-950 dark:text-stone-100">
+                Sign out?
+              </h3>
+            </div>
+
+            <p className="text-sm text-stone-600 dark:text-stone-300 mb-6">
+              Are you sure you want to sign out of your CCRA account? You can always sign back in later.
+            </p>
+
+            <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
               <button
                 type="button"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-stone-500 hover:text-red-600 transition dark:text-stone-400 dark:hover:text-red-400"
+                onClick={() => setShowSignOutConfirm(false)}
+                className="inline-flex items-center justify-center rounded-md border border-stone-200 bg-white px-4 py-2.5 text-sm font-semibold text-stone-950 transition hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 dark:hover:bg-stone-800"
               >
-                <LogOut className="w-4 h-4" />
-                Sign out
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700"
+              >
+                Sign Out
               </button>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
