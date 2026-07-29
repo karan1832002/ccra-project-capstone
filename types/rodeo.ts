@@ -91,6 +91,21 @@ export interface RodeoEntry {
   eventFee: number;
 }
 
+// One competitor's already-submitted entry into a specific competition
+// category at a specific upcoming rodeo. Distinct from RodeoEntry, which is
+// the Enter Rodeo page's client-side cart for the single competitor who's
+// currently filling out the form — a CurrentEntry represents an entry that
+// has already been posted, spanning every competitor across every
+// currently-open rodeo, used to render the public "Current Entries" table.
+export interface CurrentEntry {
+  id: string;
+  rodeoId: string; // foreign key back to RodeoEvent.id
+  rodeoName: string;
+  eventName: string; // the competition category, e.g. "Team Roping 40-59"
+  competitor: string;
+  partner?: string; // set for team events
+}
+
 // A club/association member — used to populate the Enter Rodeo page's
 // roping-partner dropdown. Only active members should ever reach that
 // dropdown; lapsed memberships shouldn't be selectable as a partner.
