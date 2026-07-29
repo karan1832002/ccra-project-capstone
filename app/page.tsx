@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ImageCarousel, { CarouselImage } from "@/components/ui/ImageCarousel";
+import NewsletterCard from "@/components/ui/NewsletterCard";
 import { Calendar, ShoppingCart, Trophy, Camera, ArrowRight } from "lucide-react";
 
 const heroImages: CarouselImage[] = [
@@ -39,6 +40,31 @@ const sponsorImages: CarouselImage[] = [
   { src: "/images/sponsors/sponsor13.jpg", alt: "Sponsor 13" },
 ];
 
+// Placeholder data — replace with your newsletter API response
+const newsletterItems = [
+  {
+    date: 'Date: MM DD–DD or "TBD"',
+    title: "Event Title",
+    description:
+      "Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.",
+    href: "/",
+  },
+  {
+    date: 'Date: MM DD–DD or "TBD"',
+    title: "Event Title",
+    description:
+      "Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.",
+    href: "/",
+  },
+  {
+    date: 'Date: MM DD–DD or "TBD"',
+    title: "Event Title",
+    description:
+      "Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.",
+    href: "/",
+  },
+];
+
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
@@ -53,7 +79,8 @@ export default function HomePage() {
               </div>
 
               <h1 className="text-5xl sm:text-6xl font-semibold tracking-tight text-stone-950 dark:text-stone-100 leading-tight">
-                Canadian Classic<br />
+                Canadian Classic
+                <br />
                 Rodeo Association
               </h1>
 
@@ -133,7 +160,6 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Auto-playing sponsor carousel */}
           <div className="max-w-2xl mx-auto">
             <ImageCarousel
               images={sponsorImages}
@@ -191,76 +217,28 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ================= UPCOMING / HIGHLIGHTS ================= */}
-      {/* will be populated with dynamic content based off of what events are scheduled and upcoming */}
+      {/* ================= UPCOMING / NEWSLETTER ================= */}
       <section className="py-20 bg-white dark:bg-stone-900 border-y border-stone-200 dark:border-stone-800">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-3 dark:text-stone-500">
-              2026 SEASON
+              What’s Coming Up
             </div>
             <h2 className="text-4xl font-semibold text-stone-950 dark:text-stone-100">
-              What’s Coming Up
+              Newsletter
             </h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <div className="rounded-md border border-stone-200 bg-stone-50 p-8 shadow-sm dark:border-stone-700 dark:bg-stone-950">
-              <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mb-2">
-                Date: MM DD–DD or "TBD"
-              </div>
-              <h3 className="text-xl font-semibold text-stone-950 dark:text-stone-100 mb-3">
-                Event Title
-              </h3>
-              <p className="text-stone-600 dark:text-stone-300 text-sm mb-6">
-                Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.
-              </p>
-              <Link
-                href="/"
-                className="text-sm font-semibold text-orange-600 hover:underline dark:text-orange-400"
-              >
-                View details →
-              </Link>
-            </div>
-
-            {/* Card 2 */}
-            <div className="rounded-md border border-stone-200 bg-stone-50 p-8 shadow-sm dark:border-stone-700 dark:bg-stone-950">
-              <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mb-2">
-                Date: MM DD–DD or "TBD"
-              </div>
-              <h3 className="text-xl font-semibold text-stone-950 dark:text-stone-100 mb-3">
-                Event Title
-              </h3>
-              <p className="text-stone-600 dark:text-stone-300 text-sm mb-6">
-                Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.
-              </p>
-              <Link
-                href="/"
-                className="text-sm font-semibold text-orange-600 hover:underline dark:text-orange-400"
-              >
-                View details →
-              </Link>
-            </div>
-
-            {/* Card 3 */}
-            <div className="rounded-md border border-stone-200 bg-stone-50 p-8 shadow-sm dark:border-stone-700 dark:bg-stone-950">
-              <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mb-2">
-                Date: MM DD–DD or "TBD"
-              </div>
-              <h3 className="text-xl font-semibold text-stone-950 dark:text-stone-100 mb-3">
-                Event Title
-              </h3>
-              <p className="text-stone-600 dark:text-stone-300 text-sm mb-6">
-                Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.
-              </p>
-              <Link
-                href="/"
-                className="text-sm font-semibold text-orange-600 hover:underline dark:text-orange-400"
-              >
-                View details →
-              </Link>
-            </div>
+            {newsletterItems.map((item, index) => (
+              <NewsletterCard
+                key={index}
+                date={item.date}
+                title={item.title}
+                description={item.description}
+                href={item.href}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -273,14 +251,14 @@ export default function HomePage() {
               Ready to Hit the Grounds?
             </h2>
             <p className="text-orange-100 text-lg max-w-2xl mx-auto mb-8">
-              Get your 2026 membership today and be part of the Canadian Classic Rodeo family.
+              Get your membership today and be part of the Canadian Classic Rodeo family.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
-                href="/events/enter-rodeo"
+                href="/profile/membership"
                 className="inline-flex items-center justify-center rounded-md bg-white px-8 py-3.5 text-sm font-semibold text-orange-700 transition hover:bg-orange-50"
               >
-                Enter Rodeo
+                Membership
               </Link>
               <Link
                 href="/about-us/contact"
