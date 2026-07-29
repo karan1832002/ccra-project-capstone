@@ -25,6 +25,7 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import Table from "@/components/ui/Table";
 import AddEntryModal from "@/components/rodeo/AddEntryModal";
+import Hero from "@/components/ui/Hero";
 import { RodeoEntry } from "@/types/rodeo";
 import { formatShortDate } from "@/lib/rodeoDateUtils";
 import { submitRodeoEntries } from "@/lib/sampleRodeoData";
@@ -67,7 +68,9 @@ export default function EnterRodeoPage() {
   // confirmation view instead of the entry form.
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [confirmationNumber, setConfirmationNumber] = useState<string | null>(null);
+  const [confirmationNumber, setConfirmationNumber] = useState<string | null>(
+    null,
+  );
 
   function handleAddEntry(entry: RodeoEntry) {
     setEntries((prev) => [...prev, entry]);
@@ -80,7 +83,15 @@ export default function EnterRodeoPage() {
 
   // Table column headers, in the exact order the row objects below must
   // list their values — Table renders cells positionally, not by key name.
-  const columns = ["Rodeo", "Date", "Event", "Partner", "Entry Fee", "Event Fee", ""];
+  const columns = [
+    "Rodeo",
+    "Date",
+    "Event",
+    "Partner",
+    "Entry Fee",
+    "Event Fee",
+    "",
+  ];
 
   const tableRows = entries.map((entry) => ({
     rodeo: entry.rodeoName,
@@ -109,7 +120,7 @@ export default function EnterRodeoPage() {
   // see what they owe before (and after) submitting.
   const totalFees = entries.reduce(
     (sum, entry) => sum + entry.entryFee + entry.eventFee,
-    0
+    0,
   );
 
   // Wrapping in react-hook-form's `handleSubmit` means clicking "Submit
@@ -129,7 +140,9 @@ export default function EnterRodeoPage() {
       });
       setConfirmationNumber(result.confirmationNumber);
     } catch (err) {
-      setSubmitError("Something went wrong submitting your entry. Please try again.");
+      setSubmitError(
+        "Something went wrong submitting your entry. Please try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -146,11 +159,11 @@ export default function EnterRodeoPage() {
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10">
-      <div className="mb-10 text-center">
-        <h1 className="mb-4 text-3xl font-bold text-orange-700">
-          Enter Rodeo
-        </h1>
-      </div>
+      <Hero
+        badge="COMPETITOR REGISTRATION"
+        title="Enter a Rodeo"
+        description="Register for upcoming CCRA rodeo events and secure your spot in the arena. Select your event, submit your entry, and get ready to compete."
+      />
 
       {confirmationNumber ? (
         // --- Confirmation view -------------------------------------------
@@ -162,7 +175,9 @@ export default function EnterRodeoPage() {
           </h2>
           <p className="text-sm text-green-800">
             Confirmation #:{" "}
-            <span className="font-mono font-semibold">{confirmationNumber}</span>
+            <span className="font-mono font-semibold">
+              {confirmationNumber}
+            </span>
           </p>
           <p className="mt-1 text-sm text-green-800">
             A confirmation email is on its way to {watch("email")}.
@@ -171,25 +186,37 @@ export default function EnterRodeoPage() {
       ) : (
         // --- Competitor info -----------------------------------------------
         <section className="mb-8 rounded-md border border-stone-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-stone-950">Your Information</h2>
+          <h2 className="mb-4 text-lg font-semibold text-stone-950">
+            Your Information
+          </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <label htmlFor="competitorName" className="block text-sm font-medium text-stone-600">
+              <label
+                htmlFor="competitorName"
+                className="block text-sm font-medium text-stone-600"
+              >
                 Competitor Name
               </label>
               <input
                 id="competitorName"
                 type="text"
                 className="mt-1 block w-full rounded-md border border-stone-200 px-3 py-2 text-sm focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
-                {...register("competitorName", { required: "Please enter your name" })}
+                {...register("competitorName", {
+                  required: "Please enter your name",
+                })}
               />
               {errors.competitorName && (
-                <p className="mt-1 text-sm text-red-700">{errors.competitorName.message}</p>
+                <p className="mt-1 text-sm text-red-700">
+                  {errors.competitorName.message}
+                </p>
               )}
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-stone-600">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-stone-600"
+              >
                 Email
               </label>
               <input
@@ -198,14 +225,24 @@ export default function EnterRodeoPage() {
                 className="mt-1 block w-full rounded-md border border-stone-200 px-3 py-2 text-sm focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
                 {...register("email", {
                   required: "Please enter your email",
-                  pattern: { value: EMAIL_PATTERN, message: "Please enter a valid email" },
+                  pattern: {
+                    value: EMAIL_PATTERN,
+                    message: "Please enter a valid email",
+                  },
                 })}
               />
-              {errors.email && <p className="mt-1 text-sm text-red-700">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-700">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             <div>
-              <label htmlFor="confirmEmail" className="block text-sm font-medium text-stone-600">
+              <label
+                htmlFor="confirmEmail"
+                className="block text-sm font-medium text-stone-600"
+              >
                 Confirm Email
               </label>
               <input
@@ -218,7 +255,9 @@ export default function EnterRodeoPage() {
                 })}
               />
               {errors.confirmEmail && (
-                <p className="mt-1 text-sm text-red-700">{errors.confirmEmail.message}</p>
+                <p className="mt-1 text-sm text-red-700">
+                  {errors.confirmEmail.message}
+                </p>
               )}
             </div>
           </div>
@@ -295,7 +334,9 @@ export default function EnterRodeoPage() {
           >
             {isSubmitting ? "Submitting…" : "Submit Entry"}
           </button>
-          {submitError && <p className="mt-2 text-sm text-red-700">{submitError}</p>}
+          {submitError && (
+            <p className="mt-2 text-sm text-red-700">{submitError}</p>
+          )}
         </div>
       )}
     </main>

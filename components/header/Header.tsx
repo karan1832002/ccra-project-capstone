@@ -9,7 +9,7 @@
  * - <  lg: DropdownMenu row is hidden; MobileNav's hamburger opens the same
  *   NAV_ITEMS in a slide-in drawer instead.
  *
- * Logo subtitle and "Sign In" label hide together at the same breakpoint
+ * "Sign In" label and full Dropdown Menu hide together at the same breakpoint
  * (lg) so the header doesn't end up half-collapsed.
  */
 "use client";
@@ -55,7 +55,7 @@ const NAV_ITEMS: NavItem[] = [
     label: "Events",
     subItems: [
       { label: "Enter Rodeo", path: "/events/enter-rodeo" },
-      { label: "Rodeo Entries", path: "/events/current-entries" },
+      { label: "Current Entries", path: "/events/current-entries" },
       { label: "Rodeo Draws", path: "/events/rodeo-draws" },
       { label: "Rodeo Approval Form", path: "/events/rodeo-approval" },
       { label: "Rulebook", path: "/events/rulebook" },
@@ -89,11 +89,6 @@ export default function Header() {
         >
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-orange-600 text-sm font-semibold text-white">
             CCRA
-          </span>
-          <span className="hidden whitespace-nowrap text-sm font-semibold leading-tight lg:block">
-            Canadian Classic
-            <br />
-            Rodeo Association
           </span>
         </Link>
 
