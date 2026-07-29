@@ -10,17 +10,14 @@ const heroImages: CarouselImage[] = [
   {
     src: "/images/barrelracer.jpg",
     alt: "Barrel Racer",
-    caption: "Ladies Barrel Racing – 2022",
   },
   {
     src: "/images/steerwrestling.jpg",
     alt: "Steer wrestling at CCRA",
-    caption: "Steer Wrestling – 2023",
   },
   {
     src: "/images/barrelracing.jpg",
     alt: "Barrel racing at CCRA",
-    caption: "Barrel Racing – 2024",
   },
 ];
 
