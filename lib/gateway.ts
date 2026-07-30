@@ -37,7 +37,7 @@ type Options = {
  */
 export async function fetchFromGateway<T>(
   path: string,
-  opts: Options = {}
+  opts: Options = {},
 ): Promise<T> {
   const res = await fetch(`${GATEWAY_URL}${path}`, {
     method: opts.method ?? "GET",
@@ -47,7 +47,10 @@ export async function fetchFromGateway<T>(
   });
 
   if (!res.ok && res.status >= 500) {
-    throw new GatewayError("GATEWAY_UNAVAILABLE", `Gateway returned ${res.status}`);
+    throw new GatewayError(
+      "GATEWAY_UNAVAILABLE",
+      `Gateway returned ${res.status}`,
+    );
   }
 
   const json = (await res.json()) as ApiResponse<T>;
@@ -64,10 +67,11 @@ export async function fetchFromGateway<T>(
 // ==========================================================================
 
 // A rodeo is the top-level container (multi-day, with an entry window).
+// (old db table)
 export type Rodeo = {
   id: string;
   rodeoTitle: string;
-  entriesOpen: string | null;   // ISO date "YYYY-MM-DD"
+  entriesOpen: string | null; // ISO date "YYYY-MM-DD"
   phoneInEntries: string | null;
   entriesClose: string | null;
   entryFee: number | null;
@@ -77,8 +81,22 @@ export type Rodeo = {
   capacity: number | null;
   createdAt: string;
 };
+// (current db table)
+// export type Rodeo = {
+//   id: string;
+//   rodeoTitle: string;
+//   entriesOpen: string | null; // ISO date "YYYY-MM-DD"
+//   entriesClose: string | null; // ISO date "YYYY-MM-DD"
+//   entryFee: number | null;
+//   location: string;
+//   image: string | null;
+//   description: string | null;
+//   capacity: number | null;
+//   createdAt: string;
+// };
 
 // An event is a single competition inside a rodeo.
+// (old db table)
 export type Event = {
   id: string;
   rodeoId: string;
@@ -87,13 +105,87 @@ export type Event = {
   eventTime: string | null;
   eventFee: number | null;
 };
+// (current db table)
+// export type Event = {
+//   id: string;
+//   rodeoId: string;
+//   category: string;
+//   eventDate: string;
+//   eventTime: string;
+//   eventFee: number;
+// };
 
 // GET /api/events/rodeos/:id returns a rodeo with these nested.
 export type RodeoDetail = Rodeo & {
-  dates: { id: string; rodeoId: string; date: string; startTime: string | null }[];
+  dates: {
+    id: string;
+    rodeoId: string;
+    date: string;
+    startTime: string | null;
+  }[];
   events: Event[];
   draws: { id: string; rodeoId: string; drawFile: string | null }[];
 };
+
+// Competitor registration for rodeo event
+// (old db table)
+export type Registration = {
+  id: string;
+  eventId: string;
+  userId: string;
+  partner: string | null;
+  category: string;
+  status: string;
+  registeredAt: string | null;
+};
+// (current db table)
+// export type Registration = {
+//   id: string;
+//   eventId: string;
+//   userId: string;
+//   competitorName: string | null;
+//   status: string;
+//   registeredAt: string | null;
+// };
+
+// Result for rodeo event
+// (old db table)
+export type Result = {
+  id: string;
+  eventId: string;
+  userId: string;
+  entryId: string | null;
+  category: string;
+  score: number | null;
+  timeSeconds: number | null;
+  placement: number | null;
+  points: number;
+  money: number;
+  ground: number;
+  recordedAt: string | null;
+};
+// (current db table)
+// export type Result = {
+//   id: string;
+//   rodeoId: string;
+//   rodeoTitle: string;
+//   rodeoLocation: string;
+//   rodeoStart: string;
+//   rodeoEnd: string;
+//   eventId: string;
+//   category: string;
+//   eventDate: string;
+//   eventTime: string;
+//   entryId: string;
+//   competitorId: string;
+//   competitorName: string;
+//   score: number | null;
+//   points: number | null;
+//   placement: number | null;
+//   money: number | null;
+//   ground: number | null;
+//   recordedAt: string | null;
+// };
 
 export type Product = {
   id: string;
@@ -102,15 +194,6 @@ export type Product = {
   price: string;
   stock: number;
   imageUrl: string | null;
-};
-
-// Standings are COMPUTED from results (no standings table anymore).
-export type Standing = {
-  rank: number;
-  userId: string;
-  totalPoints: number | string; // Postgres SUM returns a string
-  totalMoney: number;
-  entries: number | string;
 };
 
 // ==========================================================================
@@ -133,12 +216,23 @@ export function getEvent(id: string) {
   return fetchFromGateway<Event>(`/api/events/${id}`);
 }
 
+// Event Registrations (registrations for selected event)
+export function getEventRegistrations(id: string) {
+  return fetchFromGateway<Registration[]>(`/api/events/${id}/registrations`);
+}
+
+// Results
+export function getResults() {
+  return fetchFromGateway<Result[]>("/api/results");
+}
+export function getEventResults(id: string) {
+  return fetchFromGateway<Result[]>(`/api/results/event/${id}`);
+}
+export function getCategoryResults(id: string) {
+  return fetchFromGateway<Result[]>(`/api/results/standings/${id}`);
+}
+
 // Store
 export function getProducts() {
   return fetchFromGateway<Product[]>("/api/store/products");
-}
-
-// Standings
-export function getStandings(category: string) {
-  return fetchFromGateway<Standing[]>(`/api/results/standings/${category}`);
 }
