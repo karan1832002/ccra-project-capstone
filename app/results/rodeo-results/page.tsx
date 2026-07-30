@@ -72,12 +72,7 @@ export default function RodeoResultsPage() {
         Search payouts, standings, and event results from past rodeos.
       </p>
 
-      <Hero
-        badge="OFFICIAL RESULTS"
-        title="Rodeo Results"
-        description="Review results from completed rodeos, including event standings and competitor performances. Select a rodeo to view the full results breakdown."
-      />
-
+   
       <EventFilterBar
         search={search}
         onSearchChange={setSearch}

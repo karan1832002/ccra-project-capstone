@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 export default function MembershipPage() {
   const router = useRouter();
+
   type MembershipType = "full" | "associate" | "junior" | "lifetime";
 
   const prices: Record<MembershipType, string> = {
@@ -15,6 +16,10 @@ export default function MembershipPage() {
   };
 
   const [membershipType, setMembershipType] = useState<MembershipType>("full");
+
+  function handleContinue() {
+    router.push(`/membership/checkout?type=${membershipType}`);
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -36,7 +41,7 @@ export default function MembershipPage() {
 
           <select
             value={membershipType}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            onChange={(e) =>
               setMembershipType(e.target.value as MembershipType)
             }
             className="w-full border border-gray-300 rounded-lg p-3 text-gray-800 mb-6"
@@ -56,7 +61,7 @@ export default function MembershipPage() {
 
           <button
             className="bg-orange-600 hover:bg-orange-700 text-white font-semibold px-6 py-3 rounded-lg transition w-full"
-            onClick={() => router.push(`/membership/checkout?type=${membershipType}`)}
+            onClick={handleContinue}
           >
             Continue
           </button>
