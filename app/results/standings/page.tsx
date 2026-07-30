@@ -4,6 +4,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { ResultEntry } from "@/types/rodeo";
 import { getCompletedRodeoEvents, getAllResults } from "@/lib/sampleRodeoData";
 import StandingsTable from "@/components/rodeo/StandingsTable";
+import Hero from "@/components/ui/Hero";
 
 export default function RodeoStandingsPage() {
   const [entries, setEntries] = useState<ResultEntry[]>([]);
@@ -18,7 +19,7 @@ export default function RodeoStandingsPage() {
         const completedEventIds = new Set(completedEvents.map((e) => e.id));
         setEntries(allResults.filter((r) => completedEventIds.has(r.eventId)));
         setLoading(false);
-      }
+      },
     );
   }, []);
 
@@ -32,9 +33,7 @@ export default function RodeoStandingsPage() {
   const filteredEntries = useMemo(() => {
     return entries
       .filter((e) => category === "all" || e.eventName === category)
-      .filter((e) =>
-        e.competitor.toLowerCase().includes(search.toLowerCase())
-      );
+      .filter((e) => e.competitor.toLowerCase().includes(search.toLowerCase()));
   }, [entries, category, search]);
 
   if (loading) {
@@ -47,15 +46,12 @@ export default function RodeoStandingsPage() {
 
   return (
     <div className="w-full py-8 px-4 max-w-4xl mx-auto">
-
-      {/* RULEBOOK STYLE HEADING */}
-      <h1 className="text-3xl font-bold text-orange-700 mb-4 text-center">
-        Standings
-      </h1>
-
-      <p className="text-gray-600 text-center mb-8">
-        View rankings and points earned across completed rodeo events.
-      </p>
+      {/* HEADING */}
+      <Hero
+        badge="SEASON STANDINGS"
+        title="Standings"
+        description="View current CCRA standings and track competitor rankings throughout the season. Follow points earned across all rodeo events as athletes compete for the top spots."
+      />
 
       {/* SEARCH + FILTER BAR */}
       <div className="flex flex-col md:flex-row gap-4 mb-8">

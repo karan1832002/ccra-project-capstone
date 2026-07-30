@@ -61,8 +61,8 @@ export default function ImageCarousel({
     aspectRatio === "square"
       ? "aspect-square"
       : aspectRatio === "wide"
-      ? "aspect-[21/9]"
-      : "aspect-video";
+        ? "aspect-[21/9]"
+        : "aspect-video";
 
   return (
     <div
@@ -75,9 +75,8 @@ export default function ImageCarousel({
         {images.map((img, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
-              index === current ? "opacity-100" : "opacity-0 pointer-events-none"
-            }`}
+            className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${index === current ? "opacity-100" : "opacity-0 pointer-events-none"
+              }`}
           >
             <Image
               src={img.src}
@@ -127,16 +126,15 @@ export default function ImageCarousel({
 
       {/* Dots */}
       {images.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-stone-950/55 px-3 py-2 backdrop-blur-sm shadow-sm dark:bg-stone-950/70">
           {images.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrent(index)}
-              className={`w-2.5 h-2.5 rounded-full transition ${
-                index === current
-                  ? "bg-orange-600 scale-110"
-                  : "bg-white/70 hover:bg-white dark:bg-stone-400 dark:hover:bg-stone-200"
-              }`}
+              className={`h-2.5 w-2.5 rounded-full transition-all ${index === current
+                  ? "scale-125 bg-orange-500 shadow-[0_0_0_2px_rgba(249,115,22,0.45)]"
+                  : "bg-white/90 hover:bg-white dark:bg-stone-300 dark:hover:bg-white"
+                }`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}

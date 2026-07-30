@@ -39,6 +39,7 @@ export default function SignUpPage() {
     });
 
     if (error) {
+      console.error("BETTER AUTH RAW ERROR:", error);
       setError(error.message ?? "Failed to create account.");
       setLoading(false);
       return;

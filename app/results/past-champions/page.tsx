@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Hero from "@/components/ui/Hero";
 
 export default function PastChampionsPage() {
   const champions = [
@@ -21,13 +22,11 @@ export default function PastChampionsPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       {/* Header */}
-      <h1 className="text-3xl font-bold text-center text-orange-700 mb-2">
-        Past Champions
-      </h1>
-      <p className="text-center text-gray-600 mb-8">
-        Honoring outstanding competitors who have earned championship titles
-        throughout the history of the Canadian Classic Rodeo Association.
-      </p>
+      <Hero
+        badge="CCRA HISTORY"
+        title="Past Champions"
+        description="Honoring outstanding competitors who have earned championship titles throughout the history of the Canadian Classic Rodeo Association."
+      />
 
       {/* Table Section */}
       <div className="bg-white shadow-md rounded-lg p-6 mb-10">
