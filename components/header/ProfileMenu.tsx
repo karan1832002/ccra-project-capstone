@@ -11,7 +11,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { UserRound } from "lucide-react";
+import { signOut } from "@/lib/auth-client";
 import Sidebar from "../ui/Sidebar";
 import NavList, { type NavListItem } from "../ui/NavList";
 
@@ -28,7 +30,13 @@ const PROFILE_LINKS: NavListItem[] = [
   },
   { label: "Current Entries", path: "/profile/user-entries" },
   { label: "Purchase History", path: "/profile/purchase-history" },
-  { label: "Sign Out", path: "/" },
+  {
+    label: "Sign Out",
+    action: async () => {
+      await signOut();
+      window.location.href = "/";
+    },
+  },
 ];
 
 // TODO: replace with real membership status, likely pulled from auth/user state
