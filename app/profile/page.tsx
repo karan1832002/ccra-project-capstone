@@ -132,31 +132,32 @@ export default function ProfilePage() {
                   </span>
                   <ChevronRight className="w-4 h-4 text-stone-400" />
                 </button>
-
-                <Link
-                  href="/membership/renew"
-                  className="flex items-center justify-between w-full rounded-md border border-stone-200 bg-stone-50 px-4 py-3 text-sm font-semibold text-stone-950 transition hover:border-orange-300 hover:bg-orange-50 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 dark:hover:border-orange-700 dark:hover:bg-orange-950/20"
-                >
-                  <span className="flex items-center gap-2">
-                    <CreditCard className="w-4 h-4 text-orange-600 dark:text-orange-400" />
-                    Membership & Fees
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-stone-400" />
-                </Link>
-
-                {/* Sign Out Button */}
-                <button
-                  type="button"
-                  onClick={() => setShowSignOutConfirm(true)}
-                  className="flex items-center justify-between w-full rounded-md border border-stone-200 bg-stone-50 px-4 py-3 text-sm font-semibold text-red transition hover:border-red-300 hover:bg-red-50 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 dark:hover:border-red-700 dark:hover:bg-red-950/20"
-                >
-                  <span className="flex items-center gap-2">
-                    <LogOut className="w-4 h-4 text-red-600 dark:text-red-400" />
-                    Sign Out
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-stone-400" />
-                </button>
               </div>
+            </div>
+
+            <div className="space-y-3">
+              <Link
+                href="/membership/renew"
+                className="flex items-center justify-between w-full rounded-md border border-stone-200 bg-stone-50 px-4 py-3 text-sm font-semibold text-stone-950 transition hover:border-orange-300 hover:bg-orange-50 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 dark:hover:border-orange-700 dark:hover:bg-orange-950/20"
+              >
+                <span className="flex items-center gap-2">
+                  <CreditCard className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+                  Membership & Fees
+                </span>
+                <ChevronRight className="w-4 h-4 text-stone-400" />
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => setShowSignOutConfirm(true)}
+                className="flex items-center justify-between w-full rounded-md border border-stone-200 bg-stone-50 px-4 py-3 text-sm font-semibold text-red transition hover:border-red-300 hover:bg-red-50 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 dark:hover:border-red-700 dark:hover:bg-red-950/20"
+              >
+                <span className="flex items-center gap-2">
+                  <LogOut className="w-4 h-4 text-red-600 dark:text-red-400" />
+                  Sign Out
+                </span>
+                <ChevronRight className="w-4 h-4 text-stone-400" />
+              </button>
             </div>
           </div>
 

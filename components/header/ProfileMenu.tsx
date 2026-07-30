@@ -20,13 +20,6 @@ import NavList, { type NavListItem } from "../ui/NavList";
 // Structure supports plain links (just a path) and collapsible parents (a subItems array instead of a path).
 const PROFILE_LINKS: NavListItem[] = [
   { label: "Profile Information", path: "/profile" },
-  {
-    label: "Membership",
-    subItems: [
-      { label: "Membership Application", path: "/profile/membership" },
-      { label: "Pay Fees", path: "/profile/membership" },
-    ],
-  },
   { label: "Current Entries", path: "/profile/user-entries" },
   { label: "Purchase History", path: "/profile/purchase-history" },
   {
