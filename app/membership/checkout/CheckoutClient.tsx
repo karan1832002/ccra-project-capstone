@@ -7,7 +7,7 @@ export default function CheckoutClient() {
   const params = useSearchParams();
   const router = useRouter();
 
- const prices = {
+  const prices = {
     full: "$75 / year",
     associate: "$50 / year",
     junior: "$40 / year",
@@ -16,7 +16,7 @@ export default function CheckoutClient() {
 
   type MembershipKey = keyof typeof prices;
 
-  const membershipType = ((params.get("type") || "full") as MembershipKey);
+  const membershipType = (params.get("type") || "full") as MembershipKey;
 
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,15 +26,21 @@ export default function CheckoutClient() {
     setLoading(true);
     setErrorMsg("");
 
+    const startDate = new Date();
+    const expiryDate = new Date(startDate);
+    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
     try {
       const res = await fetch("http://4.248.243.149/api/memberships", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           userId: "11111111-1111-1111-1111-111111111111",
           membershipType,
-          startDate: new Date().toISOString(),
-          expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+          startDate: startDate.toISOString(),
+          expiryDate: expiryDate.toISOString(),
         }),
       });
 
@@ -42,16 +48,15 @@ export default function CheckoutClient() {
 
       if (!res.ok) {
         setErrorMsg(data.error || "Failed to save membership");
-        setLoading(false);
         return;
       }
 
       setDone(true);
-    } catch (err) {
+    } catch {
       setErrorMsg("Network or server error");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   if (done) {
@@ -74,7 +79,7 @@ export default function CheckoutClient() {
 
           <button
             onClick={() => router.push("/membership")}
-            className="bg-orange-600 hover:bg-orange-700 text-white font-semibold px-6 py-3 rounded-lg transition w-full"
+            className="w-full rounded-lg bg-orange-600 px-6 py-3 font-semibold text-white transition hover:bg-orange-700"
           >
             Back to Membership Page
           </button>
@@ -85,39 +90,42 @@ export default function CheckoutClient() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-6xl mx-auto px-6 py-10">
-        <h1 className="text-4xl font-bold text-orange-700 mb-4 text-center">
+      <div className="mx-auto max-w-6xl px-6 py-10">
+        <h1 className="mb-4 text-center text-4xl font-bold text-orange-700">
           Membership Checkout
         </h1>
-        <p className="text-gray-600 text-lg text-center">
+
+        <p className="text-center text-lg text-gray-600">
           Review your membership details before completing your registration.
         </p>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="border rounded-xl p-8 shadow-sm bg-white">
-
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            {membershipType.charAt(0).toUpperCase() + membershipType.slice(1)} Membership
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="rounded-xl border bg-white p-8 shadow-sm">
+          <h2 className="mb-4 text-2xl font-bold text-gray-900">
+            {membershipType.charAt(0).toUpperCase() +
+              membershipType.slice(1)}{" "}
+            Membership
           </h2>
 
-          <p className="text-gray-700 text-lg mb-4">
+          <p className="mb-4 text-lg text-gray-700">
             <strong>Price:</strong> {prices[membershipType]}
           </p>
 
-          <p className="text-gray-600 text-sm mb-2">Benefits</p>
-          <ul className="list-disc ml-6 text-gray-800 mb-6">
+          <p className="mb-2 text-sm text-gray-600">Benefits</p>
+
+          <ul className="mb-6 ml-6 list-disc text-gray-800">
             <li>Access to all CCRA rodeo events</li>
             <li>Member standings & payouts</li>
             <li>Exclusive updates & newsletters</li>
           </ul>
 
           {errorMsg && (
-            <p className="text-red-600 font-medium mb-4">{errorMsg}</p>
+            <p className="mb-4 font-medium text-red-600">{errorMsg}</p>
           )}
 
           <button
-            className="bg-orange-600 hover:bg-orange-700 text-white font-semibold px-6 py-3 rounded-lg transition w-full mb-4"
+            className="mb-4 w-full rounded-lg bg-orange-600 px-6 py-3 font-semibold text-white transition hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-50"
             onClick={handleComplete}
             disabled={loading}
           >
