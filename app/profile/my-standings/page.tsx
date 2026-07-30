@@ -7,59 +7,24 @@ import {
   ClipboardList,
   ChevronLeft,
 } from "lucide-react";
-import EventRankings, { EventStanding } from "@/components/my-standings/EventRankings";
-import RecentResults, { RecentResult } from "@/components/my-standings/RecentResults";
-
-const user = {
-  name: "Tammy Clemmer",
-  ageGroup: "50-59",
-  season: "2026",
-};
-
-const eventStandings: EventStanding[] = [
-  {
-    event: "Ladies Barrel Racing 40-59",
-    points: 98,
-    rank: 4,
-    entries: 2,
-    bestScore: "15.23",
-    lastResult: "3rd – Strathmore",
-  },
-  {
-    event: "Ribbon Roping 40-59 Runner",
-    points: 44,
-    rank: 9,
-    entries: 1,
-    bestScore: "N/A",
-    lastResult: "5th – Taber",
-  },
-];
-
-const recentResults: RecentResult[] = [
-  {
-    date: "Jun 14, 2026",
-    rodeo: "Strathmore Classic",
-    event: "Ladies Barrel Racing 50-59",
-    place: "3rd",
-    points: 42,
-  },
-  {
-    date: "May 31, 2026",
-    rodeo: "Taber Round-Up",
-    event: "Ribbon Roping 50-59",
-    place: "5th",
-    points: 28,
-  },
-  {
-    date: "May 17, 2026",
-    rodeo: "Brooks Spring Rodeo",
-    event: "Ladies Barrel Racing 50-59",
-    place: "2nd",
-    points: 56,
-  },
-];
+import EventRankings, { type EventStanding } from "@/components/my-standings/EventRankings";
+import RecentResults, { type RecentResult } from "@/components/my-standings/RecentResults";
+import { useSession } from "@/lib/auth-client";
 
 export default function StandingsPage() {
+  const { data: session, isPending } = useSession();
+
+  if (isPending) {
+    return (
+      <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex items-center justify-center">
+        <div className="animate-pulse text-stone-400 text-sm">Loading standings...</div>
+      </div>
+    );
+  }
+
+  const season = String(new Date().getFullYear());
+  const eventStandings: EventStanding[] = [];
+  const recentResults: RecentResult[] = [];
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
@@ -77,7 +42,7 @@ export default function StandingsPage() {
         <div className="mb-10 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="inline-flex items-center gap-2 rounded-md bg-orange-50 px-4 py-1 text-sm font-semibold text-orange-600 mb-6 dark:bg-orange-950/40 dark:text-orange-400">
-              {user.season} SEASON
+              {season} SEASON
             </div>
             <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-stone-950 dark:text-stone-100">
               My Standings
