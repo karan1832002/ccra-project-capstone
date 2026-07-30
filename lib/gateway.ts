@@ -39,7 +39,11 @@ export async function fetchFromGateway<T>(
   path: string,
   opts: Options = {},
 ): Promise<T> {
-  const res = await fetch(`${GATEWAY_URL}${path}`, {
+  // On the server, call the gateway directly with GATEWAY_URL. In the browser,
+  // GATEWAY_URL isn't available (and the gateway's CORS rejects browser origins),
+  // so route through the same-origin /api/gateway proxy instead.
+  const base = typeof window === "undefined" ? GATEWAY_URL : "/api/gateway";
+  const res = await fetch(`${base}${path}`, {
     method: opts.method ?? "GET",
     headers: { "Content-Type": "application/json" },
     body: opts.body ? JSON.stringify(opts.body) : undefined,
