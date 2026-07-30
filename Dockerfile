@@ -14,10 +14,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build-time arguments (pass via --build-arg, not hardcoded)
+# Build-time arguments (passed dynamically via --build-arg, defaults are empty for security)
 ENV NEXT_TELEMETRY_DISABLED=1
-ARG DATABASE_URL
-ARG BETTER_AUTH_SECRET
+ARG DATABASE_URL=""
+ARG BETTER_AUTH_SECRET=""
 ENV DATABASE_URL=${DATABASE_URL}
 ENV BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
 
