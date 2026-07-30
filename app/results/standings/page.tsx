@@ -49,7 +49,7 @@ export default function RodeoStandingsPage() {
     <div className="w-full py-8 px-4 max-w-4xl mx-auto">
 
       {/* RULEBOOK STYLE HEADING */}
-      <h1 className="text-3xl font-bold text-orange-700 mb-4 text-center">
+      <h1 className="text-4xl font-bold text-orange-700 mb-4 text-center">
         Standings
       </h1>
 

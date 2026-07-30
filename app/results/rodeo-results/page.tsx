@@ -63,7 +63,7 @@ export default function RodeoResultsPage() {
     <div className="max-w-3xl mx-auto py-8 px-4">
 
       {/* RULEBOOK STYLE HEADING */}
-      <h1 className="text-3xl font-bold text-orange-700 mb-4 text-center">
+      <h1 className="text-4xl font-bold text-orange-700 mb-4 text-center">
         Rodeo Results
       </h1>
 
