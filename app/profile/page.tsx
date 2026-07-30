@@ -1,54 +1,60 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Calendar,
   Trophy,
   Shield,
   Edit3,
   CreditCard,
   ClipboardList,
   ChevronRight,
-  Award,
   LogOut,
   X,
 } from "lucide-react";
-
-// Mock data – replace with real user data from your auth/session + API
-const user = {
-  name: "Tammy Clemmer",
-  status: "Active",
-  memberSince: "2018",
-  email: "tammy.clemmer@example.com",
-  phone: "(403) 555-0198",
-  address: "Strathmore, AB",
-  ageGroup: "50-59",
-  avatar: "/images/avatar-placeholder.jpg", // replace with real avatar or initials fallback
-  events: ["Ladies Barrel Racing 50-59", "Ribbon Roping 50-59"],
-  currentSeason: {
-    points: 142,
-    rank: 7,
-    rodeosEntered: 3,
-  },
-};
+import { signOut, useSession } from "@/lib/auth-client";
+import EditProfileModal from "@/components/profile/EditProfileModal";
 
 export default function ProfilePage() {
+  const { data: session, isPending } = useSession();
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const handleSignOut = () => {
-    // Replace with your actual sign-out logic (e.g. NextAuth signOut(), Clerk signOut(), etc.)
-    // Example with NextAuth:
-    // import { signOut } from "next-auth/react";
-    // signOut({ callbackUrl: "/" });
-    console.log("Signing out...");
-    setShowSignOutConfirm(false);
+  const handleSignOut = async () => {
+    await signOut();
+    window.location.href = "/";
   };
+
+  if (isPending) {
+    return (
+      <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex items-center justify-center">
+        <div className="animate-pulse text-stone-400 text-sm">Loading profile...</div>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex items-center justify-center">
+        <div className="text-stone-400 text-sm">Not signed in</div>
+      </div>
+    );
+  }
+
+  const { name, email, image, createdAt, role } = session.user as typeof session.user & { role?: string | null };
+
+  const initials = name
+    ?.split(" ")
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2) || "U";
+
+  const memberSince = createdAt ? new Date(createdAt).getFullYear() : "N/A";
+
+  const roleLabel = role
+    ? role.charAt(0).toUpperCase() + role.slice(1)
+    : "Member";
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
@@ -77,22 +83,17 @@ export default function ProfilePage() {
                 {/* Avatar */}
                 <div className="relative mb-6">
                   <div className="w-28 h-28 rounded-md overflow-hidden border-2 border-orange-200 bg-stone-100 dark:border-orange-800 dark:bg-stone-800">
-                    {/* Fallback initials if no image */}
-                    <div className="w-full h-full flex items-center justify-center text-3xl font-semibold text-orange-600 dark:text-orange-400">
-                      {user.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        .slice(0, 2)}
-                    </div>
-                    {/* Uncomment when you have real avatars:
-                    <Image
-                      src={user.avatar}
-                      alt={user.name}
-                      fill
-                      className="object-cover"
-                    />
-                    */}
+                    {image ? (
+                      <img
+                        src={image}
+                        alt={name ?? "Profile picture"}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-3xl font-semibold text-orange-600 dark:text-orange-400">
+                        {initials}
+                      </div>
+                    )}
                   </div>
                   <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-md bg-orange-600 flex items-center justify-center text-white shadow">
                     <Shield className="w-4 h-4" />
@@ -100,24 +101,29 @@ export default function ProfilePage() {
                 </div>
 
                 <h2 className="text-2xl font-semibold text-stone-950 dark:text-stone-100">
-                  {user.name}
+                  {name ?? "Member"}
                 </h2>
 
                 {/* Status Badge */}
                 <div className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-green-50 px-3 py-1 text-xs font-semibold text-green-700 dark:bg-green-950/40 dark:text-green-400">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                  {user.status} Member
+                  {roleLabel}
                 </div>
 
-                <p className="mt-4 text-sm text-stone-500 dark:text-stone-400">
-                  Member since {user.memberSince} · {user.ageGroup}
+                <p className="mt-4 text-sm text-stone-400 dark:text-stone-500">
+                  {email}
+                </p>
+
+                <p className="mt-1 text-sm text-stone-400 dark:text-stone-500">
+                  Member since {memberSince}
                 </p>
               </div>
 
               {/* Quick Actions */}
               <div className="mt-8 pt-6 border-t border-stone-200 dark:border-stone-700 space-y-3">
-                <Link
-                  href="/profile/edit"
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(true)}
                   className="flex items-center justify-between w-full rounded-md border border-stone-200 bg-stone-50 px-4 py-3 text-sm font-semibold text-stone-950 transition hover:border-orange-300 hover:bg-orange-50 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 dark:hover:border-orange-700 dark:hover:bg-orange-950/20"
                 >
                   <span className="flex items-center gap-2">
@@ -125,7 +131,7 @@ export default function ProfilePage() {
                     Edit Profile
                   </span>
                   <ChevronRight className="w-4 h-4 text-stone-400" />
-                </Link>
+                </button>
 
                 <Link
                   href="/membership/renew"
@@ -154,31 +160,8 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* ================= RIGHT COLUMN – Details & Stats ================= */}
+          {/* ================= RIGHT COLUMN – Quick Links ================= */}
           <div className="lg:col-span-8 space-y-6">
-
-            {/* Events / Categories */}
-            <div className="rounded-md border border-stone-200 bg-white p-8 shadow-sm dark:border-stone-700 dark:bg-stone-900">
-              <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-4 dark:text-stone-500">
-                COMPETING IN
-              </div>
-              <h3 className="text-xl font-semibold text-stone-950 mb-5 dark:text-stone-100">
-                Events & Categories
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                {user.events.map((event) => (
-                  <span
-                    key={event}
-                    className="inline-flex items-center gap-2 rounded-md bg-orange-50 px-4 py-2 text-sm font-medium text-orange-700 dark:bg-orange-950/40 dark:text-orange-300"
-                  >
-                    <Trophy className="w-4 h-4" />
-                    {event}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Quick Links Row */}
             <div className="grid sm:grid-cols-2 gap-4">
               <Link
                 href="/events/enter-rodeo"
@@ -213,6 +196,12 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      <EditProfileModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        user={{ name: name ?? "", email: email ?? "", image: session.user.image }}
+      />
 
       {/* ================= SIGN OUT CONFIRMATION MODAL ================= */}
       {showSignOutConfirm && (
