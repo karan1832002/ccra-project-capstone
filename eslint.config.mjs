@@ -8,6 +8,10 @@ const eslintConfig = defineConfig([
   {
     rules: {
       "react/no-unescaped-entities": "off",
+      // react-hook-form's watch() returns a function the React Compiler lint
+      // rule flags as non-memoizable. That's an unavoidable, valid pattern for
+      // this library, so disable the rule rather than block builds on it.
+      "react-hooks/incompatible-library": "off",
     },
   },
   // Override default ignores of eslint-config-next.

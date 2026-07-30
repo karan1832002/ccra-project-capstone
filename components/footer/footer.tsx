@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="mt-16 border-t border-stone-300 bg-white py-10 px-6 text-stone-700 text-sm">
@@ -8,21 +10,21 @@ export default function Footer() {
         </p>
 
         <div className="flex gap-6 text-stone-700">
-          <a href="/about-us" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
+          <Link href="/about-us" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
             About
-          </a>
-          <a href="/schedule" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
+          </Link>
+          <Link href="/schedule" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
             Schedule
-          </a>
-          <a href="/events/current-entries" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
+          </Link>
+          <Link href="/events/current-entries" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
             Events
-          </a>
-          <a href="/results/rodeo-results" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
+          </Link>
+          <Link href="/results/rodeo-results" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
             Results
-          </a>
-          <a href="/about-us/contact" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
+          </Link>
+          <Link href="/about-us/contact" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
             Contact
-          </a>
+          </Link>
         </div>
 
         <p className="text-xs text-stone-500 mt-4">
