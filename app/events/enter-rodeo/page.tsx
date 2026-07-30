@@ -2,7 +2,7 @@
  * Enter Rodeo page
  * -----------------
  * Lets a competitor:
- *   1. Enter their name + email (with confirm-email validation).
+ *   1. View their name + email.
  *   2. Add one or more event entries via the "Add Entry" pop-up
  *      (components/rodeo/AddEntryModal.tsx).
  *   3. Review everything they've added in a table before submitting.
@@ -51,6 +51,8 @@ const emptyCompetitorValues: CompetitorFormValues = {
 export default function EnterRodeoPage() {
   const { data: session, isPending } = useSession();
   const isSignedIn = Boolean(session?.user);
+  const competitorName = session?.user.name ?? "";
+  const email = session?.user.email ?? "";
   const {
     register,
     watch,
@@ -60,7 +62,7 @@ export default function EnterRodeoPage() {
   } = useForm<CompetitorFormValues>({ defaultValues: emptyCompetitorValues });
 
   // Watched so the "confirm email" validator can compare live against it.
-  const email = watch("email");
+  //const email = watch("email");
 
   // Entries the competitor has added so far via the Add Entry pop-up.
   const [entries, setEntries] = useState<RodeoEntry[]>([]);
@@ -217,7 +219,8 @@ export default function EnterRodeoPage() {
                 Your Information
               </h2>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="sm:col-span-2">
+                {/* Competitor Name */}
+                <div>
                   <label
                     htmlFor="competitorName"
                     className="block text-sm font-medium text-stone-600"
@@ -225,20 +228,14 @@ export default function EnterRodeoPage() {
                     Competitor Name
                   </label>
                   <input
-                    id="competitorName"
+                    id="Competitor Name"
                     type="text"
-                    className="mt-1 block w-full rounded-md border border-stone-200 px-3 py-2 text-sm focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
-                    {...register("competitorName", {
-                      required: "Please enter your name",
-                    })}
+                    value={competitorName}
+                    readOnly
+                    className="mt-1 block w-full rounded-md border border-stone-200 bg-stone-100 px-3 py-2 text-sm"
                   />
-                  {errors.competitorName && (
-                    <p className="mt-1 text-sm text-red-700">
-                      {errors.competitorName.message}
-                    </p>
-                  )}
                 </div>
-
+                {/* Email */}
                 <div>
                   <label
                     htmlFor="email"
@@ -249,44 +246,10 @@ export default function EnterRodeoPage() {
                   <input
                     id="email"
                     type="email"
-                    className="mt-1 block w-full rounded-md border border-stone-200 px-3 py-2 text-sm focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
-                    {...register("email", {
-                      required: "Please enter your email",
-                      pattern: {
-                        value: EMAIL_PATTERN,
-                        message: "Please enter a valid email",
-                      },
-                    })}
+                    value={email}
+                    readOnly
+                    className="mt-1 block w-full rounded-md border border-stone-200 bg-stone-100 px-3 py-2 text-sm"
                   />
-                  {errors.email && (
-                    <p className="mt-1 text-sm text-red-700">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="confirmEmail"
-                    className="block text-sm font-medium text-stone-600"
-                  >
-                    Confirm Email
-                  </label>
-                  <input
-                    id="confirmEmail"
-                    type="email"
-                    className="mt-1 block w-full rounded-md border border-stone-200 px-3 py-2 text-sm focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
-                    {...register("confirmEmail", {
-                      required: "Please confirm your email",
-                      validate: (value) =>
-                        value === email || "Emails do not match",
-                    })}
-                  />
-                  {errors.confirmEmail && (
-                    <p className="mt-1 text-sm text-red-700">
-                      {errors.confirmEmail.message}
-                    </p>
-                  )}
                 </div>
               </div>
             </section>
