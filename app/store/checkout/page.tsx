@@ -13,7 +13,7 @@ export default function CheckoutPage() {
     <div className="mx-auto max-w-3xl px-4 py-12">
 
       {/* Page Heading */}
-      <h1 className="text-5xl font-semibold text-stone-950 mb-6">
+      <h1 className="text-4xl font-bold text-orange-700 mb-4 text-center">
         Checkout
       </h1>
 
@@ -77,13 +77,6 @@ export default function CheckoutPage() {
           Complete Purchase
         </button>
       </form>
-
-      {/* Footer */}
-      <footer className="mt-20 border-t border-stone-200 pt-12">
-        <p className="text-sm text-stone-600 text-center">
-          © 2026 Canadian Classic Rodeo Association. All Rights Reserved.
-        </p>
-      </footer>
 
     </div>
   );

@@ -12,6 +12,7 @@
 
 import { useState } from "react";
 import { UserRound } from "lucide-react";
+import { signOut, useSession } from "@/lib/auth-client";
 import Sidebar from "../ui/Sidebar";
 import NavList, { type NavListItem } from "../ui/NavList";
 
@@ -19,23 +20,24 @@ import NavList, { type NavListItem } from "../ui/NavList";
 // Structure supports plain links (just a path) and collapsible parents (a subItems array instead of a path).
 const PROFILE_LINKS: NavListItem[] = [
   { label: "Profile Information", path: "/profile" },
-  {
-    label: "Membership",
-    subItems: [
-      { label: "Membership Application", path: "/profile/membership" },
-      { label: "Pay Fees", path: "/profile/membership" },
-    ],
-  },
   { label: "Current Entries", path: "/profile/user-entries" },
   { label: "Purchase History", path: "/profile/purchase-history" },
-  { label: "Sign Out", path: "/" },
+  {
+    label: "Sign Out",
+    action: async () => {
+      await signOut();
+      window.location.href = "/";
+    },
+  },
 ];
 
-// TODO: replace with real membership status, likely pulled from auth/user state
-const MEMBERSHIP_STATUS = "Active Member";
-
 export default function ProfileMenu() {
+  const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
+  const user = session?.user as { role?: string | null; name?: string; email?: string; image?: string | null } | undefined;
+  const roleLabel = user?.role
+    ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+    : "Member";
 
   function closeMenu() {
     setIsOpen(false);
@@ -65,7 +67,7 @@ export default function ProfileMenu() {
         {/* Membership status — the one bit of content that's specific to
             this sidebar rather than being generic nav-list rendering */}
         <div className="rounded-md bg-orange-50 px-3 py-2 text-sm font-medium text-stone-600">
-          Membership Status: {MEMBERSHIP_STATUS}
+          Membership Status: {roleLabel}
         </div>
 
         <NavList

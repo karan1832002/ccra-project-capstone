@@ -21,7 +21,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import Link from "next/link";
 import Table from "@/components/ui/Table";
 import AddEntryModal from "@/components/rodeo/AddEntryModal";
@@ -31,38 +30,11 @@ import { formatShortDate } from "@/lib/rodeoDateUtils";
 import { submitRodeoEntries } from "@/lib/sampleRodeoData";
 import { useSession } from "@/lib/auth-client";
 
-// Fields collected by the top-level competitor form.
-interface CompetitorFormValues {
-  competitorName: string;
-  email: string;
-  confirmEmail: string;
-}
-
-// A basic, permissive email pattern — good enough for client-side sanity
-// checking; real validation should still happen server-side.
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const emptyCompetitorValues: CompetitorFormValues = {
-  competitorName: "",
-  email: "",
-  confirmEmail: "",
-};
-
 export default function EnterRodeoPage() {
   const { data: session, isPending } = useSession();
   const isSignedIn = Boolean(session?.user);
   const competitorName = session?.user.name ?? "";
   const email = session?.user.email ?? "";
-  const {
-    register,
-    watch,
-    reset,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CompetitorFormValues>({ defaultValues: emptyCompetitorValues });
-
-  // Watched so the "confirm email" validator can compare live against it.
-  //const email = watch("email");
 
   // Entries the competitor has added so far via the Add Entry pop-up.
   const [entries, setEntries] = useState<RodeoEntry[]>([]);
@@ -128,19 +100,13 @@ export default function EnterRodeoPage() {
     0,
   );
 
-  // Wrapping in react-hook-form's `handleSubmit` means clicking "Submit
-  // Entry" first validates competitorName/email/confirmEmail against the
-  // rules on their `register(...)` calls below (required, email pattern,
-  // and the emails-match check). If any of those fail, RHF populates
-  // `errors` (so the existing red messages under each field show up) and
-  // `onSubmit` below never runs — the entries never get sent.
-  const handleSubmitEntries = handleSubmit(async (values) => {
+  async function handleSubmitEntries() {
     setIsSubmitting(true);
     setSubmitError(null);
     try {
       const result = await submitRodeoEntries({
-        competitorName: values.competitorName,
-        email: values.email,
+        competitorName,
+        email,
         entries,
       });
       setConfirmationNumber(result.confirmationNumber);
@@ -151,12 +117,11 @@ export default function EnterRodeoPage() {
     } finally {
       setIsSubmitting(false);
     }
-  });
+  }
 
   // Resets the whole page back to a blank slate so the competitor can
   // submit a separate entry (e.g. for another rodeo).
   function handleStartNewEntry() {
-    reset(emptyCompetitorValues);
     setEntries([]);
     setConfirmationNumber(null);
     setSubmitError(null);
@@ -209,7 +174,7 @@ export default function EnterRodeoPage() {
                 </span>
               </p>
               <p className="mt-1 text-sm text-green-800">
-                A confirmation email is on its way to {watch("email")}.
+                A confirmation email is on its way to {email}.
               </p>
             </section>
           ) : (

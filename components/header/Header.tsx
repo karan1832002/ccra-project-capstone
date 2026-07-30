@@ -31,26 +31,15 @@ export interface NavSubItem {
 export interface NavItem {
   label: string;
   path?: string;
-  // Optional submenu items, e.g. About Us -> Contact Information, Board of Directors.
-  // Omit this field entirely for menus that don't have submenus.
-  // An item has either a path OR subItems, never both.
   subItems?: NavSubItem[];
 }
 
-// Update this list any time the site's top-level sections change.
-// Add a `subItems` array to any entry that needs a submenu.
+// ⭐ UPDATED NAV ITEMS — EXACT ORDER YOU REQUESTED
 const NAV_ITEMS: NavItem[] = [
   { label: "Home", path: "/" },
-  {
-    label: "About Us", path: "/about-us",
-    subItems: [
-      { label: "Contact Information", path: "/about-us/contact" },
-      { label: "Board of Directors", path: "/about-us/board-of-directors" },
-      { label: "Meeting Minutes", path: "/about-us/minutes" },
-      { label: "Photo Gallery", path: "/about-us/photo-gallery" },
-    ],
-  },
+  { label: "Membership", path: "/membership" },
   { label: "Schedule", path: "/schedule" },
+
   {
     label: "Events",
     subItems: [
@@ -61,6 +50,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Rulebook", path: "/events/rulebook" },
     ],
   },
+
   {
     label: "Results",
     subItems: [
@@ -69,7 +59,19 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Past Champions", path: "/results/past-champions" },
     ],
   },
+
   { label: "Store", path: "/store" },
+
+  {
+    label: "About Us",
+    path: "/about-us",
+    subItems: [
+      { label: "Contact Information", path: "/about-us/contact" },
+      { label: "Board of Directors", path: "/about-us/board-of-directors" },
+      { label: "Meeting Minutes", path: "/about-us/minutes" },
+      { label: "Photo Gallery", path: "/about-us/photo-gallery" },
+    ],
+  },
 ];
 
 export default function Header() {
@@ -81,7 +83,8 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-2 px-4 sm:px-6 lg:px-8">
-        {/* Logo — links back to homepage */}
+        
+        {/* Logo */}
         <Link
           href="/"
           className="flex shrink-0 items-center gap-3 text-stone-950"
@@ -92,11 +95,8 @@ export default function Header() {
           </span>
         </Link>
 
-        {/* Dropdown nav menus — hidden below lg in favor of the MobileNav hamburger */}
-        <nav
-          className="hidden items-center gap-1 lg:flex"
-          aria-label="Main navigation"
-        >
+        {/* Desktop Navigation */}
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Main navigation">
           <ul className="m-0 flex list-none items-center gap-6 p-0">
             {NAV_ITEMS.map((item) => (
               <li key={item.label}>
@@ -110,9 +110,10 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* Hamburger (mobile) + cart + profile/sign-in */}
+        {/* Mobile Nav + Cart + Profile */}
         <div className="flex shrink-0 items-center gap-2">
           <MobileNav items={NAV_ITEMS} />
+
           <Link
             href="/cart"
             className="inline-flex h-10 w-10 items-center justify-center rounded-md text-stone-700 transition hover:bg-stone-100"
@@ -121,12 +122,9 @@ export default function Header() {
             <ShoppingCart className="h-5 w-5" />
           </Link>
 
-          {/* While the session is loading, render a same-sized placeholder to
-              avoid a layout shift / flash between the two states below. */}
           {isPending ? (
             <div className="h-10 w-10" aria-hidden="true" />
           ) : isSignedIn ? (
-            // Profile icon + its menu logic live in ProfileMenu.tsx
             <ProfileMenu />
           ) : (
             <Link
