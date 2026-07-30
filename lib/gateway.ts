@@ -99,12 +99,12 @@ export type Rodeo = {
 //   createdAt: string;
 // };
 
-// An event is a single competition inside a rodeo.
-// (old db table)
+// An event is a single competition inside a rodeo, identified by its category
+// (e.g. "Bull Riding"). Matches the backend `events` table.
 export type Event = {
   id: string;
   rodeoId: string;
-  eventTitle: string;
+  category: string;
   eventDate: string | null;
   eventTime: string | null;
   eventFee: number | null;
