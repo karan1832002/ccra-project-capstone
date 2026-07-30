@@ -29,6 +29,7 @@ import Hero from "@/components/ui/Hero";
 import { RodeoEntry } from "@/types/rodeo";
 import { formatShortDate } from "@/lib/rodeoDateUtils";
 import { submitRodeoEntries } from "@/lib/sampleRodeoData";
+import { useSession } from "@/lib/auth-client";
 
 // Fields collected by the top-level competitor form.
 interface CompetitorFormValues {
@@ -48,6 +49,8 @@ const emptyCompetitorValues: CompetitorFormValues = {
 };
 
 export default function EnterRodeoPage() {
+  const { data: session, isPending } = useSession();
+  const isSignedIn = Boolean(session?.user);
   const {
     register,
     watch,
@@ -165,179 +168,206 @@ export default function EnterRodeoPage() {
         description="Register for upcoming CCRA rodeo events and secure your spot in the arena. Select your event, submit your entry, and get ready to compete."
       />
 
-      {confirmationNumber ? (
-        // --- Confirmation view -------------------------------------------
-        // Shown in place of the form once the entry has been successfully
-        // saved. Same page/URL — just swapping what's rendered.
-        <section className="mb-8 rounded-md border border-green-800 bg-green-50 p-6">
-          <h2 className="mb-1 text-xl font-semibold text-green-800">
-            Entry submitted successfully!
+      {isPending ? (
+        // While authentication status is loading, show an empty placeholder
+        // to prevent layout shifting.
+        <div className="h-10 w-10" aria-hidden="true" />
+      ) : !isSignedIn ? (
+        // User is not signed in. Show login prompt and hide the entry form.
+        <section className="mt-8 rounded-md border border-stone-200 bg-white p-6 text-center shadow-sm">
+          <h2 className="text-xl font-semibold text-stone-950">
+            Please sign in to enter a rodeo
           </h2>
-          <p className="text-sm text-green-800">
-            Confirmation #:{" "}
-            <span className="font-mono font-semibold">
-              {confirmationNumber}
-            </span>
+          <p className="mt-2 text-sm text-stone-600">
+            You must have an account to submit rodeo entries.
           </p>
-          <p className="mt-1 text-sm text-green-800">
-            A confirmation email is on its way to {watch("email")}.
-          </p>
-        </section>
-      ) : (
-        // --- Competitor info -----------------------------------------------
-        <section className="mb-8 rounded-md border border-stone-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-stone-950">
-            Your Information
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="competitorName"
-                className="block text-sm font-medium text-stone-600"
-              >
-                Competitor Name
-              </label>
-              <input
-                id="competitorName"
-                type="text"
-                className="mt-1 block w-full rounded-md border border-stone-200 px-3 py-2 text-sm focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
-                {...register("competitorName", {
-                  required: "Please enter your name",
-                })}
-              />
-              {errors.competitorName && (
-                <p className="mt-1 text-sm text-red-700">
-                  {errors.competitorName.message}
-                </p>
-              )}
-            </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-stone-600"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                className="mt-1 block w-full rounded-md border border-stone-200 px-3 py-2 text-sm focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
-                {...register("email", {
-                  required: "Please enter your email",
-                  pattern: {
-                    value: EMAIL_PATTERN,
-                    message: "Please enter a valid email",
-                  },
-                })}
-              />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-700">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmEmail"
-                className="block text-sm font-medium text-stone-600"
-              >
-                Confirm Email
-              </label>
-              <input
-                id="confirmEmail"
-                type="email"
-                className="mt-1 block w-full rounded-md border border-stone-200 px-3 py-2 text-sm focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
-                {...register("confirmEmail", {
-                  required: "Please confirm your email",
-                  validate: (value) => value === email || "Emails do not match",
-                })}
-              />
-              {errors.confirmEmail && (
-                <p className="mt-1 text-sm text-red-700">
-                  {errors.confirmEmail.message}
-                </p>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* --- Add Entry button + pop-up -------------------------------------
-          Hidden once submitted — entries are locked in at that point. */}
-      {!confirmationNumber && (
-        <>
-          <div className="mb-6">
-            <button
-              type="button"
-              onClick={() => setIsModalOpen(true)}
-              className="rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700"
-            >
-              + Add Entry
-            </button>
-          </div>
-
-          <AddEntryModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onAddEntry={handleAddEntry}
-          />
-        </>
-      )}
-
-      {/* --- Entries table ---------------------------------------------------
-          Left in place after submission too, as a summary of what was entered. */}
-      <section className="mb-8">
-        <h2 className="mb-4 text-xl font-semibold text-stone-950">
-          {confirmationNumber ? "Entries Submitted" : "Your Entries"}
-        </h2>
-        {entries.length === 0 ? (
-          <p className="text-sm text-stone-400">
-            No entries yet — use "Add Entry" above to add your first event.
-          </p>
-        ) : (
-          <>
-            <Table columns={columns} data={tableRows} />
-            <p className="mt-3 text-sm font-medium text-stone-600">
-              Total fees: ${totalFees.toFixed(2)}
-            </p>
-          </>
-        )}
-      </section>
-
-      {confirmationNumber ? (
-        // --- Post-submission actions --------------------------------------
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={handleStartNewEntry}
-            className="rounded-md border border-stone-200 px-5 py-2.5 text-sm font-medium text-stone-600 hover:bg-stone-200"
-          >
-            New Entry
-          </button>
           <Link
-            href="/events/pay-fees"
-            className="rounded-md bg-orange-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-orange-700"
+            href="/sign-in"
+            className="mt-4 inline-flex items-center justify-center rounded-md bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-orange-700"
           >
-            Pay Fees
+            Sign In
           </Link>
-        </div>
+        </section>
       ) : (
-        // --- Submit ---------------------------------------------------------
-        <div>
-          <button
-            type="button"
-            onClick={handleSubmitEntries}
-            disabled={entries.length === 0 || isSubmitting}
-            className="rounded-md bg-stone-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-stone-900 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            {isSubmitting ? "Submitting…" : "Submit Entry"}
-          </button>
-          {submitError && (
-            <p className="mt-2 text-sm text-red-700">{submitError}</p>
+        // User is signed in. Show the entry form and registration content.
+        <>
+          {confirmationNumber ? (
+            // --- Confirmation view -------------------------------------------
+            // Shown in place of the form once the entry has been successfully
+            // saved. Same page/URL — just swapping what's rendered.
+            <section className="mb-8 rounded-md border border-green-800 bg-green-50 p-6">
+              <h2 className="mb-1 text-xl font-semibold text-green-800">
+                Entry submitted successfully!
+              </h2>
+              <p className="text-sm text-green-800">
+                Confirmation #:{" "}
+                <span className="font-mono font-semibold">
+                  {confirmationNumber}
+                </span>
+              </p>
+              <p className="mt-1 text-sm text-green-800">
+                A confirmation email is on its way to {watch("email")}.
+              </p>
+            </section>
+          ) : (
+            // --- Competitor info -----------------------------------------------
+            <section className="mb-8 rounded-md border border-stone-200 bg-white p-6 shadow-sm">
+              <h2 className="mb-4 text-lg font-semibold text-stone-950">
+                Your Information
+              </h2>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="sm:col-span-2">
+                  <label
+                    htmlFor="competitorName"
+                    className="block text-sm font-medium text-stone-600"
+                  >
+                    Competitor Name
+                  </label>
+                  <input
+                    id="competitorName"
+                    type="text"
+                    className="mt-1 block w-full rounded-md border border-stone-200 px-3 py-2 text-sm focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
+                    {...register("competitorName", {
+                      required: "Please enter your name",
+                    })}
+                  />
+                  {errors.competitorName && (
+                    <p className="mt-1 text-sm text-red-700">
+                      {errors.competitorName.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-stone-600"
+                  >
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    className="mt-1 block w-full rounded-md border border-stone-200 px-3 py-2 text-sm focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
+                    {...register("email", {
+                      required: "Please enter your email",
+                      pattern: {
+                        value: EMAIL_PATTERN,
+                        message: "Please enter a valid email",
+                      },
+                    })}
+                  />
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-700">
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="confirmEmail"
+                    className="block text-sm font-medium text-stone-600"
+                  >
+                    Confirm Email
+                  </label>
+                  <input
+                    id="confirmEmail"
+                    type="email"
+                    className="mt-1 block w-full rounded-md border border-stone-200 px-3 py-2 text-sm focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
+                    {...register("confirmEmail", {
+                      required: "Please confirm your email",
+                      validate: (value) =>
+                        value === email || "Emails do not match",
+                    })}
+                  />
+                  {errors.confirmEmail && (
+                    <p className="mt-1 text-sm text-red-700">
+                      {errors.confirmEmail.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </section>
           )}
-        </div>
+
+          {/* --- Add Entry button + pop-up -------------------------------------
+          Hidden once submitted — entries are locked in at that point. */}
+          {!confirmationNumber && (
+            <>
+              <div className="mb-6">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(true)}
+                  className="rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700"
+                >
+                  + Add Entry
+                </button>
+              </div>
+
+              <AddEntryModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onAddEntry={handleAddEntry}
+              />
+            </>
+          )}
+
+          {/* --- Entries table ---------------------------------------------------
+          Left in place after submission too, as a summary of what was entered. */}
+          <section className="mb-8">
+            <h2 className="mb-4 text-xl font-semibold text-stone-950">
+              {confirmationNumber ? "Entries Submitted" : "Your Entries"}
+            </h2>
+            {entries.length === 0 ? (
+              <p className="text-sm text-stone-400">
+                No entries yet — use "Add Entry" above to add your first event.
+              </p>
+            ) : (
+              <>
+                <Table columns={columns} data={tableRows} />
+                <p className="mt-3 text-sm font-medium text-stone-600">
+                  Total fees: ${totalFees.toFixed(2)}
+                </p>
+              </>
+            )}
+          </section>
+
+          {confirmationNumber ? (
+            // --- Post-submission actions --------------------------------------
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={handleStartNewEntry}
+                className="rounded-md border border-stone-200 px-5 py-2.5 text-sm font-medium text-stone-600 hover:bg-stone-200"
+              >
+                New Entry
+              </button>
+              <Link
+                href="/events/pay-fees"
+                className="rounded-md bg-orange-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-orange-700"
+              >
+                Pay Fees
+              </Link>
+            </div>
+          ) : (
+            // --- Submit ---------------------------------------------------------
+            <div>
+              <button
+                type="button"
+                onClick={handleSubmitEntries}
+                disabled={entries.length === 0 || isSubmitting}
+                className="rounded-md bg-stone-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-stone-900 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {isSubmitting ? "Submitting…" : "Submit Entry"}
+              </button>
+              {submitError && (
+                <p className="mt-2 text-sm text-red-700">{submitError}</p>
+              )}
+            </div>
+          )}
+        </>
       )}
     </main>
   );
