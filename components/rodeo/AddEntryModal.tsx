@@ -204,7 +204,13 @@ export default function AddEntryModal({
     const rodeo = rodeos.find((r) => r.rodeoId === performance.rodeoId);
 
     const entry: RodeoEntry = {
-      id: crypto.randomUUID(),
+      // crypto.randomUUID() only exists in a secure context (HTTPS or localhost).
+      // The deployed site is served over plain HTTP, so fall back to a simple
+      // unique id there. This is only a client-side list key, not a DB id.
+      id:
+        typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
 
       rodeoId: performance.rodeoId,
       rodeoName: performance.rodeoName,
