@@ -9,6 +9,7 @@ export interface NavListItem {
   label: string;
   path?: string;
   subItems?: NavListItem[];
+  action?: () => void;
 }
 
 export interface NavListProps {
@@ -43,6 +44,22 @@ export default function NavList({
         const isExpanded = expandedLabels.has(item.label);
 
         if (!hasSubItems) {
+          if (item.action) {
+            return (
+              <button
+                key={item.label}
+                type="button"
+                onClick={() => {
+                  item.action!();
+                  onNavigate();
+                }}
+                className="rounded-md px-3 py-3 text-sm font-medium text-red-600 transition hover:bg-red-50 hover:text-red-700 w-full text-left"
+              >
+                {item.label}
+              </button>
+            );
+          }
+
           return (
             <Link
               key={item.label}

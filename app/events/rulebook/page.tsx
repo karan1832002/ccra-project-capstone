@@ -1,22 +1,20 @@
 "use client";
 
 import React from "react";
+import Hero from "@/components/ui/Hero";
 
 export default function RulebookPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
       {/* Header */}
-      <h1 className="text-3xl font-bold text-center text-orange-700 mb-4">
-        Official Rulebook
-      </h1>
-      <p className="text-center text-gray-600 mb-10">
-        Access the official Canadian Classic Rodeo Association rulebook,
-        bylaws, and rule change forms.
-      </p>
+      <Hero
+        badge="RULES & REGULATIONS"
+        title="Official Rulebook"
+        description="Access the official Canadian Classic Rodeo Association rulebook, bylaws, and rule change forms."
+      />
 
       {/* Downloads Section */}
       <div className="space-y-6">
-
         {/* Rulebook PDF */}
         <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition">
           <h2 className="text-xl font-semibold text-orange-700 mb-2">
@@ -67,7 +65,6 @@ export default function RulebookPage() {
             Download Form
           </a>
         </div>
-
       </div>
     </div>
   );

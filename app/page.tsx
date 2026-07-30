@@ -3,40 +3,64 @@
 import Image from "next/image";
 import Link from "next/link";
 import ImageCarousel, { CarouselImage } from "@/components/ui/ImageCarousel";
+import SponsorsCarousel, { Sponsor } from "@/components/ui/SponsorsCarousel";
+import NewsletterCard from "@/components/ui/NewsletterCard";
 import { Calendar, ShoppingCart, Trophy, Camera, ArrowRight } from "lucide-react";
 
 const heroImages: CarouselImage[] = [
   {
     src: "/images/barrelracer.jpg",
     alt: "Barrel Racer",
-    caption: "Ladies Barrel Racing – 2022",
   },
   {
     src: "/images/steerwrestling.jpg",
     alt: "Steer wrestling at CCRA",
-    caption: "Steer Wrestling – 2023",
   },
   {
     src: "/images/barrelracing.jpg",
     alt: "Barrel racing at CCRA",
-    caption: "Barrel Racing – 2024",
   },
 ];
 
-const sponsorImages: CarouselImage[] = [
-  { src: "/images/sponsors/sponsor1-strathmorestampede.png", alt: "Sponsor 1" },
-  { src: "/images/sponsors/sponsor2-uncommonciderco.png", alt: "Sponsor 2" },
-  { src: "/images/sponsors/sponsor3-ufa.webp", alt: "Sponsor 3" },
-  { src: "/images/sponsors/sponsor4-summitmotorsltd.jpg", alt: "Sponsor 4" },
-  { src: "/images/sponsors/sponsor5-lesfermescavendishfarms.png", alt: "Sponsor 5" },
-  { src: "/images/sponsors/sponsor6-statsgroup.png", alt: "Sponsor 6" },
-  { src: "/images/sponsors/sponsor7-vaneelivestocktrucking.png", alt: "Sponsor 7" },
-  { src: "/images/sponsors/sponsor8-vantage.png", alt: "Sponsor 8" },
-  { src: "/images/sponsors/sponsor9-troyfischersilverworks.jpg", alt: "Sponsor 9" },
-  { src: "/images/sponsors/sponsor10.jpg", alt: "Sponsor 10" },
-  { src: "/images/sponsors/sponsor11.jpg", alt: "Sponsor 11" },
-  { src: "/images/sponsors/sponsor12-townoftaber.jpg", alt: "Sponsor 12" },
-  { src: "/images/sponsors/sponsor13.jpg", alt: "Sponsor 13" },
+// Placeholder – replace with data from your admin/API
+const sponsors: Sponsor[] = [
+  { id: 1, src: "/images/sponsors/sponsor1-strathmorestampede.png", alt: "Strathmore Stampede" },
+  { id: 2, src: "/images/sponsors/sponsor2-uncommonciderco.png", alt: "Uncommon Cider Co" },
+  { id: 3, src: "/images/sponsors/sponsor3-ufa.webp", alt: "UFA" },
+  { id: 4, src: "/images/sponsors/sponsor4-summitmotorsltd.jpg", alt: "Summit Motors Ltd" },
+  { id: 5, src: "/images/sponsors/sponsor5-lesfermescavendishfarms.png", alt: "Les Fermes Cavendish Farms" },
+  { id: 6, src: "/images/sponsors/sponsor6-statsgroup.png", alt: "Stats Group" },
+  { id: 7, src: "/images/sponsors/sponsor7-vaneelivestocktrucking.png", alt: "Van Ee Livestock Trucking" },
+  { id: 8, src: "/images/sponsors/sponsor8-vantage.png", alt: "Vantage" },
+  { id: 9, src: "/images/sponsors/sponsor9-troyfischersilverworks.jpg", alt: "Troy Fischer Silverworks" },
+  { id: 10, src: "/images/sponsors/sponsor10.jpg", alt: "Sponsor 10" },
+  { id: 11, src: "/images/sponsors/sponsor11.jpg", alt: "Sponsor 11" },
+  { id: 12, src: "/images/sponsors/sponsor12-townoftaber.jpg", alt: "Town of Taber" },
+  { id: 13, src: "/images/sponsors/sponsor13.jpg", alt: "South West Senior Rodeo" },
+];
+
+const newsletterItems = [
+  {
+    date: 'Date: MM DD–DD or "TBD"',
+    title: "Event Title",
+    description:
+      "Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.",
+    href: "/",
+  },
+  {
+    date: 'Date: MM DD–DD or "TBD"',
+    title: "Event Title",
+    description:
+      "Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.",
+    href: "/",
+  },
+  {
+    date: 'Date: MM DD–DD or "TBD"',
+    title: "Event Title",
+    description:
+      "Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.",
+    href: "/",
+  },
 ];
 
 export default function HomePage() {
@@ -46,14 +70,14 @@ export default function HomePage() {
       <section className="relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8 pb-16">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
             <div>
               <div className="inline-flex items-center gap-2 rounded-md bg-orange-50 px-4 py-1 text-sm font-semibold text-orange-600 mb-6 dark:bg-orange-950/40 dark:text-orange-400">
                 EST. 1985 • 41ST ANNIVERSARY
               </div>
 
               <h1 className="text-5xl sm:text-6xl font-semibold tracking-tight text-stone-950 dark:text-stone-100 leading-tight">
-                Canadian Classic<br />
+                Canadian Classic
+                <br />
                 Rodeo Association
               </h1>
 
@@ -77,7 +101,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right - Hero Image / Carousel */}
             <div className="relative">
               <ImageCarousel
                 images={heroImages}
@@ -118,11 +141,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ================= SPONSORS (Auto Carousel) ================= */}
-      <section className="py-12">
+      {/* ================= SPONSORS ================= */}
+      <section className="py-10 bg-stone-50 dark:bg-stone-950">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-3 dark:text-stone-500">
+          <div className="text-center mb-6">
+            <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-2 dark:text-stone-500">
               SUPPORTING THE CCRA
             </div>
             <h2 className="text-2xl font-semibold text-stone-950 dark:text-stone-100">
@@ -133,18 +156,15 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Auto-playing sponsor carousel */}
-          <div className="max-w-2xl mx-auto">
-            <ImageCarousel
-              images={sponsorImages}
-              autoPlay={true}
+          <div className="max-w-xl mx-auto">
+            <SponsorsCarousel
+              sponsors={sponsors}
+              autoPlay
               interval={3500}
-              showCaptions={false}
-              aspectRatio="square"
-              className="bg-white dark:bg-stone-900 [&_img]:object-contain"
             />
           </div>
-          <div className="mt-6 text-center">
+
+          <div className="mt-5 text-center">
             <Link
               href="/about-us/contact"
               className="inline-flex items-center gap-2 text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400"
@@ -191,76 +211,28 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ================= UPCOMING / HIGHLIGHTS ================= */}
-      {/* will be populated with dynamic content based off of what events are scheduled and upcoming */}
+      {/* ================= UPCOMING / NEWSLETTER ================= */}
       <section className="py-20 bg-white dark:bg-stone-900 border-y border-stone-200 dark:border-stone-800">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-3 dark:text-stone-500">
-              2026 SEASON
+              What’s Coming Up
             </div>
             <h2 className="text-4xl font-semibold text-stone-950 dark:text-stone-100">
-              What’s Coming Up
+              Newsletter
             </h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <div className="rounded-md border border-stone-200 bg-stone-50 p-8 shadow-sm dark:border-stone-700 dark:bg-stone-950">
-              <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mb-2">
-                Date: MM DD–DD or "TBD"
-              </div>
-              <h3 className="text-xl font-semibold text-stone-950 dark:text-stone-100 mb-3">
-                Event Title
-              </h3>
-              <p className="text-stone-600 dark:text-stone-300 text-sm mb-6">
-                Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.
-              </p>
-              <Link
-                href="/"
-                className="text-sm font-semibold text-orange-600 hover:underline dark:text-orange-400"
-              >
-                View details →
-              </Link>
-            </div>
-
-            {/* Card 2 */}
-            <div className="rounded-md border border-stone-200 bg-stone-50 p-8 shadow-sm dark:border-stone-700 dark:bg-stone-950">
-              <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mb-2">
-                Date: MM DD–DD or "TBD"
-              </div>
-              <h3 className="text-xl font-semibold text-stone-950 dark:text-stone-100 mb-3">
-                Event Title
-              </h3>
-              <p className="text-stone-600 dark:text-stone-300 text-sm mb-6">
-                Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.
-              </p>
-              <Link
-                href="/"
-                className="text-sm font-semibold text-orange-600 hover:underline dark:text-orange-400"
-              >
-                View details →
-              </Link>
-            </div>
-
-            {/* Card 3 */}
-            <div className="rounded-md border border-stone-200 bg-stone-50 p-8 shadow-sm dark:border-stone-700 dark:bg-stone-950">
-              <div className="text-sm font-semibold text-orange-600 dark:text-orange-400 mb-2">
-                Date: MM DD–DD or "TBD"
-              </div>
-              <h3 className="text-xl font-semibold text-stone-950 dark:text-stone-100 mb-3">
-                Event Title
-              </h3>
-              <p className="text-stone-600 dark:text-stone-300 text-sm mb-6">
-                Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.
-              </p>
-              <Link
-                href="/"
-                className="text-sm font-semibold text-orange-600 hover:underline dark:text-orange-400"
-              >
-                View details →
-              </Link>
-            </div>
+            {newsletterItems.map((item, index) => (
+              <NewsletterCard
+                key={index}
+                date={item.date}
+                title={item.title}
+                description={item.description}
+                href={item.href}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -273,14 +245,14 @@ export default function HomePage() {
               Ready to Hit the Grounds?
             </h2>
             <p className="text-orange-100 text-lg max-w-2xl mx-auto mb-8">
-              Get your 2026 membership today and be part of the Canadian Classic Rodeo family.
+              Get your membership today and be part of the Canadian Classic Rodeo family.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
-                href="/events/enter-rodeo"
+                href="/profile/membership"
                 className="inline-flex items-center justify-center rounded-md bg-white px-8 py-3.5 text-sm font-semibold text-orange-700 transition hover:bg-orange-50"
               >
-                Enter Rodeo
+                Membership
               </Link>
               <Link
                 href="/about-us/contact"

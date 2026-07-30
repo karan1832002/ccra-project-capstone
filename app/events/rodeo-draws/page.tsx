@@ -6,6 +6,7 @@ import { getRodeoEvents, getAllSheetFiles } from "@/lib/sampleRodeoData";
 import { RodeoEventCard } from "@/components/rodeo/RodeoEventCard";
 import { DrawFileList } from "@/components/rodeo/DrawFileList";
 import { EventFilterBar } from "@/components/rodeo/EventFilterBar";
+import Hero from "@/components/ui/Hero";
 
 export default function RodeoDrawsPage() {
   // Raw data fetched from the data layer, unfiltered.
@@ -75,44 +76,43 @@ export default function RodeoDrawsPage() {
     return <p className="text-sm text-stone-400">Loading draw sheets...</p>;
   }
   return (
-  <div className="max-w-6xl mx-auto px-6 py-10">
-
-    {/* Page Header */}
-    <section className="text-center mb-10">
-      <h1 className="text-5xl font-bold text-orange-700">
-        Rodeo Draws
-      </h1>
-    </section>
-
-    {/* Notice */}
-    <section className="mb-8 rounded-xl border border-orange-200 bg-orange-50 shadow-sm">
-      <div className="p-8">
-        <h2 className="text-2xl font-bold text-stone-900 mb-3">
-          Important Call Back Instructions
-        </h2>
-
-        <p className="text-stone-700 leading-7">
-          If you notice an issue with the draw (wrong event, missing entry,
-          etc.), contact the office on <strong>Friday</strong> with your
-          confirmation number. After Friday, the draw is final and cannot be
-          changed.
-        </p>
-      </div>
-    </section>
-
-    {/* Filters */}
-    <section className="mb-8">
-      <EventFilterBar
-        search={search}
-        onSearchChange={setSearch}
-        year={year}
-        onYearChange={setYear}
-        years={years}
-        sheetType={sheetType}
-        onSheetTypeChange={setSheetType}
-        showTypeFilter
+    <div className="max-w-6xl mx-auto px-6 py-10">
+      {/* Page Header */}
+      <Hero
+        badge="COMPETITION SCHEDULES"
+        title="Rodeo Draws"
+        description="View the official competition draws for upcoming CCRA rodeos. Find your event, check your position in the order, and prepare for your time in the arena."
       />
-    </section>
+
+      {/* Notice */}
+      <section className="mb-8 rounded-xl border border-orange-200 bg-orange-50 shadow-sm">
+        <div className="p-8">
+          <h2 className="text-2xl font-bold text-stone-900 mb-3">
+            Important Call Back Instructions
+          </h2>
+
+          <p className="text-stone-700 leading-7">
+            If you notice an issue with the draw (wrong event, missing entry,
+            etc.), contact the office on <strong>Friday</strong> with your
+            confirmation number. After Friday, the draw is final and cannot be
+            changed.
+          </p>
+        </div>
+      </section>
+
+      {/* Filters */}
+      <section className="mb-8">
+        <EventFilterBar
+          search={search}
+          onSearchChange={setSearch}
+          year={year}
+          onYearChange={setYear}
+          years={years}
+          sheetType={sheetType}
+          onSheetTypeChange={setSheetType}
+          showTypeFilter
+        />
+      </section>
 
       {visibleEvents.length === 0 && (
         <p className="text-sm text-stone-400 py-6">No matching draw sheets.</p>
