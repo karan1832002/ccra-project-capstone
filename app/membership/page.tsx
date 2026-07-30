@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Hero from "@/components/ui/Hero";
 
 export default function MembershipPage() {
   const router = useRouter();
@@ -23,18 +24,14 @@ export default function MembershipPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-6xl mx-auto px-6 py-10">
-        <h1 className="text-4xl font-bold text-orange-700 mb-4 text-center">
-          Membership Application
-        </h1>
-        <p className="text-gray-600 text-lg text-center">
-          Choose your membership type and complete your registration.
-        </p>
-      </div>
+      <Hero
+        badge="JOIN THE CCRA"
+        title="Membership Application"
+        description="Become a CCRA member to compete in sanctioned rodeos, earn season points, and be part of a community dedicated to western sports and competition."
+      />
 
       <div className="max-w-6xl mx-auto px-6">
         <div className="border rounded-xl p-8 shadow-sm bg-white">
-
           <label className="block text-gray-700 font-semibold mb-2 text-lg">
             Membership Type
           </label>
