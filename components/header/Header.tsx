@@ -18,7 +18,7 @@ import Link from "next/link";
 import DropdownMenu from "./DropdownMenu";
 import ProfileMenu from "./ProfileMenu";
 import MobileNav from "./MobileNav";
-import { LogIn, ShoppingCart } from "lucide-react";
+import { LogIn, ShoppingCart, Shield } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import { usePathname } from "next/navigation";
 
@@ -75,6 +75,8 @@ const NAV_ITEMS: NavItem[] = [
 export default function Header() {
   const { data: session, isPending } = useSession();
   const isSignedIn = Boolean(session?.user);
+  const role = (session?.user as { role?: string } | undefined)?.role;
+  const isAdmin = role === "admin" || role === "superadmin";
 
   const pathname = usePathname();
 
@@ -120,6 +122,16 @@ export default function Header() {
           >
             <ShoppingCart className="h-5 w-5" />
           </Link>
+
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-md text-orange-600 transition hover:bg-orange-50"
+              aria-label="Admin Dashboard"
+            >
+              <Shield className="h-5 w-5" />
+            </Link>
+          )}
 
           {/* While the session is loading, render a same-sized placeholder to
               avoid a layout shift / flash between the two states below. */}
