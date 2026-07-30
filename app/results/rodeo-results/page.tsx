@@ -6,7 +6,6 @@ import { getRodeoEvents, getAllResults } from "@/lib/sampleRodeoData";
 import { RodeoEventCard } from "@/components/rodeo/RodeoEventCard";
 import { ResultsPreview } from "@/components/rodeo/ResultsPreview";
 import { EventFilterBar } from "@/components/rodeo/EventFilterBar";
-import Hero from "@/components/ui/Hero";
 
 export default function RodeoResultsPage() {
   const [events, setEvents] = useState<RodeoEvent[]>([]);
