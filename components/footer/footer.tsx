@@ -14,13 +14,13 @@ export default function Footer() {
           <a href="/schedule" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
             Schedule
           </a>
-          <a href="/events" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
+          <a href="/events/current-entries" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
             Events
           </a>
-          <a href="/results" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
+          <a href="/results/rodeo-results" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
             Results
           </a>
-          <a href="/about-us/contact-information" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
+          <a href="/about-us/contact" className="hover:text-orange-600 hover:underline underline-offset-4 transition">
             Contact
           </a>
         </div>

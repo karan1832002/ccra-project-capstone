@@ -20,7 +20,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Table from "@/components/ui/Table";
 import AddEntryModal from "@/components/rodeo/AddEntryModal";
@@ -29,12 +29,51 @@ import { RodeoEntry } from "@/types/rodeo";
 import { formatShortDate } from "@/lib/rodeoDateUtils";
 import { submitRodeoEntries } from "@/lib/sampleRodeoData";
 import { useSession } from "@/lib/auth-client";
+import {
+  getRodeos,
+  getRodeo,
+  GatewayError,
+  type Rodeo,
+  type RodeoDetail,
+  type Event,
+} from "@/lib/gateway";
+
+// Format dates as MMM DD (i.e. Aug 29)
+function fmtMonthDay(dateStr: string | null): string {
+  if (!dateStr) return "—";
+
+  const [y, m, d] = dateStr.split("-").map(Number);
+
+  return new Date(y, m - 1, d).toLocaleDateString("en-CA", {
+    month: "short",
+    day: "numeric",
+  });
+}
+
+// Reformated data for use in AddEntryModule
+type RodeoEventData = {
+  rodeoId: string;
+  rodeoTitle: string;
+  rodeoDate: string;
+  rodeoStartTime: string | null;
+  entryFee: number | null;
+  events: {
+    eventId: string;
+    eventTitle: string;
+    eventFee: number | null;
+  }[];
+};
 
 export default function EnterRodeoPage() {
   const { data: session, isPending } = useSession();
   const isSignedIn = Boolean(session?.user);
   const competitorName = session?.user.name ?? "";
   const email = session?.user.email ?? "";
+
+  // Rodeo data loaded in from db
+  const [rodeoData, setRodeoData] = useState<RodeoEventData[]>([]);
+  const [loadingRodeos, setLoadingRodeos] = useState(true);
+  const [rodeoError, setRodeoError] = useState<string | null>(null);
 
   // Entries the competitor has added so far via the Add Entry pop-up.
   const [entries, setEntries] = useState<RodeoEntry[]>([]);
@@ -48,6 +87,51 @@ export default function EnterRodeoPage() {
   const [confirmationNumber, setConfirmationNumber] = useState<string | null>(
     null,
   );
+
+  // Load rodeo data and flatten into RodeoEventData
+  useEffect(() => {
+    async function loadRodeos() {
+      try {
+        setLoadingRodeos(true);
+
+        // Get all rodeos
+        const rodeos = await getRodeos();
+
+        // Load details for every rodeo
+        const rodeoDetails = await Promise.all(
+          rodeos.map((rodeo) => getRodeo(rodeo.id)),
+        );
+
+        // Convert into a structure that's easy for the UI
+        const data: RodeoEventData[] = rodeoDetails.flatMap((rodeo) =>
+          rodeo.dates.map((date) => ({
+            rodeoId: rodeo.id,
+            rodeoTitle: rodeo.rodeoTitle,
+            rodeoDate: date.date,
+            rodeoStartTime: date.startTime,
+            entryFee: rodeo.entryFee,
+            events: rodeo.events.map((event) => ({
+              eventId: event.id,
+              eventTitle: event.eventTitle,
+              eventFee: event.eventFee,
+            })),
+          })),
+        );
+
+        setRodeoData(data);
+      } catch (err) {
+        if (err instanceof GatewayError) {
+          setRodeoError(err.message);
+        } else {
+          setRodeoError("Unable to load rodeos.");
+        }
+      } finally {
+        setLoadingRodeos(false);
+      }
+    }
+
+    loadRodeos();
+  }, []);
 
   function handleAddEntry(entry: RodeoEntry) {
     setEntries((prev) => [...prev, entry]);
@@ -64,7 +148,6 @@ export default function EnterRodeoPage() {
     "Rodeo",
     "Date",
     "Event",
-    "Partner",
     "Entry Fee",
     "Event Fee",
     "",
@@ -74,7 +157,6 @@ export default function EnterRodeoPage() {
     rodeo: entry.rodeoName,
     date: `${formatShortDate(entry.performanceDate)} @ ${entry.performanceTime}`,
     event: entry.eventName,
-    partner: entry.partner ?? "—",
     entryFee: `$${entry.entryFee.toFixed(2)}`,
     eventFee: `$${entry.eventFee.toFixed(2)}`,
     // The "Remove" column only makes sense before submission — after
@@ -238,6 +320,7 @@ export default function EnterRodeoPage() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onAddEntry={handleAddEntry}
+                rodeos={rodeoData}
               />
             </>
           )}
