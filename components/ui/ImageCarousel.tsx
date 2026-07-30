@@ -82,6 +82,7 @@ export default function ImageCarousel({
               src={img.src}
               alt={img.alt}
               fill
+              unoptimized
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 80vw"
               priority={index === 0}

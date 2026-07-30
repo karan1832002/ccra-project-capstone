@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ImageCarousel, { CarouselImage } from "@/components/ui/ImageCarousel";
+import SponsorsCarousel, { Sponsor } from "@/components/ui/SponsorsCarousel";
 import NewsletterCard from "@/components/ui/NewsletterCard";
 import { Calendar, ShoppingCart, Trophy, Camera, ArrowRight } from "lucide-react";
 
@@ -21,23 +22,23 @@ const heroImages: CarouselImage[] = [
   },
 ];
 
-const sponsorImages: CarouselImage[] = [
-  { src: "/images/sponsors/sponsor1-strathmorestampede.png", alt: "Sponsor 1" },
-  { src: "/images/sponsors/sponsor2-uncommonciderco.png", alt: "Sponsor 2" },
-  { src: "/images/sponsors/sponsor3-ufa.webp", alt: "Sponsor 3" },
-  { src: "/images/sponsors/sponsor4-summitmotorsltd.jpg", alt: "Sponsor 4" },
-  { src: "/images/sponsors/sponsor5-lesfermescavendishfarms.png", alt: "Sponsor 5" },
-  { src: "/images/sponsors/sponsor6-statsgroup.png", alt: "Sponsor 6" },
-  { src: "/images/sponsors/sponsor7-vaneelivestocktrucking.png", alt: "Sponsor 7" },
-  { src: "/images/sponsors/sponsor8-vantage.png", alt: "Sponsor 8" },
-  { src: "/images/sponsors/sponsor9-troyfischersilverworks.jpg", alt: "Sponsor 9" },
-  { src: "/images/sponsors/sponsor10.jpg", alt: "Sponsor 10" },
-  { src: "/images/sponsors/sponsor11.jpg", alt: "Sponsor 11" },
-  { src: "/images/sponsors/sponsor12-townoftaber.jpg", alt: "Sponsor 12" },
-  { src: "/images/sponsors/sponsor13.jpg", alt: "Sponsor 13" },
+// Placeholder – replace with data from your admin/API
+const sponsors: Sponsor[] = [
+  { id: 1, src: "/images/sponsors/sponsor1-strathmorestampede.png", alt: "Strathmore Stampede" },
+  { id: 2, src: "/images/sponsors/sponsor2-uncommonciderco.png", alt: "Uncommon Cider Co" },
+  { id: 3, src: "/images/sponsors/sponsor3-ufa.webp", alt: "UFA" },
+  { id: 4, src: "/images/sponsors/sponsor4-summitmotorsltd.jpg", alt: "Summit Motors Ltd" },
+  { id: 5, src: "/images/sponsors/sponsor5-lesfermescavendishfarms.png", alt: "Les Fermes Cavendish Farms" },
+  { id: 6, src: "/images/sponsors/sponsor6-statsgroup.png", alt: "Stats Group" },
+  { id: 7, src: "/images/sponsors/sponsor7-vaneelivestocktrucking.png", alt: "Van Ee Livestock Trucking" },
+  { id: 8, src: "/images/sponsors/sponsor8-vantage.png", alt: "Vantage" },
+  { id: 9, src: "/images/sponsors/sponsor9-troyfischersilverworks.jpg", alt: "Troy Fischer Silverworks" },
+  { id: 10, src: "/images/sponsors/sponsor10.jpg", alt: "Sponsor 10" },
+  { id: 11, src: "/images/sponsors/sponsor11.jpg", alt: "Sponsor 11" },
+  { id: 12, src: "/images/sponsors/sponsor12-townoftaber.jpg", alt: "Town of Taber" },
+  { id: 13, src: "/images/sponsors/sponsor13.jpg", alt: "South West Senior Rodeo" },
 ];
 
-// Placeholder data — replace with your newsletter API response
 const newsletterItems = [
   {
     date: 'Date: MM DD–DD or "TBD"',
@@ -69,7 +70,6 @@ export default function HomePage() {
       <section className="relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8 pb-16">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
             <div>
               <div className="inline-flex items-center gap-2 rounded-md bg-orange-50 px-4 py-1 text-sm font-semibold text-orange-600 mb-6 dark:bg-orange-950/40 dark:text-orange-400">
                 EST. 1985 • 41ST ANNIVERSARY
@@ -101,7 +101,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right - Hero Image / Carousel */}
             <div className="relative">
               <ImageCarousel
                 images={heroImages}
@@ -142,11 +141,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ================= SPONSORS (Auto Carousel) ================= */}
-      <section className="py-12">
+      {/* ================= SPONSORS ================= */}
+      <section className="py-10 bg-stone-50 dark:bg-stone-950">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-3 dark:text-stone-500">
+          <div className="text-center mb-6">
+            <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-2 dark:text-stone-500">
               SUPPORTING THE CCRA
             </div>
             <h2 className="text-2xl font-semibold text-stone-950 dark:text-stone-100">
@@ -157,17 +156,15 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="max-w-2xl mx-auto">
-            <ImageCarousel
-              images={sponsorImages}
-              autoPlay={true}
+          <div className="max-w-xl mx-auto">
+            <SponsorsCarousel
+              sponsors={sponsors}
+              autoPlay
               interval={3500}
-              showCaptions={false}
-              aspectRatio="square"
-              className="bg-white dark:bg-stone-900 [&_img]:object-contain"
             />
           </div>
-          <div className="mt-6 text-center">
+
+          <div className="mt-5 text-center">
             <Link
               href="/about-us/contact"
               className="inline-flex items-center gap-2 text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400"

@@ -196,7 +196,7 @@ export default function ProfilePage() {
               </Link>
 
               <Link
-                href="/results/standings"
+                href="/profile/my-standings"
                 className="group flex items-center gap-4 rounded-md border border-stone-200 bg-white p-5 shadow-sm transition hover:border-orange-300 hover:shadow-md dark:border-stone-700 dark:bg-stone-900 dark:hover:border-orange-700"
               >
                 <div className="w-11 h-11 rounded-md bg-orange-100 flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition dark:bg-orange-950/40 dark:text-orange-400">
