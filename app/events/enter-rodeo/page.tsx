@@ -27,15 +27,12 @@ import AddEntryModal from "@/components/rodeo/AddEntryModal";
 import Hero from "@/components/ui/Hero";
 import { RodeoEntry } from "@/types/rodeo";
 import { formatShortDate } from "@/lib/rodeoDateUtils";
-import { submitRodeoEntries } from "@/lib/sampleRodeoData";
 import { useSession } from "@/lib/auth-client";
 import {
   getRodeos,
   getRodeo,
+  registerForEvent,
   GatewayError,
-  type Rodeo,
-  type RodeoDetail,
-  type Event,
 } from "@/lib/gateway";
 
 // Format dates as MMM DD (i.e. Aug 29)
@@ -67,6 +64,7 @@ type RodeoEventData = {
 export default function EnterRodeoPage() {
   const { data: session, isPending } = useSession();
   const isSignedIn = Boolean(session?.user);
+  const userId = session?.user.id ?? "";
   const competitorName = session?.user.name ?? "";
   const email = session?.user.email ?? "";
 
@@ -144,14 +142,7 @@ export default function EnterRodeoPage() {
 
   // Table column headers, in the exact order the row objects below must
   // list their values — Table renders cells positionally, not by key name.
-  const columns = [
-    "Rodeo",
-    "Date",
-    "Event",
-    "Entry Fee",
-    "Event Fee",
-    "",
-  ];
+  const columns = ["Rodeo", "Date", "Event", "Entry Fee", "Event Fee", ""];
 
   const tableRows = entries.map((entry) => ({
     rodeo: entry.rodeoName,
@@ -185,13 +176,22 @@ export default function EnterRodeoPage() {
   async function handleSubmitEntries() {
     setIsSubmitting(true);
     setSubmitError(null);
+
     try {
-      const result = await submitRodeoEntries({
-        competitorName,
-        email,
-        entries,
-      });
-      setConfirmationNumber(result.confirmationNumber);
+      if (!session) {
+        throw new Error("You must be logged in to register.");
+      }
+
+      await Promise.all(
+        entries.map((entry) =>
+          registerForEvent(entry.eventId, {
+            userId: userId,
+            competitorName: competitorName,
+          }),
+        ),
+      );
+
+      setConfirmationNumber("success"); // temporary until you decide how confirmations work
     } catch (err) {
       setSubmitError(
         "Something went wrong submitting your entry. Please try again.",
