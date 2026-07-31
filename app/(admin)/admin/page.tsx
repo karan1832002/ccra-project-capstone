@@ -2,12 +2,11 @@ import { db } from "@/lib/db/client";
 import { user } from "@/lib/db/schema/auth";
 import { sponsors } from "@/lib/db/schema/sponsors";
 import { count, eq } from "drizzle-orm";
-import { Calendar, ShoppingCart, Users, Star } from "lucide-react";
+import { Calendar, Users, Star } from "lucide-react";
 import { getAdminRodeos } from "@/lib/gateway-client";
 
 export default async function AdminDashboardPage() {
   let totalRodeos = 0;
-  let pendingOrders = 0;
   let totalUsers = 0;
   let activeSponsors = 0;
   let fetchError: string | null = null;
@@ -41,7 +40,6 @@ export default async function AdminDashboardPage() {
 
   const stats = [
     { label: "Total Rodeos", value: totalRodeos, icon: Calendar },
-    { label: "Orders Pending", value: pendingOrders, icon: ShoppingCart },
     { label: "Total Users", value: totalUsers, icon: Users },
     { label: "Active Sponsors", value: activeSponsors, icon: Star },
   ];
