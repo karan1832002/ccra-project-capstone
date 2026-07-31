@@ -1,10 +1,9 @@
 import { db } from "@/lib/db/client";
-import { events } from "@/lib/db/schema/events";
-import { orders } from "@/lib/db/schema/orders";
 import { user } from "@/lib/db/schema/auth";
 import { sponsors } from "@/lib/db/schema/sponsors";
 import { count, eq } from "drizzle-orm";
 import { Calendar, ShoppingCart, Users, Star } from "lucide-react";
+import { getAdminRodeos } from "@/lib/gateway-client";
 
 export default async function AdminDashboardPage() {
   let totalRodeos = 0;
@@ -13,21 +12,14 @@ export default async function AdminDashboardPage() {
   let activeSponsors = 0;
   let fetchError: string | null = null;
 
-  // Fetch dashboard metrics from the local database. A caught error
-  // renders an error banner instead of crashing the entire page so
-  // the admin layout and sidebar remain usable.
+  // Fetch dashboard metrics. Rodeos are in the event-service database
+  // and fetched via the gateway. Users and sponsors are in the local
+  // auth database. Orders count is temporarily zero until the
+  // product-service gateway endpoint is wired up.
   try {
-    [totalRodeos, pendingOrders, totalUsers, activeSponsors] =
+    const [rodeosList, totalUsersResult, activeSponsorsResult] =
       await Promise.all([
-        db
-          .select({ value: count() })
-          .from(events)
-          .then((r) => r[0]?.value ?? 0),
-        db
-          .select({ value: count() })
-          .from(orders)
-          .where(eq(orders.status, "pending"))
-          .then((r) => r[0]?.value ?? 0),
+        getAdminRodeos(),
         db
           .select({ value: count() })
           .from(user)
@@ -38,6 +30,10 @@ export default async function AdminDashboardPage() {
           .where(eq(sponsors.visible, true))
           .then((r) => r[0]?.value ?? 0),
       ]);
+
+    totalRodeos = rodeosList.length;
+    totalUsers = totalUsersResult;
+    activeSponsors = activeSponsorsResult;
   } catch (error: unknown) {
     fetchError =
       error instanceof Error ? error.message : "Failed to load dashboard data.";
