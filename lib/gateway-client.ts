@@ -2,7 +2,7 @@
 //
 // Authenticated counterpart to lib/gateway.ts's fetchFromGateway(). Use this
 // for ADMIN actions — anything that needs a verified user id/role attached,
-// like GET /api/events/:id/registrations.
+// like GET /api/users or PATCH /api/users/:id/role.
 //
 // SERVER-SIDE ONLY. This reads cookies via next/headers to verify the
 // Better-Auth session, which only works in Server Components, Route
@@ -17,31 +17,48 @@
 //     match — otherwise every call here will also 403.
 //   - Import path `@/lib/auth` — point this at wherever betterAuth({...})
 //     is actually exported from if it's not lib/auth.ts.
-//   - `Role` and `Registration` types are placeholders based on what little
-//     we know (user.role defaults to "member" in auth.ts). Tighten these up
-//     once you know the real role set and the registrations response shape.
 
 import "server-only";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { GatewayError } from "@/lib/gateway";
 
-const GATEWAY_URL = process.env.GATEWAY_URL ?? "http://localhost:4000";
+// The base URL of the API gateway. NEXT_PUBLIC_GATEWAY_URL is embedded
+// at build time so the value does not need to be read from the runtime
+// environment on every request.
+const GATEWAY_URL =
+  process.env.NEXT_PUBLIC_GATEWAY_URL ?? "http://localhost:4000";
 const FRONTEND_GATEWAY_KEY = process.env.FRONTEND_GATEWAY_KEY;
 
 type ApiResponse<T> =
   | { success: true; data: T }
   | { success: false; error: { code: string; message: string } };
 
-type Options = {
-  method?: string;
-  body?: unknown;
-};
+// ==========================================================================
+// INTERFACES
+// ==========================================================================
 
-// Matches the additionalFields.role shape in auth.ts. Extend this union as
-// real roles beyond "member" get added (this file assumes "admin"/"staff"
-// exist — adjust to whatever you actually use).
-type Role = "member" | "staff" | "admin" | "superadmin";
+// Represents a user account returned by the gateway's /api/users endpoint.
+export interface User {
+  id: string;
+  email: string;
+  role: string;
+}
+
+// Payload sent to the gateway when submitting a rodeo result via
+// POST /api/results. All monetary values are in dollars.
+export interface RodeoResultData {
+  userId: string;
+  eventId: string;
+  timeOrScore: number;
+  placing: number;
+  payoutMoney: number;
+  groundMoney: number;
+}
+
+// ==========================================================================
+// SESSION VERIFICATION
+// ==========================================================================
 
 async function getVerifiedSession() {
   const incomingHeaders = await headers();
@@ -52,20 +69,37 @@ async function getVerifiedSession() {
   return session;
 }
 
+// ==========================================================================
+// CORE FETCH WRAPPER
+// ==========================================================================
+
 /**
- * Calls an authenticated gateway route with the caller's verified user id
- * and role attached.
+ * Sends an authenticated request to the API gateway.
  *
- * Throws GatewayError("UNAUTHENTICATED") if there's no session, or
- * GatewayError("FORBIDDEN") if `allowedRoles` is given and the session's
- * role isn't in it. That local check just fails fast — the gateway should
- * still enforce its own authorization independently; this isn't a
- * replacement for that.
+ * The endpoint argument is a path like "/api/users". It is concatenated
+ * to the base gateway URL so the full target becomes something like
+ * "http://localhost:4000/api/users". This keeps callers from repeating
+ * the base URL in every method.
+ *
+ * Before the request leaves the server, the current user's session is
+ * verified and the user id and role are injected as custom headers
+ * (`x-user-id` and `x-user-role`). An internal gateway key is also
+ * attached so the gateway can confirm the request originated from this
+ * frontend service.
+ *
+ * Error handling:
+ * - Missing gateway key        -> GatewayError("GATEWAY_MISCONFIGURED")
+ * - No active session          -> GatewayError("UNAUTHENTICATED")
+ * - Gateway returns 5xx        -> GatewayError("GATEWAY_UNAVAILABLE")
+ * - Gateway returns ApiResponse with success:false -> GatewayError with
+ *   the code and message from the gateway's error payload.
  */
 export async function callGateway<T>(
-  path: string,
-  opts: Options & { allowedRoles?: Role[] } = {},
+  endpoint: string,
+  options: RequestInit = {},
 ): Promise<T> {
+  // Abort early if the shared secret that identifies this frontend to the
+  // gateway has not been configured.
   if (!FRONTEND_GATEWAY_KEY) {
     throw new GatewayError(
       "GATEWAY_MISCONFIGURED",
@@ -74,33 +108,36 @@ export async function callGateway<T>(
   }
 
   const session = await getVerifiedSession();
-  const role = ((session.user as { role?: string }).role ?? "member") as Role;
+  const role = (session.user as { role?: string }).role ?? "member";
 
-  if (opts.allowedRoles && !opts.allowedRoles.includes(role)) {
-    // Deliberately a different code/message than the gateway's own FORBIDDEN
-    // response — this lets callers (and diagnostics) tell "blocked locally,
-    // before any network call" apart from "the gateway itself said no".
-    throw new GatewayError(
-      "FORBIDDEN_LOCAL",
-      `Blocked before reaching the gateway: role "${role}" is not in the allowed list.`,
-    );
-  }
+  // Build the full URL by appending the caller-supplied endpoint path
+  // to the gateway base URL. The endpoint should always start with "/".
+  const url = `${GATEWAY_URL}${endpoint}`;
 
-  const res = await fetch(`${GATEWAY_URL}${path}`, {
-    method: opts.method ?? "GET",
+  // Merge the caller's headers with the authentication headers required
+  // by the gateway. Caller-supplied headers take precedence so that
+  // methods can override Content-Type or pass additional custom headers.
+  const res = await fetch(url, {
+    ...options,
     headers: {
       "Content-Type": "application/json",
       "x-frontend-gateway-key": FRONTEND_GATEWAY_KEY,
       "x-user-id": session.user.id,
       "x-user-role": role,
+      ...options.headers,
     },
-    body: opts.body ? JSON.stringify(opts.body) : undefined,
-    // Admin data shouldn't be served from Next's fetch cache.
+    // Admin data must not be served from Next.js's fetch cache.
     cache: "no-store",
   });
 
+  // Treat any 5xx response as a gateway outage rather than a
+  // domain-level error. This lets callers implement retry logic
+  // without inspecting status codes themselves.
   if (!res.ok && res.status >= 500) {
-    throw new GatewayError("GATEWAY_UNAVAILABLE", `Gateway returned ${res.status}`);
+    throw new GatewayError(
+      "GATEWAY_UNAVAILABLE",
+      `Gateway returned ${res.status}`,
+    );
   }
 
   const json = (await res.json()) as ApiResponse<T>;
@@ -114,8 +151,8 @@ export async function callGateway<T>(
 // CONVENIENCE WRAPPERS
 // ==========================================================================
 
-// Placeholder shape — replace once you've seen a real (non-Forbidden)
-// response body from this endpoint.
+// Shape of a registration record returned by
+// GET /api/events/:eventId/registrations.
 export type Registration = {
   id: string;
   eventId: string;
@@ -123,8 +160,22 @@ export type Registration = {
   entryId?: string;
 };
 
+// Fetches all registrations for a given event from the gateway's
+// /api/events/:eventId/registrations endpoint.
 export function getEventRegistrations(eventId: string) {
-  return callGateway<Registration[]>(`/api/events/${eventId}/registrations`, {
-    allowedRoles: ["admin", "staff", "superadmin"],
+  return callGateway<Registration[]>(
+    `/api/events/${eventId}/registrations`,
+  );
+}
+
+// ---- Rodeo results -------------------------------------------------------
+
+// Submits a rodeo result record to the gateway's /api/results endpoint.
+// The payload includes the rider, event, score/time, placing, and
+// any associated payouts.
+export function submitRodeoResult(data: RodeoResultData) {
+  return callGateway<void>("/api/results", {
+    method: "POST",
+    body: JSON.stringify(data),
   });
 }
