@@ -75,14 +75,7 @@ export default function RodeoStandingsPage() {
           ))}
         </select>
       </div>
-
-      {/* CATEGORY TITLE */}
-      {category !== "all" && filteredEntries.length > 0 && (
-        <h2 className="text-xl font-semibold text-stone-900 mb-4 text-center">
-          {category}
-        </h2>
-      )}
-
+      
       {/* NO RESULTS */}
       {filteredEntries.length === 0 && (
         <p className="text-sm text-stone-400 py-6 text-center">
