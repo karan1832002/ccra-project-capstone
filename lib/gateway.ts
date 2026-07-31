@@ -105,19 +105,10 @@ export type Event = {
   id: string;
   rodeoId: string;
   category: string;
-  eventDate: string | null;
-  eventTime: string | null;
-  eventFee: number | null;
+  eventDate: string;
+  eventTime: string;
+  eventFee: number;
 };
-// (current db table)
-// export type Event = {
-//   id: string;
-//   rodeoId: string;
-//   category: string;
-//   eventDate: string;
-//   eventTime: string;
-//   eventFee: number;
-// };
 
 // GET /api/events/rodeos/:id returns a rodeo with these nested.
 export type RodeoDetail = Rodeo & {
@@ -151,6 +142,11 @@ export type Registration = {
 //   status: string;
 //   registeredAt: string | null;
 // };
+
+export type RegisterEventRequest = {
+  userId: string;
+  competitorName?: string;
+};
 
 // Result for rodeo event
 // (old db table)
@@ -223,6 +219,19 @@ export function getEvent(id: string) {
 // Event Registrations (registrations for selected event)
 export function getEventRegistrations(id: string) {
   return fetchFromGateway<Registration[]>(`/api/events/${id}/registrations`);
+}
+
+export function registerForEvent(
+  eventId: string,
+  data: RegisterEventRequest,
+) {
+  return fetchFromGateway<Registration>(
+    `/api/events/${eventId}/register`,
+    {
+      method: "POST",
+      body: data,
+    },
+  );
 }
 
 // Results
