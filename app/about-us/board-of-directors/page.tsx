@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Hero from "@/components/ui/Hero";
 
 interface Director {
   name: string;
@@ -112,7 +113,7 @@ const directors: Director[] = [
 export default function BoardOfDirectorsPage() {
   const [selected, setSelected] = useState<Director | null>(null);
 
-  // close modal on escape key or when clicked outside of modal
+  // Close modal on Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setSelected(null);
@@ -121,7 +122,7 @@ export default function BoardOfDirectorsPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // prevent body scroll when modal is open 
+  // Prevent body scroll while modal is open
   useEffect(() => {
     if (selected) {
       document.body.style.overflow = "hidden";
@@ -132,22 +133,15 @@ export default function BoardOfDirectorsPage() {
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="max-w-3xl mx-auto text-center py-16">
-          <div className="inline-flex items-center gap-2 rounded-md bg-orange-50 px-4 py-1 text-sm font-semibold text-orange-600 mb-6 dark:bg-orange-950/40 dark:text-orange-400">
-            LEADERSHIP
-          </div>
-          <h1 className="text-5xl font-semibold text-stone-950 tracking-tight mb-6 dark:text-stone-100">
-            Board of Directors
-          </h1>
-          <p className="text-xl text-stone-600 dark:text-stone-300">
-            The Canadian Classic Rodeo Association is guided by a dedicated group of
-            volunteers who give their time to preserve and grow our sport.
-          </p>
-        </div>
+      {/* ================= HERO ================= */}
+      <Hero
+        badge="LEADERSHIP"
+        title="Board of Directors"
+        description="The Canadian Classic Rodeo Association is guided by a dedicated group of volunteers who give their time to preserve and grow our sport."
+      />
 
-        {/* Board Grid */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        {/* ================= BOARD GRID ================= */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {directors.map((director) => (
             <button
@@ -155,7 +149,7 @@ export default function BoardOfDirectorsPage() {
               onClick={() => setSelected(director)}
               className="text-left rounded-md border border-stone-200 bg-white p-8 shadow-sm transition duration-200 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2 dark:border-stone-700 dark:bg-stone-900 dark:focus:ring-offset-stone-950"
             >
-              {/* Avatar */}
+              {/* Avatar initials */}
               <div className="w-16 h-16 rounded-md bg-orange-100 flex items-center justify-center text-2xl font-semibold text-orange-700 mb-6 dark:bg-orange-950/40 dark:text-orange-400">
                 {director.name
                   .split(" ")
@@ -179,16 +173,15 @@ export default function BoardOfDirectorsPage() {
           ))}
         </div>
 
-        {/* Bottom CTA */}
+        {/* ================= BOTTOM CTA ================= */}
         <div className="mt-20 rounded-md border border-stone-200 bg-white p-10 text-center shadow-sm dark:border-stone-700 dark:bg-stone-900">
           <h2 className="text-2xl font-semibold text-stone-950 mb-3 dark:text-stone-100">
             Interested in Serving?
           </h2>
           <p className="text-stone-600 max-w-xl mx-auto mb-8 dark:text-stone-300">
-            The CCRA is always looking for passionate members who want to contribute
-            to the future of classic rodeo in Canada.
+            The CCRA is always looking for passionate members who want to contribute to the
+            future of classic rodeo in Canada.
           </p>
-          {/* this is subject to change incase we want it to directly route to the members of the board */}
           <a
             href="/about-us/contact"
             className="inline-flex items-center justify-center rounded-md bg-orange-600 px-8 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
@@ -198,7 +191,7 @@ export default function BoardOfDirectorsPage() {
         </div>
       </div>
 
-      {/* ========== LARGE PREVIEW MODAL ========== */}
+      {/* ================= DIRECTOR MODAL ================= */}
       {selected && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
@@ -214,7 +207,6 @@ export default function BoardOfDirectorsPage() {
 
           {/* Modal panel */}
           <div className="relative w-full max-w-2xl rounded-md bg-white shadow-lg overflow-hidden dark:bg-stone-900 dark:border dark:border-stone-700">
-            {/* Close button */}
             <button
               onClick={() => setSelected(null)}
               className="absolute top-4 right-4 z-10 w-10 h-10 rounded-md flex items-center justify-center text-stone-400 hover:text-stone-950 hover:bg-stone-100 transition dark:text-stone-400 dark:hover:text-stone-100 dark:hover:bg-stone-800"
@@ -233,7 +225,6 @@ export default function BoardOfDirectorsPage() {
             </button>
 
             <div className="p-8 sm:p-10">
-              {/* Large Avatar */}
               <div className="w-24 h-24 rounded-md bg-orange-100 flex items-center justify-center text-4xl font-semibold text-orange-700 mb-6 dark:bg-orange-950/40 dark:text-orange-400">
                 {selected.name
                   .split(" ")

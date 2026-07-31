@@ -46,16 +46,6 @@ export default function RodeoStandingsPage() {
 
   return (
     <div className="w-full py-8 px-4 max-w-4xl mx-auto">
-
-
-      {/* RULEBOOK STYLE HEADING */}
-      <h1 className="text-4xl font-bold text-orange-700 mb-4 text-center">
-        Standings
-      </h1>
-
-      <p className="text-gray-600 text-center mb-8">
-        View rankings and points earned across completed rodeo events.
-      </p>
       {/* HEADING */}
       <Hero
         badge="SEASON STANDINGS"
@@ -85,14 +75,7 @@ export default function RodeoStandingsPage() {
           ))}
         </select>
       </div>
-
-      {/* CATEGORY TITLE */}
-      {category !== "all" && filteredEntries.length > 0 && (
-        <h2 className="text-xl font-semibold text-stone-900 mb-4 text-center">
-          {category}
-        </h2>
-      )}
-
+      
       {/* NO RESULTS */}
       {filteredEntries.length === 0 && (
         <p className="text-sm text-stone-400 py-6 text-center">

@@ -112,7 +112,7 @@ export default function EnterRodeoPage() {
             entryFee: rodeo.entryFee,
             events: rodeo.events.map((event) => ({
               eventId: event.id,
-              eventTitle: event.eventTitle,
+              eventTitle: event.category, // backend field is now `category`
               eventFee: event.eventFee,
             })),
           })),

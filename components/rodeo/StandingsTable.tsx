@@ -78,7 +78,6 @@ export function StandingsTable({ entries }: StandingsTableProps) {
 
         return (
           <div key={eventName} className="w-full max-w-6xl">
-            <h2 className="text-lg font-semibold text-stone-900 mb-2">{eventName}</h2>
 
             <div className="w-full flex justify-center">
               <div className="w-full max-w-6xl">

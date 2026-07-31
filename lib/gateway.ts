@@ -39,7 +39,11 @@ export async function fetchFromGateway<T>(
   path: string,
   opts: Options = {},
 ): Promise<T> {
-  const res = await fetch(`${GATEWAY_URL}${path}`, {
+  // On the server, call the gateway directly with GATEWAY_URL. In the browser,
+  // GATEWAY_URL isn't available (and the gateway's CORS rejects browser origins),
+  // so route through the same-origin /api/gateway proxy instead.
+  const base = typeof window === "undefined" ? GATEWAY_URL : "/api/gateway";
+  const res = await fetch(`${base}${path}`, {
     method: opts.method ?? "GET",
     headers: { "Content-Type": "application/json" },
     body: opts.body ? JSON.stringify(opts.body) : undefined,
@@ -95,12 +99,12 @@ export type Rodeo = {
 //   createdAt: string;
 // };
 
-// An event is a single competition inside a rodeo.
-// (old db table)
+// An event is a single competition inside a rodeo, identified by its category
+// (e.g. "Bull Riding"). Matches the backend `events` table.
 export type Event = {
   id: string;
   rodeoId: string;
-  eventTitle: string;
+  category: string;
   eventDate: string | null;
   eventTime: string | null;
   eventFee: number | null;

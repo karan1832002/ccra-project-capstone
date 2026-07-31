@@ -1,4 +1,5 @@
 import { getRodeos, GatewayError, type Rodeo } from "@/lib/gateway";
+import Hero from "@/components/ui/Hero";
 
 export const metadata = { title: "Rodeo Schedule | CCRA" };
 
@@ -15,7 +16,8 @@ function fmtLong(dateStr: string | null): string {
 function entryStatus(open: string | null, close: string | null) {
   const today = new Date().toISOString().slice(0, 10);
   if (open && today < open) return { label: "Opens soon", tone: "upcoming" };
-  if (close && today > close) return { label: "Entries closed", tone: "closed" };
+  if (close && today > close)
+    return { label: "Entries closed", tone: "closed" };
   if (open && close) return { label: "Entries open", tone: "open" };
   return { label: "TBA", tone: "tba" };
 }
@@ -34,24 +36,20 @@ export default async function SchedulePage() {
   try {
     rodeos = await getRodeos();
   } catch (err) {
-    error = err instanceof GatewayError ? err.message : "Unable to load the schedule right now.";
+    error =
+      err instanceof GatewayError
+        ? err.message
+        : "Unable to load the schedule right now.";
   }
 
   return (
     <div className="min-h-screen bg-stone-50">
-
       {/* Header */}
-      <header className="border-b border-stone-200 bg-white">
-        <div className="mx-auto max-w-5xl px-4 py-10 text-center">
-          <h1 className="text-3xl font-bold text-orange-700 mb-4">
-            2026 Season Rodeo Schedule
-          </h1>
-          <p className="text-gray-600 mb-6">
-            View official dates, entry windows, and performance times for all
-            Canadian Classic Rodeo Association sanctioned rodeos.
-          </p>
-        </div>
-      </header>
+      <Hero
+        badge="2026 SEASON"
+        title="Rodeo Schedule"
+        description="View official dates, entry windows, and performance times for all Canadian Classic Rodeo Association sanctioned rodeos."
+      />
 
       <main className="mx-auto max-w-7xl px-6 py-12">
         {error && (
@@ -98,18 +96,29 @@ export default async function SchedulePage() {
                   {rodeos.map((r) => {
                     const status = entryStatus(r.entriesOpen, r.entriesClose);
                     return (
-                      <tr key={r.id} className="transition-colors hover:bg-orange-50/40">
+                      <tr
+                        key={r.id}
+                        className="transition-colors hover:bg-orange-50/40"
+                      >
                         <td className="px-6 py-5">
-                          <div className="font-semibold text-stone-950">{r.rodeoTitle}</div>
+                          <div className="font-semibold text-stone-950">
+                            {r.rodeoTitle}
+                          </div>
                           {r.entryFee != null && (
                             <div className="mt-0.5 text-xs text-stone-500">
                               Entry fee ${r.entryFee}
                             </div>
                           )}
                         </td>
-                        <td className="px-6 py-5 text-stone-600">{r.location}</td>
-                        <td className="px-6 py-5 text-stone-600">{fmtLong(r.entriesOpen)}</td>
-                        <td className="px-6 py-5 text-stone-600">{fmtLong(r.entriesClose)}</td>
+                        <td className="px-6 py-5 text-stone-600">
+                          {r.location}
+                        </td>
+                        <td className="px-6 py-5 text-stone-600">
+                          {fmtLong(r.entriesOpen)}
+                        </td>
+                        <td className="px-6 py-5 text-stone-600">
+                          {fmtLong(r.entriesClose)}
+                        </td>
                         <td className="px-6 py-5">
                           <span
                             className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset ${toneStyles[status.tone]}`}
@@ -129,9 +138,14 @@ export default async function SchedulePage() {
               {rodeos.map((r) => {
                 const status = entryStatus(r.entriesOpen, r.entriesClose);
                 return (
-                  <div key={r.id} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-md">
+                  <div
+                    key={r.id}
+                    className="rounded-2xl border border-stone-200 bg-white p-5 shadow-md"
+                  >
                     <div className="flex items-start justify-between gap-3">
-                      <h2 className="text-lg font-semibold text-stone-950">{r.rodeoTitle}</h2>
+                      <h2 className="text-lg font-semibold text-stone-950">
+                        {r.rodeoTitle}
+                      </h2>
                       <span
                         className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset ${toneStyles[status.tone]}`}
                       >
@@ -143,17 +157,27 @@ export default async function SchedulePage() {
 
                     <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
                       <div>
-                        <dt className="text-xs uppercase tracking-wide text-stone-400">Opens</dt>
-                        <dd className="mt-0.5 text-stone-700">{fmtLong(r.entriesOpen)}</dd>
+                        <dt className="text-xs uppercase tracking-wide text-stone-400">
+                          Opens
+                        </dt>
+                        <dd className="mt-0.5 text-stone-700">
+                          {fmtLong(r.entriesOpen)}
+                        </dd>
                       </div>
                       <div>
-                        <dt className="text-xs uppercase tracking-wide text-stone-400">Closes</dt>
-                        <dd className="mt-0.5 text-stone-700">{fmtLong(r.entriesClose)}</dd>
+                        <dt className="text-xs uppercase tracking-wide text-stone-400">
+                          Closes
+                        </dt>
+                        <dd className="mt-0.5 text-stone-700">
+                          {fmtLong(r.entriesClose)}
+                        </dd>
                       </div>
                     </dl>
 
                     {r.entryFee != null && (
-                      <p className="mt-3 text-xs text-stone-500">Entry fee ${r.entryFee}</p>
+                      <p className="mt-3 text-xs text-stone-500">
+                        Entry fee ${r.entryFee}
+                      </p>
                     )}
                   </div>
                 );
@@ -163,7 +187,8 @@ export default async function SchedulePage() {
         )}
 
         <p className="mt-8 text-center text-sm text-stone-400">
-          Showing {rodeos.length} {rodeos.length === 1 ? "rodeo" : "rodeos"} for the 2026 season
+          Showing {rodeos.length} {rodeos.length === 1 ? "rodeo" : "rodeos"} for
+          the 2026 season
         </p>
       </main>
     </div>

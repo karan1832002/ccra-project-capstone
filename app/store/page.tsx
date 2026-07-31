@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Hero from "@/components/ui/Hero";
 
 type Product = {
   id: string;
@@ -40,15 +41,19 @@ export default function StorePage() {
     loadProducts();
   }, []);
 
-  if (loading) return <div className="text-center py-20">Loading products...</div>;
-  if (error) return <div className="text-center py-20 text-red-600">{error}</div>;
+  if (loading)
+    return <div className="text-center py-20">Loading products...</div>;
+  if (error)
+    return <div className="text-center py-20 text-red-600">{error}</div>;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header like Results page */}
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <h1 className="text-4xl font-bold text-orange-700 mb-4 text-center">CCRA Store</h1>
-      </div>
+      {/* Header */}
+      <Hero
+        badge="OFFICIAL MERCHANDISE"
+        title="CCRA Store"
+        description="Shop official CCRA apparel, accessories, and merchandise. Show your support for the Canadian Cowboys Rodeo Association on and off the rodeo grounds."
+      />
 
       {/* Product Grid */}
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-6 pb-20">
