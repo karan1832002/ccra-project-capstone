@@ -11,10 +11,9 @@
 //
 // ASSUMPTIONS TO CONFIRM (I can't see the Azure gateway's own code, so these
 // are my best guess at a reasonable contract, not a verified one):
-//   - Header names below (`x-frontend-gateway-key`, `x-user-id`,
-//     `x-user-role`) are placeholders. If the gateway's auth middleware
-//     expects e.g. `Authorization: Bearer <key>` instead, change them to
-//     match — otherwise every call here will also 403.
+//   - The gateway's requireInternalToken middleware checks for the
+//     `x-gateway-key` header — the same key used by lib/auth.ts for
+//     notification dispatch.
 //   - Import path `@/lib/auth` — point this at wherever betterAuth({...})
 //     is actually exported from if it's not lib/auth.ts.
 
@@ -22,6 +21,7 @@ import "server-only";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { GatewayError } from "@/lib/gateway";
+import type { Rodeo, Event, RodeoDetail } from "@/lib/gateway";
 
 // The base URL of the API gateway. NEXT_PUBLIC_GATEWAY_URL is embedded
 // at build time so the value does not need to be read from the runtime
@@ -54,6 +54,27 @@ export interface RodeoResultData {
   placing: number;
   payoutMoney: number;
   groundMoney: number;
+}
+
+// Payload for creating or updating a rodeo via the event-service gateway.
+export interface RodeoPayload {
+  rodeoTitle: string;
+  location: string;
+  entryFee?: number | null;
+  entriesOpen?: string | null;
+  entriesClose?: string | null;
+  phoneInEntries?: string | null;
+  description?: string | null;
+  image?: string | null;
+  capacity?: number | null;
+}
+
+// Payload for adding or updating a competition event under a rodeo.
+export interface EventPayload {
+  category: string;
+  eventDate: string;
+  eventTime: string;
+  eventFee: number;
 }
 
 // ==========================================================================
@@ -121,7 +142,7 @@ export async function callGateway<T>(
     ...options,
     headers: {
       "Content-Type": "application/json",
-      "x-frontend-gateway-key": FRONTEND_GATEWAY_KEY,
+      "x-gateway-key": FRONTEND_GATEWAY_KEY,
       "x-user-id": session.user.id,
       "x-user-role": role,
       ...options.headers,
@@ -166,6 +187,64 @@ export function getEventRegistrations(eventId: string) {
   return callGateway<Registration[]>(
     `/api/events/${eventId}/registrations`,
   );
+}
+
+// ---- Rodeo & event management (admin) ------------------------------------
+
+// Fetches all rodeos from the event-service via the gateway.
+export function getAdminRodeos() {
+  return callGateway<Rodeo[]>("/api/events/rodeos");
+}
+
+// Fetches a single rodeo with its nested events, dates, and draws.
+export function getAdminRodeoDetail(id: string) {
+  return callGateway<RodeoDetail>(`/api/events/rodeos/${id}`);
+}
+
+// Creates a new rodeo in the event-service.
+export function createRodeo(data: RodeoPayload) {
+  return callGateway<Rodeo>("/api/events/rodeos", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+// Updates an existing rodeo's fields.
+export function updateRodeo(id: string, data: Partial<RodeoPayload>) {
+  return callGateway<Rodeo>(`/api/events/rodeos/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+// Deletes a rodeo and cascades to its child events.
+export function deleteRodeo(id: string) {
+  return callGateway<void>(`/api/events/rodeos/${id}`, {
+    method: "DELETE",
+  });
+}
+
+// Adds a competition event under an existing rodeo.
+export function createEvent(rodeoId: string, data: EventPayload) {
+  return callGateway<Event>(`/api/events/rodeos/${rodeoId}/events`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+// Updates a competition event's details.
+export function updateEvent(id: string, data: Partial<EventPayload>) {
+  return callGateway<Event>(`/api/events/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+// Removes a competition event.
+export function deleteEvent(id: string) {
+  return callGateway<void>(`/api/events/${id}`, {
+    method: "DELETE",
+  });
 }
 
 // ---- Rodeo results -------------------------------------------------------
