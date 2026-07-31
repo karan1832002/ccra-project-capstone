@@ -23,11 +23,9 @@ import { auth } from "@/lib/auth";
 import { GatewayError } from "@/lib/gateway";
 import type { Rodeo, Event, RodeoDetail } from "@/lib/gateway";
 
-// The base URL of the API gateway. NEXT_PUBLIC_GATEWAY_URL is embedded
-// at build time so the value does not need to be read from the runtime
-// environment on every request.
-const GATEWAY_URL =
-  process.env.NEXT_PUBLIC_GATEWAY_URL ?? "http://localhost:4000";
+// The base URL of the API gateway. GATEWAY_URL is the internal
+// cluster routing variable — never exposed to the client.
+const GATEWAY_URL = process.env.GATEWAY_URL ?? "http://localhost:4000";
 const FRONTEND_GATEWAY_KEY = process.env.FRONTEND_GATEWAY_KEY;
 
 type ApiResponse<T> =
