@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
-const GATEWAY_URL = process.env.GATEWAY_URL || "http://4.248.243.149";
-const FRONTEND_GATEWAY_KEY = process.env.FRONTEND_GATEWAY_KEY || "b3b08eeeffa7f1fa17f28ab774d070e8286edc433e04311de60066e988d7e081";
+// Both come from the environment (.env.local locally, k8s secrets in prod).
+const GATEWAY_URL = process.env.GATEWAY_URL ?? "";
+const FRONTEND_GATEWAY_KEY = process.env.FRONTEND_GATEWAY_KEY ?? "";
 
 // GET /api/media?category=event_photo
 export async function GET(request: Request) {

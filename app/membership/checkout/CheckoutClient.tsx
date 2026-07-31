@@ -31,7 +31,7 @@ export default function CheckoutClient() {
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
 
     try {
-      const res = await fetch("http://4.248.243.149/api/memberships", {
+      const res = await fetch("/api/gateway/api/memberships", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

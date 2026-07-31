@@ -22,7 +22,7 @@ export default function StorePage() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const res = await fetch("http://4.248.243.149/api/store/products", {
+        const res = await fetch("/api/gateway/api/store/products", {
           credentials: "include",
         });
 
