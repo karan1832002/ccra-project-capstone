@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Hero from "@/components/ui/Hero";
 import ImageCarousel from "@/components/ui/ImageCarousel";
 import { Image as ImageIcon, X } from "lucide-react";
 
-// Media item structure
 interface MediaItem {
   id: string;
   fileName: string;
@@ -18,7 +18,7 @@ export default function GalleryPage() {
   const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState<MediaItem | null>(null);
 
-  // Fetch live photos from database API
+  // Fetch live photos from API
   useEffect(() => {
     async function loadGallery() {
       try {
@@ -36,7 +36,6 @@ export default function GalleryPage() {
     loadGallery();
   }, []);
 
-  // Format slides for carousel
   const carouselSlides = photos.map((p) => ({
     src: p.blobUrl,
     alt: p.fileName,
@@ -44,56 +43,53 @@ export default function GalleryPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 dark:bg-stone-950 dark:text-stone-100">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        
-        {/* Page Header */}
-        <div className="max-w-3xl mx-auto text-center pt-8 pb-12">
-          <div className="inline-flex items-center gap-2 rounded-full bg-orange-100 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-orange-700 mb-6 dark:bg-orange-950/50 dark:text-orange-400">
-            Official Rodeo Media
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-stone-950 tracking-tight mb-6 dark:text-stone-100">
-            Photo Gallery
-          </h1>
-          <p className="text-lg text-stone-600 dark:text-stone-300">
-            Relive the action, grit, and unforgettable moments from the Canadian Classic Rodeo Association season.
-          </p>
-        </div>
+    <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
+      {/* ================= HERO ================= */}
+      <Hero
+        badge="OFFICIAL RODEO MEDIA"
+        title="Photo Gallery"
+        description="Relive the action, grit, and unforgettable moments from the Canadian Classic Rodeo Association season."
+      />
 
-        {/* Featured Slideshow */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        {/* ================= FEATURED SLIDESHOW ================= */}
         {photos.length > 0 && (
           <section className="mb-20">
-            <h2 className="text-2xl font-bold text-stone-950 mb-6 dark:text-stone-100 flex items-center gap-2">
+            <h2 className="text-2xl font-semibold text-stone-950 mb-6 dark:text-stone-100 flex items-center gap-2">
               <span className="w-2.5 h-6 bg-orange-600 rounded-full inline-block" />
               Featured Highlights
             </h2>
-            <ImageCarousel images={carouselSlides} autoPlay interval={4500} showCaptions aspectRatio="video" />
+            <ImageCarousel
+              images={carouselSlides}
+              autoPlay
+              interval={4500}
+              showCaptions
+              aspectRatio="video"
+            />
           </section>
         )}
 
-        {/* Main Photo Grid */}
+        {/* ================= PHOTO GRID ================= */}
         <section>
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold text-stone-950 dark:text-stone-100 flex items-center gap-2">
+            <h2 className="text-2xl font-semibold text-stone-950 dark:text-stone-100 flex items-center gap-2">
               <ImageIcon className="w-6 h-6 text-orange-600" />
               Rodeo Season Collection
             </h2>
             {photos.length > 0 && (
-              <span className="text-xs font-semibold px-3 py-1 bg-stone-200 text-stone-700 rounded-full dark:bg-stone-800 dark:text-stone-300">
+              <span className="text-xs font-semibold px-3 py-1 bg-stone-200 text-stone-700 rounded-md dark:bg-stone-800 dark:text-stone-300">
                 {photos.length} {photos.length === 1 ? "Photo" : "Photos"}
               </span>
             )}
           </div>
 
-          {/* Loading state */}
           {loading ? (
             <div className="py-20 text-center text-stone-500 font-medium">
               <div className="inline-block animate-spin w-8 h-8 border-4 border-orange-600 border-t-transparent rounded-full mb-3" />
               <div>Loading gallery collection...</div>
             </div>
           ) : photos.length === 0 ? (
-            /* Empty state */
-            <div className="rounded-2xl border border-dashed border-stone-300 bg-white/60 p-12 text-center dark:border-stone-800 dark:bg-stone-900/50">
+            <div className="rounded-md border border-dashed border-stone-300 bg-white/60 p-12 text-center dark:border-stone-700 dark:bg-stone-900/50">
               <ImageIcon className="w-12 h-12 text-stone-400 mx-auto mb-4" />
               <h3 className="font-semibold text-lg text-stone-800 dark:text-stone-200 mb-1">
                 No photos in gallery yet
@@ -103,15 +99,16 @@ export default function GalleryPage() {
               </p>
             </div>
           ) : (
-            /* Photo Grid List */
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {photos.map((item) => {
-                const displayName = item.fileName.replace(/^\d+-/, "").replace(/\.[^/.]+$/, "");
+                const displayName = item.fileName
+                  .replace(/^\d+-/, "")
+                  .replace(/\.[^/.]+$/, "");
                 return (
                   <div
                     key={item.id}
                     onClick={() => setSelectedPhoto(item)}
-                    className="group relative aspect-square overflow-hidden rounded-xl border border-stone-200 bg-stone-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-stone-800 dark:bg-stone-900 cursor-pointer"
+                    className="group relative aspect-square overflow-hidden rounded-md border border-stone-200 bg-stone-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-stone-700 dark:bg-stone-900 cursor-pointer"
                   >
                     <Image
                       src={item.blobUrl}
@@ -138,14 +135,14 @@ export default function GalleryPage() {
           )}
         </section>
 
-        {/* Lightbox Image Preview Modal */}
+        {/* ================= LIGHTBOX ================= */}
         {selectedPhoto && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/90 backdrop-blur-md p-4 sm:p-8"
             onClick={() => setSelectedPhoto(null)}
           >
             <div
-              className="relative max-w-5xl w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-2xl flex items-center justify-center"
+              className="relative max-w-5xl w-full aspect-video rounded-md overflow-hidden bg-black shadow-2xl flex items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
               <Image
@@ -157,7 +154,7 @@ export default function GalleryPage() {
               />
               <button
                 onClick={() => setSelectedPhoto(null)}
-                className="absolute top-4 right-4 w-11 h-11 rounded-full bg-black/60 text-white hover:bg-black/90 flex items-center justify-center transition shadow-lg backdrop-blur-sm"
+                className="absolute top-4 right-4 w-11 h-11 rounded-md bg-black/60 text-white hover:bg-black/90 flex items-center justify-center transition shadow-lg backdrop-blur-sm"
                 aria-label="Close preview"
               >
                 <X className="w-6 h-6" />
@@ -178,7 +175,6 @@ export default function GalleryPage() {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );
