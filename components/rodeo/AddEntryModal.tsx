@@ -25,10 +25,9 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Member, RodeoEntry } from "@/types/rodeo";
 import { getActiveMembers } from "@/lib/sampleMemberData";
-import { formatRodeoPerformanceLabel } from "@/lib/rodeoDateUtils";
 
 interface RodeoEventData {
   rodeoId: string;

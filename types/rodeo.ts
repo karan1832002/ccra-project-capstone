@@ -78,15 +78,18 @@ export interface CompetitionEvent {
 // their ids — that way the entries table can render immediately without
 // re-looking-up names from an id.
 export interface RodeoEntry {
-  id: string; // client-generated id (e.g. crypto.randomUUID()) — not a database id yet
-  rodeoId: string; // foreign key back to RodeoEvent.id
+  id: string; // client-generated id (used for removing entries before submission)
+  rodeoId: string; // database rodeo id
   rodeoName: string;
-  performanceId: string; // foreign key back to RodeoEvent.performances[].id — which specific day/time was entered
-  performanceDate: string; // ISO date, denormalized from the performance for easy display
-  performanceTime: string; // display time, denormalized from the performance for easy display
-  eventId: string; // foreign key back to CompetitionEvent.id
+
+  performanceId: string; // database performance id
+  performanceDate: string; // display value
+  performanceTime: string; // display value
+
+  eventId: string; // database event id (used when submitting registration)
   eventName: string;
-  partner?: string; // set when eventId refers to a team event
+
+  partner?: string;
   entryFee: number;
   eventFee: number;
 }
