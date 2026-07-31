@@ -14,12 +14,15 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build-time arguments (passed dynamically via --build-arg, defaults are empty for security)
+# Build-time arguments
 ENV NEXT_TELEMETRY_DISABLED=1
 ARG DATABASE_URL=""
 ARG BETTER_AUTH_SECRET=""
+ARG NEXT_PUBLIC_GATEWAY_URL=""
+
 ENV DATABASE_URL=${DATABASE_URL}
 ENV BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+ENV NEXT_PUBLIC_GATEWAY_URL=${NEXT_PUBLIC_GATEWAY_URL}
 
 RUN npm run build
 
@@ -36,6 +39,7 @@ ENV NEXT_PUBLIC_APP_URL=""
 ENV RESEND_API_KEY=""
 ENV FRONTEND_GATEWAY_KEY=""
 ENV GATEWAY_URL=""
+ENV NEXT_PUBLIC_GATEWAY_URL=""
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
