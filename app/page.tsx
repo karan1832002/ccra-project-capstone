@@ -2,10 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "@/lib/auth-client";
 import ImageCarousel, { CarouselImage } from "@/components/ui/ImageCarousel";
 import SponsorsCarousel, { Sponsor } from "@/components/ui/SponsorsCarousel";
 import NewsletterCard from "@/components/ui/NewsletterCard";
-import { Calendar, ShoppingCart, Trophy, Camera, ArrowRight } from "lucide-react";
+import {
+  Calendar,
+  ShoppingCart,
+  Trophy,
+  Camera,
+  ArrowRight,
+} from "lucide-react";
 
 const heroImages: CarouselImage[] = [
   {
@@ -24,19 +31,55 @@ const heroImages: CarouselImage[] = [
 
 // Placeholder – replace with data from your admin/API
 const sponsors: Sponsor[] = [
-  { id: 1, src: "/images/sponsors/sponsor1-strathmorestampede.png", alt: "Strathmore Stampede" },
-  { id: 2, src: "/images/sponsors/sponsor2-uncommonciderco.png", alt: "Uncommon Cider Co" },
+  {
+    id: 1,
+    src: "/images/sponsors/sponsor1-strathmorestampede.png",
+    alt: "Strathmore Stampede",
+  },
+  {
+    id: 2,
+    src: "/images/sponsors/sponsor2-uncommonciderco.png",
+    alt: "Uncommon Cider Co",
+  },
   { id: 3, src: "/images/sponsors/sponsor3-ufa.webp", alt: "UFA" },
-  { id: 4, src: "/images/sponsors/sponsor4-summitmotorsltd.jpg", alt: "Summit Motors Ltd" },
-  { id: 5, src: "/images/sponsors/sponsor5-lesfermescavendishfarms.png", alt: "Les Fermes Cavendish Farms" },
-  { id: 6, src: "/images/sponsors/sponsor6-statsgroup.png", alt: "Stats Group" },
-  { id: 7, src: "/images/sponsors/sponsor7-vaneelivestocktrucking.png", alt: "Van Ee Livestock Trucking" },
+  {
+    id: 4,
+    src: "/images/sponsors/sponsor4-summitmotorsltd.jpg",
+    alt: "Summit Motors Ltd",
+  },
+  {
+    id: 5,
+    src: "/images/sponsors/sponsor5-lesfermescavendishfarms.png",
+    alt: "Les Fermes Cavendish Farms",
+  },
+  {
+    id: 6,
+    src: "/images/sponsors/sponsor6-statsgroup.png",
+    alt: "Stats Group",
+  },
+  {
+    id: 7,
+    src: "/images/sponsors/sponsor7-vaneelivestocktrucking.png",
+    alt: "Van Ee Livestock Trucking",
+  },
   { id: 8, src: "/images/sponsors/sponsor8-vantage.png", alt: "Vantage" },
-  { id: 9, src: "/images/sponsors/sponsor9-troyfischersilverworks.jpg", alt: "Troy Fischer Silverworks" },
+  {
+    id: 9,
+    src: "/images/sponsors/sponsor9-troyfischersilverworks.jpg",
+    alt: "Troy Fischer Silverworks",
+  },
   { id: 10, src: "/images/sponsors/sponsor10.jpg", alt: "Sponsor 10" },
   { id: 11, src: "/images/sponsors/sponsor11.jpg", alt: "Sponsor 11" },
-  { id: 12, src: "/images/sponsors/sponsor12-townoftaber.jpg", alt: "Town of Taber" },
-  { id: 13, src: "/images/sponsors/sponsor13.jpg", alt: "South West Senior Rodeo" },
+  {
+    id: 12,
+    src: "/images/sponsors/sponsor12-townoftaber.jpg",
+    alt: "Town of Taber",
+  },
+  {
+    id: 13,
+    src: "/images/sponsors/sponsor13.jpg",
+    alt: "South West Senior Rodeo",
+  },
 ];
 
 const newsletterItems = [
@@ -64,6 +107,8 @@ const newsletterItems = [
 ];
 
 export default function HomePage() {
+  const { data: session } = useSession();
+
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
       {/* ================= HERO ================= */}
@@ -82,22 +127,19 @@ export default function HomePage() {
               </h1>
 
               <p className="mt-6 text-xl text-stone-600 dark:text-stone-300 max-w-lg leading-relaxed">
-                Preserving Western heritage through competitive rodeo for athletes of all ages and skill levels.
+                Preserving Western heritage through competitive rodeo for
+                athletes of all ages and skill levels.
               </p>
 
               <div className="mt-10 flex flex-wrap gap-4">
-                <Link
-                  href="/sign-up"
-                  className="inline-flex items-center justify-center rounded-md bg-orange-600 px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-orange-700"
-                >
-                  Join the CCRA
-                </Link>
-                <Link
-                  href="/schedule"
-                  className="inline-flex items-center justify-center rounded-md border border-stone-200 bg-white px-8 py-3.5 text-sm font-semibold text-stone-950 transition hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:hover:bg-stone-800"
-                >
-                  2026 Schedule
-                </Link>
+                {!session && (
+                  <Link
+                    href="/sign-up"
+                    className="inline-flex items-center justify-center rounded-md bg-orange-600 px-8 py-3.5 text-sm text-white font-semibold transition hover:bg-orange-700"
+                  >
+                    Join the CCRA
+                  </Link>
+                )}
               </div>
             </div>
 
@@ -120,10 +162,30 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { href: "/schedule", icon: Calendar, label: "Schedule", desc: "2026 Events" },
-              { href: "/store", icon: ShoppingCart, label: "Store", desc: "CCRA Merchandise" },
-              { href: "/results/standings", icon: Trophy, label: "Standings", desc: "Current Rankings" },
-              { href: "/about-us/photo-gallery", icon: Camera, label: "Gallery", desc: "Photo Moments" },
+              {
+                href: "/schedule",
+                icon: Calendar,
+                label: "Schedule",
+                desc: "2026 Events",
+              },
+              {
+                href: "/store",
+                icon: ShoppingCart,
+                label: "Store",
+                desc: "CCRA Merchandise",
+              },
+              {
+                href: "/results/standings",
+                icon: Trophy,
+                label: "Standings",
+                desc: "Current Rankings",
+              },
+              {
+                href: "/about-us/photo-gallery",
+                icon: Camera,
+                label: "Gallery",
+                desc: "Photo Moments",
+              },
             ].map((item) => (
               <Link
                 key={item.href}
@@ -133,8 +195,12 @@ export default function HomePage() {
                 <div className="w-12 h-12 rounded-md bg-orange-100 flex items-center justify-center text-orange-600 mb-4 group-hover:bg-orange-600 group-hover:text-white transition dark:bg-orange-950/40 dark:text-orange-400">
                   <item.icon className="w-6 h-6" />
                 </div>
-                <span className="font-semibold text-stone-950 dark:text-stone-100">{item.label}</span>
-                <span className="text-sm text-stone-500 mt-1 dark:text-stone-400">{item.desc}</span>
+                <span className="font-semibold text-stone-950 dark:text-stone-100">
+                  {item.label}
+                </span>
+                <span className="text-sm text-stone-500 mt-1 dark:text-stone-400">
+                  {item.desc}
+                </span>
               </Link>
             ))}
           </div>
@@ -152,16 +218,13 @@ export default function HomePage() {
               Our Sponsors
             </h2>
             <p className="mt-2 text-sm text-stone-600 dark:text-stone-300 max-w-xl mx-auto">
-              Thank you to the businesses and individuals who help keep classic rodeo alive in Canada.
+              Thank you to the businesses and individuals who help keep classic
+              rodeo alive in Canada.
             </p>
           </div>
 
           <div className="max-w-xl mx-auto">
-            <SponsorsCarousel
-              sponsors={sponsors}
-              autoPlay
-              interval={3500}
-            />
+            <SponsorsCarousel sponsors={sponsors} autoPlay interval={3500} />
           </div>
 
           <div className="mt-5 text-center">
@@ -188,7 +251,11 @@ export default function HomePage() {
                 A Legacy of Western Spirit
               </h2>
               <p className="text-lg text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
-                Founded in 1985 as the Canadian Senior Pro Rodeo Association, the CCRA has grown into a vibrant community of competitors from beginner to professional. We celebrate the love of the sport, Western values, and the active lifestyle that brings us together.
+                Founded in 1985 as the Canadian Senior Pro Rodeo Association,
+                the CCRA has grown into a vibrant community of competitors from
+                beginner to professional. We celebrate the love of the sport,
+                Western values, and the active lifestyle that brings us
+                together.
               </p>
               <Link
                 href="/about-us"
@@ -245,7 +312,8 @@ export default function HomePage() {
               Ready to Hit the Grounds?
             </h2>
             <p className="text-orange-100 text-lg max-w-2xl mx-auto mb-8">
-              Get your membership today and be part of the Canadian Classic Rodeo family.
+              Get your membership today and be part of the Canadian Classic
+              Rodeo family.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
