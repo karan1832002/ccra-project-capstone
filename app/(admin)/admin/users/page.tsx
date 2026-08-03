@@ -6,14 +6,16 @@ import { user } from "@/lib/db/schema/auth";
 import type { User } from "@/lib/gateway-client";
 import UserTable from "./UserTable";
 
+// --- User Management Page ---
+// Server component restricted to superadmins. Queries the local auth
+// database for all user records and passes the mapped User[] array to
+// the UserTable presentation component. The mapping coerces null roles
+// to "member" so downstream consumers can treat role as non-nullable.
+// Database errors are caught and rendered as an error banner so the
+// admin layout shell remains intact.
 export default async function AdminUsersPage() {
-  // Restrict this route to superadmins only. The requireAdmin helper
-  // redirects unauthenticated users to /sign-in and non-admins to /.
   await requireAdmin("superadmin");
 
-  // Fetch all users directly from the frontend auth database. The
-  // Drizzle schema uses camelCase column names; we map to the User
-  // interface expected by downstream components.
   let users: User[] | null = null;
   let fetchError: string | null = null;
 
@@ -39,9 +41,7 @@ export default async function AdminUsersPage() {
   return (
     <div className="space-y-6 p-8 bg-gray-50">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
-          Users
-        </h1>
+        <h1 className="text-2xl font-bold text-gray-900">Users</h1>
         <p className="mt-1 text-sm text-gray-500">
           Manage user accounts and roles.
         </p>
@@ -49,15 +49,15 @@ export default async function AdminUsersPage() {
 
       <div>
         {fetchError ? (
+          /* --- Error Banner --- */
           <div className="rounded-md border border-red-200 bg-red-50 p-6">
             <p className="text-sm font-medium text-red-800">
               Could not load users.
             </p>
-            <p className="mt-1 text-sm text-red-600">
-              {fetchError}
-            </p>
+            <p className="mt-1 text-sm text-red-600">{fetchError}</p>
           </div>
         ) : (
+          /* --- User Management Table --- */
           <UserTable users={users!} />
         )}
       </div>
