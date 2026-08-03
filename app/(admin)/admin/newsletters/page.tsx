@@ -1,3 +1,4 @@
+// --- Newsletters Page Placeholder ---
 export default function AdminNewslettersPage() {
   return (
     <div className="p-8">

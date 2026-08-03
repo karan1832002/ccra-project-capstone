@@ -1,7 +1,8 @@
 import { User } from "@/lib/gateway-client";
 import RoleSelect from "./RoleSelect";
 
-// Helper that returns pill-badge classes for a given role string.
+// Returns Tailwind pill-badge classes keyed by role. Superadmins get
+// orange styling; all other roles render in neutral gray.
 function roleBadgeClass(role: string) {
   if (role === "superadmin") {
     return "bg-orange-50 text-orange-700 border border-orange-200";
@@ -9,9 +10,16 @@ function roleBadgeClass(role: string) {
   return "bg-gray-100 text-gray-700 border border-gray-200";
 }
 
-// Server component that renders a list of users in a styled table.
-// Each row shows the user's ID, email, current role, and an inline
-// role-change dropdown (RoleSelect) in the Actions column.
+// --- User Management Table ---
+// Server component that receives a User[] array from the parent
+// AdminUsersPage and renders it as a styled HTML table. Each row
+// displays the user ID (monospaced), email, a role pill badge, and an
+// inline RoleSelect dropdown in the Actions column. The RoleSelect is
+// the only client-side boundary in this tree — the table itself remains
+// a server component.
+//
+// An empty users array renders a "No users found" message instead of
+// an empty table so the admin gets clear feedback.
 export default function UserTable({ users }: { users: User[] }) {
   if (users.length === 0) {
     return (
