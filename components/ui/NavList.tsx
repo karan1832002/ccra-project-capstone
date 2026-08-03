@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useSession } from "@/lib/auth-client";
 
 export interface NavListItem {
   label: string;
@@ -25,6 +26,14 @@ export default function NavList({
 }: NavListProps) {
   const [expandedLabels, setExpandedLabels] = useState<Set<string>>(new Set());
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const role = (session?.user as { role?: string } | undefined)?.role ?? "member";
+  const isAdminRole = role === "admin" || role === "superadmin";
+  const isAdminRoute = pathname.startsWith("/admin");
+  // Admin links only render when the user holds an admin role AND is
+  // currently browsing within the /admin dashboard, keeping the public
+  // mobile nav free of admin clutter.
+  const showAdminLinks = isAdminRole && isAdminRoute;
 
   const isActive = (path?: string) =>
     path && pathname.startsWith(path);
@@ -119,6 +128,113 @@ export default function NavList({
           </div>
         );
       })}
+
+      {showAdminLinks && (
+        <>
+          <hr className="border-t border-stone-200" />
+          <span className="px-3 pt-2 text-xs font-semibold uppercase tracking-wider text-stone-500">
+            Admin
+          </span>
+
+          <Link
+            href="/admin"
+            onClick={onNavigate}
+            className={
+              isActive("/admin") && pathname === "/admin"
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+            }
+          >
+            Dashboard
+          </Link>
+
+          {role === "superadmin" && (
+            <Link
+              href="/admin/users"
+              onClick={onNavigate}
+              className={
+                isActive("/admin/users")
+                  ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
+                  : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+              }
+            >
+              Users
+            </Link>
+          )}
+
+          <Link
+            href="/admin/events"
+            onClick={onNavigate}
+            className={
+              isActive("/admin/events")
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+            }
+          >
+            Events
+          </Link>
+
+          <Link
+            href="/admin/products"
+            onClick={onNavigate}
+            className={
+              isActive("/admin/products")
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+            }
+          >
+            Products
+          </Link>
+
+          <Link
+            href="/admin/orders"
+            onClick={onNavigate}
+            className={
+              isActive("/admin/orders")
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+            }
+          >
+            Orders
+          </Link>
+
+          <Link
+            href="/admin/newsletters"
+            onClick={onNavigate}
+            className={
+              isActive("/admin/newsletters")
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+            }
+          >
+            Newsletters
+          </Link>
+
+          <Link
+            href="/admin/gallery"
+            onClick={onNavigate}
+            className={
+              isActive("/admin/gallery")
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+            }
+          >
+            Gallery
+          </Link>
+
+          <Link
+            href="/admin/sponsors"
+            onClick={onNavigate}
+            className={
+              isActive("/admin/sponsors")
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+            }
+          >
+            Sponsors
+          </Link>
+        </>
+      )}
     </nav>
   );
 }

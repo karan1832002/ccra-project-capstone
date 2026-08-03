@@ -31,12 +31,14 @@ export default async function AdminEventsPage() {
   }
 
   return (
-    <div className="space-y-6 p-8 bg-gray-50">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Events</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Manage rodeos, dates, draws, and event details.
-        </p>
+    <div className="space-y-6 p-4 md:p-8 bg-gray-50">
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Events</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Manage rodeos, dates, draws, and event details.
+          </p>
+        </div>
       </div>
 
       {/* --- Rodeo Creation Form --- */}
@@ -53,9 +55,9 @@ export default async function AdminEventsPage() {
       ) : !rodeos || rodeos.length === 0 ? (
         <p className="text-sm text-gray-500">No rodeos found.</p>
       ) : (
-        <div className="overflow-x-auto rounded-md border border-gray-200 bg-white shadow-sm">
-          <table className="w-full">
-            <thead className="bg-gray-50">
+        <div className="w-full overflow-x-auto rounded-md border border-gray-200 bg-white shadow-sm">
+          <table className="min-w-full text-sm">
+            <thead className="hidden sm:table-header-group bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                   Title
@@ -81,26 +83,44 @@ export default async function AdminEventsPage() {
               {rodeos.map((rodeo) => (
                 <tr
                   key={rodeo.id}
-                  className="border-b border-gray-100 bg-white transition-colors hover:bg-gray-50/50"
+                  className="block mb-6 border border-stone-200 p-4 rounded-md bg-white sm:table-row sm:mb-0 sm:border-0 sm:p-0 sm:border-b sm:border-gray-100 sm:hover:bg-gray-50/50"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+                      Title
+                    </span>
                     {rodeo.rodeoTitle}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+                      Location
+                    </span>
                     {rodeo.location}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+                      Entry Fee
+                    </span>
                     {rodeo.entryFee != null
                       ? `$${rodeo.entryFee.toFixed(2)}`
                       : "\u2014"}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+                      Entries Open
+                    </span>
                     {fmtDate(rodeo.entriesOpen)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+                      Entries Close
+                    </span>
                     {fmtDate(rodeo.entriesClose)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+                      Capacity
+                    </span>
                     {rodeo.capacity ?? "\u2014"}
                   </td>
                 </tr>
