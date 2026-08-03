@@ -46,8 +46,8 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* --- Sidebar --- */}
-      <aside className="w-64 shrink-0 border-r border-gray-200 bg-white flex flex-col">
+      {/* --- Sidebar (desktop only) --- */}
+      <aside className="hidden md:flex w-64 shrink-0 border-r border-gray-200 bg-white flex flex-col">
         <div className="px-6 py-5 border-b border-gray-200">
           <Link href="/admin" className="text-lg font-semibold text-gray-900">
             CCRA Admin
@@ -72,7 +72,7 @@ export default async function AdminLayout({
       </aside>
 
       {/* --- Main Content Area --- */}
-      <main className="flex-1 overflow-y-auto">{children}</main>
+      <main className="flex-1 w-full overflow-x-hidden overflow-y-auto">{children}</main>
     </div>
   );
 }
