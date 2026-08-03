@@ -7,12 +7,10 @@ import type { User } from "@/lib/gateway-client";
 import UserTable from "./UserTable";
 
 // --- User Management Page ---
-// Server component restricted to superadmins. Queries the local auth
-// database for all user records and passes the mapped User[] array to
-// the UserTable presentation component. The mapping coerces null roles
-// to "member" so downstream consumers can treat role as non-nullable.
-// Database errors are caught and rendered as an error banner so the
-// admin layout shell remains intact.
+// Server component restricted to superadmins. Fetches all user records
+// from the auth database and passes the mapped User[] array to the
+// UserTable client component. Search, pagination, and role mutation
+// are handled client-side within UserTable and RoleSelect.
 export default async function AdminUsersPage() {
   await requireAdmin("superadmin");
 
@@ -39,12 +37,14 @@ export default async function AdminUsersPage() {
   }
 
   return (
-    <div className="space-y-6 p-8 bg-gray-50">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Users</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Manage user accounts and roles.
-        </p>
+    <div className="space-y-6 p-4 md:p-8 bg-gray-50">
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Users</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Manage user accounts and roles.
+          </p>
+        </div>
       </div>
 
       <div>
@@ -57,8 +57,10 @@ export default async function AdminUsersPage() {
             <p className="mt-1 text-sm text-red-600">{fetchError}</p>
           </div>
         ) : (
-          /* --- User Management Table --- */
-          <UserTable users={users!} />
+          /* --- User Management Table (client-side search + pagination) --- */
+          <div className="w-full overflow-x-auto border-t border-stone-200 mt-4">
+            <UserTable users={users!} />
+          </div>
         )}
       </div>
     </div>

@@ -56,13 +56,15 @@ export default async function AdminSponsorsPage({
   const isEditing = editingId !== null && editingRow !== null;
 
   return (
-    <div className="space-y-6 p-8 bg-stone-50 min-h-screen">
+    <div className="space-y-6 p-4 md:p-8 bg-stone-50 min-h-screen">
       {/* --- Page Header --- */}
-      <div>
-        <h1 className="text-2xl font-bold text-stone-950">Sponsors</h1>
-        <p className="mt-1 text-sm text-stone-600">
-          Manage sponsor logos, links, and visibility.
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-stone-950">Sponsors</h1>
+          <p className="mt-1 text-sm text-stone-600">
+            Manage sponsor logos, links, and visibility.
+          </p>
+        </div>
       </div>
 
       {/* --- Create / Edit Form --- */}
@@ -187,9 +189,9 @@ export default async function AdminSponsorsPage({
           </div>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-md border border-stone-200 bg-white shadow-sm">
-          <table className="w-full">
-            <thead className="bg-stone-50">
+        <div className="w-full overflow-x-auto rounded-md border border-stone-200 bg-white shadow-sm">
+          <table className="min-w-full text-sm">
+            <thead className="hidden sm:table-header-group bg-stone-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-600">
                   Name
@@ -209,9 +211,12 @@ export default async function AdminSponsorsPage({
               {rows.map((row) => (
                 <tr
                   key={row.id}
-                  className="border-b border-stone-100 bg-white transition-colors hover:bg-stone-50/50"
+                  className="block mb-6 border border-stone-200 p-4 rounded-md bg-white sm:table-row sm:mb-0 sm:border-0 sm:p-0 sm:border-b sm:border-stone-100 sm:hover:bg-stone-50/50"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-stone-950">
+                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm font-medium text-stone-950">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-500 mb-1">
+                      Name
+                    </span>
                     <div className="flex items-center gap-3">
                       {row.logo ? (
                         <img
@@ -229,13 +234,16 @@ export default async function AdminSponsorsPage({
                       {row.name}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-stone-600">
+                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-stone-600">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-500 mb-1">
+                      Website
+                    </span>
                     {row.website ? (
                       <a
                         href={row.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-orange-600 hover:text-orange-500 underline"
+                        className="text-orange-600 hover:text-orange-500 underline break-all"
                       >
                         {row.website.replace(/^https?:\/\//, "").replace(/\/$/, "")}
                       </a>
@@ -243,7 +251,10 @@ export default async function AdminSponsorsPage({
                       <span className="text-stone-400">—</span>
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-500 mb-1">
+                      Status
+                    </span>
                     {row.visible ? (
                       <span className="inline-flex items-center rounded-full bg-orange-50 px-2.5 py-0.5 text-xs font-medium text-orange-700 border border-orange-200">
                         Visible
@@ -254,7 +265,10 @@ export default async function AdminSponsorsPage({
                       </span>
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-500 mb-1">
+                      Actions
+                    </span>
                     <div className="flex items-center gap-2">
                       {/* --- Edit Link --- */}
                       <Link

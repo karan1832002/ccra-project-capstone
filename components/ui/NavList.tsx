@@ -29,6 +29,11 @@ export default function NavList({
   const { data: session } = useSession();
   const role = (session?.user as { role?: string } | undefined)?.role ?? "member";
   const isAdminRole = role === "admin" || role === "superadmin";
+  const isAdminRoute = pathname.startsWith("/admin");
+  // Admin links only render when the user holds an admin role AND is
+  // currently browsing within the /admin dashboard, keeping the public
+  // mobile nav free of admin clutter.
+  const showAdminLinks = isAdminRole && isAdminRoute;
 
   const isActive = (path?: string) =>
     path && pathname.startsWith(path);
@@ -124,7 +129,7 @@ export default function NavList({
         );
       })}
 
-      {isAdminRole && (
+      {showAdminLinks && (
         <>
           <hr className="border-t border-stone-200" />
           <span className="px-3 pt-2 text-xs font-semibold uppercase tracking-wider text-stone-500">
