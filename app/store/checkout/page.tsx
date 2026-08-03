@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Elements,
   PaymentElement,
@@ -158,6 +158,9 @@ export default function CheckoutPage() {
   const [paymentId, setPaymentId] = useState("");
   const [state, setState] = useState<"loading" | "ready" | "paid" | "error">("loading");
   const [errorMsg, setErrorMsg] = useState("");
+  // Guards against React StrictMode running the effect twice in dev, which would
+  // otherwise create two orders + two payments for a single checkout.
+  const startedRef = useRef(false);
 
   const total = cartItems.reduce((sum, i) => sum + i.price * i.qty, 0);
   const itemCount = cartItems.reduce((sum, i) => sum + i.qty, 0);
@@ -166,6 +169,8 @@ export default function CheckoutPage() {
   // Create a PaymentIntent for the cart total and grab its client_secret.
   useEffect(() => {
     if (cartItems.length === 0 || amountCents <= 0 || sessionLoading || clientSecret) return;
+    if (startedRef.current) return; // don't create a second order on StrictMode's re-run
+    startedRef.current = true;
     const userId = session?.user?.id ?? "guest";
 
     async function startCheckout() {
