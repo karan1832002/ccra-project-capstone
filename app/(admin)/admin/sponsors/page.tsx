@@ -1,3 +1,4 @@
+// --- Sponsors Page Placeholder ---
 export default function AdminSponsorsPage() {
   return (
     <div className="p-8">
