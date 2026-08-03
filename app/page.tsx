@@ -1,11 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
 import ImageCarousel, { CarouselImage } from "@/components/ui/ImageCarousel";
 import SponsorsCarousel, { Sponsor } from "@/components/ui/SponsorsCarousel";
 import NewsletterCard from "@/components/ui/NewsletterCard";
+import { getPublishedNewsletters } from "@/app/(admin)/admin/newsletters/actions";
+import type { NewsletterRow } from "@/app/(admin)/admin/newsletters/actions";
 import {
   Calendar,
   ShoppingCart,
@@ -82,32 +85,37 @@ const sponsors: Sponsor[] = [
   },
 ];
 
-const newsletterItems = [
-  {
-    date: 'Date: MM DD–DD or "TBD"',
-    title: "Event Title",
-    description:
-      "Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.",
-    href: "/",
-  },
-  {
-    date: 'Date: MM DD–DD or "TBD"',
-    title: "Event Title",
-    description:
-      "Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.",
-    href: "/",
-  },
-  {
-    date: 'Date: MM DD–DD or "TBD"',
-    title: "Event Title",
-    description:
-      "Event description goes here. This is a brief overview of what attendees can expect at this event, including highlights and special features.",
-    href: "/",
-  },
-];
 
 export default function HomePage() {
   const { data: session } = useSession();
+
+  // --- Published Newsletter Fetch ---
+  // Calls getPublishedNewsletters() on mount in the browser. The result
+  // is an array of NewsletterRow objects from the database, filtered to
+  // published = true and ordered newest-first. Falls back to an empty
+  // array on error so the empty state renders instead of crashing.
+  const [newsletterItems, setNewsletterItems] = useState<NewsletterRow[]>([]);
+  const [newsLoading, setNewsLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    getPublishedNewsletters()
+      .then((data) => {
+        if (!cancelled) {
+          setNewsletterItems(data);
+          setNewsLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setNewsletterItems([]);
+          setNewsLoading(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
@@ -291,15 +299,53 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {newsletterItems.map((item, index) => (
-              <NewsletterCard
-                key={index}
-                date={item.date}
-                title={item.title}
-                description={item.description}
-                href={item.href}
-              />
-            ))}
+            {newsLoading ? (
+              /* --- Loading Skeleton --- */
+              Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-md border border-stone-200 bg-stone-50 p-8 shadow-sm animate-pulse"
+                >
+                  <div className="h-4 w-24 bg-stone-200 rounded mb-2" />
+                  <div className="h-6 w-48 bg-stone-200 rounded mb-3" />
+                  <div className="h-4 w-full bg-stone-200 rounded mb-6" />
+                  <div className="h-4 w-20 bg-stone-200 rounded" />
+                </div>
+              ))
+            ) : newsletterItems.length === 0 ? (
+              /* --- Empty State --- */
+              <div className="col-span-full flex flex-col items-center justify-center py-12 text-center">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-stone-100">
+                  <svg
+                    className="h-5 w-5 text-stone-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    />
+                  </svg>
+                </div>
+                <p className="text-sm text-stone-500">
+                  No recent updates. Check back soon.
+                </p>
+              </div>
+            ) : (
+              newsletterItems.map((item) => (
+                <NewsletterCard
+                  key={item.id}
+                  id={item.id}
+                  date={item.date}
+                  title={item.title}
+                  description={item.description}
+                />
+              ))
+            )}
           </div>
         </div>
       </section>
