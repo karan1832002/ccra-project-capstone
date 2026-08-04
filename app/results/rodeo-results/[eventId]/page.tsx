@@ -5,6 +5,7 @@ import Link from "next/link";
 import { RodeoEvent, ResultEntry } from "@/types/rodeo";
 import { getRodeoEvent, getResultsForEvent } from "@/lib/sampleRodeoData";
 import { ResultsTable, formatCurrency } from "@/components/rodeo/ResultsTable";
+import { pageStructure } from "@/lib/styles";
 
 interface RodeoResultsDetailPageProps {
   // Next.js provides dynamic route params as a Promise, so it's unwrapped
@@ -83,35 +84,45 @@ export default function RodeoResultsDetailPage({
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
-      {backLink}
+    <div className={pageStructure.pageWrapper}>
+      <div className={pageStructure.contentContainer}>
+        {backLink}
 
-      {/* Header on the left, payout summary on the right, tops aligned. */}
-      <div className="flex items-start justify-between gap-6 mb-6">
-        <div>
-          <h1 className="text-3xl font-semibold text-stone-950">{event.name} Results</h1>
-          <p className="text-sm text-stone-400">
-            {event.dateLabel}
-            {event.location ? ` · ${event.location}` : ""}
-          </p>
-        </div>
+        {/* Header on the left, payout summary on the right, tops aligned. */}
+        <div className="flex items-start justify-between gap-6 mb-6">
+          <div>
+            <h1 className="text-3xl font-semibold text-stone-950">
+              {event.name} Results
+            </h1>
+            <p className="text-sm text-stone-400">
+              {event.dateLabel}
+              {event.location ? ` · ${event.location}` : ""}
+            </p>
+          </div>
 
-        {/* Rodeo-wide payout summary. A two-column grid (label / value)
+          {/* Rodeo-wide payout summary. A two-column grid (label / value)
             keeps every colon and every $ amount aligned in its own column,
             regardless of how long each label is*/}
-        <div className="text-sm text-stone-600 shrink-0">
-          <div className="grid grid-cols-[auto_auto] gap-x-2 gap-y-1">
-            <span className="text-right">Money:</span>
-            <span className="font-semibold text-stone-950">{formatCurrency(totalMoney)}</span>
-            <span className="text-right">Ground:</span>
-            <span className="font-semibold text-stone-950">{formatCurrency(totalGroundMoney)}</span>
-            <span className="text-right">Total Payout:</span>
-            <span className="font-semibold text-stone-950">{formatCurrency(totalPayout)}</span>
+          <div className="text-sm text-stone-600 shrink-0">
+            <div className="grid grid-cols-[auto_auto] gap-x-2 gap-y-1">
+              <span className="text-right">Money:</span>
+              <span className="font-semibold text-stone-950">
+                {formatCurrency(totalMoney)}
+              </span>
+              <span className="text-right">Ground:</span>
+              <span className="font-semibold text-stone-950">
+                {formatCurrency(totalGroundMoney)}
+              </span>
+              <span className="text-right">Total Payout:</span>
+              <span className="font-semibold text-stone-950">
+                {formatCurrency(totalPayout)}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <ResultsTable entries={results} performances={event.performances} />
+        <ResultsTable entries={results} performances={event.performances} />
+      </div>
     </div>
   );
 }

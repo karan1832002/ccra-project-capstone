@@ -7,6 +7,7 @@ import { RodeoEventCard } from "@/components/rodeo/RodeoEventCard";
 import { ResultsPreview } from "@/components/rodeo/ResultsPreview";
 import { EventFilterBar } from "@/components/rodeo/EventFilterBar";
 import Hero from "@/components/ui/Hero";
+import { pageStructure } from "@/lib/styles";
 
 export default function RodeoResultsPage() {
   const [events, setEvents] = useState<RodeoEvent[]>([]);
@@ -61,42 +62,43 @@ export default function RodeoResultsPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4">
-
-      {/* RULEBOOK STYLE HEADING */}
+    <div className={pageStructure.pageWrapper}>
+      {/* HEADING */}
       <Hero
         badge="OFFICIAL RESULTS"
         title="Rodeo Results"
         description="Review results from completed rodeos, including event standings and competitor performances. Select a rodeo to view the full results breakdown."
       />
-   
-      <EventFilterBar
-        search={search}
-        onSearchChange={setSearch}
-        year={year}
-        onYearChange={setYear}
-        years={years}
-      />
 
-      {visibleEvents.length === 0 && (
-        <p className="text-sm text-stone-400 py-6">No matching rodeos.</p>
-      )}
+      <div className={pageStructure.contentContainer}>
+        <EventFilterBar
+          search={search}
+          onSearchChange={setSearch}
+          year={year}
+          onYearChange={setYear}
+          years={years}
+        />
 
-      {eventsWithYearHeaders.map(({ event, showYearHeader }) => (
-        <React.Fragment key={event.id}>
-          {showYearHeader && (
-            <div className="text-xs font-semibold text-stone-400 mt-5 mb-2">
-              {event.year}
-            </div>
-          )}
-          <RodeoEventCard event={event}>
-            <ResultsPreview
-              eventId={event.id}
-              entries={resultsByEvent.get(event.id) ?? []}
-            />
-          </RodeoEventCard>
-        </React.Fragment>
-      ))}
+        {visibleEvents.length === 0 && (
+          <p className="text-sm text-stone-400 py-6">No matching rodeos.</p>
+        )}
+
+        {eventsWithYearHeaders.map(({ event, showYearHeader }) => (
+          <React.Fragment key={event.id}>
+            {showYearHeader && (
+              <div className="text-xs font-semibold text-stone-400 mt-5 mb-2">
+                {event.year}
+              </div>
+            )}
+            <RodeoEventCard event={event}>
+              <ResultsPreview
+                eventId={event.id}
+                entries={resultsByEvent.get(event.id) ?? []}
+              />
+            </RodeoEventCard>
+          </React.Fragment>
+        ))}
+      </div>
     </div>
   );
 }

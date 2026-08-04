@@ -1,6 +1,10 @@
 import { CurrentEntriesTable } from "@/components/rodeo/CurrentEntriesTable";
 import Hero from "@/components/ui/Hero";
-import { getCurrentEntriesForUpcomingRodeos, getRodeoEvents } from "@/lib/sampleRodeoData";
+import { pageStructure } from "@/lib/styles";
+import {
+  getCurrentEntriesForUpcomingRodeos,
+  getRodeoEvents,
+} from "@/lib/sampleRodeoData";
 
 export default async function CurrentEntriesPage() {
   const [entries, rodeos] = await Promise.all([
@@ -9,13 +13,16 @@ export default async function CurrentEntriesPage() {
   ]);
 
   return (
-    <main className="p-8 flex flex-col items-center">
+    <main className={pageStructure.pageWrapper}>
       <Hero
         badge="UPCOMING RODEOS"
         title="Current Entries"
         description="Check out the latest lineup of competitors for upcoming rodeos. Entries are updated as they come in, so check back often."
       />
-      <CurrentEntriesTable entries={entries} rodeos={rodeos} />
+
+      <div className={pageStructure.contentContainer}>
+        <CurrentEntriesTable entries={entries} rodeos={rodeos} />
+      </div>
     </main>
   );
 }

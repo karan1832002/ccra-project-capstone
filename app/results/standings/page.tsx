@@ -5,6 +5,7 @@ import { ResultEntry } from "@/types/rodeo";
 import { getCompletedRodeoEvents, getAllResults } from "@/lib/sampleRodeoData";
 import StandingsTable from "@/components/rodeo/StandingsTable";
 import Hero from "@/components/ui/Hero";
+import { pageStructure } from "@/lib/styles";
 
 export default function RodeoStandingsPage() {
   const [entries, setEntries] = useState<ResultEntry[]>([]);
@@ -45,7 +46,7 @@ export default function RodeoStandingsPage() {
   }
 
   return (
-    <div className="w-full py-8 px-4 max-w-4xl mx-auto">
+    <div className={pageStructure.pageWrapper}>
       {/* HEADING */}
       <Hero
         badge="SEASON STANDINGS"
@@ -53,40 +54,42 @@ export default function RodeoStandingsPage() {
         description="View current CCRA standings and track competitor rankings throughout the season. Follow points earned across all rodeo events as athletes compete for the top spots."
       />
 
-      {/* SEARCH + FILTER BAR */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
-        <input
-          type="text"
-          placeholder="Search competitor..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full md:w-1/2 rounded-md border border-stone-300 px-4 py-2"
-        />
+      <div className={pageStructure.contentContainer}>
+        {/* SEARCH + FILTER BAR */}
+        <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <input
+            type="text"
+            placeholder="Search competitor..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full md:w-1/2 rounded-md border border-stone-300 px-4 py-2"
+          />
 
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full md:w-1/2 rounded-md border border-stone-300 px-4 py-2"
-        >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat === "all" ? "All Categories" : cat}
-            </option>
-          ))}
-        </select>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full md:w-1/2 rounded-md border border-stone-300 px-4 py-2"
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat === "all" ? "All Categories" : cat}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* NO RESULTS */}
+        {filteredEntries.length === 0 && (
+          <p className="text-sm text-stone-400 py-6 text-center">
+            No standings found.
+          </p>
+        )}
+
+        {/* STANDINGS TABLE */}
+        {filteredEntries.length > 0 && (
+          <StandingsTable entries={filteredEntries} />
+        )}
       </div>
-      
-      {/* NO RESULTS */}
-      {filteredEntries.length === 0 && (
-        <p className="text-sm text-stone-400 py-6 text-center">
-          No standings found.
-        </p>
-      )}
-
-      {/* STANDINGS TABLE */}
-      {filteredEntries.length > 0 && (
-        <StandingsTable entries={filteredEntries} />
-      )}
     </div>
   );
 }
