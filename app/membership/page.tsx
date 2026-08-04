@@ -25,7 +25,6 @@ export default function MembershipPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [submitting, setSubmitting] = useState(false);
-  const [captchaChecked, setCaptchaChecked] = useState(false);
   const [agreeInfoCorrect, setAgreeInfoCorrect] = useState(false);
   const [agreeRules, setAgreeRules] = useState(false);
 
@@ -92,10 +91,6 @@ export default function MembershipPage() {
     if (!agreeInfoCorrect || !agreeRules) {
       newErrors.agreements =
         "You must certify info, and accept CCRA rules.";
-    }
-
-    if (!captchaChecked) {
-      newErrors.captcha = "Please complete the CAPTCHA.";
     }
 
     setErrors(newErrors);
@@ -460,7 +455,7 @@ export default function MembershipPage() {
                   : "border-gray-300 bg-white hover:bg-gray-100"
               }`}
             >
-              <div className="font-semibold mb-1">💳 Credit Card (Stripe)</div>
+              <div className="font-semibold mb-1">💳 Credit Card</div>
               <div className="text-xs">
                 Pay instantly with Visa, MasterCard, or Amex.
               </div>
