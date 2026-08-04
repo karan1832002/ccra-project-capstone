@@ -18,6 +18,7 @@
 import { useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
+import { iconButtonClass } from "@/lib/styles";
 
 export interface SidebarProps {
   isOpen: boolean;
@@ -63,18 +64,16 @@ export default function Sidebar({
         type="button"
         onClick={onClose}
         aria-label={`Close ${title.toLowerCase()} overlay`}
-        className={
-          isOpen
-            ? "absolute inset-0 bg-stone-950/45 opacity-100 transition-opacity duration-300 ease-in-out"
-            : "absolute inset-0 bg-stone-950/45 opacity-0 transition-opacity duration-300 ease-in-out"
-        }
+        className={`absolute inset-0 bg-stone-950/45 transition-opacity duration-300 ease-in-out ${
+          isOpen ? "opacity-100" : "opacity-0"
+        }`}
       />
 
       {/* Sidebar panel */}
       <aside
         id={id}
         className={[
-          "absolute top-0 h-full w-[85%] max-w-sm overflow-y-auto bg-white p-5 shadow-lg transition-transform duration-300",
+          "absolute top-0 h-full w-[85%] max-w-sm overflow-y-auto bg-surface p-5 shadow-lg transition-transform duration-300",
           isLeft ? "left-0" : "right-0",
           isOpen
             ? "translate-x-0"
@@ -84,11 +83,11 @@ export default function Sidebar({
         ].join(" ")}
       >
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-stone-950">{title}</span>
+          <span className="text-sm font-semibold text-heading">{title}</span>
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-stone-600 transition hover:bg-orange-50"
+            className={iconButtonClass}
             aria-label={`Close ${title.toLowerCase()}`}
           >
             <X className="h-6 w-6" />

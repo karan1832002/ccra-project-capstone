@@ -43,11 +43,11 @@ export default function DropdownMenu({
       {path ? (
         <Link
           href={path}
-          className={`inline-flex items-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition
+          className={`inline-flex items-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium hover:bg-highlight transition
             ${
               isActiveTop
-                ? "text-orange-600 font-semibold underline underline-offset-4"
-                : "text-stone-600 hover:bg-orange-50 hover:text-stone-950"
+                ? "text-primary font-semibold underline underline-offset-4"
+                : "text-foreground hover:text-heading"
             }
           `}
         >
@@ -57,11 +57,11 @@ export default function DropdownMenu({
         <button
           type="button"
           onClick={() => setIsOpen((open) => !open)}
-          className={`inline-flex items-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition
+          className={`inline-flex items-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium hover:bg-highlight transition
             ${
               isActiveTop
-                ? "text-orange-600 font-semibold underline underline-offset-4"
-                : "text-stone-600 hover:bg-orange-50 hover:text-stone-950"
+                ? "text-primary font-semibold underline underline-offset-4"
+                : "text-foreground hover:text-heading"
             }
           `}
           aria-haspopup={hasSubItems ? "true" : undefined}
@@ -73,7 +73,7 @@ export default function DropdownMenu({
 
       {/* Dropdown flyout */}
       {hasSubItems && isOpen && (
-        <div className="absolute top-full left-0 min-w-[180px] rounded-md border border-stone-200 bg-white p-2 shadow-lg z-20">
+        <div className="absolute top-full left-0 min-w-[180px] rounded-md border border-border bg-surface p-2 shadow-lg z-20">
           <ul className="m-0 list-none p-0">
             {subItems!.map((subItem) => {
               const subActive = pathname.startsWith(subItem.path);
@@ -82,11 +82,11 @@ export default function DropdownMenu({
                 <li key={subItem.label}>
                   <Link
                     href={subItem.path}
-                    className={`block rounded-md px-3 py-2 text-sm transition
+                    className={`block rounded-md px-3 py-2 text-sm hover:bg-highlight transition
                       ${
                         subActive
-                          ? "text-orange-600 font-semibold bg-orange-50 underline underline-offset-4"
-                          : "text-stone-600 hover:bg-orange-50 hover:text-stone-950"
+                          ? "text-primary font-semibold underline underline-offset-4"
+                          : "text-foreground hover:text-heading"
                       }
                     `}
                   >
