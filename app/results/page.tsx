@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ListOrdered, BarChart3, Crown, ArrowRight } from "lucide-react";
 import Hero from "@/components/ui/Hero";
-import { pageStructure, buttons } from "@/lib/styles";
+import { pageStructure, layout, buttons } from "@/lib/styles";
 
 // One card per Results submenu item (see the header nav). Update this array
 // if a submenu item is renamed, added, or removed so the cards stay in sync
@@ -61,7 +61,7 @@ const flow = [
 // to each Results submenu page (Rodeo Results, Standings, Past Champions).
 export default function ResultsPage() {
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
+    <div className={pageStructure.pageWrapper}>
       {/* ================= HERO ================= */}
       <Hero
         badge="POINTS & PLACINGS"
@@ -69,13 +69,15 @@ export default function ResultsPage() {
         description="Follow the season from rodeo to rodeo, see where everyone stands, and look back at the champions who came before."
       />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+      <div className={pageStructure.contentContainer}>
         {/* ================= OVERVIEW =================
             Intro copy explaining how a single rodeo's results feed into
             the season standings and, eventually, the record of past
             champions. Pairs with primary CTAs into Rodeo Results and
             Standings. */}
-        <div className="grid lg:grid-cols-2 gap-16 py-20 items-center">
+        <div
+          className={`${pageStructure.firstSectionWrapper} ${layout.twoColumnGrid}`}
+        >
           <div>
             <div className={`${pageStructure.eyebrowLabel} mb-4`}>
               OUR RECORD
@@ -84,7 +86,7 @@ export default function ResultsPage() {
               Every Run Counted
             </h2>
 
-            <div className="prose prose-stone text-stone-600 space-y-6 text-lg dark:prose-invert dark:text-stone-300">
+            <div className="prose text-foreground space-y-6 text-lg">
               <p>
                 Every rodeo on the schedule adds to the story of the season. As
                 soon as a rodeo wraps up, its results are posted event by event,
@@ -115,7 +117,7 @@ export default function ResultsPage() {
           </div>
 
           {/* Visual: image + overlay caption. */}
-          <div className="relative rounded-md shadow-sm overflow-hidden aspect-[16/10] bg-stone-200 dark:bg-stone-800">
+          <div className="relative rounded-md shadow-sm overflow-hidden aspect-[16/10] bg-background">
             <Image
               src="/images/ccraresults.jpg"
               alt="Competitor celebrating a result at a Canadian Classic Rodeo event"
@@ -150,18 +152,18 @@ export default function ResultsPage() {
               <Link
                 key={href}
                 href={href}
-                className="group rounded-md border border-stone-200 bg-white p-8 shadow-sm hover:shadow-lg transition dark:border-stone-700 dark:bg-stone-900"
+                className="group rounded-md border border-border bg-surface p-8 shadow-sm hover:shadow-lg transition"
               >
-                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-orange-100 text-orange-600 dark:bg-orange-950/40 dark:text-orange-400">
+                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-foreground">
                   <Icon className="h-6 w-6" />
                 </div>
-                <h3 className="text-2xl font-semibold text-stone-950 mb-3 dark:text-stone-100">
+                <h3 className="text-2xl font-semibold text-heading mb-3">
                   {title}
                 </h3>
-                <p className="text-stone-600 mb-4 dark:text-stone-300">
+                <p className="text-foreground mb-4">
                   {description}
                 </p>
-                <div className="inline-flex items-center gap-2 text-sm font-semibold text-orange-600 dark:text-orange-400">
+                <div className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
                   Go to {title}
                   <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
                 </div>
@@ -182,20 +184,20 @@ export default function ResultsPage() {
             </h2>
           </div>
 
-          <div className="bg-white rounded-md border border-stone-200 p-12 dark:border-stone-700 dark:bg-stone-900">
+          <div className={pageStructure.contentPanel}>
             <div className="max-w-3xl mx-auto space-y-12">
               {flow.map(({ step, title, description }) => (
                 <div key={step} className="flex gap-8">
                   <div className="w-28 flex-shrink-0 text-right">
-                    <div className="font-semibold text-orange-600 dark:text-orange-400">
+                    <div className="font-semibold text-primary">
                       Step {step}
                     </div>
                   </div>
                   <div>
-                    <div className="font-semibold text-stone-950 dark:text-stone-100">
+                    <div className="font-semibold text-heading">
                       {title}
                     </div>
-                    <p className="text-stone-600 mt-1 dark:text-stone-300">
+                    <p className="text-foreground mt-1">
                       {description}
                     </p>
                   </div>
@@ -215,9 +217,9 @@ export default function ResultsPage() {
             </h2>
           </div>
 
-          <div className="bg-white rounded-md border border-stone-200 p-12 dark:border-stone-700 dark:bg-stone-900">
+          <div className={pageStructure.contentPanel}>
             <div className="max-w-md mx-auto text-center">
-              <p className="text-stone-600 mb-8 dark:text-stone-300">
+              <p className="text-foreground mb-8">
                 Past Champions has the top competitor in every event category
                 from previous seasons — a running record of who's stood at the
                 top of the CCRA.

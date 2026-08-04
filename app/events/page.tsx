@@ -9,7 +9,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Hero from "@/components/ui/Hero";
-import { pageStructure, buttons } from "@/lib/styles";
+import { pageStructure, layout, buttons } from "@/lib/styles";
 
 // One card per Events submenu item (see the header nav). Update this array
 // if a submenu item is renamed, added, or removed so the cards stay in sync
@@ -93,7 +93,7 @@ const steps = [
 // (Enter Rodeo, Current Entries, Rodeo Draws, Rodeo Approval Form, Rulebook).
 export default function EventsPage() {
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
+    <div className={pageStructure.pageWrapper}>
       {/* ================= HERO ================= */}
       <Hero
         badge="GATE TO GATE"
@@ -101,38 +101,36 @@ export default function EventsPage() {
         description="Everything you need to find a rodeo, enter your events, and see how you stack up against the field."
       />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+      <div className={pageStructure.contentContainer}>
         {/* ================= OVERVIEW =================
             Intro copy explaining the rodeo/event relationship (a season
             contains many rodeos, each rodeo contains many events), with
             primary CTAs to Schedule and Enter Rodeo. */}
-        <div className="grid lg:grid-cols-2 gap-16 py-20 items-center">
+        <div
+          className={`${pageStructure.firstSectionWrapper} ${layout.twoColumnGrid}`}
+        >
           <div>
-            <div className={pageStructure.eyebrowLabel}>
-              HOW IT WORKS
-            </div>
+            <div className={pageStructure.eyebrowLabel}>HOW IT WORKS</div>
             <h2 className={`${pageStructure.sectionHeading} mb-8`}>
               A Season Full of Rodeos
             </h2>
 
-            <div className="prose prose-stone text-stone-600 space-y-6 text-lg dark:prose-invert dark:text-stone-300">
+            <div className="prose text-foreground space-y-6 text-lg">
               <p>
-                Throughout the season, the CCRA hosts rodeos across the province, and each
-                rodeo brings together a full slate of individual events — from the roughstock
-                events to timed events and everything in between.
+                Throughout the season, the CCRA hosts rodeos across the
+                province, and each rodeo brings together a full slate of
+                individual events — from the roughstock events to timed events
+                and everything in between.
               </p>
               <p>
-                Competitors can browse this season's full lineup on the Schedule page, then
-                use the tools below to enter, track entries, and check draw sheets for each
-                rodeo they're headed to.
+                Competitors can browse this season's full lineup on the Schedule
+                page, then use the tools below to enter, track entries, and
+                check draw sheets for each rodeo they're headed to.
               </p>
             </div>
 
             <div className="mt-10 flex items-center gap-4">
-              <Link
-                href="/schedule"
-                className={buttons.primaryButton}
-              >
+              <Link href="/schedule" className={buttons.primaryButton}>
                 View 2026 Schedule
               </Link>
               <Link
@@ -145,7 +143,7 @@ export default function EventsPage() {
           </div>
 
           {/* Visual: image + overlay caption. */}
-          <div className="relative rounded-md shadow-sm overflow-hidden aspect-[16/10] bg-stone-200 dark:bg-stone-800">
+          <div className="relative rounded-md shadow-sm overflow-hidden aspect-[16/10] bg-background">
             <Image
               src="/images/ccraevents.jpg"
               alt="Competitor entering the arena at a Canadian Classic Rodeo event"
@@ -157,7 +155,9 @@ export default function EventsPage() {
               <div className="text-sm uppercase tracking-widest opacity-75">
                 Rodeos This Season
               </div>
-              <div className="text-3xl font-semibold">See the Full Schedule</div>
+              <div className="text-3xl font-semibold">
+                See the Full Schedule
+              </div>
             </div>
           </div>
         </div>
@@ -168,9 +168,7 @@ export default function EventsPage() {
             editing this markup directly. */}
         <div className={pageStructure.sectionWrapper}>
           <div className="text-center mb-16">
-            <div className={pageStructure.eyebrowLabel}>
-              MANAGE YOUR SEASON
-            </div>
+            <div className={pageStructure.eyebrowLabel}>MANAGE YOUR SEASON</div>
             <h2 className={pageStructure.sectionHeading}>
               Everything In One Place
             </h2>
@@ -182,16 +180,16 @@ export default function EventsPage() {
               <Link
                 key={href}
                 href={href}
-                className="group rounded-md border border-stone-200 bg-white p-8 shadow-sm hover:shadow-lg transition dark:border-stone-700 dark:bg-stone-900"
+                className="group rounded-md border border-border bg-surface p-8 shadow-sm hover:shadow-lg transition"
               >
-                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-orange-100 text-orange-600 dark:bg-orange-950/40 dark:text-orange-400">
+                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-foreground">
                   <Icon className="h-6 w-6" />
                 </div>
-                <h3 className="text-2xl font-semibold text-stone-950 mb-3 dark:text-stone-100">
+                <h3 className="text-2xl font-semibold text-heading mb-3">
                   {title}
                 </h3>
-                <p className="text-stone-600 mb-4 dark:text-stone-300">{description}</p>
-                <div className="inline-flex items-center gap-2 text-sm font-semibold text-orange-600 dark:text-orange-400">
+                <p className="text-foreground mb-4">{description}</p>
+                <div className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
                   Go to {title}
                   <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
                 </div>
@@ -205,28 +203,24 @@ export default function EventsPage() {
             List is rendered from the steps array above. */}
         <div className={pageStructure.sectionWrapper}>
           <div className="text-center mb-16">
-            <div className={pageStructure.eyebrowLabel}>
-              THE PROCESS
-            </div>
+            <div className={pageStructure.eyebrowLabel}>THE PROCESS</div>
             <h2 className={pageStructure.sectionHeading}>
               From Entry to Arena
             </h2>
           </div>
 
-          <div className="bg-white rounded-md border border-stone-200 p-12 dark:border-stone-700 dark:bg-stone-900">
+          <div className={pageStructure.contentPanel}>
             <div className="max-w-3xl mx-auto space-y-12">
               {steps.map(({ step, title, description }) => (
                 <div key={step} className="flex gap-8">
                   <div className="w-28 flex-shrink-0 text-right">
-                    <div className="font-semibold text-orange-600 dark:text-orange-400">
+                    <div className="font-semibold text-primary">
                       Step {step}
                     </div>
                   </div>
                   <div>
-                    <div className="font-semibold text-stone-950 dark:text-stone-100">
-                      {title}
-                    </div>
-                    <p className="text-stone-600 mt-1 dark:text-stone-300">{description}</p>
+                    <div className="font-semibold text-heading">{title}</div>
+                    <p className="text-foreground mt-1">{description}</p>
                   </div>
                 </div>
               ))}
@@ -238,24 +232,17 @@ export default function EventsPage() {
             Closing call-to-action pointing to the Rulebook submenu page. */}
         <div className={pageStructure.sectionWrapper}>
           <div className="text-center mb-16">
-            <div className={pageStructure.eyebrowLabel}>
-              BEFORE YOU COMPETE
-            </div>
-            <h2 className={pageStructure.sectionHeading}>
-              Know the Rules
-            </h2>
+            <div className={pageStructure.eyebrowLabel}>BEFORE YOU COMPETE</div>
+            <h2 className={pageStructure.sectionHeading}>Know the Rules</h2>
           </div>
 
-          <div className="bg-white rounded-md border border-stone-200 p-12 dark:border-stone-700 dark:bg-stone-900">
+          <div className={pageStructure.contentPanel}>
             <div className="max-w-md mx-auto text-center">
-              <p className="text-stone-600 mb-8 dark:text-stone-300">
-                The Rulebook page has the current rules and our bylaws — everything you need to
-                compete with confidence.
+              <p className="text-foreground mb-8">
+                The Rulebook page has the current rules and our bylaws —
+                everything you need to compete with confidence.
               </p>
-              <Link
-                href="/events/rulebook"
-                className={buttons.primaryButton}
-              >
+              <Link href="/events/rulebook" className={buttons.primaryButton}>
                 View the Rulebook
               </Link>
             </div>
