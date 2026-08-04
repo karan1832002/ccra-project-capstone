@@ -16,6 +16,7 @@ import { Menu } from "lucide-react";
 import Sidebar from "../ui/Sidebar";
 import NavList from "../ui/NavList";
 import type { NavItem } from "./Header";
+import { iconButtonClass } from "@/lib/styles";
 
 export interface MobileNavProps {
   items: NavItem[];
@@ -34,7 +35,7 @@ export default function MobileNav({ items }: MobileNavProps) {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-stone-600 transition hover:bg-orange-50 lg:hidden"
+        className={`${iconButtonClass} lg:hidden`}
         aria-label="Open navigation menu"
         aria-expanded={isOpen}
         aria-controls="nav-sidebar"

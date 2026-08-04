@@ -19,6 +19,24 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                // Prior explicit choice, if any
+                const stored = localStorage.getItem('theme');
+
+                // Fallback: system dark mode setting
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                // Set before paint to avoid a flash of the wrong theme
+                if (stored === 'dark' || (!stored && prefersDark)) {
+                  document.documentElement.classList.add('dark');
+                }
+              })();
+            `,
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"

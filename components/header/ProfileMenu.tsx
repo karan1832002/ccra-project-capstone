@@ -15,6 +15,7 @@ import { UserRound } from "lucide-react";
 import { signOut, useSession } from "@/lib/auth-client";
 import Sidebar from "../ui/Sidebar";
 import NavList, { type NavListItem } from "../ui/NavList";
+import { iconButtonClass } from "@/lib/styles";
 
 // TODO: replace with real links as pages are created.
 // Structure supports plain links (just a path) and collapsible parents (a subItems array instead of a path).
@@ -49,7 +50,7 @@ export default function ProfileMenu() {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="inline-flex h-10 w-10 items-center justify-center rounded-md text-stone-600 transition hover:bg-orange-50"
+        className={iconButtonClass}
         aria-label="Open profile menu"
         aria-expanded={isOpen}
         aria-controls="profile-sidebar"

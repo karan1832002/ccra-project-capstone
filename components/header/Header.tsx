@@ -1,7 +1,7 @@
 /**
  * Header
  * ------
- * Site header: logo, top-level nav, cart, and sign-in/profile.
+ * Site header: logo, top-level nav, cart, admin, and sign-in/profile.
  *
  * Responsive nav strategy:
  * - >= lg: full DropdownMenu row (hover flyouts), MobileNav's hamburger
@@ -18,9 +18,11 @@ import Link from "next/link";
 import DropdownMenu from "./DropdownMenu";
 import ProfileMenu from "./ProfileMenu";
 import MobileNav from "./MobileNav";
+import ThemeToggle from "../ui/ThemeToggle";
 import { LogIn, ShoppingCart, Shield } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import { usePathname } from "next/navigation";
+import { iconButtonClass, iconButtonHighlightClass } from "@/lib/styles";
 
 // A sub-item is always a simple link — no further nesting, path required.
 export interface NavSubItem {
@@ -31,10 +33,14 @@ export interface NavSubItem {
 export interface NavItem {
   label: string;
   path?: string;
+  // Optional submenu items, e.g. About Us -> Contact Information, Board of Directors.
+  // Omit this field entirely for menus that don't have submenus.
+  // An item has either a path OR subItems, never both.
   subItems?: NavSubItem[];
 }
 
-// ⭐ UPDATED NAV ITEMS — EXACT ORDER YOU REQUESTED
+// Update this list any time the site's top-level sections change.
+// Add a `subItems` array to any entry that needs a submenu.
 const NAV_ITEMS: NavItem[] = [
   { label: "Home", path: "/" },
   { label: "Membership", path: "/membership" },
@@ -83,22 +89,24 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-border bg-surface/90 backdrop-blur">
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-2 px-4 sm:px-6 lg:px-8">
-        
-        {/* Logo */}
+        {/* Logo — links back to homepage */}
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-3 text-stone-950"
+          className="flex shrink-0 items-center gap-3"
           aria-label="Go to homepage"
         >
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-orange-600 text-sm font-semibold text-white">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
             CCRA
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Main navigation">
+        {/* Desktop Navigation — hidden below lg in favor of the MobileNav */}
+        <nav
+          className="hidden items-center gap-1 lg:flex"
+          aria-label="Main navigation"
+        >
           <ul className="m-0 flex list-none items-center gap-6 p-0">
             {NAV_ITEMS.map((item) => (
               <li key={item.label}>
@@ -112,28 +120,28 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* Mobile Nav + Cart + Profile */}
+        {/* Mobile Nav + Cart + Admin + Profile */}
         <div className="flex shrink-0 items-center gap-2">
           <MobileNav items={NAV_ITEMS} />
 
-          <Link
-            href="/cart"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-stone-700 transition hover:bg-stone-100"
-            aria-label="View cart"
-          >
+          <ThemeToggle />
+
+          <Link href="/cart" className={iconButtonClass} aria-label="View cart">
             <ShoppingCart className="h-5 w-5" />
           </Link>
 
           {isAdmin && (
             <Link
               href="/admin"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-md text-orange-600 transition hover:bg-orange-50"
+              className={`${iconButtonHighlightClass} text-accent-foreground hover:text-accent-foreground`}
               aria-label="Admin Dashboard"
             >
               <Shield className="h-5 w-5" />
             </Link>
           )}
 
+          {/* While the session is loading, render a same-sized placeholder to
+              avoid a layout shift / flash between the two states below. */}
           {isPending ? (
             <div className="h-10 w-10" aria-hidden="true" />
           ) : isSignedIn ? (
@@ -141,11 +149,13 @@ export default function Header() {
           ) : (
             <Link
               href="/sign-in"
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-orange-600 px-3 text-sm font-semibold text-white transition hover:bg-orange-700 lg:px-5 lg:py-3"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover lg:px-5 lg:py-3"
               aria-label="Sign In"
             >
               <LogIn className="h-4 w-4 shrink-0" />
-              <span className="hidden whitespace-nowrap lg:inline">Sign In</span>
+              <span className="hidden whitespace-nowrap lg:inline">
+                Sign In
+              </span>
             </Link>
           )}
         </div>
