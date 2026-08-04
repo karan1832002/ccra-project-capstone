@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin-auth";
 import ConfirmForm from "@/components/ui/ConfirmForm";
+import LogoUploader from "./LogoUploader";
 import type { SponsorRow } from "./actions";
 import {
   getAdminSponsors,
@@ -95,18 +96,7 @@ export default async function AdminSponsorsPage({
                 className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-400 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700">
-                Logo URL
-              </label>
-              <input
-                name="logo"
-                type="url"
-                defaultValue={editingRow?.logo ?? ""}
-                placeholder="https://example.com/logo.png"
-                className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-400 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
-              />
-            </div>
+            <LogoUploader key={editingId ?? "new"} defaultLogo={editingRow?.logo ?? ""} />
           </div>
 
           <div>

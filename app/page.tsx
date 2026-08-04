@@ -5,10 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
 import ImageCarousel, { CarouselImage } from "@/components/ui/ImageCarousel";
-import SponsorsCarousel, { Sponsor } from "@/components/ui/SponsorsCarousel";
+import SponsorsCarousel from "@/components/ui/SponsorsCarousel";
 import NewsletterCard from "@/components/ui/NewsletterCard";
 import { getPublishedNewsletters } from "@/app/(admin)/admin/newsletters/actions";
 import type { NewsletterRow } from "@/app/(admin)/admin/newsletters/actions";
+import { getVisibleSponsors } from "@/app/(admin)/admin/sponsors/actions";
+import type { SponsorRow } from "@/app/(admin)/admin/sponsors/actions";
 import {
   Calendar,
   ShoppingCart,
@@ -32,58 +34,6 @@ const heroImages: CarouselImage[] = [
   },
 ];
 
-// Placeholder – replace with data from your admin/API
-const sponsors: Sponsor[] = [
-  {
-    id: 1,
-    src: "/images/sponsors/sponsor1-strathmorestampede.png",
-    alt: "Strathmore Stampede",
-  },
-  {
-    id: 2,
-    src: "/images/sponsors/sponsor2-uncommonciderco.png",
-    alt: "Uncommon Cider Co",
-  },
-  { id: 3, src: "/images/sponsors/sponsor3-ufa.webp", alt: "UFA" },
-  {
-    id: 4,
-    src: "/images/sponsors/sponsor4-summitmotorsltd.jpg",
-    alt: "Summit Motors Ltd",
-  },
-  {
-    id: 5,
-    src: "/images/sponsors/sponsor5-lesfermescavendishfarms.png",
-    alt: "Les Fermes Cavendish Farms",
-  },
-  {
-    id: 6,
-    src: "/images/sponsors/sponsor6-statsgroup.png",
-    alt: "Stats Group",
-  },
-  {
-    id: 7,
-    src: "/images/sponsors/sponsor7-vaneelivestocktrucking.png",
-    alt: "Van Ee Livestock Trucking",
-  },
-  { id: 8, src: "/images/sponsors/sponsor8-vantage.png", alt: "Vantage" },
-  {
-    id: 9,
-    src: "/images/sponsors/sponsor9-troyfischersilverworks.jpg",
-    alt: "Troy Fischer Silverworks",
-  },
-  { id: 10, src: "/images/sponsors/sponsor10.jpg", alt: "Sponsor 10" },
-  { id: 11, src: "/images/sponsors/sponsor11.jpg", alt: "Sponsor 11" },
-  {
-    id: 12,
-    src: "/images/sponsors/sponsor12-townoftaber.jpg",
-    alt: "Town of Taber",
-  },
-  {
-    id: 13,
-    src: "/images/sponsors/sponsor13.jpg",
-    alt: "South West Senior Rodeo",
-  },
-];
 
 
 export default function HomePage() {
@@ -97,19 +47,29 @@ export default function HomePage() {
   const [newsletterItems, setNewsletterItems] = useState<NewsletterRow[]>([]);
   const [newsLoading, setNewsLoading] = useState(true);
 
+  const [sponsorItems, setSponsorItems] = useState<SponsorRow[]>([]);
+  const [sponsorLoading, setSponsorLoading] = useState(true);
+
   useEffect(() => {
     let cancelled = false;
-    getPublishedNewsletters()
-      .then((data) => {
+    Promise.all([
+      getPublishedNewsletters(),
+      getVisibleSponsors(),
+    ])
+      .then(([news, sponsors]) => {
         if (!cancelled) {
-          setNewsletterItems(data);
+          setNewsletterItems(news);
+          setSponsorItems(sponsors);
           setNewsLoading(false);
+          setSponsorLoading(false);
         }
       })
       .catch(() => {
         if (!cancelled) {
           setNewsletterItems([]);
+          setSponsorItems([]);
           setNewsLoading(false);
+          setSponsorLoading(false);
         }
       });
     return () => {
@@ -232,7 +192,20 @@ export default function HomePage() {
           </div>
 
           <div className="max-w-xl mx-auto">
-            <SponsorsCarousel sponsors={sponsors} autoPlay interval={3500} />
+            <SponsorsCarousel
+              sponsors={
+                sponsorLoading
+                  ? []
+                  : sponsorItems.map((s) => ({
+                      id: s.id,
+                      src: s.logo ?? "",
+                      alt: s.name,
+                      href: s.website ?? undefined,
+                    }))
+              }
+              autoPlay
+              interval={3500}
+            />
           </div>
 
           <div className="mt-5 text-center">
