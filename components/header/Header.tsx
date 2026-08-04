@@ -35,7 +35,6 @@ export interface NavItem {
   path?: string;
   // Optional submenu items, e.g. About Us -> Contact Information, Board of Directors.
   // Omit this field entirely for menus that don't have submenus.
-  // An item has either a path OR subItems, never both.
   subItems?: NavSubItem[];
 }
 
@@ -48,6 +47,7 @@ const NAV_ITEMS: NavItem[] = [
 
   {
     label: "Events",
+    path: "/events",
     subItems: [
       { label: "Enter Rodeo", path: "/events/enter-rodeo" },
       { label: "Current Entries", path: "/events/current-entries" },
@@ -59,6 +59,7 @@ const NAV_ITEMS: NavItem[] = [
 
   {
     label: "Results",
+    path: "/results",
     subItems: [
       { label: "Rodeo Results", path: "/results/rodeo-results" },
       { label: "Standings", path: "/results/standings" },
@@ -124,7 +125,11 @@ export default function Header() {
 
           <ThemeToggle />
 
-          <Link href="/cart" className={buttons.iconButton} aria-label="View cart">
+          <Link
+            href="/cart"
+            className={buttons.iconButton}
+            aria-label="View cart"
+          >
             <ShoppingCart className="h-5 w-5" />
           </Link>
 
