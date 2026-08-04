@@ -75,6 +75,7 @@ export default function ProfileMenu() {
           items={PROFILE_LINKS}
           onNavigate={closeMenu}
           className="mt-6 grid gap-1"
+          suppressAdmin
         />
       </Sidebar>
     </>
