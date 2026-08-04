@@ -25,6 +25,7 @@ import Link from "next/link";
 import Table from "@/components/ui/Table";
 import AddEntryModal from "@/components/rodeo/AddEntryModal";
 import Hero from "@/components/ui/Hero";
+import { pageStructure } from "@/lib/styles";
 import { RodeoEntry } from "@/types/rodeo";
 import { formatShortDate } from "@/lib/rodeoDateUtils";
 import { useSession } from "@/lib/auth-client";
@@ -210,176 +211,179 @@ export default function EnterRodeoPage() {
   }
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10">
+    <main className={pageStructure.pageWrapper}>
       <Hero
         badge="COMPETITOR REGISTRATION"
         title="Enter a Rodeo"
         description="Register for upcoming CCRA rodeo events and secure your spot in the arena. Select your event, submit your entry, and get ready to compete."
       />
 
-      {isPending ? (
-        // While authentication status is loading, show an empty placeholder
-        // to prevent layout shifting.
-        <div className="h-10 w-10" aria-hidden="true" />
-      ) : !isSignedIn ? (
-        // User is not signed in. Show login prompt and hide the entry form.
-        <section className="mt-8 rounded-md border border-stone-200 bg-white p-6 text-center shadow-sm">
-          <h2 className="text-xl font-semibold text-stone-950">
-            Please sign in to enter a rodeo
-          </h2>
-          <p className="mt-2 text-sm text-stone-600">
-            You must have an account to submit rodeo entries.
-          </p>
-
-          <Link
-            href="/sign-in"
-            className="mt-4 inline-flex items-center justify-center rounded-md bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-orange-700"
-          >
-            Sign In
-          </Link>
-        </section>
-      ) : (
-        // User is signed in. Show the entry form and registration content.
-        <>
-          {confirmationNumber ? (
-            // --- Confirmation view -------------------------------------------
-            // Shown in place of the form once the entry has been successfully
-            // saved. Same page/URL — just swapping what's rendered.
-            <section className="mb-8 rounded-md border border-green-800 bg-green-50 p-6">
-              <h2 className="mb-1 text-xl font-semibold text-green-800">
-                Entry submitted successfully!
-              </h2>
-              <p className="text-sm text-green-800">
-                Confirmation #:{" "}
-                <span className="font-mono font-semibold">
-                  {confirmationNumber}
-                </span>
-              </p>
-              <p className="mt-1 text-sm text-green-800">
-                A confirmation email is on its way to {email}.
-              </p>
-            </section>
-          ) : (
-            // --- Competitor info -----------------------------------------------
-            <section className="mb-8 rounded-md border border-stone-200 bg-white p-6 shadow-sm">
-              <h2 className="mb-4 text-lg font-semibold text-stone-950">
-                Your Information
-              </h2>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {/* Competitor Name */}
-                <div>
-                  <label
-                    htmlFor="competitorName"
-                    className="block text-sm font-medium text-stone-600"
-                  >
-                    Competitor Name
-                  </label>
-                  <input
-                    id="Competitor Name"
-                    type="text"
-                    value={competitorName}
-                    readOnly
-                    className="mt-1 block w-full rounded-md border border-stone-200 bg-stone-100 px-3 py-2 text-sm"
-                  />
-                </div>
-                {/* Email */}
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-stone-600"
-                  >
-                    Email
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    readOnly
-                    className="mt-1 block w-full rounded-md border border-stone-200 bg-stone-100 px-3 py-2 text-sm"
-                  />
-                </div>
-              </div>
-            </section>
-          )}
-
-          {/* --- Add Entry button + pop-up -------------------------------------
-          Hidden once submitted — entries are locked in at that point. */}
-          {!confirmationNumber && (
-            <>
-              <div className="mb-6">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(true)}
-                  className="rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700"
-                >
-                  + Add Entry
-                </button>
-              </div>
-
-              <AddEntryModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onAddEntry={handleAddEntry}
-                rodeos={rodeoData}
-              />
-            </>
-          )}
-
-          {/* --- Entries table ---------------------------------------------------
-          Left in place after submission too, as a summary of what was entered. */}
-          <section className="mb-8">
-            <h2 className="mb-4 text-xl font-semibold text-stone-950">
-              {confirmationNumber ? "Entries Submitted" : "Your Entries"}
+      <div className={pageStructure.contentContainer}>
+        {isPending ? (
+          // While authentication status is loading, show an empty placeholder
+          // to prevent layout shifting.
+          <div className="h-10 w-10" aria-hidden="true" />
+        ) : !isSignedIn ? (
+          // User is not signed in. Show login prompt and hide the entry form.
+          <section className="mt-8 rounded-md border border-stone-200 bg-white p-6 text-center shadow-sm">
+            <h2 className="text-xl font-semibold text-stone-950">
+              Please sign in to enter a rodeo
             </h2>
-            {entries.length === 0 ? (
-              <p className="text-sm text-stone-400">
-                No entries yet — use "Add Entry" above to add your first event.
-              </p>
-            ) : (
-              <>
-                <Table columns={columns} data={tableRows} />
-                <p className="mt-3 text-sm font-medium text-stone-600">
-                  Total fees: ${totalFees.toFixed(2)}
+            <p className="mt-2 text-sm text-stone-600">
+              You must have an account to submit rodeo entries.
+            </p>
+
+            <Link
+              href="/sign-in"
+              className="mt-4 inline-flex items-center justify-center rounded-md bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-orange-700"
+            >
+              Sign In
+            </Link>
+          </section>
+        ) : (
+          // User is signed in. Show the entry form and registration content.
+          <>
+            {confirmationNumber ? (
+              // --- Confirmation view -------------------------------------------
+              // Shown in place of the form once the entry has been successfully
+              // saved. Same page/URL — just swapping what's rendered.
+              <section className="mb-8 rounded-md border border-green-800 bg-green-50 p-6">
+                <h2 className="mb-1 text-xl font-semibold text-green-800">
+                  Entry submitted successfully!
+                </h2>
+                <p className="text-sm text-green-800">
+                  Confirmation #:{" "}
+                  <span className="font-mono font-semibold">
+                    {confirmationNumber}
+                  </span>
                 </p>
+                <p className="mt-1 text-sm text-green-800">
+                  A confirmation email is on its way to {email}.
+                </p>
+              </section>
+            ) : (
+              // --- Competitor info -----------------------------------------------
+              <section className="mb-8 rounded-md border border-stone-200 bg-white p-6 shadow-sm">
+                <h2 className="mb-4 text-lg font-semibold text-stone-950">
+                  Your Information
+                </h2>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {/* Competitor Name */}
+                  <div>
+                    <label
+                      htmlFor="competitorName"
+                      className="block text-sm font-medium text-stone-600"
+                    >
+                      Competitor Name
+                    </label>
+                    <input
+                      id="Competitor Name"
+                      type="text"
+                      value={competitorName}
+                      readOnly
+                      className="mt-1 block w-full rounded-md border border-stone-200 bg-stone-100 px-3 py-2 text-sm"
+                    />
+                  </div>
+                  {/* Email */}
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-stone-600"
+                    >
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      value={email}
+                      readOnly
+                      className="mt-1 block w-full rounded-md border border-stone-200 bg-stone-100 px-3 py-2 text-sm"
+                    />
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* --- Add Entry button + pop-up -------------------------------------
+          Hidden once submitted — entries are locked in at that point. */}
+            {!confirmationNumber && (
+              <>
+                <div className="mb-6">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(true)}
+                    className="rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700"
+                  >
+                    + Add Entry
+                  </button>
+                </div>
+
+                <AddEntryModal
+                  isOpen={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                  onAddEntry={handleAddEntry}
+                  rodeos={rodeoData}
+                />
               </>
             )}
-          </section>
 
-          {confirmationNumber ? (
-            // --- Post-submission actions --------------------------------------
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={handleStartNewEntry}
-                className="rounded-md border border-stone-200 px-5 py-2.5 text-sm font-medium text-stone-600 hover:bg-stone-200"
-              >
-                New Entry
-              </button>
-              <Link
-                href="/events/pay-fees"
-                className="rounded-md bg-orange-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-orange-700"
-              >
-                Pay Fees
-              </Link>
-            </div>
-          ) : (
-            // --- Submit ---------------------------------------------------------
-            <div>
-              <button
-                type="button"
-                onClick={handleSubmitEntries}
-                disabled={entries.length === 0 || isSubmitting}
-                className="rounded-md bg-stone-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-stone-900 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                {isSubmitting ? "Submitting…" : "Submit Entry"}
-              </button>
-              {submitError && (
-                <p className="mt-2 text-sm text-red-700">{submitError}</p>
+            {/* --- Entries table ---------------------------------------------------
+          Left in place after submission too, as a summary of what was entered. */}
+            <section className="mb-8">
+              <h2 className="mb-4 text-xl font-semibold text-stone-950">
+                {confirmationNumber ? "Entries Submitted" : "Your Entries"}
+              </h2>
+              {entries.length === 0 ? (
+                <p className="text-sm text-stone-400">
+                  No entries yet — use "Add Entry" above to add your first
+                  event.
+                </p>
+              ) : (
+                <>
+                  <Table columns={columns} data={tableRows} />
+                  <p className="mt-3 text-sm font-medium text-stone-600">
+                    Total fees: ${totalFees.toFixed(2)}
+                  </p>
+                </>
               )}
-            </div>
-          )}
-        </>
-      )}
+            </section>
+
+            {confirmationNumber ? (
+              // --- Post-submission actions --------------------------------------
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={handleStartNewEntry}
+                  className="rounded-md border border-stone-200 px-5 py-2.5 text-sm font-medium text-stone-600 hover:bg-stone-200"
+                >
+                  New Entry
+                </button>
+                <Link
+                  href="/events/pay-fees"
+                  className="rounded-md bg-orange-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-orange-700"
+                >
+                  Pay Fees
+                </Link>
+              </div>
+            ) : (
+              // --- Submit ---------------------------------------------------------
+              <div>
+                <button
+                  type="button"
+                  onClick={handleSubmitEntries}
+                  disabled={entries.length === 0 || isSubmitting}
+                  className="rounded-md bg-stone-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-stone-900 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  {isSubmitting ? "Submitting…" : "Submit Entry"}
+                </button>
+                {submitError && (
+                  <p className="mt-2 text-sm text-red-700">{submitError}</p>
+                )}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </main>
   );
 }
