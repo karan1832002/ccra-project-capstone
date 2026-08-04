@@ -34,12 +34,14 @@ export interface NavListProps {
   items: NavListItem[];
   onNavigate: () => void; // called after a nav Link/action is triggered (e.g. to close a mobile menu)
   className?: string;
+  suppressAdmin?: boolean;
 }
 
 export default function NavList({
   items,
   onNavigate,
   className,
+  suppressAdmin = false,
 }: NavListProps) {
   // Tracks which group labels are currently expanded (dropdown open)
   const [expandedLabels, setExpandedLabels] = useState<Set<string>>(new Set());
@@ -51,7 +53,7 @@ export default function NavList({
   // Admin links only render when the user holds an admin role AND is
   // currently browsing within the /admin dashboard, keeping the public
   // mobile nav free of admin clutter.
-  const showAdminLinks = isAdminRole && isAdminRoute;
+  const showAdminLinks = !suppressAdmin && isAdminRole && isAdminRoute;
 
   // Determines whether a given path should be styled as "active"
   // Root path ("/") requires an exact match; everything else uses startsWith
