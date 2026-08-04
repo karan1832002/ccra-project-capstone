@@ -54,6 +54,13 @@ export interface RodeoResultData {
   groundMoney: number;
 }
 
+// A single date entry for a multi-day rodeo. Submitted as a nested array
+// when creating or updating a rodeo. Matches the `rodeo_dates` table.
+export interface RodeoDatePayload {
+  date: string; // YYYY-MM-DD
+  startTime: string; // HH:MM
+}
+
 // Payload for creating or updating a rodeo via the event-service gateway.
 export interface RodeoPayload {
   rodeoTitle: string;
@@ -65,6 +72,7 @@ export interface RodeoPayload {
   description?: string | null;
   image?: string | null;
   capacity?: number | null;
+  rodeoDates?: RodeoDatePayload[];
 }
 
 // Payload for adding or updating a competition event under a rodeo.
@@ -149,21 +157,51 @@ export async function callGateway<T>(
     cache: "no-store",
   });
 
-  // Treat any 5xx response as a gateway outage rather than a
-  // domain-level error. This lets callers implement retry logic
-  // without inspecting status codes themselves.
-  if (!res.ok && res.status >= 500) {
+  // Read the raw body before attempting JSON parse so that non-JSON
+  // error responses (e.g. plain-text 4xx from a misrouted request)
+  // produce a diagnostic message instead of a cryptic JSON parse error.
+  const text = await res.text();
+
+  if (!res.ok) {
+    console.error(
+      "[gateway] Non-OK response",
+      JSON.stringify({ url, method: options.method ?? "GET", status: res.status, body: text }),
+    );
+
+    // Attempt to extract a structured error from the body.
+    try {
+      const errorBody = JSON.parse(text) as ApiResponse<unknown>;
+      if (!errorBody.success && errorBody.error) {
+        throw new GatewayError(errorBody.error.code, errorBody.error.message);
+      }
+    } catch (err) {
+      if (err instanceof GatewayError) throw err;
+      // Fall through to generic error below.
+    }
+
     throw new GatewayError(
-      "GATEWAY_UNAVAILABLE",
-      `Gateway returned ${res.status}`,
+      res.status >= 500 ? "GATEWAY_UNAVAILABLE" : "BAD_REQUEST",
+      text.slice(0, 200) || `Gateway returned ${res.status}`,
     );
   }
 
-  const json = (await res.json()) as ApiResponse<T>;
-  if (!json.success) {
-    throw new GatewayError(json.error.code, json.error.message);
+  try {
+    const json = JSON.parse(text) as ApiResponse<T>;
+    if (!json.success) {
+      throw new GatewayError(json.error.code, json.error.message);
+    }
+    return json.data;
+  } catch (err) {
+    if (err instanceof GatewayError) throw err;
+    console.error(
+      "[gateway] JSON parse failure on OK response",
+      JSON.stringify({ url, status: res.status, body: text.slice(0, 500) }),
+    );
+    throw new GatewayError(
+      "GATEWAY_UNAVAILABLE",
+      "Gateway returned an unparseable response.",
+    );
   }
-  return json.data;
 }
 
 // ==========================================================================
