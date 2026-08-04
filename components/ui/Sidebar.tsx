@@ -18,7 +18,7 @@
 import { useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
-import { iconButtonClass } from "@/lib/styles";
+import { buttons } from "@/lib/styles";
 
 export interface SidebarProps {
   isOpen: boolean;
@@ -87,7 +87,7 @@ export default function Sidebar({
           <button
             type="button"
             onClick={onClose}
-            className={iconButtonClass}
+            className={buttons.iconButton}
             aria-label={`Close ${title.toLowerCase()}`}
           >
             <X className="h-6 w-6" />
