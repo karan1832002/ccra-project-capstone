@@ -30,26 +30,24 @@ type CartContextType = {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loaded, setLoaded] = useState(false);
-
-  // Read from localStorage on initial client mount to avoid hydration mismatch
-  useEffect(() => {
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    if (typeof window === "undefined") return [];
     try {
       const raw = localStorage.getItem("ccra-cart");
-      if (raw) setCartItems(JSON.parse(raw));
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Save to localStorage whenever cartItems updates
+  useEffect(() => {
+    try {
+      localStorage.setItem("ccra-cart", JSON.stringify(cartItems));
     } catch {
       // ignore
     }
-    setLoaded(true);
-  }, []);
-
-  // Save to localStorage whenever cartItems updates (only after initial load)
-  useEffect(() => {
-    if (loaded) {
-      localStorage.setItem("ccra-cart", JSON.stringify(cartItems));
-    }
-  }, [cartItems, loaded]);
+  }, [cartItems]);
 
   const addToCart = (item: NewCartItem) => {
     setCartItems((prev) => {

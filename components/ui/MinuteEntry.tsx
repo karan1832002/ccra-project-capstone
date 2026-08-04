@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { FileText, ChevronDown, ChevronUp, Download, ExternalLink, Calendar } from "lucide-react";
+import { FileText, ChevronDown, ChevronUp, ExternalLink, Calendar } from "lucide-react";
 
 export interface MinuteEntryData {
   id: string;

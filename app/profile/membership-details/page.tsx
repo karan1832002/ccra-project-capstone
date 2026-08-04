@@ -5,9 +5,14 @@ import { useRouter } from "next/navigation";
 
 export default function MembershipDetailsPage() {
   const router = useRouter();
-  const [session, setSession] = useState<any>(null);
+  const [session, setSession] = useState<{ id?: string; name?: string; email?: string } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [membership, setMembership] = useState<any>(null);
+  const [membership, setMembership] = useState<{
+    membershipType?: string;
+    status?: string;
+    startDate?: string;
+    expiryDate?: string;
+  } | null>(null);
 
   useEffect(() => {
     async function loadSession() {
@@ -27,11 +32,12 @@ export default function MembershipDetailsPage() {
   }, [router]);
 
   useEffect(() => {
-    if (!session) return;
+    if (!session?.id) return;
+    const userId = session.id;
 
     async function loadMembership() {
       const res = await fetch(
-        `http://4.248.243.149/api/memberships/user/${session.id}`
+        `http://4.248.243.149/api/memberships/user/${userId}`
       );
       const data = await res.json();
 

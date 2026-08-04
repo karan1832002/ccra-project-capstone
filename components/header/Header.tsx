@@ -20,7 +20,6 @@ import ProfileMenu from "./ProfileMenu";
 import MobileNav from "./MobileNav";
 import { LogIn, ShoppingCart, Shield } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
-import { usePathname } from "next/navigation";
 
 // A sub-item is always a simple link — no further nesting, path required.
 export interface NavSubItem {
@@ -79,8 +78,6 @@ export default function Header() {
   const isSignedIn = Boolean(session?.user);
   const role = (session?.user as { role?: string } | undefined)?.role;
   const isAdmin = role === "admin" || role === "superadmin";
-
-  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/95 backdrop-blur">

@@ -5,7 +5,7 @@ import { addRodeo } from "./actions";
 import type { RodeoPayload } from "@/lib/gateway-client";
 
 // Standard rodeo competition categories recognized by the event-service.
-const CATEGORIES = [
+const _CATEGORIES = [
   "Bareback",
   "Saddle Bronc",
   "Bull Riding",

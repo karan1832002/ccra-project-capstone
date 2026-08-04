@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import type { User } from "@/lib/gateway-client";
 import RoleSelect from "./RoleSelect";
 
@@ -29,12 +29,6 @@ export default function UserTable({ users }: { users: User[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Reset to page 1 on every search change so the user lands on the
-  // first batch of matching rows.
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery]);
-
   const filteredUsers = useMemo(() => {
     if (!searchQuery) return users;
     const q = searchQuery.toLowerCase();
@@ -59,7 +53,10 @@ export default function UserTable({ users }: { users: User[] }) {
       <input
         type="text"
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        onChange={(e) => {
+          setSearchQuery(e.target.value);
+          setCurrentPage(1);
+        }}
         placeholder="Search by email or user ID..."
         className="w-full rounded-md border border-stone-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
       />

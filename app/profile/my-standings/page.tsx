@@ -12,7 +12,7 @@ import RecentResults, { type RecentResult } from "@/components/my-standings/Rece
 import { useSession } from "@/lib/auth-client";
 
 export default function StandingsPage() {
-  const { data: session, isPending } = useSession();
+  const { isPending } = useSession();
 
   if (isPending) {
     return (
