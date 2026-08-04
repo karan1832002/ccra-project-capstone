@@ -1,27 +1,26 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
 /* dark: utilities trigger off .dark class */
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Light-mode/Default values */
 :root {
-  /* General Page */
-  --background: #fafaf9;
+  /* General */
+  --background: #fafaf9; /* page bg */
   --foreground: #44403b; /* body text */
   --heading: #0c0a09; /* headings */
   --muted-foreground: #a6a09b; /* secondary text */
-  --accent: #ffedd4;
-  --accent-foreground: #ff6900;
 
   /* Base Colours */
-  --primary: #ff6900;
+  --primary: #f54900;
   --primary-foreground: #ffffff;
   --primary-hover: #ca3500;
+  --accent: #ffedd4;
+  --accent-foreground: #f54900;
 
   /* Features */
   --surface: #ffffff; /* background */
-  --highlight: #fff7ed; 
+  --highlight: #fff7ed;
   --border: #e7e5e4;
   --border-hover: #ffb86a;
 }
@@ -33,19 +32,15 @@
   --foreground: #d6d1cb;
   --heading: #f5f2ee;
   --muted-foreground: #8a8178;
-  --accent: #3d2814;
-  --accent-foreground: #ff6900;
 
   /* Base Colours */
-  --primary: #ff6900;
-  --primary-foreground: #18120e;
-  --primary-hover: #ca3500;
+  --accent: #441306;
 
   /* Features */
   --surface: #231b15;
   --highlight: #2c2118;
-  --border: #362a20;
-  --border-hover: #ff8a3d;
+  --border: #292524;
+  --border-hover: #ca3500;
 }
 
 /* Pass above values to Tailwind; keeps page reactive to .dark class */
