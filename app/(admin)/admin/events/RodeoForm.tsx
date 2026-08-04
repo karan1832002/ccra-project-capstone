@@ -69,6 +69,7 @@ export default function RodeoForm({
   // user clicks Edit on a different row).
   useEffect(() => {
     if (initialData) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTitle(initialData.rodeoTitle);
       setLocation(initialData.location);
       setEntryFee(initialData.entryFee != null ? String(initialData.entryFee) : "");

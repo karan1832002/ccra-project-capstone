@@ -49,6 +49,7 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
   }, [rodeoId]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void loadEvents();
   }, [loadEvents]);
 
