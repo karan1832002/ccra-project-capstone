@@ -12,6 +12,10 @@ import {
   Star,
 } from "lucide-react";
 
+// --- Sidebar Route Definitions ---
+// Navigation items rendered in the admin sidebar. Each entry defines a
+// label, target route, and icon. Items tagged superadminOnly are only
+// visible when the authenticated user holds the superadmin role.
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Users", href: "/admin/users", icon: Users, superadminOnly: true },
@@ -23,7 +27,17 @@ const navItems = [
   { label: "Sponsors", href: "/admin/sponsors", icon: Star },
 ];
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+// --- Admin Layout Shell ---
+// Server component that wraps every /admin route. Calls requireAdmin()
+// to gate all admin pages behind authentication and at least an "admin"
+// role. The sidebar filters navigation items by role, hiding superadmin-
+// only routes from regular admins. Children render in the main content
+// area beside the sidebar.
+export default async function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { role } = await requireAdmin();
 
   const visibleNavItems = navItems.filter(
@@ -32,8 +46,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <aside className="w-64 shrink-0 border-r border-gray-200 bg-white flex flex-col">
+      {/* --- Sidebar (desktop only) --- */}
+      <aside className="hidden md:flex w-64 shrink-0 border-r border-gray-200 bg-white flex flex-col">
         <div className="px-6 py-5 border-b border-gray-200">
           <Link href="/admin" className="text-lg font-semibold text-gray-900">
             CCRA Admin
@@ -57,8 +71,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </nav>
       </aside>
 
-      {/* Main content */}
-      <main className="flex-1 overflow-y-auto">{children}</main>
+      {/* --- Main Content Area --- */}
+      <main className="flex-1 w-full overflow-x-hidden overflow-y-auto">{children}</main>
     </div>
   );
 }

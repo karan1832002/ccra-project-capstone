@@ -13,18 +13,23 @@ import {
 } from "@/lib/gateway-client";
 import type { RodeoPayload, EventPayload } from "@/lib/gateway-client";
 
-// Fetches the full list of rodeos from the event-service gateway.
+// --- Rodeo & Event Server Actions ---
+// All mutation wrappers below delegate to the event-service gateway and
+// then call revalidatePath("/admin/events") to purge the Next.js server-
+// side cache for the events admin page. This ensures the UI reflects
+// changes without a manual refresh. Read operations (fetch) do not
+// revalidate — they return fresh gateway responses on every call.
+
 export async function fetchRodeos() {
   return getAdminRodeos();
 }
 
-// Fetches a single rodeo with its nested events, dates, and draws.
 export async function fetchRodeoDetail(id: string) {
   return getAdminRodeoDetail(id);
 }
 
-// Validates and creates a new rodeo record through the gateway.
-// Revalidates the events admin page so the list stays current.
+// Creates a rodeo after validating required string fields.
+// Throws before touching the gateway if either title or location is empty.
 export async function addRodeo(data: RodeoPayload) {
   if (!data.rodeoTitle.trim()) {
     throw new Error("Rodeo title is required.");
@@ -38,21 +43,23 @@ export async function addRodeo(data: RodeoPayload) {
   return result;
 }
 
-// Updates an existing rodeo's metadata. Only sends the fields
-// that were actually provided by the form.
+// Partial-update to an existing rodeo. Only the fields provided by
+// the calling form are forwarded to the gateway.
 export async function editRodeo(id: string, data: Partial<RodeoPayload>) {
   const result = await updateRodeo(id, data);
   revalidatePath("/admin/events");
   return result;
 }
 
-// Deletes a rodeo. The gateway cascades to child events and draws.
+// Hard-deletes a rodeo. The gateway cascade-removes associated dates,
+// draws, and events.
 export async function removeRodeo(id: string) {
   await deleteRodeo(id);
   revalidatePath("/admin/events");
 }
 
-// Adds a competition event under a parent rodeo.
+// Creates a competition event nested under a parent rodeo.
+// Validates that the category string is non-empty before the gateway call.
 export async function addEvent(rodeoId: string, data: EventPayload) {
   if (!data.category.trim()) {
     throw new Error("Category is required.");
@@ -63,14 +70,14 @@ export async function addEvent(rodeoId: string, data: EventPayload) {
   return result;
 }
 
-// Updates a competition event's details.
+// Updates a competition event's mutable fields.
 export async function editEvent(id: string, data: Partial<EventPayload>) {
   const result = await updateEvent(id, data);
   revalidatePath("/admin/events");
   return result;
 }
 
-// Removes a competition event from its parent rodeo.
+// Removes a single competition event from its parent rodeo.
 export async function removeEvent(id: string) {
   await deleteEvent(id);
   revalidatePath("/admin/events");

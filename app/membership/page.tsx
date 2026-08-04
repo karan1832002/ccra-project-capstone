@@ -8,7 +8,7 @@ import Hero from "@/components/ui/Hero";
 export default function MembershipPage() {
   const router = useRouter();
 
-  const [session, setSession] = useState<any>(null);
+  const [session, setSession] = useState<{ id?: string; name?: string; email?: string } | null>(null);
   const [loadingSession, setLoadingSession] = useState(true);
 
   const [fullName, setFullName] = useState("");
@@ -31,39 +31,42 @@ export default function MembershipPage() {
 
   const LOCAL_STORAGE_KEY = "ccra_membership_draft_v1";
 
-  // LOAD SESSION
+  // LOAD SESSION AND DRAFT
   useEffect(() => {
-    async function loadSession() {
-      const res = await fetch("/api/auth/get-session");
-      const data = await res.json();
+    async function loadData() {
+      try {
+        const res = await fetch("/api/auth/get-session");
+        const data = await res.json();
 
-      if (!data?.user) {
+        if (data?.user) {
+          setSession(data.user);
+          setFullName(data.user.name ?? "");
+          setEmail(data.user.email ?? "");
+        } else {
+          setSession(null);
+        }
+      } catch {
         setSession(null);
+      } finally {
         setLoadingSession(false);
-        return;
       }
 
-      setSession(data.user);
-      setFullName(data.user.name ?? "");
-      setEmail(data.user.email ?? "");
-      setLoadingSession(false);
+      const draft = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (draft) {
+        try {
+          const parsed = JSON.parse(draft);
+          setFullName(parsed.fullName ?? "");
+          setEmail(parsed.email ?? "");
+          setPhone(parsed.phone ?? "");
+          setDivision(parsed.division ?? "");
+          setEvents(parsed.events ?? []);
+          setSignature(parsed.signature ?? "");
+          setPaymentMethod(parsed.paymentMethod ?? "");
+        } catch {}
+      }
     }
 
-    loadSession();
-
-    const draft = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (draft) {
-      try {
-        const parsed = JSON.parse(draft);
-        setFullName(parsed.fullName ?? "");
-        setEmail(parsed.email ?? "");
-        setPhone(parsed.phone ?? "");
-        setDivision(parsed.division ?? "");
-        setEvents(parsed.events ?? []);
-        setSignature(parsed.signature ?? "");
-        setPaymentMethod(parsed.paymentMethod ?? "");
-      } catch {}
-    }
+    loadData();
   }, []);
 
   // PHONE FORMATTER
@@ -128,6 +131,7 @@ export default function MembershipPage() {
   async function handleSubmit() {
     if (submitting) return;
     if (!validate()) return;
+    if (!session?.id) return;
 
     setSubmitting(true);
 

@@ -64,7 +64,8 @@ jobs:
           build-args: |
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET }}
-            NEXT_PUBLIC_GATEWAY_URL=${{ vars.NEXT_PUBLIC_GATEWAY_URL }}
+            NEXT_PUBLIC_GATEWAY_URL=${{ secrets.NEXT_PUBLIC_GATEWAY_URL || vars.NEXT_PUBLIC_GATEWAY_URL }}
+            NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_51TzU2JJDSCdwvbDTBMPVQ8MPwXPBMd2Tbk00UAiIcu19NjIUbPu9jNL6diXrIDk68InG5f3Fis6wmvjYxXNOtyBT00fmpFmIR4
 
       # Write the AKS admin kubeconfig (stored base64-encoded) so kubectl can auth.
       - name: Configure kubectl

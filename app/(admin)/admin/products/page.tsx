@@ -1,3 +1,4 @@
+// --- Products Page Placeholder ---
 export default function AdminProductsPage() {
   return (
     <div className="p-8">

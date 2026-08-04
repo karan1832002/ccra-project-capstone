@@ -1,17 +1,17 @@
 import Link from "next/link";
 
 export type NewsletterCardProps = {
+  id: string;
   date: string;
   title: string;
   description: string;
-  href?: string;
 };
 
 export default function NewsletterCard({
+  id,
   date,
   title,
   description,
-  href = "/",
 }: NewsletterCardProps) {
   return (
     <div className="rounded-md border border-stone-200 bg-stone-50 p-8 shadow-sm dark:border-stone-700 dark:bg-stone-950">
@@ -25,7 +25,7 @@ export default function NewsletterCard({
         {description}
       </p>
       <Link
-        href={href}
+        href={`/newsletters/${id}`}
         className="text-sm font-semibold text-orange-600 hover:underline dark:text-orange-400"
       >
         View details →

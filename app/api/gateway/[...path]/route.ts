@@ -18,7 +18,10 @@ async function proxy(req: NextRequest, path: string[]) {
 
   const init: RequestInit = {
     method: req.method,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-gateway-key": process.env.FRONTEND_GATEWAY_KEY ?? "",
+    },
     cache: "no-store",
   };
   if (req.method !== "GET" && req.method !== "HEAD") {

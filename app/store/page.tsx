@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Hero from "@/components/ui/Hero";
+import { useCart } from "@/app/context/CartContext";
 
 type Product = {
   id: string;
@@ -18,6 +19,19 @@ export default function StorePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [addedId, setAddedId] = useState<string | null>(null);
+  const { addToCart } = useCart();
+
+  function handleAddToCart(product: Product) {
+    addToCart({
+      id: product.id,
+      title: product.name,
+      price: product.priceCents / 100,
+      image: product.image,
+    });
+    setAddedId(product.id);
+    setTimeout(() => setAddedId(null), 1500);
+  }
 
   useEffect(() => {
     async function loadProducts() {
@@ -78,8 +92,16 @@ export default function StorePage() {
               ${(product.priceCents / 100).toFixed(2)}
             </p>
 
-            <button className="w-full bg-red-700 hover:bg-red-800 text-white py-2 rounded-lg transition">
-              Add to Cart
+            <button
+              onClick={() => handleAddToCart(product)}
+              disabled={product.stock <= 0}
+              className="w-full bg-red-700 hover:bg-red-800 text-white py-2 rounded-lg transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              {product.stock <= 0
+                ? "Out of Stock"
+                : addedId === product.id
+                ? "Added ✓"
+                : "Add to Cart"}
             </button>
           </div>
         ))}

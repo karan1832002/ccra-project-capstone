@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /* dark: utilities trigger off .dark class */
 @custom-variant dark (&:where(.dark, .dark *));

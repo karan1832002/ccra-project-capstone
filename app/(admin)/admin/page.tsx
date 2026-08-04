@@ -5,16 +5,20 @@ import { count, eq } from "drizzle-orm";
 import { Calendar, Users, Star } from "lucide-react";
 import { getAdminRodeos } from "@/lib/gateway-client";
 
+// --- Admin Dashboard Metrics Page ---
+// Server component that aggregates high-level counts from three data
+// sources in parallel: rodeos from the event-service gateway, total user
+// count from the local auth DB, and visible sponsor count from the local
+// sponsors table. If any source fails the entire set degrades gracefully
+// into an error banner so the admin still sees a working page layout.
+// The orders stat is intentionally absent — awaiting the product-service
+// gateway endpoint.
 export default async function AdminDashboardPage() {
   let totalRodeos = 0;
   let totalUsers = 0;
   let activeSponsors = 0;
   let fetchError: string | null = null;
 
-  // Fetch dashboard metrics. Rodeos are in the event-service database
-  // and fetched via the gateway. Users and sponsors are in the local
-  // auth database. Orders count is temporarily zero until the
-  // product-service gateway endpoint is wired up.
   try {
     const [rodeosList, totalUsersResult, activeSponsorsResult] =
       await Promise.all([
@@ -45,16 +49,19 @@ export default async function AdminDashboardPage() {
   ];
 
   return (
-    <div className="space-y-6 p-8 bg-gray-50">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">
-          Dashboard Overview
-        </h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Key metrics across the CCRA platform.
-        </p>
+    <div className="space-y-6 p-4 md:p-8 bg-gray-50">
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Dashboard Overview
+          </h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Key metrics across the CCRA platform.
+          </p>
+        </div>
       </div>
 
+      {/* --- Error Banner --- */}
       {fetchError ? (
         <div className="rounded-md border border-red-200 bg-red-50 p-6">
           <p className="text-sm font-medium text-red-800">
@@ -65,7 +72,8 @@ export default async function AdminDashboardPage() {
           </p>
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        /* --- Stat Cards Grid --- */
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => {
             const Icon = stat.icon;
             return (

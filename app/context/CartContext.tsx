@@ -4,10 +4,12 @@ import {
   createContext,
   useContext,
   useState,
+  useEffect,
   ReactNode,
 } from "react";
 
 type CartItem = {
+  id?: string;
   title: string;
   price: number;
   image?: string;
@@ -28,7 +30,24 @@ type CartContextType = {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const raw = localStorage.getItem("ccra-cart");
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Save to localStorage whenever cartItems updates
+  useEffect(() => {
+    try {
+      localStorage.setItem("ccra-cart", JSON.stringify(cartItems));
+    } catch {
+      // ignore
+    }
+  }, [cartItems]);
 
   const addToCart = (item: NewCartItem) => {
     setCartItems((prev) => {

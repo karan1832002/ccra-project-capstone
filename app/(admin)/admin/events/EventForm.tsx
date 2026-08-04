@@ -4,7 +4,8 @@ import { useState, useTransition } from "react";
 import { addRodeo } from "./actions";
 import type { RodeoPayload } from "@/lib/gateway-client";
 
-const CATEGORIES = [
+// Standard rodeo competition categories recognized by the event-service.
+const _CATEGORIES = [
   "Bareback",
   "Saddle Bronc",
   "Bull Riding",
@@ -15,15 +16,18 @@ const CATEGORIES = [
   "Breakaway Roping",
 ] as const;
 
-// Client component that renders a form for creating a new rodeo
-// and optionally adding initial competition events to it.
-// Submits through a server action that calls the event-service gateway.
+// --- Rodeo Creation Form ---
+// Client-side form that collects rodeo metadata and delegates persistence
+// to the addRodeo server action (which calls the event-service gateway).
+// Uses useTransition to track the pending state of the async submission.
+// On success the form resets to empty; on failure an error banner appears.
+// The CATEGORIES constant is declared here for the planned multi-select
+// feature that will attach competition events at creation time.
 export default function EventForm() {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Rodeo fields
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
   const [entryFee, setEntryFee] = useState("");
@@ -32,6 +36,8 @@ export default function EventForm() {
   const [description, setDescription] = useState("");
   const [phoneInEntries, setPhoneInEntries] = useState("");
 
+  // Builds a RodeoPayload from controlled inputs, calls the server action,
+  // then either resets the form or displays the thrown error.
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
@@ -51,7 +57,6 @@ export default function EventForm() {
 
         await addRodeo(payload);
 
-        // Reset form fields on success
         setTitle("");
         setLocation("");
         setEntryFee("");
@@ -62,7 +67,7 @@ export default function EventForm() {
         setSuccess("Rodeo created successfully.");
       } catch (err: unknown) {
         setError(
-          err instanceof Error ? err.message : "Failed to create rodeo.",
+          err instanceof Error ? err.message : "Failed to create rodeo."
         );
       }
     });
@@ -74,6 +79,7 @@ export default function EventForm() {
         Create New Rodeo
       </h2>
 
+      {/* --- Feedback Banners --- */}
       {error && (
         <div className="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
@@ -88,7 +94,7 @@ export default function EventForm() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          {/* Title */}
+          {/* --- Rodeo Title --- */}
           <div>
             <label
               htmlFor="rodeo-title"
@@ -107,7 +113,7 @@ export default function EventForm() {
             />
           </div>
 
-          {/* Location */}
+          {/* --- Location --- */}
           <div>
             <label
               htmlFor="rodeo-location"
@@ -126,7 +132,7 @@ export default function EventForm() {
             />
           </div>
 
-          {/* Entry Fee */}
+          {/* --- Entry Fee --- */}
           <div>
             <label
               htmlFor="rodeo-fee"
@@ -146,7 +152,7 @@ export default function EventForm() {
             />
           </div>
 
-          {/* Phone-in entries */}
+          {/* --- Phone-In Entries --- */}
           <div>
             <label
               htmlFor="rodeo-phone"
@@ -164,7 +170,7 @@ export default function EventForm() {
             />
           </div>
 
-          {/* Entries Open */}
+          {/* --- Entries Open Date --- */}
           <div>
             <label
               htmlFor="rodeo-open"
@@ -181,7 +187,7 @@ export default function EventForm() {
             />
           </div>
 
-          {/* Entries Close */}
+          {/* --- Entries Close Date --- */}
           <div>
             <label
               htmlFor="rodeo-close"
@@ -199,7 +205,7 @@ export default function EventForm() {
           </div>
         </div>
 
-        {/* Description */}
+        {/* --- Description Textarea --- */}
         <div>
           <label
             htmlFor="rodeo-desc"
