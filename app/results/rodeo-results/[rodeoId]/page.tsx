@@ -2,26 +2,28 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { RodeoEvent, ResultEntry } from "@/types/rodeo";
-import { getRodeoEvent, getResultsForEvent } from "@/lib/sampleRodeoData";
+// import { RodeoEvent, ResultEntry } from "@/types/rodeo";
+// import { getRodeoEvent, getResultsForEvent } from "@/lib/sampleRodeoData";
 import { ResultsTable, formatCurrency } from "@/components/rodeo/ResultsTable";
 import { pageStructure } from "@/lib/styles";
+import { getRodeo, getEventResults, RodeoDetail, Result } from "@/lib/gateway";
+import { formatShortDate } from "@/lib/rodeoDateUtils";
 
 interface RodeoResultsDetailPageProps {
   // Next.js provides dynamic route params as a Promise, so it's unwrapped
   // with React.use() below rather than read directly off props.
-  params: Promise<{ eventId: string }>;
+  params: Promise<{ rodeoId: string }>;
 }
 
 export default function RodeoResultsDetailPage({
   params,
 }: RodeoResultsDetailPageProps) {
-  const { eventId } = React.use(params);
+  const { rodeoId } = React.use(params);
 
-  const [event, setEvent] = useState<RodeoEvent | null>(null);
-  const [results, setResults] = useState<ResultEntry[]>([]);
+  const [rodeo, setRodeo] = useState<RodeoDetail | null>(null);
+  const [results, setResults] = useState<Result[]>([]);
+  const [rodeoMissing, setRodeoMissing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [eventMissing, setEventMissing] = useState(false);
 
   // Rodeo-wide payout totals across every result, regardless of category —
   // mirrors the "Payout Report" summary row shown at the top of the
@@ -31,28 +33,38 @@ export default function RodeoResultsDetailPage({
     [results],
   );
   const totalGroundMoney = useMemo(
-    () => results.reduce((sum, entry) => sum + entry.groundMoney, 0),
+    () => results.reduce((sum, entry) => sum + entry.ground, 0),
     [results],
   );
   const totalPayout = totalMoney + totalGroundMoney;
 
-  // Load the rodeo itself first, then its results — if the id doesn't match
-  // any rodeo (bad link, typo'd URL), skip straight to the "not found" state
-  // instead of trying to fetch results for nothing.
+  // Load the selected rodeo, then retrieve results for each event it contains.
   useEffect(() => {
-    getRodeoEvent(eventId).then((evt) => {
-      if (!evt) {
-        setEventMissing(true);
+    async function load() {
+      setLoading(true);
+
+      try {
+        const rodeo = await getRodeo(rodeoId);
+        setRodeo(rodeo);
+
+        // Load the results for every event in this rodeo.
+        const results = (
+          await Promise.all(
+            rodeo.events.map((event) => getEventResults(event.id)),
+          )
+        ).flat();
+
+        setResults(results);
+      } catch (error) {
+        console.error("Failed to load rodeo results:", error);
+        setRodeoMissing(true);
+      } finally {
         setLoading(false);
-        return;
       }
-      setEvent(evt);
-      getResultsForEvent(eventId).then((res) => {
-        setResults(res);
-        setLoading(false);
-      });
-    });
-  }, [eventId]);
+    }
+
+    load();
+  }, [rodeoId]);
 
   const backLink = (
     <Link
@@ -72,7 +84,7 @@ export default function RodeoResultsDetailPage({
     );
   }
 
-  if (eventMissing || !event) {
+  if (rodeoMissing || !rodeo) {
     return (
       <div className="max-w-4xl mx-auto py-8 px-4">
         {backLink}
@@ -83,6 +95,13 @@ export default function RodeoResultsDetailPage({
     );
   }
 
+  const dates = rodeo.dates.map((d) => d.date).toSorted();
+
+  const dateLabel =
+    dates.length === 1
+      ? formatShortDate(dates[0])
+      : `${formatShortDate(dates[0])} – ${formatShortDate(dates[dates.length - 1])}`;
+
   return (
     <div className={pageStructure.pageWrapper}>
       <div className={pageStructure.contentContainer}>
@@ -92,11 +111,11 @@ export default function RodeoResultsDetailPage({
         <div className="flex items-start justify-between gap-6 mb-6">
           <div>
             <h1 className="text-3xl font-semibold text-stone-950">
-              {event.name} Results
+              {rodeo.rodeoTitle} Results
             </h1>
             <p className="text-sm text-stone-400">
-              {event.dateLabel}
-              {event.location ? ` · ${event.location}` : ""}
+              {dateLabel}
+              {rodeo.location ? ` · ${rodeo.location}` : ""}
             </p>
           </div>
 
@@ -121,7 +140,7 @@ export default function RodeoResultsDetailPage({
           </div>
         </div>
 
-        <ResultsTable entries={results} performances={event.performances} />
+        <ResultsTable entries={results} events={rodeo.events} />
       </div>
     </div>
   );
