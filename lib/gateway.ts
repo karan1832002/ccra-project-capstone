@@ -156,7 +156,7 @@ export type Result = {
   userId: string;
   entryId: string | null;
   category: string;
-  score: number | null;
+  score?: number | null;
   timeSeconds: number | null;
   placement: number | null;
   points: number;
