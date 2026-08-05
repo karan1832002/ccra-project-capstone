@@ -22,7 +22,8 @@ interface StandingsTableProps {
 
 // Running season total for one competitor within one category.
 interface CompetitorTotals {
-  userId: string;
+  competitorId: string;
+  competitorName: string;
   eventIds: Set<string>;
   points: number;
 }
@@ -53,6 +54,10 @@ export function StandingsTable({ entries }: StandingsTableProps) {
           /*
            * Combine all results for each competitor into one season total.
            *
+           * competitorId is used as the grouping key because it uniquely
+           * identifies the competitor. The displayed name comes from the
+           * result's competitorName field.
+           *
            * A competitor may have multiple results in the same category.
            * Points are added together, while eventIds are stored in a Set
            * so each event is only counted once toward Event Count.
@@ -60,8 +65,9 @@ export function StandingsTable({ entries }: StandingsTableProps) {
           const totalsByCompetitor = new Map<string, CompetitorTotals>();
 
           for (const entry of categoryEntries) {
-            const existing = totalsByCompetitor.get(entry.userId) ?? {
-              userId: entry.userId,
+            const existing = totalsByCompetitor.get(entry.competitorId) ?? {
+              competitorId: entry.competitorId,
+              competitorName: entry.competitorName ?? entry.competitorId,
               eventIds: new Set<string>(),
               points: 0,
             };
@@ -72,7 +78,7 @@ export function StandingsTable({ entries }: StandingsTableProps) {
             // Add this result's points to their season total.
             existing.points += entry.points ?? 0;
 
-            totalsByCompetitor.set(entry.userId, existing);
+            totalsByCompetitor.set(entry.competitorId, existing);
           }
 
           // Rank competitors by total points, highest first.
@@ -89,7 +95,7 @@ export function StandingsTable({ entries }: StandingsTableProps) {
            */
           const data = ranked.map((competitor, index) => ({
             rank: index + 1,
-            competitor: competitor.userId,
+            competitor: competitor.competitorName,
             eventCount: competitor.eventIds.size,
             points: competitor.points,
           }));

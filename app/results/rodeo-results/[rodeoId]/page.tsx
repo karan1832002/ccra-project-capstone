@@ -24,15 +24,17 @@ export default function RodeoResultsDetailPage({
   const [loading, setLoading] = useState(true);
 
   // Calculate payout totals across every result in the rodeo.
-  // These values are displayed in the summary panel above the results tables.
+  // Null payout values are treated as zero for calculations.
   const totalMoney = useMemo(
-    () => results.reduce((sum, entry) => sum + entry.money, 0),
+    () => results.reduce((sum, entry) => sum + (entry.money ?? 0), 0),
     [results],
   );
+
   const totalGroundMoney = useMemo(
-    () => results.reduce((sum, entry) => sum + entry.ground, 0),
+    () => results.reduce((sum, entry) => sum + (entry.ground ?? 0), 0),
     [results],
   );
+
   const totalPayout = totalMoney + totalGroundMoney;
 
   // Load the selected rodeo using the id from the URL.

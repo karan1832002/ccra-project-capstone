@@ -20,7 +20,6 @@ export default function RodeoStandingsPage() {
   const [entries, setEntries] = useState<StandingResult[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Search will be enabled once competitor/user information is available.
   const [search, setSearch] = useState("");
 
   // Currently selected event category filter.
@@ -38,6 +37,11 @@ export default function RodeoStandingsPage() {
           getEvents(),
           getResults(),
         ]);
+        console.log("Sample result:", allResults[0]);
+        console.log(
+          "User IDs:",
+          allResults.map((result) => result.competitorId),
+        );
 
         // Create a quick lookup map so results can find their related event
         // without repeatedly searching through the entire event list.
@@ -78,12 +82,9 @@ export default function RodeoStandingsPage() {
   }, [entries]);
 
   // Apply the selected category filter.
-  // Competitor searching will be enabled once user information is available
-  // on result records.
   const filteredEntries = useMemo(() => {
-    return entries.filter((e) => category === "all" || e.category === category);
-    // TODO: Re-enable competitor search once user information is available.
-    // .filter((e) => e.userId?.toLowerCase().includes(search.toLowerCase()));
+    return entries.filter((e) => category === "all" || e.category === category)
+    .filter((e) => e.competitorName?.toLowerCase().includes(search.toLowerCase()));
   }, [entries, category, search]);
 
   if (loading) {
@@ -106,15 +107,11 @@ export default function RodeoStandingsPage() {
       <div className={pageStructure.contentContainer}>
         {/* SEARCH + FILTER BAR */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">
-          {/* Competitor search will be enabled once result records include
-              competitor/user information. */}
           <input
             type="text"
             placeholder="Search competitor..."
             value={search}
-            disabled
-            // TODO: Re-enable competitor search once user information is available.
-            // onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
             className="w-full md:w-1/2 rounded-md border border-border px-4 py-2"
           />
 
