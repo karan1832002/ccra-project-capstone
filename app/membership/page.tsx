@@ -10,6 +10,10 @@ export default function MembershipPage() {
 
   const [session, setSession] = useState<{ id?: string; name?: string; email?: string } | null>(null);
   const [loadingSession, setLoadingSession] = useState(true);
+  const [membershipStatus, setMembershipStatus] = useState<{
+    status: string;
+    expiryDate?: string;
+  } | null>(null);
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -42,6 +46,15 @@ export default function MembershipPage() {
           setSession(data.user);
           setFullName(data.user.name ?? "");
           setEmail(data.user.email ?? "");
+
+          // Already a member? Show their status instead of the apply form.
+          try {
+            const statusRes = await fetch(`/api/gateway/api/memberships/status/${data.user.id}`);
+            const statusJson = await statusRes.json();
+            if (statusJson?.data) setMembershipStatus(statusJson.data);
+          } catch {
+            // Non-fatal: fall through to the form.
+          }
         } else {
           setSession(null);
         }
@@ -99,7 +112,7 @@ export default function MembershipPage() {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return newErrors;
   }
 
   // EVENT TOGGLE
@@ -130,62 +143,71 @@ export default function MembershipPage() {
   // SUBMIT MEMBERSHIP
   async function handleSubmit() {
     if (submitting) return;
-    if (!validate()) return;
-    if (!session?.id) return;
+    // Show exactly what's missing instead of failing silently.
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      alert("Please complete the form:\n\n• " + Object.values(validationErrors).join("\n• "));
+      return;
+    }
+    // Must be signed in — this was failing silently before.
+    if (!session?.id) {
+      alert("Please sign in before submitting a membership application.");
+      return;
+    }
 
     setSubmitting(true);
 
     const userId = session.id;
 
-    const membershipRes = await fetch("/api/memberships/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId,
-  membership_type: "full",   // or dynamic based on your UI
-  status: "pending",
-  start_date: new Date().toISOString().split("T")[0],
-  expiry_date: "2027-07-31",  // or calculate +1 year
-        fullName,
-        email,
-        phone,
-        division,
-        events,
-        signature,
-      }),
-    });
-
-    if (!membershipRes.ok) {
-      alert("Error creating membership.");
-      setSubmitting(false);
-      return;
-    }
-
-    if (paymentMethod === "card") {
-      const stripeRes = await fetch("/api/stripe/create-checkout-session", {
+    try {
+      // 1. Create the membership application. It starts as "pending" and only
+      //    becomes "active" once payment clears (via the payment-service webhook).
+      const startDate = new Date().toISOString().split("T")[0];
+      const expiryDate = "2027-07-31"; // TODO: calculate +1 year from startDate
+      const membershipRes = await fetch("/api/gateway/api/memberships", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId,
           membershipType: "full",
-          amount: 18375,
+          startDate,
+          expiryDate,
+          fullName,
+          email,
+          phone,
+          division,
+          signature,
+          events,
         }),
       });
 
-      const data = await stripeRes.json();
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert("Stripe error.");
+      const membershipJson = await membershipRes.json();
+      if (!membershipRes.ok || !membershipJson?.data?.id) {
+        console.error("[membership] create failed:", membershipJson);
+        alert(membershipJson?.error?.message ?? "Error creating membership.");
+        setSubmitting(false);
+        return;
       }
-    }
+      const membershipId = membershipJson.data.id;
 
-    if (paymentMethod === "etransfer") {
-      router.push("/membership/etransfer-instructions");
-    }
+      if (paymentMethod === "card") {
+        // 2. Hand off to the Stripe checkout page for this membership. Payment
+        //    success there activates the membership.
+        router.push(`/membership/checkout?mid=${membershipId}`);
+        return; // keep spinner while navigating
+      }
 
-    setSubmitting(false);
+      if (paymentMethod === "etransfer") {
+        router.push("/membership/etransfer-instructions");
+        return;
+      }
+
+      setSubmitting(false);
+    } catch (err) {
+      console.error("[membership] submit error:", err);
+      alert("Network error while submitting. Is the backend running? Check the console.");
+      setSubmitting(false);
+    }
   }
 
   // LOADING SCREEN
@@ -221,6 +243,36 @@ export default function MembershipPage() {
             className="mt-4 inline-flex rounded-md bg-orange-600 px-5 py-2.5 text-white hover:bg-orange-700 transition-all hover:scale-105 active:scale-95"
           >
             Sign In
+          </Link>
+        </section>
+      </main>
+    );
+  }
+
+  // ALREADY AN ACTIVE MEMBER — no need to apply again.
+  if (membershipStatus?.status === "active") {
+    return (
+      <main className="mx-auto max-w-4xl px-4 py-10">
+        <Hero
+          badge="CCRA MEMBERSHIP"
+          title="Membership Registration"
+          description="Become an official CCRA member."
+        />
+
+        <section className="mt-8 rounded-md border border-green-200 bg-green-50 p-8 text-center shadow-sm">
+          <div className="mb-3 text-4xl">✅</div>
+          <h2 className="text-xl font-semibold text-green-800">
+            Your membership is active
+          </h2>
+          <p className="mt-2 text-sm text-green-700">
+            You&apos;re all set{membershipStatus.expiryDate ? ` through ${membershipStatus.expiryDate}` : ""}.
+            You can now enter rodeo events.
+          </p>
+          <Link
+            href="/events/enter-rodeo"
+            className="mt-5 inline-flex rounded-md bg-orange-600 px-5 py-2.5 text-white transition-all hover:scale-105 hover:bg-orange-700 active:scale-95"
+          >
+            Enter a Rodeo
           </Link>
         </section>
       </main>
@@ -513,6 +565,21 @@ export default function MembershipPage() {
           {errors.agreements && (
           <p className="text-xs text-red-500 mt-1">✖ {errors.agreements}</p>
         )}
+
+          {/* Simple bot check. validate() requires this before submitting. */}
+          <label className="flex items-center gap-2 cursor-pointer pt-2">
+            <input
+              type="checkbox"
+              checked={captchaChecked}
+              onChange={(e) => setCaptchaChecked(e.target.checked)}
+              className="accent-orange-600"
+            />
+            <span>I&apos;m not a robot.</span>
+          </label>
+
+          {errors.captcha && (
+            <p className="text-xs text-red-500 mt-1">✖ {errors.captcha}</p>
+          )}
         </div>
 
         {/* SUBMIT BUTTON */}

@@ -82,6 +82,7 @@ export default function EnterRodeoPage() {
   // confirmation view instead of the entry form.
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [needsMembership, setNeedsMembership] = useState(false);
   const [confirmationNumber, setConfirmationNumber] = useState<string | null>(
     null,
   );
@@ -176,6 +177,7 @@ export default function EnterRodeoPage() {
   async function handleSubmitEntries() {
     setIsSubmitting(true);
     setSubmitError(null);
+    setNeedsMembership(false);
 
     try {
       if (!session) {
@@ -193,9 +195,14 @@ export default function EnterRodeoPage() {
 
       setConfirmationNumber("success"); // temporary until you decide how confirmations work
     } catch (err) {
-      setSubmitError(
-        "Something went wrong submitting your entry. Please try again.",
-      );
+      // The backend rejects entry with MEMBERSHIP_REQUIRED when the user has no
+      // active membership — surface that specifically with a path to fix it.
+      const code = (err as { code?: string })?.code;
+      if (code === "MEMBERSHIP_REQUIRED") {
+        setNeedsMembership(true);
+      } else {
+        setSubmitError("Something went wrong submitting your entry. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -375,6 +382,17 @@ export default function EnterRodeoPage() {
               </button>
               {submitError && (
                 <p className="mt-2 text-sm text-red-700">{submitError}</p>
+              )}
+              {needsMembership && (
+                <div className="mt-3 rounded-lg border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-900">
+                  <p className="font-medium">An active CCRA membership is required to enter events.</p>
+                  <a
+                    href="/membership"
+                    className="mt-2 inline-flex rounded-md bg-orange-600 px-4 py-2 text-xs font-semibold text-white hover:bg-orange-700"
+                  >
+                    Get a membership
+                  </a>
+                </div>
               )}
             </div>
           )}
