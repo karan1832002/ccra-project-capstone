@@ -233,6 +233,18 @@ export default function NavList({
           </Link>
 
           <Link
+            href="/admin/results"
+            onClick={onNavigate}
+            className={
+              isActive("/admin/results")
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+            }
+          >
+            Results
+          </Link>
+
+          <Link
             href="/admin/products"
             onClick={onNavigate}
             className={
