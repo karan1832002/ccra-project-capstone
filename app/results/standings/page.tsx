@@ -4,20 +4,11 @@ import { useEffect, useState, useMemo } from "react";
 import StandingsTable from "@/components/rodeo/StandingsTable";
 import Hero from "@/components/ui/Hero";
 import { pageStructure } from "@/lib/styles";
-import { getEvents, getResults, Result } from "@/lib/gateway";
-
-/**
- * Result data used by the standings page.
- * Extends the database Result type with the competition category
- * retrieved from the related event record.
- */
-interface StandingResult extends Result {
-  category: string;
-}
+import { getResults, Result } from "@/lib/gateway";
 
 export default function RodeoStandingsPage() {
-  // All result records enriched with their event category.
-  const [entries, setEntries] = useState<StandingResult[]>([]);
+  // All results used to calculate season standings.
+  const [entries, setEntries] = useState<Result[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
@@ -30,40 +21,10 @@ export default function RodeoStandingsPage() {
       setLoading(true);
 
       try {
-        // Load events and results together since results only contain
-        // event IDs. The event data is needed to determine the category
-        // each result belongs to.
-        const [allEvents, allResults] = await Promise.all([
-          getEvents(),
-          getResults(),
-        ]);
-        console.log("Sample result:", allResults[0]);
-        console.log(
-          "User IDs:",
-          allResults.map((result) => result.competitorId),
-        );
+        // Load every result for the current season.
+        const results = await getResults();
 
-        // Create a quick lookup map so results can find their related event
-        // without repeatedly searching through the entire event list.
-        const eventMap = new Map(allEvents.map((event) => [event.id, event]));
-
-        // Add category information from the event record onto each result.
-        // Results without a matching event are ignored because they cannot
-        // be grouped correctly for standings.
-        const enrichedResults: StandingResult[] = allResults
-          .map((result) => {
-            const event = eventMap.get(result.eventId);
-
-            if (!event) return null;
-
-            return {
-              ...result,
-              category: event.category,
-            };
-          })
-          .filter((result): result is StandingResult => result !== null);
-
-        setEntries(enrichedResults);
+        setEntries(results);
       } catch (error) {
         console.error("Failed to load standings:", error);
       } finally {
@@ -83,8 +44,11 @@ export default function RodeoStandingsPage() {
 
   // Apply the selected category filter.
   const filteredEntries = useMemo(() => {
-    return entries.filter((e) => category === "all" || e.category === category)
-    .filter((e) => e.competitorName?.toLowerCase().includes(search.toLowerCase()));
+    return entries
+      .filter((e) => category === "all" || e.category === category)
+      .filter((e) =>
+        e.competitorName?.toLowerCase().includes(search.toLowerCase()),
+      );
   }, [entries, category, search]);
 
   if (loading) {
