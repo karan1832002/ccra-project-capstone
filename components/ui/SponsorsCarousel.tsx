@@ -58,6 +58,7 @@ export default function SponsorsCarousel({
         src={sponsor.src}
         alt={sponsor.alt}
         fill
+        unoptimized
         className="object-contain drop-shadow-lg"
         sizes="(max-width: 768px) 100vw, 500px"
         priority={current === 0}
