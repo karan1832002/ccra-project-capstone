@@ -1,46 +1,95 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
-import { ResultEntry } from "@/types/rodeo";
-import { getCompletedRodeoEvents, getAllResults } from "@/lib/sampleRodeoData";
+import { useEffect, useState, useMemo } from "react";
 import StandingsTable from "@/components/rodeo/StandingsTable";
 import Hero from "@/components/ui/Hero";
 import { pageStructure } from "@/lib/styles";
+import { getEvents, getResults, Result } from "@/lib/gateway";
+
+/**
+ * Result data used by the standings page.
+ * Extends the database Result type with the competition category
+ * retrieved from the related event record.
+ */
+interface StandingResult extends Result {
+  category: string;
+}
 
 export default function RodeoStandingsPage() {
-  const [entries, setEntries] = useState<ResultEntry[]>([]);
+  // All result records enriched with their event category.
+  const [entries, setEntries] = useState<StandingResult[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Search will be enabled once competitor/user information is available.
   const [search, setSearch] = useState("");
+
+  // Currently selected event category filter.
   const [category, setCategory] = useState("all");
 
   useEffect(() => {
-    Promise.all([getCompletedRodeoEvents(), getAllResults()]).then(
-      ([completedEvents, allResults]) => {
-        const completedEventIds = new Set(completedEvents.map((e) => e.id));
-        setEntries(allResults.filter((r) => completedEventIds.has(r.eventId)));
+    async function load() {
+      setLoading(true);
+
+      try {
+        // Load events and results together since results only contain
+        // event IDs. The event data is needed to determine the category
+        // each result belongs to.
+        const [allEvents, allResults] = await Promise.all([
+          getEvents(),
+          getResults(),
+        ]);
+
+        // Create a quick lookup map so results can find their related event
+        // without repeatedly searching through the entire event list.
+        const eventMap = new Map(allEvents.map((event) => [event.id, event]));
+
+        // Add category information from the event record onto each result.
+        // Results without a matching event are ignored because they cannot
+        // be grouped correctly for standings.
+        const enrichedResults: StandingResult[] = allResults
+          .map((result) => {
+            const event = eventMap.get(result.eventId);
+
+            if (!event) return null;
+
+            return {
+              ...result,
+              category: event.category,
+            };
+          })
+          .filter((result): result is StandingResult => result !== null);
+
+        setEntries(enrichedResults);
+      } catch (error) {
+        console.error("Failed to load standings:", error);
+      } finally {
         setLoading(false);
-      },
-    );
+      }
+    }
+
+    load();
   }, []);
 
-  // Extract distinct categories from eventName
+  // Build the category dropdown options from the loaded results.
+  // The "all" option displays standings from every category.
   const categories = useMemo(() => {
-    const set = new Set(entries.map((e) => e.eventName));
+    const set = new Set(entries.map((e) => e.category));
     return ["all", ...Array.from(set)];
   }, [entries]);
 
-  // Filtered standings
+  // Apply the selected category filter.
+  // Competitor searching will be enabled once user information is available
+  // on result records.
   const filteredEntries = useMemo(() => {
-    return entries
-      .filter((e) => category === "all" || e.eventName === category)
-      .filter((e) => e.competitor.toLowerCase().includes(search.toLowerCase()));
+    return entries.filter((e) => category === "all" || e.category === category);
+    // TODO: Re-enable competitor search once user information is available.
+    // .filter((e) => e.userId?.toLowerCase().includes(search.toLowerCase()));
   }, [entries, category, search]);
 
   if (loading) {
     return (
       <div className="w-full py-8 px-4">
-        <p className="text-sm text-stone-400">Loading standings...</p>
+        <p className="text-sm text-muted-foreground">Loading standings...</p>
       </div>
     );
   }
@@ -57,18 +106,23 @@ export default function RodeoStandingsPage() {
       <div className={pageStructure.contentContainer}>
         {/* SEARCH + FILTER BAR */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">
+          {/* Competitor search will be enabled once result records include
+              competitor/user information. */}
           <input
             type="text"
             placeholder="Search competitor..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full md:w-1/2 rounded-md border border-stone-300 px-4 py-2"
+            disabled
+            // TODO: Re-enable competitor search once user information is available.
+            // onChange={(e) => setSearch(e.target.value)}
+            className="w-full md:w-1/2 rounded-md border border-border px-4 py-2"
           />
 
+          {/* Category selector filters standings by competition type. */}
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full md:w-1/2 rounded-md border border-stone-300 px-4 py-2"
+            className="w-full md:w-1/2 rounded-md border border-border px-4 py-2"
           >
             {categories.map((cat) => (
               <option key={cat} value={cat}>
@@ -80,7 +134,7 @@ export default function RodeoStandingsPage() {
 
         {/* NO RESULTS */}
         {filteredEntries.length === 0 && (
-          <p className="text-sm text-stone-400 py-6 text-center">
+          <p className="text-sm text-foreground py-6 text-center">
             No standings found.
           </p>
         )}
