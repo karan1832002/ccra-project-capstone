@@ -1,24 +1,18 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { RodeoSummary } from "@/types/rodeo";
 import { RodeoEventCard } from "@/components/rodeo/RodeoEventCard";
 import { ResultsPreview } from "@/components/rodeo/ResultsPreview";
 import { EventFilterBar } from "@/components/rodeo/EventFilterBar";
 import Hero from "@/components/ui/Hero";
 import { pageStructure } from "@/lib/styles";
-import { getRodeos, getRodeo, getResults, Result } from "@/lib/gateway";
+import { getResults, Result } from "@/lib/gateway";
 
 export default function RodeoResultsPage() {
-  // Rodeo summaries displayed on the page and the associated result entries.
-  const [rodeos, setRodeos] = useState<RodeoSummary[]>([]);
+  // All results loaded from the backend. Rodeo summaries are derived from
+  // this data rather than loaded separately.
   const [results, setResults] = useState<Result[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // Maps each event ID to its parent rodeo ID so results can be grouped by rodeo.
-  const [eventToRodeo, setEventToRodeo] = useState<Map<string, string>>(
-    new Map(),
-  );
 
   // Filter controls.
   const [search, setSearch] = useState("");
@@ -29,57 +23,9 @@ export default function RodeoResultsPage() {
       setLoading(true);
 
       try {
-        // Load the list of rodeos, then retrieve full details for each.
-        const rodeoList = await getRodeos();
-
-        // Skip any rodeos that fail to load so the rest of the page can still render.
-        const details = (
-          await Promise.all(
-            rodeoList.map(async (r) => {
-              try {
-                return await getRodeo(r.id);
-              } catch (error) {
-                console.error("Skipping failed rodeo:", r.rodeoTitle, error);
-                return null;
-              }
-            }),
-          )
-        ).filter((r) => r !== null);
-
-        // Build a lookup table linking each event to its parent rodeo.
-        const eventMap = new Map<string, string>();
-
-        details.forEach((rodeo) => {
-          rodeo.events.forEach((event) => {
-            eventMap.set(event.id, rodeo.id);
-          });
-        });
-
-        // Load all recorded results.
+        // Load all posted results. Each result already contains its associated
+        // rodeo information, allowing the page to build its own rodeo summaries.
         const results = await getResults();
-
-        setEventToRodeo(eventMap);
-
-        // Convert the backend rodeo data into the simplified format used by the UI.
-        const summaries: RodeoSummary[] = details
-          .filter((r) => r.dates.length > 0)
-          .map((r) => {
-            // Ensure dates are ordered so the first and last represent the rodeo span.
-            const dates = r.dates.toSorted((a, b) =>
-              a.date.localeCompare(b.date),
-            );
-
-            return {
-              id: r.id,
-              name: r.rodeoTitle,
-              location: r.location,
-              year: new Date(dates[0].date).getFullYear(),
-              startDate: dates[0].date,
-              endDate: dates[dates.length - 1].date,
-            };
-          });
-
-        setRodeos(summaries);
         setResults(results);
       } catch (error) {
         console.error("Results page failed:", error);
@@ -91,38 +37,73 @@ export default function RodeoResultsPage() {
     load();
   }, []);
 
-  // Available years for the filter dropdown.
-  const years = useMemo(
-    () => Array.from(new Set(rodeos.map((e) => e.year))).sort((a, b) => b - a),
-    [rodeos],
-  );
-
-  // Group all results by rodeo using the event-to-rodeo lookup table.
-  const resultsByRodeo = useMemo(() => {
-    const map = new Map<string, Result[]>();
+  // Group results by rodeo while building the summary information needed
+  // to render each rodeo card. Each map entry contains the rodeo details
+  // along with every result belonging to that rodeo.
+  const rodeoMap = useMemo(() => {
+    const map = new Map<
+      string,
+      {
+        id: string;
+        name: string;
+        location: string;
+        year: number;
+        startDate: string;
+        endDate: string;
+        results: Result[];
+      }
+    >();
 
     for (const result of results) {
-      const rodeoId = eventToRodeo.get(result.eventId);
+      const existing = map.get(result.rodeoId);
 
-      // Ignore results that cannot be matched to a rodeo.
-      if (!rodeoId) continue;
+      if (existing) {
+        // Update the existing rodeo summary with this additional result.
+        existing.results.push(result);
 
-      const existing = map.get(rodeoId) ?? [];
-      existing.push(result);
-      map.set(rodeoId, existing);
+        if (result.eventDate < existing.startDate) {
+          existing.startDate = result.eventDate;
+        }
+
+        if (result.eventDate > existing.endDate) {
+          existing.endDate = result.eventDate;
+        }
+
+        continue;
+      }
+
+      // First result encountered for this rodeo. Initialize the summary.
+      map.set(result.rodeoId, {
+        id: result.rodeoId,
+        name: result.rodeoTitle,
+        location: result.rodeoLocation,
+        year: new Date(result.eventDate).getFullYear(),
+        startDate: result.eventDate,
+        endDate: result.eventDate,
+        results: [result],
+      });
     }
 
     return map;
-  }, [results, eventToRodeo]);
+  }, [results]);
 
-  // Apply the search and year filters, then hide rodeos without posted results.
+  // Build the year filter options from the loaded rodeo summaries.
+  const years = useMemo(
+    () =>
+      Array.from(
+        new Set(Array.from(rodeoMap.values()).map((r) => r.year)),
+      ).sort((a, b) => b - a),
+    [rodeoMap],
+  );
+
+  // Apply the selected year and search filters, then sort rodeos from
+  // newest to oldest.
   const visibleRodeos = useMemo(() => {
-    return rodeos
-      .filter((e) => year === "all" || String(e.year) === year)
-      .filter((e) => e.name.toLowerCase().includes(search.toLowerCase()))
-      .filter((e) => resultsByRodeo.has(e.id))
+    return Array.from(rodeoMap.values())
+      .filter((r) => year === "all" || String(r.year) === year)
+      .filter((r) => r.name.toLowerCase().includes(search.toLowerCase()))
       .sort((a, b) => (a.startDate < b.startDate ? 1 : -1));
-  }, [rodeos, year, search, resultsByRodeo]);
+  }, [rodeoMap, year, search]);
 
   // Insert a year heading before the first rodeo of each season.
   const rodeosWithYearHeaders = useMemo(
@@ -168,10 +149,7 @@ export default function RodeoResultsPage() {
               </div>
             )}
             <RodeoEventCard event={rodeo}>
-              <ResultsPreview
-                rodeoId={rodeo.id}
-                entries={resultsByRodeo.get(rodeo.id) ?? []}
-              />
+              <ResultsPreview rodeoId={rodeo.id} entries={rodeo.results} />
             </RodeoEventCard>
           </React.Fragment>
         ))}
