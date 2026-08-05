@@ -1,32 +1,33 @@
 /**
  * ResultsTable
  * ------------
- * Results-specific body content for the results detail page. Splits a
- * rodeo's results into one Table per competition category (e.g. "Ladies
- * Barrel Racing 40-59", "Team Roping 60+"), rather than one giant table
- * mixing every category's rows together. Within each category, rows are
- * sorted by performance date first, then by placing — matching how the
- * association's own results pages are ordered.
+ * Displays a rodeo's results grouped by competition category. Each category
+ * receives its own table so results from different events are kept separate.
+ *
+ * Results are provided from the backend and are matched with the rodeo's
+ * events list to retrieve additional information such as event category,
+ * date, and time.
  */
 
 import React from "react";
 import Table from "@/components/ui/Table";
-// import { ResultEntry, RodeoPerformance } from "@/types/rodeo";
 import { Event, Result } from "@/lib/gateway";
 
 interface ResultsTableProps {
   entries: Result[];
-  // The rodeo's own list of performances, used to look up a date/time label
-  // for entry.performanceId and to sort each category's rows by date.
+  // The events belonging to the current rodeo. Results only contain an
+  // eventId, so this list is used to look up event details when displaying
+  // category names and event date/time information.
   events: Event[];
 }
 
+// Formats monetary values using Canadian currency formatting.
 export function formatCurrency(amount: number): string {
   return amount.toLocaleString("en-CA", { style: "currency", currency: "CAD" });
 }
 
-// Rough stock events are scored (score), timed events have a time — only one
-// of the two will be set on any given entry.
+// Rough stock events use a score, while timed events use timeSeconds.
+// Only one value should normally be present for a given result.
 function formatTimeOrScore(entry: Result): string {
   if (entry.timeSeconds != null) {
     return entry.timeSeconds.toFixed(3);
@@ -39,8 +40,8 @@ function formatTimeOrScore(entry: Result): string {
   return "-";
 }
 
-// Turns a performance's ISO date and display time into a short label,
-// e.g. "Jul 21 @ 9 am".
+// Converts an event date and time into a readable display format.
+// Example: "Jul 21 @ 9 am".
 function formatDateTimeLabel(event: Event): string {
   const date = new Date(`${event.eventDate}T00:00:00`);
 
@@ -54,14 +55,15 @@ function formatDateTimeLabel(event: Event): string {
 
 export function ResultsTable({ entries, events }: ResultsTableProps) {
   if (entries.length === 0) {
-    return <p className="text-sm text-stone-400">No results posted yet.</p>;
+    return <p className="text-sm text-foreground">No results posted yet.</p>;
   }
 
-  // Quick lookup from a performance id to its full record — used both to
-  // sort each category's rows by date and to render the date/time label.
+  // Create a quick lookup table so results can access their related event
+  // information using eventId.
   const eventById = new Map(events.map((event) => [event.id, event]));
 
-  // Group entries by competition category so each one gets its own table.
+  // Group results by competition category. This allows each event category
+  // (such as Barrel Racing or Team Roping) to render as its own table.
   const entriesByCategory = new Map<string, Result[]>();
 
   for (const entry of entries) {
@@ -72,6 +74,8 @@ export function ResultsTable({ entries, events }: ResultsTableProps) {
     entriesByCategory.set(category, existing);
   }
 
+  // Table columns must match the order of properties in each row object below.
+  // The shared Table component renders row values positionally.
   const columns = [
     "Date & Time",
     "Placing",
@@ -86,14 +90,14 @@ export function ResultsTable({ entries, events }: ResultsTableProps) {
     <div className="space-y-8">
       {Array.from(entriesByCategory.entries()).map(
         ([eventName, categoryEntries]) => {
-          // Sort by performance date first, then by placing within that date —
-          // matches the order results are posted in on the association's site.
+          // Results are displayed in placing order, with unplaced entries
+          // moved to the bottom.
           const sortedEntries = [...categoryEntries].sort(
             (a, b) => (a.placement ?? 999) - (b.placement ?? 999),
           );
 
-          // Property insertion order here must mirror `columns` above, since
-          // Table renders each row positionally via Object.values(row).
+          // Convert backend results into the row format expected by the
+          // shared Table component.
           const data = sortedEntries.map((entry) => {
             const event = eventById.get(entry.eventId);
 
@@ -101,6 +105,9 @@ export function ResultsTable({ entries, events }: ResultsTableProps) {
               dateTime: event ? formatDateTimeLabel(event) : "-",
               placing: entry.placement ?? "-",
               timeOrScore: formatTimeOrScore(entry),
+              // Competitor names are not currently included in Result data,
+              // so the userId is displayed until competitor information is
+              // available from the backend.
               competitor: entry.userId,
               money: formatCurrency(entry.money),
               groundMoney: formatCurrency(entry.ground),
@@ -110,7 +117,7 @@ export function ResultsTable({ entries, events }: ResultsTableProps) {
 
           return (
             <div key={eventName}>
-              <h2 className="text-lg font-semibold text-stone-900 mb-2">
+              <h2 className="text-lg font-semibold text-heading mb-2">
                 {eventName}
               </h2>
               <Table columns={columns} data={data} />

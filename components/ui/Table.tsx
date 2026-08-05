@@ -26,16 +26,16 @@ function Table<T extends Record<string, React.ReactNode>>({
   data,
 }: TableProps<T>) {
   return (
-    <div className="overflow-x-auto rounded-md border border-stone-200 shadow-sm w-full">
-      <table className="w-full divide-y divide-stone-200">
+    <div className="overflow-x-auto rounded-md border border-border shadow-sm w-full">
+      <table className="w-full divide-y divide-border">
         {/* Table Headers */}
-        <thead className="bg-orange-600">
+        <thead className="bg-primary">
           <tr>
             {columns.map((col, index) => (
               <th
                 key={index}
                 scope="col"
-                className="px-6 py-3 text-center text-sm font-semibold text-white uppercase tracking-wider"
+                className="px-6 py-3 text-center text-sm font-semibold text-primary-foreground uppercase tracking-wider"
               >
                 {col}
               </th>
@@ -43,16 +43,16 @@ function Table<T extends Record<string, React.ReactNode>>({
           </tr>
         </thead>
         {/* Table Data */}
-        <tbody className="divide-y divide-stone-200">
+        <tbody className="divide-y divide-border">
           {data.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-              className={`${rowIndex % 2 === 0 ? "bg-white" : "bg-stone-50"} hover:bg-orange-50`}
+              className={`${rowIndex % 2 === 0 ? "bg-surface" : "bg-highlight"} hover:bg-accent`}
             >
               {Object.values(row).map((cell, cellIndex) => (
                 <td
                   key={cellIndex}
-                  className="px-6 py-4 whitespace-nowrap text-sm text-stone-600"
+                  className="px-6 py-4 whitespace-nowrap text-sm text-foreground"
                 >
                   {cell}
                 </td>
