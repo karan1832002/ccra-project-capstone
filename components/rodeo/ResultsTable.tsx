@@ -15,6 +15,7 @@ import { Event, Result } from "@/lib/gateway";
 
 interface ResultsTableProps {
   entries: Result[];
+
   // The events belonging to the current rodeo. Results only contain an
   // eventId, so this list is used to look up event details when displaying
   // category names and event date/time information.
@@ -22,22 +23,22 @@ interface ResultsTableProps {
 }
 
 // Formats monetary values using Canadian currency formatting.
-export function formatCurrency(amount: number): string {
-  return amount.toLocaleString("en-CA", { style: "currency", currency: "CAD" });
+// Returns "-" when no payout value exists.
+export function formatCurrency(amount: number | null): string {
+  if (amount == null) {
+    return "-";
+  }
+
+  return amount.toLocaleString("en-CA", {
+    style: "currency",
+    currency: "CAD",
+  });
 }
 
-// Rough stock events use a score, while timed events use timeSeconds.
-// Only one value should normally be present for a given result.
-function formatTimeOrScore(entry: Result): string {
-  if (entry.timeSeconds != null) {
-    return entry.timeSeconds.toFixed(3);
-  }
-
-  if (entry.score != null) {
-    return entry.score.toString();
-  }
-
-  return "-";
+// Formats the event score when one exists.
+// Some event types may not use a score, so empty values are handled safely.
+function formatScore(entry: Result): string {
+  return entry.score != null ? entry.score.toString() : "-";
 }
 
 // Converts an event date and time into a readable display format.
@@ -58,12 +59,12 @@ export function ResultsTable({ entries, events }: ResultsTableProps) {
     return <p className="text-sm text-foreground">No results posted yet.</p>;
   }
 
-  // Create a quick lookup table so results can access their related event
+  // Create a lookup table so results can access their related event
   // information using eventId.
   const eventById = new Map(events.map((event) => [event.id, event]));
 
-  // Group results by competition category. This allows each event category
-  // (such as Barrel Racing or Team Roping) to render as its own table.
+  // Group results by competition category so each category receives
+  // its own results table.
   const entriesByCategory = new Map<string, Result[]>();
 
   for (const entry of entries) {
@@ -79,7 +80,7 @@ export function ResultsTable({ entries, events }: ResultsTableProps) {
   const columns = [
     "Date & Time",
     "Placing",
-    "Time / Score",
+    "Score",
     "Competitor",
     "Money $",
     "Ground $",
@@ -90,8 +91,8 @@ export function ResultsTable({ entries, events }: ResultsTableProps) {
     <div className="space-y-8">
       {Array.from(entriesByCategory.entries()).map(
         ([eventName, categoryEntries]) => {
-          // Results are displayed in placing order, with unplaced entries
-          // moved to the bottom.
+          // Display results in placing order, with unplaced entries moved
+          // to the bottom of the table.
           const sortedEntries = [...categoryEntries].sort(
             (a, b) => (a.placement ?? 999) - (b.placement ?? 999),
           );
@@ -104,11 +105,8 @@ export function ResultsTable({ entries, events }: ResultsTableProps) {
             return {
               dateTime: event ? formatDateTimeLabel(event) : "-",
               placing: entry.placement ?? "-",
-              timeOrScore: formatTimeOrScore(entry),
-              // Competitor names are not currently included in Result data,
-              // so the userId is displayed until competitor information is
-              // available from the backend.
-              competitor: entry.userId,
+              score: formatScore(entry),
+              competitor: entry.competitorName ?? entry.competitorId,
               money: formatCurrency(entry.money),
               groundMoney: formatCurrency(entry.ground),
               points: entry.points ?? "-",
@@ -120,6 +118,7 @@ export function ResultsTable({ entries, events }: ResultsTableProps) {
               <h2 className="text-lg font-semibold text-heading mb-2">
                 {eventName}
               </h2>
+
               <Table columns={columns} data={data} />
             </div>
           );

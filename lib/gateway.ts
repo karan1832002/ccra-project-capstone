@@ -150,42 +150,42 @@ export type RegisterEventRequest = {
 
 // Result for rodeo event
 // (old db table)
-export type Result = {
-  id: string;
-  eventId: string;
-  userId: string;
-  entryId: string | null;
-  category: string;
-  score?: number | null;
-  timeSeconds: number | null;
-  placement: number | null;
-  points: number;
-  money: number;
-  ground: number;
-  recordedAt: string | null;
-};
-// (current db table)
 // export type Result = {
 //   id: string;
-//   rodeoId: string;
-//   rodeoTitle: string;
-//   rodeoLocation: string;
-//   rodeoStart: string;
-//   rodeoEnd: string;
 //   eventId: string;
+//   userId: string;
+//   entryId: string | null;
 //   category: string;
-//   eventDate: string;
-//   eventTime: string;
-//   entryId: string;
-//   competitorId: string;
-//   competitorName: string;
-//   score: number | null;
-//   points: number | null;
+//   score?: number | null;
+//   timeSeconds: number | null;
 //   placement: number | null;
-//   money: number | null;
-//   ground: number | null;
+//   points: number;
+//   money: number;
+//   ground: number;
 //   recordedAt: string | null;
 // };
+// (current db table)
+export type Result = {
+  id: string;
+  rodeoId: string;
+  rodeoTitle: string;
+  rodeoLocation: string;
+  rodeoStart: string;
+  rodeoEnd: string;
+  eventId: string;
+  category: string;
+  eventDate: string;
+  eventTime: string;
+  entryId: string;
+  competitorId: string;
+  competitorName: string;
+  score: number | null;
+  points: number | null;
+  placement: number | null;
+  money: number | null;
+  ground: number | null;
+  recordedAt: string | null;
+};
 
 export type Product = {
   id: string;
