@@ -3,20 +3,15 @@ import "server-only";
 import { requireAdmin } from "@/lib/admin-auth";
 import { fetchRodeos } from "./actions";
 import type { Rodeo } from "@/lib/gateway";
-import EventForm from "./EventForm";
-
-// Renders a nullable date string. Falls back to an em-dash when null.
-function fmtDate(value: string | null) {
-  if (!value) return "\u2014";
-  return value;
-}
+import RodeoForm from "./RodeoForm";
+import RodeoTable from "./RodeoTable";
 
 // --- Events Management Page ---
 // Server component available to both admin and superadmin roles (the
 // layout already gates at the "admin" level). Fetches all rodeos from the
-// event-service gateway and renders them in a read-only table alongside
-// the rodeo creation form. A fetch failure renders an error banner instead
-// of crashing the page so the admin form remains usable for diagnosis.
+// event-service gateway and passes them as props to the client-side
+// RodeoTable. A fetch failure renders an error banner instead of crashing
+// the page so the admin form remains usable for diagnosis.
 export default async function AdminEventsPage() {
   await requireAdmin();
 
@@ -42,7 +37,7 @@ export default async function AdminEventsPage() {
       </div>
 
       {/* --- Rodeo Creation Form --- */}
-      <EventForm />
+      <RodeoForm />
 
       {/* --- Rodeo List Table --- */}
       {fetchError ? (
@@ -55,79 +50,7 @@ export default async function AdminEventsPage() {
       ) : !rodeos || rodeos.length === 0 ? (
         <p className="text-sm text-gray-500">No rodeos found.</p>
       ) : (
-        <div className="w-full overflow-x-auto rounded-md border border-gray-200 bg-white shadow-sm">
-          <table className="min-w-full text-sm">
-            <thead className="hidden sm:table-header-group bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Title
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Location
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Entry Fee
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Entries Open
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Entries Close
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                  Capacity
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rodeos.map((rodeo) => (
-                <tr
-                  key={rodeo.id}
-                  className="block mb-6 border border-stone-200 p-4 rounded-md bg-white sm:table-row sm:mb-0 sm:border-0 sm:p-0 sm:border-b sm:border-gray-100 sm:hover:bg-gray-50/50"
-                >
-                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
-                      Title
-                    </span>
-                    {rodeo.rodeoTitle}
-                  </td>
-                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
-                      Location
-                    </span>
-                    {rodeo.location}
-                  </td>
-                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
-                      Entry Fee
-                    </span>
-                    {rodeo.entryFee != null
-                      ? `$${rodeo.entryFee.toFixed(2)}`
-                      : "\u2014"}
-                  </td>
-                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
-                      Entries Open
-                    </span>
-                    {fmtDate(rodeo.entriesOpen)}
-                  </td>
-                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
-                      Entries Close
-                    </span>
-                    {fmtDate(rodeo.entriesClose)}
-                  </td>
-                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
-                      Capacity
-                    </span>
-                    {rodeo.capacity ?? "\u2014"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <RodeoTable data={rodeos} />
       )}
     </div>
   );

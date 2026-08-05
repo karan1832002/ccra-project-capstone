@@ -22,7 +22,7 @@ import ThemeToggle from "../ui/ThemeToggle";
 import { LogIn, ShoppingCart, Shield } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import { usePathname } from "next/navigation";
-import { iconButtonClass, iconButtonHighlightClass } from "@/lib/styles";
+import { buttons } from "@/lib/styles";
 
 // A sub-item is always a simple link — no further nesting, path required.
 export interface NavSubItem {
@@ -35,7 +35,6 @@ export interface NavItem {
   path?: string;
   // Optional submenu items, e.g. About Us -> Contact Information, Board of Directors.
   // Omit this field entirely for menus that don't have submenus.
-  // An item has either a path OR subItems, never both.
   subItems?: NavSubItem[];
 }
 
@@ -48,6 +47,7 @@ const NAV_ITEMS: NavItem[] = [
 
   {
     label: "Events",
+    path: "/events",
     subItems: [
       { label: "Enter Rodeo", path: "/events/enter-rodeo" },
       { label: "Current Entries", path: "/events/current-entries" },
@@ -59,6 +59,7 @@ const NAV_ITEMS: NavItem[] = [
 
   {
     label: "Results",
+    path: "/results",
     subItems: [
       { label: "Rodeo Results", path: "/results/rodeo-results" },
       { label: "Standings", path: "/results/standings" },
@@ -124,14 +125,18 @@ export default function Header() {
 
           <ThemeToggle />
 
-          <Link href="/cart" className={iconButtonClass} aria-label="View cart">
+          <Link
+            href="/cart"
+            className={buttons.iconButton}
+            aria-label="View cart"
+          >
             <ShoppingCart className="h-5 w-5" />
           </Link>
 
           {isAdmin && (
             <Link
               href="/admin"
-              className={`${iconButtonHighlightClass} text-accent-foreground hover:text-accent-foreground`}
+              className={`${buttons.iconButtonHighlight} text-accent-foreground hover:text-accent-foreground`}
               aria-label="Admin Dashboard"
             >
               <Shield className="h-5 w-5" />
