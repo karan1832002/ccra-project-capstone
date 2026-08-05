@@ -2,16 +2,14 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-// import { RodeoEvent, ResultEntry } from "@/types/rodeo";
-// import { getRodeoEvent, getResultsForEvent } from "@/lib/sampleRodeoData";
 import { ResultsTable, formatCurrency } from "@/components/rodeo/ResultsTable";
 import { pageStructure } from "@/lib/styles";
 import { getRodeo, getEventResults, RodeoDetail, Result } from "@/lib/gateway";
 import { formatShortDate } from "@/lib/rodeoDateUtils";
 
 interface RodeoResultsDetailPageProps {
-  // Next.js provides dynamic route params as a Promise, so it's unwrapped
-  // with React.use() below rather than read directly off props.
+  // Next.js provides dynamic route params as a Promise in this route setup.
+  // React.use() unwraps the promise so the rodeo id can be used for data loading.
   params: Promise<{ rodeoId: string }>;
 }
 
@@ -25,9 +23,8 @@ export default function RodeoResultsDetailPage({
   const [rodeoMissing, setRodeoMissing] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Rodeo-wide payout totals across every result, regardless of category —
-  // mirrors the "Payout Report" summary row shown at the top of the
-  // association's own results pages.
+  // Calculate payout totals across every result in the rodeo.
+  // These values are displayed in the summary panel above the results tables.
   const totalMoney = useMemo(
     () => results.reduce((sum, entry) => sum + entry.money, 0),
     [results],
@@ -38,7 +35,9 @@ export default function RodeoResultsDetailPage({
   );
   const totalPayout = totalMoney + totalGroundMoney;
 
-  // Load the selected rodeo, then retrieve results for each event it contains.
+  // Load the selected rodeo using the id from the URL.
+  // Once the rodeo details are available, load results for each event
+  // belonging to that rodeo and combine them into a single results array.
   useEffect(() => {
     async function load() {
       setLoading(true);
@@ -47,7 +46,8 @@ export default function RodeoResultsDetailPage({
         const rodeo = await getRodeo(rodeoId);
         setRodeo(rodeo);
 
-        // Load the results for every event in this rodeo.
+        // Each rodeo contains multiple events. Results are stored by event,
+        // so each event must be queried separately before combining them.
         const results = (
           await Promise.all(
             rodeo.events.map((event) => getEventResults(event.id)),
@@ -56,6 +56,7 @@ export default function RodeoResultsDetailPage({
 
         setResults(results);
       } catch (error) {
+        // Handles invalid rodeo ids, missing data, or failed API requests.
         console.error("Failed to load rodeo results:", error);
         setRodeoMissing(true);
       } finally {
@@ -66,6 +67,7 @@ export default function RodeoResultsDetailPage({
     load();
   }, [rodeoId]);
 
+  // Shared navigation back to the main results listing page.
   const backLink = (
     <Link
       href="/results/rodeo-results"
@@ -79,7 +81,7 @@ export default function RodeoResultsDetailPage({
     return (
       <div className="max-w-4xl mx-auto py-8 px-4">
         {backLink}
-        <p className="text-sm text-stone-400">Loading results...</p>
+        <p className="text-sm text-muted-foreground">Loading results...</p>
       </div>
     );
   }
@@ -88,13 +90,15 @@ export default function RodeoResultsDetailPage({
     return (
       <div className="max-w-4xl mx-auto py-8 px-4">
         {backLink}
-        <p className="text-sm text-stone-400">
-          We couldn&apos;t find results for that rodeo.
+        <p className="text-sm text-foreground">
+          We couldn't find results for that rodeo.
         </p>
       </div>
     );
   }
 
+  // Format the rodeo date range for display.
+  // Single-day rodeos show one date; multi-day rodeos show the full range.
   const dates = rodeo.dates.map((d) => d.date).toSorted();
 
   const dateLabel =
@@ -107,39 +111,41 @@ export default function RodeoResultsDetailPage({
       <div className={pageStructure.contentContainer}>
         {backLink}
 
-        {/* Header on the left, payout summary on the right, tops aligned. */}
+        {/* Page header contains the rodeo name/date information on the left and
+            overall payout totals on the right. */}
         <div className="flex items-start justify-between gap-6 mb-6">
           <div>
-            <h1 className="text-3xl font-semibold text-stone-950">
+            <h1 className="text-3xl font-semibold text-heading">
               {rodeo.rodeoTitle} Results
             </h1>
-            <p className="text-sm text-stone-400">
+            <p className="text-sm text-muted-foreground">
               {dateLabel}
               {rodeo.location ? ` · ${rodeo.location}` : ""}
             </p>
           </div>
 
-          {/* Rodeo-wide payout summary. A two-column grid (label / value)
-            keeps every colon and every $ amount aligned in its own column,
-            regardless of how long each label is*/}
-          <div className="text-sm text-stone-600 shrink-0">
+          {/* Summary of all prize money awarded across this rodeo.
+              A grid keeps labels and values aligned regardless of label length. */}
+          <div className="text-sm text-foreground shrink-0">
             <div className="grid grid-cols-[auto_auto] gap-x-2 gap-y-1">
               <span className="text-right">Money:</span>
-              <span className="font-semibold text-stone-950">
+              <span className="font-semibold text-heading">
                 {formatCurrency(totalMoney)}
               </span>
               <span className="text-right">Ground:</span>
-              <span className="font-semibold text-stone-950">
+              <span className="font-semibold text-heading">
                 {formatCurrency(totalGroundMoney)}
               </span>
               <span className="text-right">Total Payout:</span>
-              <span className="font-semibold text-stone-950">
+              <span className="font-semibold text-heading">
                 {formatCurrency(totalPayout)}
               </span>
             </div>
           </div>
         </div>
 
+        {/* ResultsTable groups the combined event results into separate
+            competition category tables. */}
         <ResultsTable entries={results} events={rodeo.events} />
       </div>
     </div>
