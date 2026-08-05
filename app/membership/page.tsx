@@ -29,6 +29,7 @@ export default function MembershipPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [submitting, setSubmitting] = useState(false);
+  const [captchaChecked, setCaptchaChecked] = useState(false);
   const [agreeInfoCorrect, setAgreeInfoCorrect] = useState(false);
   const [agreeRules, setAgreeRules] = useState(false);
 

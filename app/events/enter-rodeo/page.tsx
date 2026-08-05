@@ -353,7 +353,7 @@ export default function EnterRodeoPage() {
                   </p>
                 </>
               )}
-<<<<<<< HEAD
+
               {needsMembership && (
                 <div className="mt-3 rounded-lg border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-900">
                   <p className="font-medium">An active CCRA membership is required to enter events.</p>
@@ -365,11 +365,6 @@ export default function EnterRodeoPage() {
                   </a>
                 </div>
               )}
-            </div>
-          )}
-        </>
-      )}
-=======
             </section>
 
             {confirmationNumber ? (
@@ -408,7 +403,6 @@ export default function EnterRodeoPage() {
           </>
         )}
       </div>
->>>>>>> efd76743de5cfe0985b15721b745c40cfd0a2181
     </main>
   );
 }

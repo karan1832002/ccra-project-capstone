@@ -149,17 +149,18 @@ function MembershipCheckout() {
 
   useEffect(() => {
     if (sessionLoading || clientSecret) return;
-    if (!membershipId) {
-      setErrorMsg("Missing membership reference. Please start from the membership page.");
-      setState("error");
-      return;
-    }
+    if (!membershipId) return;
     if (startedRef.current) return; // guard against StrictMode double-run
     startedRef.current = true;
 
     const userId = session?.user?.id ?? "guest";
 
     async function startCheckout() {
+      if (!membershipId) {
+        setErrorMsg("Missing membership reference. Please start from the membership page.");
+        setState("error");
+        return;
+      }
       try {
         const res = await fetch("/api/gateway/api/payments", {
           method: "POST",
