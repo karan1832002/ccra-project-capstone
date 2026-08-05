@@ -247,7 +247,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="relative aspect-[4/3] rounded-md overflow-hidden border border-stone-200 dark:border-stone-700">
+            <div className="relative aspect-4/3 rounded-md overflow-hidden border border-stone-200 dark:border-stone-700">
               <Image
                 src="/images/cowwrestler.jpg"
                 alt="CCRA competitors"
