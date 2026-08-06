@@ -68,7 +68,6 @@ export interface RodeoPayload {
   entryFee?: number | null;
   entriesOpen?: string | null;
   entriesClose?: string | null;
-  phoneInEntries?: string | null;
   description?: string | null;
   image?: string | null;
   capacity?: number | null;

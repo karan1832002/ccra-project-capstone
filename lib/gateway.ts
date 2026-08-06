@@ -76,7 +76,6 @@ export type Rodeo = {
   id: string;
   rodeoTitle: string;
   entriesOpen: string | null; // ISO date "YYYY-MM-DD"
-  phoneInEntries: string | null;
   entriesClose: string | null;
   entryFee: number | null;
   location: string;

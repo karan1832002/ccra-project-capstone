@@ -58,7 +58,6 @@ export default function RodeoForm({
   const [entriesOpen, setEntriesOpen] = useState("");
   const [entriesClose, setEntriesClose] = useState("");
   const [description, setDescription] = useState("");
-  const [phoneInEntries, setPhoneInEntries] = useState("");
 
   // Dynamic array of rodeo dates for multi-day events.
   const [rodeoDates, setRodeoDates] = useState<RodeoDatePayload[]>([]);
@@ -76,7 +75,6 @@ export default function RodeoForm({
       setEntriesOpen(initialData.entriesOpen ?? "");
       setEntriesClose(initialData.entriesClose ?? "");
       setDescription(initialData.description ?? "");
-      setPhoneInEntries(initialData.phoneInEntries ?? "");
 
       // Hydrate existing dates from the rodeo detail response. The
       // RodeoDetail type nests `dates`; a plain Rodeo list item does
@@ -100,7 +98,6 @@ export default function RodeoForm({
       setEntriesOpen("");
       setEntriesClose("");
       setDescription("");
-      setPhoneInEntries("");
       setRodeoDates([]);
     }
     setError(null);
@@ -175,7 +172,6 @@ export default function RodeoForm({
           entriesOpen: entriesOpen || null,
           entriesClose: entriesClose || null,
           description: description.trim() || null,
-          phoneInEntries: phoneInEntries.trim() || null,
           rodeoDates: rodeoDates.length > 0 ? rodeoDates : undefined,
         };
 
@@ -191,7 +187,6 @@ export default function RodeoForm({
           setEntriesOpen("");
           setEntriesClose("");
           setDescription("");
-          setPhoneInEntries("");
           setRodeoDates([]);
           setSuccess("Rodeo created successfully.");
         }
@@ -279,24 +274,6 @@ export default function RodeoForm({
               onChange={(e) => setEntryFee(e.target.value)}
               className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
               placeholder="50.00"
-            />
-          </div>
-
-          {/* --- Phone-In Entries --- */}
-          <div>
-            <label
-              htmlFor="rodeo-phone"
-              className="block text-xs font-medium uppercase tracking-wider text-gray-500 mb-1"
-            >
-              Phone-In Entries
-            </label>
-            <input
-              id="rodeo-phone"
-              type="text"
-              value={phoneInEntries}
-              onChange={(e) => setPhoneInEntries(e.target.value)}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
-              placeholder="(555) 123-4567"
             />
           </div>
 
