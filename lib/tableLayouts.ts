@@ -35,7 +35,7 @@ export const TABLE_LAYOUTS = {
   // Results: Date & Time, Placing, Score, Competitor, Money, Ground, Points
   results: {
     columnWidths: ["16%", "12%", "12%", "20%", "15%", "15%", "10%"],
-    wrapColumns: [1, 2],
+    wrapColumns: [0, 3],
     alignColumns: [
       "center",
       "center",
