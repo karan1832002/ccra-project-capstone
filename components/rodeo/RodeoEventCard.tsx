@@ -20,15 +20,20 @@ interface RodeoEventCardProps {
 
 export function RodeoEventCard({ event, children }: RodeoEventCardProps) {
   return (
-    <div className="rounded-md border border-stone-200 shadow-sm bg-white p-6 mb-3">
+    <div className="rounded-md border border-border shadow-sm bg-surface p-6 mb-3">
       <div className="flex justify-between items-baseline mb-3 flex-wrap gap-1">
-        <span className="font-semibold text-xl text-stone-950">
-          {event.name}
-        </span>
-        <span className="text-sm text-stone-400">
-          {formatShortDate(event.startDate)}
-          {event.endDate !== event.startDate &&
+        <span className="font-semibold text-xl text-heading">{event.name}</span>
+
+        <span className="text-sm text-muted-foreground">
+          {/* Dates are optional in the database, so only format when a value exists. */}
+          {event.startDate ? formatShortDate(event.startDate) : "—"}
+
+          {/* Only display a date range when both dates exist and they differ. */}
+          {event.startDate &&
+            event.endDate &&
+            event.endDate !== event.startDate &&
             ` - ${formatShortDate(event.endDate)}`}
+
           {event.location ? ` · ${event.location}` : ""}
         </span>
       </div>
