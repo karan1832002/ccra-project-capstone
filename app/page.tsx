@@ -197,11 +197,11 @@ export default function HomePage() {
                 sponsorLoading
                   ? []
                   : sponsorItems.map((s) => ({
-                      id: s.id,
-                      src: s.logo ?? "",
-                      alt: s.name,
-                      href: s.website ?? undefined,
-                    }))
+                    id: s.id,
+                    src: s.logo ?? "",
+                    alt: s.name,
+                    href: s.website ?? undefined,
+                  }))
               }
               autoPlay
               interval={3500}
@@ -304,20 +304,28 @@ export default function HomePage() {
                     />
                   </svg>
                 </div>
+
                 <p className="text-sm text-stone-500">
                   No recent updates. Check back soon.
                 </p>
               </div>
+             /* --- Sort Newsletters by Most Recent (3 at a time) --- */
             ) : (
-              newsletterItems.map((item) => (
-                <NewsletterCard
-                  key={item.id}
-                  id={item.id}
-                  date={item.date}
-                  title={item.title}
-                  description={item.description}
-                />
-              ))
+              [...newsletterItems]
+                .sort(
+                  (a, b) =>
+                    new Date(b.date).getTime() - new Date(a.date).getTime()
+                )
+                .slice(0, 3)
+                .map((item) => (
+                  <NewsletterCard
+                    key={item.id}
+                    id={item.id}
+                    date={item.date}
+                    title={item.title}
+                    description={item.description}
+                  />
+                ))
             )}
           </div>
         </div>

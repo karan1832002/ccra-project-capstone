@@ -1,123 +1,116 @@
 /**
  * StandingsTable
  * --------------
- * Standings-specific body content for the standings page. Aggregates a
- * season's worth of ResultEntry rows into one ranked Table per competition
- * category (the same per-category grouping ResultsTable uses), except each
- * row here represents a competitor's season totals rather than a single
- * placing.
+ * Displays season standings calculated from individual Result records.
+ *
+ * The component:
+ * - Groups results by competition category
+ * - Aggregates points earned by each competitor
+ * - Tracks the number of unique events where a competitor earned points
+ * - Ranks competitors within each category by total points
+ *
+ * Each competition category receives its own standings table.
  */
 
-import React from "react";
 import Table from "@/components/ui/Table";
-import { ResultEntry } from "@/types/rodeo";
+import { Result } from "@/lib/gateway";
 
 interface StandingsTableProps {
-  // Every result from every *completed* rodeo this season — the page is
-  // responsible for filtering out results from rodeos that haven't
-  // happened yet before passing entries in.
-  entries: ResultEntry[];
+  // All results used to calculate season standings.
+  entries: Result[];
 }
 
-// Running total for one competitor within one category, before ranking.
+// Running season total for one competitor within one category.
 interface CompetitorTotals {
-  competitor: string;
-  rodeoIds: Set<string>; // distinct rodeos they've placed at — size gives Rodeo Count
+  competitorId: string;
+  competitorName: string;
+  eventIds: Set<string>;
   points: number;
 }
 
 export function StandingsTable({ entries }: StandingsTableProps) {
   if (entries.length === 0) {
-    return <p className="text-sm text-stone-400">No standings posted yet.</p>;
+    return <p className="text-sm text-foreground">No standings posted yet.</p>;
   }
 
-  // Group entries by competition category so each one (e.g. "Ladies Barrel
-  // Racing 40-59") gets its own ranked table, same as the results page.
-  const entriesByCategory = new Map<string, ResultEntry[]>();
+  // Group results by competition category so each category receives
+  // its own standings table.
+  const entriesByCategory = new Map<string, Result[]>();
+
   for (const entry of entries) {
-    const existing = entriesByCategory.get(entry.eventName) ?? [];
+    const category = entry.category;
+
+    const existing = entriesByCategory.get(category) ?? [];
     existing.push(entry);
-    entriesByCategory.set(entry.eventName, existing);
+    entriesByCategory.set(category, existing);
   }
 
-  const columns = ["Rank", "Competitor", "Rodeo Count", "Points"];
+  const columns = ["Rank", "Competitor", "Event Count", "Points"];
 
   return (
-    <div className="space-y-8 w-full flex flex-col items-center">
-      {Array.from(entriesByCategory.entries()).map(([eventName, categoryEntries]) => {
-        // Roll every placing up into one running total per competitor:
-        // total points across the season, and the number of distinct
-        // rodeos (not placings) they've collected points at — a
-        // competitor with two placings at the same rodeo still only
-        // counts as 1 toward Rodeo Count.
-        const totalsByCompetitor = new Map<string, CompetitorTotals>();
-        for (const entry of categoryEntries) {
-          const existing = totalsByCompetitor.get(entry.competitor) ?? {
-            competitor: entry.competitor,
-            rodeoIds: new Set<string>(),
-            points: 0,
-          };
-          existing.rodeoIds.add(entry.eventId);
-          existing.points += entry.points ?? 0;
-          totalsByCompetitor.set(entry.competitor, existing);
-        }
+    <div className="space-y-8 w-full">
+      {Array.from(entriesByCategory.entries()).map(
+        ([category, categoryEntries]) => {
+          /*
+           * Combine all results for each competitor into one season total.
+           *
+           * competitorId is used as the grouping key because it uniquely
+           * identifies the competitor. The displayed name comes from the
+           * result's competitorName field.
+           *
+           * A competitor may have multiple results in the same category.
+           * Points are added together, while eventIds are stored in a Set
+           * so each event is only counted once toward Event Count.
+           */
+          const totalsByCompetitor = new Map<string, CompetitorTotals>();
 
-        // Rank by total points, highest first.
-        const ranked = Array.from(totalsByCompetitor.values()).sort(
-          (a, b) => b.points - a.points
-        );
+          for (const entry of categoryEntries) {
+            const existing = totalsByCompetitor.get(entry.competitorId) ?? {
+              competitorId: entry.competitorId,
+              competitorName: entry.competitorName ?? entry.competitorId,
+              eventIds: new Set<string>(),
+              points: 0,
+            };
 
-        // Property insertion order here must mirror `columns` above, since
-        // Table renders each row positionally via Object.values(row).
-        const data = ranked.map((totals, index) => ({
-          rank: index + 1,
-          competitor: totals.competitor,
-          rodeoCount: totals.rodeoIds.size,
-          points: totals.points,
-        }));
+            // Track unique events where this competitor earned points.
+            existing.eventIds.add(entry.eventId);
 
-        return (
-          <div key={eventName} className="w-full max-w-6xl">
+            // Add this result's points to their season total.
+            existing.points += entry.points ?? 0;
 
-            <div className="w-full flex justify-center">
-              <div className="w-full max-w-6xl">
-                <div className="bg-white shadow-md rounded-lg p-6">
-                  <h2 className="text-xl font-bold text-stone-900 mb-4">{eventName}</h2>
+            totalsByCompetitor.set(entry.competitorId, existing);
+          }
 
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse">
-                        <thead>
-                          <tr className="bg-orange-600 text-white">
-                          <th className="px-4 py-2 text-left">Rank</th>
-                          <th className="px-4 py-2 text-left">Competitor</th>
-                          <th className="px-4 py-2 text-left">Rodeo Count</th>
-                          <th className="px-4 py-2 text-left">Points</th>
-                          </tr>
-                        </thead>
+          // Rank competitors by total points, highest first.
+          const ranked = Array.from(totalsByCompetitor.values()).sort(
+            (a, b) => b.points - a.points,
+          );
 
-                        <tbody>
-                          {ranked.map((row, index) => (
-                            <tr
-                              key={row.competitor}
-                              className={index % 2 === 0 ? "bg-stone-50" : "bg-white"}
-                            >
-                              <td className="px-4 py-2 border-b">{index + 1}</td>
-                              <td className="px-4 py-2 border-b">{row.competitor}</td>
-                              <td className="px-4 py-2 border-b">{row.rodeoIds.size}</td>
-                              <td className="px-4 py-2 border-b font-semibold">
-                              {row.points}
-                              </td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-              </div>
+          /*
+           * Convert the aggregated competitor totals into the format expected
+           * by the reusable Table component.
+           *
+           * Property order must match the columns array because Table renders
+           * row values using Object.values().
+           */
+          const data = ranked.map((competitor, index) => ({
+            rank: index + 1,
+            competitor: competitor.competitorName,
+            eventCount: competitor.eventIds.size,
+            points: competitor.points,
+          }));
+
+          return (
+            <div key={category} className="w-full max-w-6xl">
+              <h2 className="text-xl font-bold text-heading mb-4">
+                {category}
+              </h2>
+
+              <Table columns={columns} data={data} />
             </div>
-          </div>
-        );
-      })}
+          );
+        },
+      )}
     </div>
   );
 }

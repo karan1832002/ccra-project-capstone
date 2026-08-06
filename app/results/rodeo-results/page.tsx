@@ -1,60 +1,118 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { RodeoEvent, ResultEntry } from "@/types/rodeo";
-import { getRodeoEvents, getAllResults } from "@/lib/sampleRodeoData";
 import { RodeoEventCard } from "@/components/rodeo/RodeoEventCard";
 import { ResultsPreview } from "@/components/rodeo/ResultsPreview";
 import { EventFilterBar } from "@/components/rodeo/EventFilterBar";
 import Hero from "@/components/ui/Hero";
 import { pageStructure } from "@/lib/styles";
+import { getResults, Result } from "@/lib/gateway";
 
 export default function RodeoResultsPage() {
-  const [events, setEvents] = useState<RodeoEvent[]>([]);
-  const [results, setResults] = useState<ResultEntry[]>([]);
+  // All results loaded from the backend. Rodeo summaries are derived from
+  // this data rather than loaded separately.
+  const [results, setResults] = useState<Result[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Filter controls.
   const [search, setSearch] = useState("");
   const [year, setYear] = useState("all");
 
   useEffect(() => {
-    Promise.all([getRodeoEvents(), getAllResults()]).then(([evts, res]) => {
-      setEvents(evts);
-      setResults(res);
-      setLoading(false);
-    });
+    async function load() {
+      setLoading(true);
+
+      try {
+        // Load all posted results. Each result already contains its associated
+        // rodeo information, allowing the page to build its own rodeo summaries.
+        const results = await getResults();
+        setResults(results);
+      } catch (error) {
+        console.error("Results page failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
   }, []);
 
-  const years = useMemo(
-    () => Array.from(new Set(events.map((e) => e.year))).sort((a, b) => b - a),
-    [events],
-  );
+  // Group results by rodeo while building the summary information needed
+  // to render each rodeo card. Each map entry contains the rodeo details
+  // along with every result belonging to that rodeo.
+  const rodeoMap = useMemo(() => {
+    const map = new Map<
+      string,
+      {
+        id: string;
+        name: string;
+        location: string;
+        year: number;
+        startDate: string;
+        endDate: string;
+        results: Result[];
+      }
+    >();
 
-  const resultsByEvent = useMemo(() => {
-    const map = new Map<string, ResultEntry[]>();
-    for (const entry of results) {
-      const existing = map.get(entry.eventId) ?? [];
-      existing.push(entry);
-      map.set(entry.eventId, existing);
+    for (const result of results) {
+      const existing = map.get(result.rodeoId);
+
+      if (existing) {
+        // Update the existing rodeo summary with this additional result.
+        existing.results.push(result);
+
+        if (result.eventDate < existing.startDate) {
+          existing.startDate = result.eventDate;
+        }
+
+        if (result.eventDate > existing.endDate) {
+          existing.endDate = result.eventDate;
+        }
+
+        continue;
+      }
+
+      // First result encountered for this rodeo. Initialize the summary.
+      map.set(result.rodeoId, {
+        id: result.rodeoId,
+        name: result.rodeoTitle,
+        location: result.rodeoLocation,
+        year: new Date(result.eventDate).getFullYear(),
+        startDate: result.eventDate,
+        endDate: result.eventDate,
+        results: [result],
+      });
     }
+
     return map;
   }, [results]);
 
-  const visibleEvents = useMemo(() => {
-    return events
-      .filter((e) => year === "all" || String(e.year) === year)
-      .filter((e) => e.name.toLowerCase().includes(search.toLowerCase()))
-      .filter((e) => (resultsByEvent.get(e.id) ?? []).length > 0)
-      .sort((a, b) => (a.startDate < b.startDate ? 1 : -1));
-  }, [events, year, search, resultsByEvent]);
-
-  const eventsWithYearHeaders = useMemo(
+  // Build the year filter options from the loaded rodeo summaries.
+  const years = useMemo(
     () =>
-      visibleEvents.map((event, i) => ({
+      Array.from(
+        new Set(Array.from(rodeoMap.values()).map((r) => r.year)),
+      ).sort((a, b) => b - a),
+    [rodeoMap],
+  );
+
+  // Apply the selected year and search filters, then sort rodeos from
+  // newest to oldest.
+  const visibleRodeos = useMemo(() => {
+    return Array.from(rodeoMap.values())
+      .filter((r) => year === "all" || String(r.year) === year)
+      .filter((r) => r.name.toLowerCase().includes(search.toLowerCase()))
+      .sort((a, b) => (a.startDate < b.startDate ? 1 : -1));
+  }, [rodeoMap, year, search]);
+
+  // Insert a year heading before the first rodeo of each season.
+  const rodeosWithYearHeaders = useMemo(
+    () =>
+      visibleRodeos.map((event, i) => ({
         event,
-        showYearHeader: i === 0 || event.year !== visibleEvents[i - 1].year,
+        showYearHeader: i === 0 || event.year !== visibleRodeos[i - 1].year,
       })),
-    [visibleEvents],
+    [visibleRodeos],
   );
 
   if (loading) {
@@ -79,22 +137,19 @@ export default function RodeoResultsPage() {
           years={years}
         />
 
-        {visibleEvents.length === 0 && (
+        {visibleRodeos.length === 0 && (
           <p className="text-sm text-stone-400 py-6">No matching rodeos.</p>
         )}
 
-        {eventsWithYearHeaders.map(({ event, showYearHeader }) => (
-          <React.Fragment key={event.id}>
+        {rodeosWithYearHeaders.map(({ event: rodeo, showYearHeader }) => (
+          <React.Fragment key={rodeo.id}>
             {showYearHeader && (
               <div className="text-xs font-semibold text-stone-400 mt-5 mb-2">
-                {event.year}
+                {rodeo.year}
               </div>
             )}
-            <RodeoEventCard event={event}>
-              <ResultsPreview
-                eventId={event.id}
-                entries={resultsByEvent.get(event.id) ?? []}
-              />
+            <RodeoEventCard event={rodeo}>
+              <ResultsPreview rodeoId={rodeo.id} entries={rodeo.results} />
             </RodeoEventCard>
           </React.Fragment>
         ))}

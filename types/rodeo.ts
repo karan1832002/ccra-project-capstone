@@ -117,3 +117,13 @@ export interface Member {
   name: string;
   active: boolean;
 }
+
+// Summary of Rodeo and Rodeo Date information
+export type RodeoSummary = {
+  id: string;
+  name: string;
+  location: string;
+  year: number;
+  startDate: string;
+  endDate: string;
+};

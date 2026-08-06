@@ -10,6 +10,8 @@ import {
   Mail,
   Image,
   Star,
+  Trophy,
+  Inbox,
 } from "lucide-react";
 
 // --- Sidebar Route Definitions ---
@@ -18,8 +20,10 @@ import {
 // visible when the authenticated user holds the superadmin role.
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { label: "Inbox", href: "/admin/inbox", icon: Inbox },
   { label: "Users", href: "/admin/users", icon: Users, superadminOnly: true },
   { label: "Events", href: "/admin/events", icon: Calendar },
+  { label: "Results", href: "/admin/results", icon: Trophy },
   { label: "Products", href: "/admin/products", icon: Package },
   { label: "Orders", href: "/admin/orders", icon: ShoppingCart },
   { label: "Newsletters", href: "/admin/newsletters", icon: Mail },

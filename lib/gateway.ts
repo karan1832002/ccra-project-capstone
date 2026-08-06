@@ -71,13 +71,11 @@ export async function fetchFromGateway<T>(
 // ==========================================================================
 
 // A rodeo is the top-level container (multi-day, with an entry window).
-// (old db table)
 export type Rodeo = {
   id: string;
   rodeoTitle: string;
   entriesOpen: string | null; // ISO date "YYYY-MM-DD"
-  phoneInEntries: string | null;
-  entriesClose: string | null;
+  entriesClose: string | null; // ISO date "YYYY-MM-DD"
   entryFee: number | null;
   location: string;
   image: string | null;
@@ -85,19 +83,6 @@ export type Rodeo = {
   capacity: number | null;
   createdAt: string;
 };
-// (current db table)
-// export type Rodeo = {
-//   id: string;
-//   rodeoTitle: string;
-//   entriesOpen: string | null; // ISO date "YYYY-MM-DD"
-//   entriesClose: string | null; // ISO date "YYYY-MM-DD"
-//   entryFee: number | null;
-//   location: string;
-//   image: string | null;
-//   description: string | null;
-//   capacity: number | null;
-//   createdAt: string;
-// };
 
 // An event is a single competition inside a rodeo, identified by its category
 // (e.g. "Bull Riding"). Matches the backend `events` table.
@@ -150,42 +135,42 @@ export type RegisterEventRequest = {
 
 // Result for rodeo event
 // (old db table)
-export type Result = {
-  id: string;
-  eventId: string;
-  userId: string;
-  entryId: string | null;
-  category: string;
-  score: number | null;
-  timeSeconds: number | null;
-  placement: number | null;
-  points: number;
-  money: number;
-  ground: number;
-  recordedAt: string | null;
-};
-// (current db table)
 // export type Result = {
 //   id: string;
-//   rodeoId: string;
-//   rodeoTitle: string;
-//   rodeoLocation: string;
-//   rodeoStart: string;
-//   rodeoEnd: string;
 //   eventId: string;
+//   userId: string;
+//   entryId: string | null;
 //   category: string;
-//   eventDate: string;
-//   eventTime: string;
-//   entryId: string;
-//   competitorId: string;
-//   competitorName: string;
-//   score: number | null;
-//   points: number | null;
+//   score?: number | null;
+//   timeSeconds: number | null;
 //   placement: number | null;
-//   money: number | null;
-//   ground: number | null;
+//   points: number;
+//   money: number;
+//   ground: number;
 //   recordedAt: string | null;
 // };
+// (current db table)
+export type Result = {
+  id: string;
+  rodeoId: string;
+  rodeoTitle: string;
+  rodeoLocation: string;
+  rodeoStart: string;
+  rodeoEnd: string;
+  eventId: string;
+  category: string;
+  eventDate: string;
+  eventTime: string;
+  entryId: string;
+  competitorId: string;
+  competitorName: string;
+  score: number | null;
+  points: number | null;
+  placement: number | null;
+  money: number | null;
+  ground: number | null;
+  recordedAt: string | null;
+};
 
 export type Product = {
   id: string;
@@ -221,17 +206,11 @@ export function getEventRegistrations(id: string) {
   return fetchFromGateway<Registration[]>(`/api/events/${id}/registrations`);
 }
 
-export function registerForEvent(
-  eventId: string,
-  data: RegisterEventRequest,
-) {
-  return fetchFromGateway<Registration>(
-    `/api/events/${eventId}/register`,
-    {
-      method: "POST",
-      body: data,
-    },
-  );
+export function registerForEvent(eventId: string, data: RegisterEventRequest) {
+  return fetchFromGateway<Registration>(`/api/events/${eventId}/register`, {
+    method: "POST",
+    body: data,
+  });
 }
 
 // Results
@@ -248,4 +227,62 @@ export function getCategoryResults(id: string) {
 // Store
 export function getProducts() {
   return fetchFromGateway<Product[]>("/api/store/products");
+}
+
+// ==========================================================================
+// PUBLIC FORM SUBMISSIONS
+// ==========================================================================
+
+export interface ContactPayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  message: string;
+}
+
+export interface RodeoApprovalPayload {
+  rodeoName: string;
+  committeeName: string;
+  primaryContact: string;
+  email: string;
+  phone?: string;
+  message?: string;
+  rodeoType?: string;
+  location?: string;
+  arenaType?: string;
+  scheduleDetails?: string;
+  orderOfEvents?: string;
+  stockContractor?: string;
+  judges?: string;
+  electrical?: string;
+  stalls?: string;
+  selfPenning?: string;
+  stallContact?: string;
+  mailingAddress?: string;
+  directions?: string;
+  medicalProvider?: string;
+  associationFees?: string;
+  signature?: string;
+  dateSigned?: string;
+  payment?: string;
+  addedMoney?: Record<string, string>;
+}
+
+/** Submits a contact form to the admin-service via the API gateway. */
+export async function submitContact(data: ContactPayload) {
+  return fetchFromGateway<{ id: string }>("/api/admin/contact", {
+    method: "POST",
+    body: data,
+    revalidate: 0,
+  });
+}
+
+/** Submits a rodeo-approval request to the admin-service via the API gateway. */
+export async function submitRodeoApproval(data: RodeoApprovalPayload) {
+  return fetchFromGateway<{ id: string }>("/api/admin/rodeo-approvals", {
+    method: "POST",
+    body: data,
+    revalidate: 0,
+  });
 }

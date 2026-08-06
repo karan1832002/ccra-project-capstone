@@ -1,46 +1,60 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
-import { ResultEntry } from "@/types/rodeo";
-import { getCompletedRodeoEvents, getAllResults } from "@/lib/sampleRodeoData";
+import { useEffect, useState, useMemo } from "react";
 import StandingsTable from "@/components/rodeo/StandingsTable";
 import Hero from "@/components/ui/Hero";
 import { pageStructure } from "@/lib/styles";
+import { getResults, Result } from "@/lib/gateway";
 
 export default function RodeoStandingsPage() {
-  const [entries, setEntries] = useState<ResultEntry[]>([]);
+  // All results used to calculate season standings.
+  const [entries, setEntries] = useState<Result[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
+
+  // Currently selected event category filter.
   const [category, setCategory] = useState("all");
 
   useEffect(() => {
-    Promise.all([getCompletedRodeoEvents(), getAllResults()]).then(
-      ([completedEvents, allResults]) => {
-        const completedEventIds = new Set(completedEvents.map((e) => e.id));
-        setEntries(allResults.filter((r) => completedEventIds.has(r.eventId)));
+    async function load() {
+      setLoading(true);
+
+      try {
+        // Load every result for the current season.
+        const results = await getResults();
+
+        setEntries(results);
+      } catch (error) {
+        console.error("Failed to load standings:", error);
+      } finally {
         setLoading(false);
-      },
-    );
+      }
+    }
+
+    load();
   }, []);
 
-  // Extract distinct categories from eventName
+  // Build the category dropdown options from the loaded results.
+  // The "all" option displays standings from every category.
   const categories = useMemo(() => {
-    const set = new Set(entries.map((e) => e.eventName));
+    const set = new Set(entries.map((e) => e.category));
     return ["all", ...Array.from(set)];
   }, [entries]);
 
-  // Filtered standings
+  // Apply the selected category filter.
   const filteredEntries = useMemo(() => {
     return entries
-      .filter((e) => category === "all" || e.eventName === category)
-      .filter((e) => e.competitor.toLowerCase().includes(search.toLowerCase()));
+      .filter((e) => category === "all" || e.category === category)
+      .filter((e) =>
+        e.competitorName?.toLowerCase().includes(search.toLowerCase()),
+      );
   }, [entries, category, search]);
 
   if (loading) {
     return (
       <div className="w-full py-8 px-4">
-        <p className="text-sm text-stone-400">Loading standings...</p>
+        <p className="text-sm text-muted-foreground">Loading standings...</p>
       </div>
     );
   }
@@ -62,13 +76,14 @@ export default function RodeoStandingsPage() {
             placeholder="Search competitor..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full md:w-1/2 rounded-md border border-stone-300 px-4 py-2"
+            className="w-full md:w-1/2 rounded-md border border-border px-4 py-2"
           />
 
+          {/* Category selector filters standings by competition type. */}
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full md:w-1/2 rounded-md border border-stone-300 px-4 py-2"
+            className="w-full md:w-1/2 rounded-md border border-border px-4 py-2"
           >
             {categories.map((cat) => (
               <option key={cat} value={cat}>
@@ -80,7 +95,7 @@ export default function RodeoStandingsPage() {
 
         {/* NO RESULTS */}
         {filteredEntries.length === 0 && (
-          <p className="text-sm text-stone-400 py-6 text-center">
+          <p className="text-sm text-foreground py-6 text-center">
             No standings found.
           </p>
         )}
