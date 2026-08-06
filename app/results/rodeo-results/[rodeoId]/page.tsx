@@ -55,9 +55,6 @@ export default function RodeoResultsDetailPage({
           )
         ).flat();
 
-        console.log("rodeoId:", rodeoId);
-        console.log("Detail page results:", results);
-
         setResults(results);
       } catch (error) {
         console.error("Failed to load results:", error);
