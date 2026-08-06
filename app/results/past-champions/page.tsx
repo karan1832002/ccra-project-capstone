@@ -48,7 +48,10 @@ export default function PastChampionsPage() {
       />
 
       <div className={pageStructure.contentContainer}>
-        <PastChampionsTable entries={results} />
+        <div className="mx-auto max-w-3xl">
+          <PastChampionsTable entries={results} />
+        </div>
+
         {/* Info Boxes */}
         <div className="my-12">
           {/* 2026 Schedule */}

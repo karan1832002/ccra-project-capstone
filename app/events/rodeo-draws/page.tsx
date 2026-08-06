@@ -33,9 +33,17 @@ export default function RodeoDrawsPage() {
     );
   }, []);
 
-  // Distinct years present in the data, newest first — feeds the year dropdown.
-  const years = useMemo(
-    () => Array.from(new Set(events.map((e) => e.year))).sort((a, b) => b - a),
+  // Distinct years present in the data, newest first — feeds the filter dropdown.
+  const yearOptions = useMemo(
+    () => [
+      { label: "All Years", value: "all" },
+      ...Array.from(new Set(events.map((e) => e.year)))
+        .sort((a, b) => b - a)
+        .map((year) => ({
+          label: String(year),
+          value: String(year),
+        })),
+    ],
     [events],
   );
 
@@ -107,9 +115,10 @@ export default function RodeoDrawsPage() {
           <EventFilterBar
             search={search}
             onSearchChange={setSearch}
-            year={year}
-            onYearChange={setYear}
-            years={years}
+            searchPlaceholder="Search rodeos..."
+            filterValue={year}
+            onFilterChange={setYear}
+            filterOptions={yearOptions}
             sheetType={sheetType}
             onSheetTypeChange={setSheetType}
             showTypeFilter

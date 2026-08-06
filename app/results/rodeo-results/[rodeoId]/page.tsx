@@ -146,7 +146,9 @@ export default function RodeoResultsDetailPage({
 
         {/* ResultsTable groups the combined event results into separate
             competition category tables. */}
-        <ResultsTable entries={results} />
+        <div className="mx-auto max-w-5xl">
+          <ResultsTable entries={results} />
+        </div>
       </div>
     </div>
   );
