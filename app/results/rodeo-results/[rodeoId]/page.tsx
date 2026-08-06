@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ResultsTable, formatCurrency } from "@/components/rodeo/ResultsTable";
 import { pageStructure } from "@/lib/styles";
-import { getRodeo, getEventResults, RodeoDetail, Result } from "@/lib/gateway";
+import { getRodeo, getEventResults, Result } from "@/lib/gateway";
 import { formatShortDate } from "@/lib/rodeoDateUtils";
 
 interface RodeoResultsDetailPageProps {
@@ -18,9 +18,8 @@ export default function RodeoResultsDetailPage({
 }: RodeoResultsDetailPageProps) {
   const { rodeoId } = React.use(params);
 
-  const [rodeo, setRodeo] = useState<RodeoDetail | null>(null);
   const [results, setResults] = useState<Result[]>([]);
-  const [rodeoMissing, setRodeoMissing] = useState(false);
+  const [resultsMissing, setResultsMissing] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Calculate payout totals across every result in the rodeo.
@@ -37,35 +36,36 @@ export default function RodeoResultsDetailPage({
 
   const totalPayout = totalMoney + totalGroundMoney;
 
-  // Load the selected rodeo using the id from the URL.
-  // Once the rodeo details are available, load results for each event
-  // belonging to that rodeo and combine them into a single results array.
+  // Load the selected rodeo to identify its events.
+  // Results are stored by event, so each event's results are loaded
+  // and combined into a single results array.
   useEffect(() => {
     async function load() {
       setLoading(true);
 
       try {
+        // Get the rodeo details so we can find the event IDs that belong
+        // to this rodeo. Results are stored by event, not by rodeo.
         const rodeo = await getRodeo(rodeoId);
-        setRodeo(rodeo);
 
-        // Each rodeo contains multiple events. Results are stored by event,
-        // so each event must be queried separately before combining them.
+        // Retrieve results for each event and combine them into one array.
         const results = (
           await Promise.all(
             rodeo.events.map((event) => getEventResults(event.id)),
           )
         ).flat();
 
+        console.log("rodeoId:", rodeoId);
+        console.log("Detail page results:", results);
+
         setResults(results);
       } catch (error) {
-        // Handles invalid rodeo ids, missing data, or failed API requests.
-        console.error("Failed to load rodeo results:", error);
-        setRodeoMissing(true);
+        console.error("Failed to load results:", error);
+        setResultsMissing(true);
       } finally {
         setLoading(false);
       }
     }
-
     load();
   }, [rodeoId]);
 
@@ -88,7 +88,7 @@ export default function RodeoResultsDetailPage({
     );
   }
 
-  if (rodeoMissing || !rodeo) {
+  if (resultsMissing || results.length === 0) {
     return (
       <div className="max-w-4xl mx-auto py-8 px-4">
         {backLink}
@@ -101,7 +101,7 @@ export default function RodeoResultsDetailPage({
 
   // Format the rodeo date range for display.
   // Single-day rodeos show one date; multi-day rodeos show the full range.
-  const dates = rodeo.dates.map((d) => d.date).toSorted();
+  const dates = [...new Set(results.map((r) => r.eventDate))].toSorted();
 
   const dateLabel =
     dates.length === 1
@@ -118,11 +118,12 @@ export default function RodeoResultsDetailPage({
         <div className="flex items-start justify-between gap-6 mb-6">
           <div>
             <h1 className="text-3xl font-semibold text-heading">
-              {rodeo.rodeoTitle} Results
+              {results[0].rodeoTitle} Results
             </h1>
+
             <p className="text-sm text-muted-foreground">
               {dateLabel}
-              {rodeo.location ? ` · ${rodeo.location}` : ""}
+              {results[0].rodeoLocation ? ` · ${results[0].rodeoLocation}` : ""}
             </p>
           </div>
 
@@ -148,7 +149,7 @@ export default function RodeoResultsDetailPage({
 
         {/* ResultsTable groups the combined event results into separate
             competition category tables. */}
-        <ResultsTable entries={results} events={rodeo.events} />
+        <ResultsTable entries={results} />
       </div>
     </div>
   );
