@@ -5,7 +5,7 @@ import { RodeoEvent, SheetFile } from "@/types/rodeo";
 import { getRodeoEvents, getAllSheetFiles } from "@/lib/sampleRodeoData";
 import { RodeoEventCard } from "@/components/rodeo/RodeoEventCard";
 import { DrawFileList } from "@/components/rodeo/DrawFileList";
-import { EventFilterBar } from "@/components/rodeo/EventFilterBar";
+import SearchAndFilterBar from "@/components/ui/SearchAndFilterBar";
 import Hero from "@/components/ui/Hero";
 import { pageStructure } from "@/lib/styles";
 
@@ -15,7 +15,7 @@ export default function RodeoDrawsPage() {
   const [files, setFiles] = useState<SheetFile[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Current filter selections, controlled here and passed down to EventFilterBar.
+  // Current filter selections, controlled here and passed down to SearchAndFilterBar.
   const [search, setSearch] = useState("");
   const [year, setYear] = useState("all");
   const [sheetType, setSheetType] = useState("all");
@@ -112,7 +112,7 @@ export default function RodeoDrawsPage() {
 
         {/* Filters */}
         <section className="mb-8">
-          <EventFilterBar
+          <SearchAndFilterBar
             search={search}
             onSearchChange={setSearch}
             searchPlaceholder="Search rodeos..."
