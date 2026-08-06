@@ -248,3 +248,61 @@ export function getCategoryResults(id: string) {
 export function getProducts() {
   return fetchFromGateway<Product[]>("/api/store/products");
 }
+
+// ==========================================================================
+// PUBLIC FORM SUBMISSIONS
+// ==========================================================================
+
+export interface ContactPayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  message: string;
+}
+
+export interface RodeoApprovalPayload {
+  rodeoName: string;
+  committeeName: string;
+  primaryContact: string;
+  email: string;
+  phone?: string;
+  message?: string;
+  rodeoType?: string;
+  location?: string;
+  arenaType?: string;
+  scheduleDetails?: string;
+  orderOfEvents?: string;
+  stockContractor?: string;
+  judges?: string;
+  electrical?: string;
+  stalls?: string;
+  selfPenning?: string;
+  stallContact?: string;
+  mailingAddress?: string;
+  directions?: string;
+  medicalProvider?: string;
+  associationFees?: string;
+  signature?: string;
+  dateSigned?: string;
+  payment?: string;
+  addedMoney?: Record<string, string>;
+}
+
+/** Submits a contact form to the admin-service via the API gateway. */
+export async function submitContact(data: ContactPayload) {
+  return fetchFromGateway<{ id: string }>("/api/admin/contact", {
+    method: "POST",
+    body: data,
+    revalidate: 0,
+  });
+}
+
+/** Submits a rodeo-approval request to the admin-service via the API gateway. */
+export async function submitRodeoApproval(data: RodeoApprovalPayload) {
+  return fetchFromGateway<{ id: string }>("/api/admin/rodeo-approvals", {
+    method: "POST",
+    body: data,
+    revalidate: 0,
+  });
+}

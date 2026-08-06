@@ -140,6 +140,8 @@ export async function callGateway<T>(
   // to the gateway base URL. The endpoint should always start with "/".
   const url = `${GATEWAY_URL}${endpoint}`;
 
+  console.log("[gateway] REQUEST", JSON.stringify({ url, method: options.method ?? "GET" }));
+
   // Merge the caller's headers with the authentication headers required
   // by the gateway. Caller-supplied headers take precedence so that
   // methods can override Content-Type or pass additional custom headers.
@@ -291,5 +293,77 @@ export function submitRodeoResult(data: RodeoResultData) {
   return callGateway<void>("/api/results", {
     method: "POST",
     body: JSON.stringify(data),
+  });
+}
+
+// ---- Contact submissions & rodeo approvals (admin) -----------------------
+
+/** A contact-form submission as returned by the admin-service. */
+export interface ContactSubmission {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string | null;
+  message: string;
+  status: string;
+  createdAt: string;
+}
+
+/** A rodeo-approval request as returned by the admin-service. */
+export interface RodeoApproval {
+  id: string;
+  rodeoName: string;
+  committeeName: string;
+  primaryContact: string;
+  email: string;
+  phone: string | null;
+  message: string | null;
+  status: string;
+  createdAt: string;
+  rodeoType: string | null;
+  location: string | null;
+  arenaType: string | null;
+  scheduleDetails: string | null;
+  orderOfEvents: string | null;
+  stockContractor: string | null;
+  judges: string | null;
+  electrical: string | null;
+  stalls: string | null;
+  selfPenning: string | null;
+  stallContact: string | null;
+  mailingAddress: string | null;
+  directions: string | null;
+  medicalProvider: string | null;
+  associationFees: string | null;
+  signature: string | null;
+  dateSigned: string | null;
+  payment: string | null;
+  addedMoney: Record<string, string> | null;
+}
+
+/** Fetches all contact-form submissions (admin-gated). */
+export function getContactSubmissions() {
+  return callGateway<ContactSubmission[]>("/api/admin/contact");
+}
+
+/** Patches the status of a contact submission (e.g. "read", "archived"). */
+export function updateContactStatus(id: string, status: string) {
+  return callGateway<ContactSubmission>(`/api/admin/contact/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
+}
+
+/** Fetches all rodeo-approval requests (admin-gated). */
+export function getRodeoApprovals() {
+  return callGateway<RodeoApproval[]>("/api/admin/rodeo-approvals");
+}
+
+/** Patches the status of a rodeo approval (e.g. "approved", "rejected"). */
+export function updateRodeoApprovalStatus(id: string, status: string) {
+  return callGateway<RodeoApproval>(`/api/admin/rodeo-approvals/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
   });
 }
