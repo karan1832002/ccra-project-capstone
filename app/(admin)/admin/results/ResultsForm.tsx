@@ -57,11 +57,11 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
   // from the gateway so the Competitor dropdown only shows relevant entrants.
   useEffect(() => {
     if (!selectedEventId) {
-      setRegisteredUserIds([]);
       return;
     }
 
     let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRegistrationsLoading(true);
 
     fetchEventRegistrations(selectedEventId)
