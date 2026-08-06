@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import StandingsTable from "@/components/rodeo/StandingsTable";
 import Hero from "@/components/ui/Hero";
-import EventFilterBar from "@/components/rodeo/EventFilterBar";
+import SearchAndFilterBar from "@/components/ui/SearchAndFilterBar";
 import { pageStructure } from "@/lib/styles";
 import { getResults, Result } from "@/lib/gateway";
 
@@ -81,7 +81,7 @@ export default function RodeoStandingsPage() {
       <div className={pageStructure.contentContainer}>
         <div className="mx-auto max-w-3xl">
           {/* SEARCH + FILTER BAR */}
-          <EventFilterBar
+          <SearchAndFilterBar
             search={search}
             onSearchChange={setSearch}
             searchPlaceholder="Search competitors..."
