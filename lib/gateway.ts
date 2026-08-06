@@ -306,3 +306,21 @@ export async function submitRodeoApproval(data: RodeoApprovalPayload) {
     revalidate: 0,
   });
 }
+
+// ==========================================================================
+// MEETING MINUTES (public read)
+// ==========================================================================
+
+export type MinuteEntry = {
+  id: string;
+  title: string;
+  meetingDate: string;
+  location: string | null;
+  summary: string;
+  googleDocUrl: string | null;
+  createdAt: string;
+};
+
+export function getMinutes() {
+  return fetchFromGateway<MinuteEntry[]>("/api/admin/minutes");
+}

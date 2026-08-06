@@ -12,6 +12,7 @@ import {
   Star,
   Trophy,
   Inbox,
+  FileText,
 } from "lucide-react";
 
 // --- Sidebar Route Definitions ---
@@ -21,6 +22,7 @@ import {
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Inbox", href: "/admin/inbox", icon: Inbox },
+  { label: "Minutes", href: "/admin/minutes", icon: FileText },
   { label: "Users", href: "/admin/users", icon: Users, superadminOnly: true },
   { label: "Events", href: "/admin/events", icon: Calendar },
   { label: "Results", href: "/admin/results", icon: Trophy },

@@ -367,3 +367,49 @@ export function updateRodeoApprovalStatus(id: string, status: string) {
     body: JSON.stringify({ status }),
   });
 }
+
+// ---- Meeting minutes (admin CRUD) ----------------------------------------
+
+/** Payload for creating or updating a meeting minute. */
+export interface MinuteEntryData {
+  title: string;
+  meetingDate: string;
+  location?: string;
+  summary: string;
+  googleDocUrl?: string;
+}
+
+/** A meeting-minute record returned by the admin-service. */
+export interface MinuteEntry {
+  id: string;
+  title: string;
+  meetingDate: string;
+  location: string | null;
+  summary: string;
+  googleDocUrl: string | null;
+  createdAt: string;
+}
+
+export function getAdminMinutes() {
+  return callGateway<MinuteEntry[]>("/api/admin/minutes");
+}
+
+export function createMinute(data: MinuteEntryData) {
+  return callGateway<MinuteEntry>("/api/admin/minutes", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export function updateMinute(id: string, data: Partial<MinuteEntryData>) {
+  return callGateway<MinuteEntry>(`/api/admin/minutes/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+export function deleteMinute(id: string) {
+  return callGateway<void>(`/api/admin/minutes/${id}`, {
+    method: "DELETE",
+  });
+}

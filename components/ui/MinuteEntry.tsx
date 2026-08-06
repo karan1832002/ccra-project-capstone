@@ -6,11 +6,11 @@ import { FileText, ChevronDown, ChevronUp, ExternalLink, Calendar } from "lucide
 export interface MinuteEntryData {
   id: string;
   title: string;
-  date: string;
-  location?: string;
+  meetingDate: string;
+  location?: string | null;
   summary: string;
-  fullContent?: string;          // Optional text content
-  googleDocUrl?: string;         // Link to Google Doc
+  fullContent?: string;
+  googleDocUrl?: string | null;
 }
 
 interface MinuteEntryProps {
@@ -38,7 +38,7 @@ export default function MinuteEntry({ entry }: MinuteEntryProps) {
             </h2>
             <span className="inline-flex items-center gap-1 text-sm text-stone-500 dark:text-stone-400">
               <Calendar className="w-3.5 h-3.5" />
-              {entry.date}
+              {entry.meetingDate}
             </span>
           </div>
 
