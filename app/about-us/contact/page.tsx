@@ -1,5 +1,6 @@
 import { Phone, Mail, Pin } from "lucide-react";
 import Hero from "@/components/ui/Hero";
+import ContactForm from "./ContactForm";
 
 export default function ContactInformationPage() {
   return (
@@ -113,79 +114,7 @@ export default function ContactInformationPage() {
 
           {/* ================= CONTACT FORM ================= */}
           <div className="lg:col-span-7">
-            <div className="bg-white rounded-md border border-stone-200 shadow-sm p-10 dark:border-stone-700 dark:bg-stone-900">
-              <h2 className="text-2xl font-semibold text-stone-950 mb-8 dark:text-stone-100">
-                Send Us a Message
-              </h2>
-
-              <form className="space-y-8">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-stone-700 mb-2 dark:text-stone-300">
-                      First Name
-                    </label>
-                    <input
-                      type="text"
-                      className="h-12 w-full rounded-md border border-stone-200 bg-white px-4 text-sm text-stone-900 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-300 transition dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
-                      placeholder="Enter first name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-stone-700 mb-2 dark:text-stone-300">
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      className="h-12 w-full rounded-md border border-stone-200 bg-white px-4 text-sm text-stone-900 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-300 transition dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
-                      placeholder="Enter last name"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2 dark:text-stone-300">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    className="h-12 w-full rounded-md border border-stone-200 bg-white px-4 text-sm text-stone-900 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-300 transition dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
-                    placeholder="your@email.com"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2 dark:text-stone-300">
-                    Subject
-                  </label>
-                  <select className="h-12 w-full rounded-md border border-stone-200 bg-white px-4 text-sm text-stone-900 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-300 transition dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100">
-                    <option>General Inquiry</option>
-                    <option>Membership</option>
-                    <option>Event Information</option>
-                    <option>Sponsorship</option>
-                    <option>Volunteer / Officials</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2 dark:text-stone-300">
-                    Message
-                  </label>
-                  <textarea
-                    rows={6}
-                    className="w-full rounded-md border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-300 transition resize-y dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
-                    placeholder="How can we help you today?"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full md:w-auto inline-flex items-center justify-center rounded-md bg-orange-600 px-10 py-3.5 text-sm font-semibold text-white transition hover:bg-orange-700 disabled:opacity-60"
-                >
-                  Send Message
-                </button>
-              </form>
-            </div>
+            <ContactForm />
           </div>
         </div>
 
