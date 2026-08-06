@@ -1,80 +1,45 @@
 /**
  * AddEntryModal
  * -------------
- * Pop-up form used on the Enter Rodeo page to add a single event entry.
+ * Pop-up form used on the Enter Rodeo page to add a single rodeo event
+ * to the competitor's registration.
  *
  * Flow:
- *   1. User picks a Rodeo — since a rodeo can run across several days, each
- *      option in this dropdown is actually one specific performance (a
- *      rodeo + a single day/time), e.g. "Pincher Creek - Aug 03 @ 11 am".
- *      Only rodeos currently open for entries are listed here at all.
- *   2. The Event dropdown loads, filtered to only the competition events
- *      offered at that rodeo.
- *   3. Entry Fee / Event Fee auto-fill from the selected event and are
- *      read-only — the entrant doesn't set these themselves.
- *   4. "Add Entry" validates the form and hands a fully-formed
- *      `RodeoEntry` back to the parent page via `onAddEntry`. The parent
- *      is responsible for appending it to the entries table.
- *   "Cancel" (or closing without submitting) discards whatever was
- *   typed — the parent's entries list is only touched on submit.
+ *   1. The competitor selects a rodeo that is currently accepting entries.
+ *   2. The available competition events for that rodeo are loaded.
+ *   3. Entry Fee and Event Fee are automatically filled in from the
+ *      selected rodeo and event.
+ *   4. Clicking "Add Entry" creates a RodeoEntry object and passes it
+ *      back to the parent page, where it is added to the registration table.
  *
- * This component owns its own react-hook-form instance, so each time
- * it's opened fresh it starts from a blank slate.
+ * This component owns its own react-hook-form instance, so every time the
+ * modal is opened it starts with a fresh, empty form.
  */
 
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Member, RodeoEntry } from "@/types/rodeo";
-import { getActiveMembers } from "@/lib/sampleMemberData";
-
-interface RodeoEventData {
-  rodeoId: string;
-  rodeoTitle: string;
-  rodeoDate: string;
-  rodeoStartTime: string | null;
-  entryFee: number | null;
-  events: {
-    eventId: string;
-    eventTitle: string;
-    eventFee: number | null;
-  }[];
-}
+import { RodeoEntry, RodeoEventData } from "@/types/rodeoEntry";
 
 interface AddEntryModalProps {
   isOpen: boolean;
-  onClose: () => void; // called for both Cancel and the backdrop click
-  onAddEntry: (entry: RodeoEntry) => void; // called only when the user submits
+  onClose: () => void; // Closes the modal without adding an entry.
+  onAddEntry: (entry: RodeoEntry) => void; // Adds the completed entry to the parent page.
   rodeos: RodeoEventData[];
 }
 
-// One selectable option in the "Rodeo" dropdown — a single rodeo performance
-// (one specific day/time within a possibly multi-day rodeo). Flattened out
-// of `RodeoEvent.performances` so the dropdown can show — and the entrant
-// can pick — the rodeo and the exact date/time in one selection.
-interface RodeoPerformanceOption {
-  key: string; // `${rodeoId}::${performanceId}` — used as the <select> value since it must be a single string
-  rodeoId: string;
-  rodeoName: string;
-  performanceId: string;
-  performanceDate: string;
-  performanceTime: string;
-  label: string;
-}
-
-// Shape of the fields react-hook-form manages. Fees are stored as numbers
-// but rendered read-only, since they're derived from the chosen event
-// rather than typed in by the entrant.
+// Form fields managed by react-hook-form. The fee fields are populated
+// automatically based on the selected rodeo and event.
 interface AddEntryFormValues {
-  performanceKey: string; // identifies both the rodeo and the specific day/time picked
+  rodeoId: string;
   eventId: string;
   entryFee: number | "";
   eventFee: number | "";
 }
 
 const emptyValues: AddEntryFormValues = {
-  performanceKey: "",
+  rodeoId: "",
   eventId: "",
   entryFee: "",
   eventFee: "",
@@ -102,62 +67,30 @@ export default function AddEntryModal({
   onAddEntry,
   rodeos,
 }: AddEntryModalProps) {
-  // --- Reference data loaded from the (sample) data layer ---------------
-  const [events, setEvents] = useState<RodeoEventData["events"]>([]); // events available for the *currently selected* rodeo
-  const [members, setMembers] = useState<Member[]>([]);
+  // Events available for the currently selected rodeo.
+  const [events, setEvents] = useState<RodeoEventData["events"]>([]);
 
   const {
     register,
     handleSubmit,
-    control,
     watch,
     setValue,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<AddEntryFormValues>({ defaultValues: emptyValues });
 
-  const selectedPerformanceKey = watch("performanceKey");
   const selectedEventId = watch("eventId");
 
-  // Map each open rodeo's performances into individual dropdown options,
-  // e.g. one "Pincher Creek" rodeo with two performances becomes two options.
-  const performanceOptions = useMemo<RodeoPerformanceOption[]>(
-    () =>
-      rodeos.map((rodeo) => ({
-        key: rodeo.rodeoId,
-        rodeoId: rodeo.rodeoId,
-        rodeoName: rodeo.rodeoTitle,
-        performanceId: rodeo.rodeoId,
-        performanceDate: rodeo.rodeoDate,
-        performanceTime: rodeo.rodeoStartTime ?? "",
-        label: `${rodeo.rodeoTitle} - ${fmtMonthDay(rodeo.rodeoDate)} @ ${
-          rodeo.rodeoStartTime ?? "TBD"
-        }`,
-      })),
-    [rodeos],
-  );
+  const selectedRodeoId = watch("rodeoId");
 
-  const selectedPerformance = performanceOptions.find(
-    (p) => p.key === selectedPerformanceKey,
-  );
-
-  // The full CompetitionEvent object for whatever is currently selected —
-  // its eventFee is used to autofill the Event Fee field.
+  // Currently selected event, used to populate the Event Fee field.
   const selectedEvent = events.find((e) => e.eventId === selectedEventId);
 
-  // The rodeo backing the selected performance — its entryFee (not the
-  // event's) is used to autofill the Entry Fee field.
-  const selectedRodeo = rodeos.find(
-    (r) => r.rodeoId === selectedPerformance?.rodeoId,
-  );
+  // Currently selected rodeo, used to populate the Entry Fee field.
+  const selectedRodeo = rodeos.find((r) => r.rodeoId === selectedRodeoId);
 
-  // Load the list of active members once, when the modal first mounts.
-  useEffect(() => {
-    getActiveMembers().then(setMembers);
-  }, []);
-
-  // Reset the form back to blank every time the modal is (re)opened, so
-  // stale selections from a previous entry don't leak into the next one.
+  // Reset the form each time the modal opens so every new entry starts
+  // with a clean slate.
   useEffect(() => {
     if (isOpen) {
       reset(emptyValues);
@@ -165,11 +98,8 @@ export default function AddEntryModal({
     }
   }, [isOpen, reset]);
 
-  // When the selected rodeo changes (i.e. a performance from a *different*
-  // rodeo was picked), load the events offered there and clear out anything
-  // downstream (event, fees) that no longer applies. Picking a
-  // different performance of the *same* rodeo doesn't need to re-fetch.
-  const selectedRodeoId = selectedPerformance?.rodeoId;
+  // When the selected rodeo changes, load its available events and clear
+  // any previously selected event and fee values.
   useEffect(() => {
     if (!selectedRodeoId) {
       setEvents([]);
@@ -185,7 +115,7 @@ export default function AddEntryModal({
     setValue("eventFee", "");
   }, [selectedRodeoId, rodeos, setValue]);
 
-  // When the event changes, autofill the fee fields.
+  // Update the fee fields whenever the selected rodeo or event changes.
   useEffect(() => {
     setValue("entryFee", selectedRodeo?.entryFee ?? "");
     setValue("eventFee", selectedEvent?.eventFee ?? "");
@@ -194,34 +124,25 @@ export default function AddEntryModal({
   if (!isOpen) return null;
 
   const onSubmit = (values: AddEntryFormValues) => {
-    const performance = performanceOptions.find(
-      (p) => p.key === values.performanceKey,
-    );
+    const rodeo = rodeos.find((r) => r.rodeoId === values.rodeoId);
     const event = events.find((e) => e.eventId === values.eventId);
-    if (!performance || !event) return; // shouldn't happen — inputs are validated below
 
-    const rodeo = rodeos.find((r) => r.rodeoId === performance.rodeoId);
+    if (!rodeo || !event) return;
 
     const entry: RodeoEntry = {
       // crypto.randomUUID() only exists in a secure context (HTTPS or localhost).
       // The deployed site is served over plain HTTP, so fall back to a simple
       // unique id there. This is only a client-side list key, not a DB id.
-      id:
-        typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
-          ? crypto.randomUUID()
-          : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      id: crypto.randomUUID(),
 
-      rodeoId: performance.rodeoId,
-      rodeoName: performance.rodeoName,
-
-      performanceId: performance.performanceId,
-      performanceDate: performance.performanceDate,
-      performanceTime: performance.performanceTime,
+      rodeoId: rodeo.rodeoId,
+      rodeoName: rodeo.rodeoTitle,
 
       eventId: event.eventId,
       eventName: event.eventTitle,
+      eventDate: event.eventDate,
 
-      entryFee: rodeo?.entryFee ?? 0,
+      entryFee: rodeo.entryFee ?? 0,
       eventFee: event.eventFee ?? 0,
     };
 
@@ -246,36 +167,49 @@ export default function AddEntryModal({
           </div>
 
           <div className="space-y-4 px-6 py-5">
-            {/* Rodeo dropdown — each option is one specific performance (rodeo + date/time),
-                and only rodeos currently open for entries are listed. */}
+            {/* Rodeo dropdown. Displays rodeos currently accepting entries. */}
             <div>
               <label
-                htmlFor="performanceKey"
+                htmlFor="rodeoId"
                 className="block text-sm font-medium text-stone-700"
               >
                 Rodeo
               </label>
               <select
-                id="performanceKey"
-                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                {...register("performanceKey", {
+                id="rodeoId"
+                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:bg-stone-100 disabled:text-stone-400"
+                {...register("rodeoId", {
                   required: "Please select a rodeo",
                 })}
               >
-                {performanceOptions.map((option) => (
-                  <option key={option.key} value={option.key}>
-                    {option.label}
-                  </option>
-                ))}
+                <option value="">Select a rodeo</option>
+                {rodeos.map((rodeo) => {
+                  const startDate = fmtMonthDay(rodeo.rodeoDates[0]);
+                  const endDate = fmtMonthDay(
+                    rodeo.rodeoDates[rodeo.rodeoDates.length - 1],
+                  );
+
+                  const dateLabel =
+                    startDate === endDate
+                      ? startDate
+                      : `${startDate} - ${endDate}`;
+
+                  return (
+                    <option key={rodeo.rodeoId} value={rodeo.rodeoId}>
+                      {rodeo.rodeoTitle} ({dateLabel})
+                    </option>
+                  );
+                })}
               </select>
-              {errors.performanceKey && (
+              {errors.rodeoId && (
                 <p className="mt-1 text-sm text-red-600">
-                  {errors.performanceKey.message}
+                  {errors.rodeoId.message}
                 </p>
               )}
             </div>
 
-            {/* Event dropdown — disabled until a rodeo is picked */}
+            {/* Event dropdown. Lists only the events offered by the selected rodeo.
+            Disabled until a rodeo is picked */}
             <div>
               <label
                 htmlFor="eventId"
@@ -286,17 +220,15 @@ export default function AddEntryModal({
               <select
                 id="eventId"
                 className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:bg-stone-100 disabled:text-stone-400"
-                disabled={!selectedPerformance}
+                disabled={!selectedRodeo}
                 {...register("eventId", { required: "Please select an event" })}
               >
                 <option value="">
-                  {selectedPerformance
-                    ? "Select an event"
-                    : "Select a rodeo first"}
+                  {selectedRodeo ? "Select an event" : "Select a rodeo first"}
                 </option>
                 {events.map((event) => (
                   <option key={event.eventId} value={event.eventId}>
-                    {event.eventTitle}
+                    {event.eventTitle} - {fmtMonthDay(event.eventDate)}
                   </option>
                 ))}
               </select>
@@ -307,7 +239,7 @@ export default function AddEntryModal({
               )}
             </div>
 
-            {/* Entry Fee / Event Fee — autofilled from the selected event, read-only */}
+            {/* Entry Fee and Event Fee are populated automatically and cannot be edited. */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label
