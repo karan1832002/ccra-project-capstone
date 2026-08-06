@@ -13,6 +13,7 @@
  */
 
 import Table from "@/components/ui/Table";
+import { TABLE_LAYOUTS } from "@/lib/tableLayouts";
 import { Result } from "@/lib/gateway";
 
 interface PastChampionsTableProps {
@@ -62,16 +63,12 @@ export default function PastChampionsTable({
           // Determine the champion for each season.
           const champions = Array.from(entriesByYear.entries())
             .map(([year, seasonEntries]) => {
-              const totalsByCompetitor = new Map<
-                string,
-                CompetitorTotals
-              >();
+              const totalsByCompetitor = new Map<string, CompetitorTotals>();
 
               for (const entry of seasonEntries) {
                 const existing = totalsByCompetitor.get(entry.competitorId) ?? {
                   competitorId: entry.competitorId,
-                  competitorName:
-                    entry.competitorName ?? entry.competitorId,
+                  competitorName: entry.competitorName ?? entry.competitorId,
                   eventIds: new Set<string>(),
                   points: 0,
                 };
@@ -106,7 +103,13 @@ export default function PastChampionsTable({
                 {category}
               </h2>
 
-              <Table columns={columns} data={data} />
+              <Table
+                columns={columns}
+                data={data}
+                columnWidths={TABLE_LAYOUTS.pastChampions.columnWidths}
+                wrapColumns={TABLE_LAYOUTS.pastChampions.wrapColumns}
+                alignColumns={TABLE_LAYOUTS.pastChampions.alignColumns}
+              />
             </div>
           );
         },

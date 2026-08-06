@@ -10,6 +10,7 @@
  */
 
 import Table from "@/components/ui/Table";
+import { TABLE_LAYOUTS } from "@/lib/tableLayouts";
 import { Result } from "@/lib/gateway";
 
 interface ResultsTableProps {
@@ -73,8 +74,8 @@ export function ResultsTable({ entries }: ResultsTableProps) {
     "Placing",
     "Score",
     "Competitor",
-    "Money $",
-    "Ground $",
+    "Money",
+    "Ground",
     "Points",
   ];
 
@@ -106,7 +107,13 @@ export function ResultsTable({ entries }: ResultsTableProps) {
                 {eventName}
               </h2>
 
-              <Table columns={columns} data={data} />
+              <Table
+                columns={columns}
+                data={data}
+                columnWidths={TABLE_LAYOUTS.results.columnWidths}
+                wrapColumns={TABLE_LAYOUTS.results.wrapColumns}
+                alignColumns={TABLE_LAYOUTS.results.alignColumns}
+              />
             </div>
           );
         },

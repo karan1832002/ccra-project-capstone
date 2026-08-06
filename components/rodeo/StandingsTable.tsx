@@ -13,6 +13,7 @@
  */
 
 import Table from "@/components/ui/Table";
+import { TABLE_LAYOUTS } from "@/lib/tableLayouts";
 import { Result } from "@/lib/gateway";
 
 interface StandingsTableProps {
@@ -106,7 +107,13 @@ export function StandingsTable({ entries }: StandingsTableProps) {
                 {category}
               </h2>
 
-              <Table columns={columns} data={data} />
+              <Table
+                columns={columns}
+                data={data}
+                columnWidths={TABLE_LAYOUTS.standings.columnWidths}
+                wrapColumns={TABLE_LAYOUTS.standings.wrapColumns}
+                alignColumns={TABLE_LAYOUTS.standings.alignColumns}
+              />
             </div>
           );
         },

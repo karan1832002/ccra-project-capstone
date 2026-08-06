@@ -11,6 +11,7 @@
 
 import React from "react";
 import Table from "@/components/ui/Table";
+import { TABLE_LAYOUTS } from "@/lib/tableLayouts";
 import { CurrentEntry, RodeoEvent } from "@/types/rodeo";
 
 interface CurrentEntriesTableProps {
@@ -26,7 +27,7 @@ export function CurrentEntriesTable({
   rodeos,
 }: CurrentEntriesTableProps) {
   if (entries.length === 0) {
-    return <p className="text-sm text-stone-400">No entries posted yet.</p>;
+    return <p className="text-sm text-foreground">No entries posted yet.</p>;
   }
 
   // Quick lookup from a rodeo id to its full record.
@@ -91,18 +92,24 @@ export function CurrentEntriesTable({
         return (
           <div key={rodeoId}>
             <div className="mb-2">
-              <h2 className="text-xl font-semibold text-stone-950">
+              <h2 className="text-xl font-semibold text-heading">
                 {rodeoEntries[0].rodeoName}
               </h2>
               {(rodeo?.dateLabel || rodeo?.location) && (
-                <p className="text-sm text-stone-400">
+                <p className="text-sm text-muted-foreground">
                   {rodeo?.dateLabel}
                   {rodeo?.dateLabel && rodeo?.location ? " · " : ""}
                   {rodeo?.location}
                 </p>
               )}
             </div>
-            <Table columns={columns} data={data} />
+            <Table
+              columns={columns}
+              data={data}
+              columnWidths={TABLE_LAYOUTS.currentEntries.columnWidths}
+              wrapColumns={TABLE_LAYOUTS.currentEntries.wrapColumns}
+              alignColumns={TABLE_LAYOUTS.currentEntries.alignColumns}
+            />
           </div>
         );
       })}

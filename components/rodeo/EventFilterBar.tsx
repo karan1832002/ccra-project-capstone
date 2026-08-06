@@ -16,33 +16,33 @@ import SearchInput from "@/components/ui/SearchInput";
 import FilterSelect from "@/components/ui/FilterSelect";
 
 interface EventFilterBarProps {
-  // Owned by the parent page — see file comment above.
+  // Search
   search: string;
   onSearchChange: (value: string) => void;
-  year: string;
-  onYearChange: (value: string) => void;
-  years: number[];
+  searchPlaceholder?: string;
+
+  // Primary dropdown filter
+  filterValue: string;
+  onFilterChange: (value: string) => void;
+  filterOptions: { label: string; value: string }[];
+
+  // Optional secondary filter (used on Draws page)
   sheetType?: string;
   onSheetTypeChange?: (value: string) => void;
-  // Opt-in — see file comment above.
   showTypeFilter?: boolean;
 }
 
 export function EventFilterBar({
   search,
   onSearchChange,
-  year,
-  onYearChange,
-  years,
+  searchPlaceholder = "Search...",
+  filterValue,
+  onFilterChange,
+  filterOptions,
   sheetType,
   onSheetTypeChange,
   showTypeFilter = false,
 }: EventFilterBarProps) {
-  const yearOptions = [
-    { label: "All years", value: "all" },
-    ...years.map((y) => ({ label: String(y), value: String(y) })),
-  ];
-
   const typeOptions = [
     { label: "All documents", value: "all" },
     { label: "Draw sheets", value: "draw" },
@@ -55,10 +55,14 @@ export function EventFilterBar({
         <SearchInput
           value={search}
           onChange={onSearchChange}
-          placeholder="Search by rodeo name"
+          placeholder={searchPlaceholder}
         />
       </div>
-      <FilterSelect value={year} onChange={onYearChange} options={yearOptions} className="min-w-[110px]" />
+      <FilterSelect
+        value={filterValue}
+        onChange={onFilterChange}
+        options={filterOptions}
+      />
       {showTypeFilter && onSheetTypeChange && (
         <FilterSelect
           value={sheetType ?? "all"}

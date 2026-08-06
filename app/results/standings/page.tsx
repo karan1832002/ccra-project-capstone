@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import StandingsTable from "@/components/rodeo/StandingsTable";
 import Hero from "@/components/ui/Hero";
+import EventFilterBar from "@/components/rodeo/EventFilterBar";
 import { pageStructure } from "@/lib/styles";
 import { getResults, Result } from "@/lib/gateway";
 
@@ -37,9 +38,18 @@ export default function RodeoStandingsPage() {
 
   // Build the category dropdown options from the loaded results.
   // The "all" option displays standings from every category.
-  const categories = useMemo(() => {
-    const set = new Set(entries.map((e) => e.category));
-    return ["all", ...Array.from(set)];
+  const categoryOptions = useMemo(() => {
+    const categories = Array.from(
+      new Set(entries.map((e) => e.category)),
+    ).sort();
+
+    return [
+      { label: "All Categories", value: "all" },
+      ...categories.map((category) => ({
+        label: category,
+        value: category,
+      })),
+    ];
   }, [entries]);
 
   // Apply the selected category filter.
@@ -69,41 +79,29 @@ export default function RodeoStandingsPage() {
       />
 
       <div className={pageStructure.contentContainer}>
-        {/* SEARCH + FILTER BAR */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
-          <input
-            type="text"
-            placeholder="Search competitor..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full md:w-1/2 rounded-md border border-border px-4 py-2"
+        <div className="mx-auto max-w-3xl">
+          {/* SEARCH + FILTER BAR */}
+          <EventFilterBar
+            search={search}
+            onSearchChange={setSearch}
+            searchPlaceholder="Search competitors..."
+            filterValue={category}
+            onFilterChange={setCategory}
+            filterOptions={categoryOptions}
           />
 
-          {/* Category selector filters standings by competition type. */}
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full md:w-1/2 rounded-md border border-border px-4 py-2"
-          >
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat === "all" ? "All Categories" : cat}
-              </option>
-            ))}
-          </select>
+          {/* NO RESULTS */}
+          {filteredEntries.length === 0 && (
+            <p className="text-sm text-foreground py-6 text-center">
+              No standings found.
+            </p>
+          )}
+
+          {/* STANDINGS TABLE */}
+          {filteredEntries.length > 0 && (
+            <StandingsTable entries={filteredEntries} />
+          )}
         </div>
-
-        {/* NO RESULTS */}
-        {filteredEntries.length === 0 && (
-          <p className="text-sm text-foreground py-6 text-center">
-            No standings found.
-          </p>
-        )}
-
-        {/* STANDINGS TABLE */}
-        {filteredEntries.length > 0 && (
-          <StandingsTable entries={filteredEntries} />
-        )}
       </div>
     </div>
   );

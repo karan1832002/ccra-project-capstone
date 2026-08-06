@@ -21,7 +21,9 @@ export default async function CurrentEntriesPage() {
       />
 
       <div className={pageStructure.contentContainer}>
-        <CurrentEntriesTable entries={entries} rodeos={rodeos} />
+        <div className="mx-auto max-w-3xl">
+          <CurrentEntriesTable entries={entries} rodeos={rodeos} />
+        </div>
       </div>
     </main>
   );
