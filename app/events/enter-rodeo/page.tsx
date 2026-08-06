@@ -11,56 +11,30 @@
  *      number and the entries table, with buttons to start a new entry or
  *      go pay fees.
  *
- * Entries live in local component state (`entries`) — `submitRodeoEntries`
- * in lib/sampleRodeoData.ts stands in for the real save-to-database call
- * for now. Swap that function's body out for a real API call once the
- * backend exists; this page doesn't need to change since it already
- * treats submission as an async call that can fail.
+ * Available rodeos are loaded from the gateway when the page opens and
+ * filtered to only those currently accepting entries. Entries themselves
+ * live in local component state until the competitor submits, at which
+ * point each selected event is registered through the backend API.
  */
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Table from "@/components/ui/Table";
 import AddEntryModal from "@/components/rodeo/AddEntryModal";
 import Hero from "@/components/ui/Hero";
 import { pageStructure } from "@/lib/styles";
-import { RodeoEntry } from "@/types/rodeo";
+import { RodeoEntry, RodeoEventData } from "@/types/rodeoEntry";
 import { formatShortDate } from "@/lib/rodeoDateUtils";
 import { useSession } from "@/lib/auth-client";
+import { toIsoDate } from "@/lib/rodeoDateUtils";
 import {
   getRodeos,
   getRodeo,
   registerForEvent,
   GatewayError,
 } from "@/lib/gateway";
-
-// Format dates as MMM DD (i.e. Aug 29)
-function fmtMonthDay(dateStr: string | null): string {
-  if (!dateStr) return "—";
-
-  const [y, m, d] = dateStr.split("-").map(Number);
-
-  return new Date(y, m - 1, d).toLocaleDateString("en-CA", {
-    month: "short",
-    day: "numeric",
-  });
-}
-
-// Reformated data for use in AddEntryModule
-type RodeoEventData = {
-  rodeoId: string;
-  rodeoTitle: string;
-  rodeoDate: string;
-  rodeoStartTime: string | null;
-  entryFee: number | null;
-  events: {
-    eventId: string;
-    eventTitle: string;
-    eventFee: number | null;
-  }[];
-};
 
 export default function EnterRodeoPage() {
   const { data: session, isPending } = useSession();
@@ -69,7 +43,7 @@ export default function EnterRodeoPage() {
   const competitorName = session?.user.name ?? "";
   const email = session?.user.email ?? "";
 
-  // Rodeo data loaded in from db
+  // Flattened rodeo/event data formatted for the AddEntryModal.
   const [rodeoData, setRodeoData] = useState<RodeoEventData[]>([]);
   const [loadingRodeos, setLoadingRodeos] = useState(true);
   const [rodeoError, setRodeoError] = useState<string | null>(null);
@@ -88,35 +62,54 @@ export default function EnterRodeoPage() {
     null,
   );
 
-  // Load rodeo data and flatten into RodeoEventData
+  // Load rodeos currently accepting entries and reshape them into the
+  // simplified format used by the Add Entry modal.
   useEffect(() => {
     async function loadRodeos() {
       try {
         setLoadingRodeos(true);
 
-        // Get all rodeos
+        // Get all rodeo summaries first. These provide the IDs needed to request
+        // full rodeo details, including dates and available events.
         const rodeos = await getRodeos();
 
-        // Load details for every rodeo
+        const today = toIsoDate(new Date());
+
+        // Only rodeos whose entry window is currently open should be available
+        // for competitors to register.
+        const openRodeos = rodeos.filter((rodeo) => {
+          if (!rodeo.entriesOpen || !rodeo.entriesClose) {
+            return false;
+          }
+
+          return rodeo.entriesOpen <= today && today <= rodeo.entriesClose;
+        });
+
+        // Load full details for each rodeo. The detailed response contains the
+        // event list, schedules, and fees required for competitor registration.
         const rodeoDetails = await Promise.all(
-          rodeos.map((rodeo) => getRodeo(rodeo.id)),
+          openRodeos.map((rodeo) => getRodeo(rodeo.id)),
         );
 
-        // Convert into a structure that's easy for the UI
-        const data: RodeoEventData[] = rodeoDetails.flatMap((rodeo) =>
-          rodeo.dates.map((date) => ({
+        // Keep only the fields the Add Entry modal needs and normalize each
+        // rodeo into a lightweight UI model.
+        const data: RodeoEventData[] = rodeoDetails.map((rodeo) => {
+          const dates = rodeo.dates.map((date) => date.date).toSorted();
+
+          return {
             rodeoId: rodeo.id,
             rodeoTitle: rodeo.rodeoTitle,
-            rodeoDate: date.date,
-            rodeoStartTime: date.startTime,
+            rodeoDates: dates,
             entryFee: rodeo.entryFee,
+
             events: rodeo.events.map((event) => ({
               eventId: event.id,
-              eventTitle: event.category, // backend field is now `category`
+              eventTitle: event.category,
+              eventDate: event.eventDate,
               eventFee: event.eventFee,
             })),
-          })),
-        );
+          };
+        });
 
         setRodeoData(data);
       } catch (err) {
@@ -133,11 +126,14 @@ export default function EnterRodeoPage() {
     loadRodeos();
   }, []);
 
+  // Called by the Add Entry modal after a successful submission.
+  // Adds the new entry to the review table and closes the modal.
   function handleAddEntry(entry: RodeoEntry) {
     setEntries((prev) => [...prev, entry]);
     setIsModalOpen(false);
   }
 
+  // Removes an entry from the review table before submission.
   function handleRemoveEntry(id: string) {
     setEntries((prev) => prev.filter((entry) => entry.id !== id));
   }
@@ -146,9 +142,11 @@ export default function EnterRodeoPage() {
   // list their values — Table renders cells positionally, not by key name.
   const columns = ["Rodeo", "Date", "Event", "Entry Fee", "Event Fee", ""];
 
+  // Convert each entry into the shape expected by the reusable Table
+  // component, including the optional Remove button.
   const tableRows = entries.map((entry) => ({
     rodeo: entry.rodeoName,
-    date: `${formatShortDate(entry.performanceDate)} @ ${entry.performanceTime}`,
+    date: formatShortDate(entry.eventDate),
     event: entry.eventName,
     entryFee: `$${entry.entryFee.toFixed(2)}`,
     eventFee: `$${entry.eventFee.toFixed(2)}`,
@@ -175,6 +173,8 @@ export default function EnterRodeoPage() {
     0,
   );
 
+  // Registers every selected event with the backend. All registrations are
+  // submitted together so the competitor receives a single confirmation.
   async function handleSubmitEntries() {
     setIsSubmitting(true);
     setSubmitError(null);
@@ -194,15 +194,18 @@ export default function EnterRodeoPage() {
         ),
       );
 
-      setConfirmationNumber("success"); // temporary until you decide how confirmations work
+      // Placeholder until the backend returns a real confirmation number.
+      setConfirmationNumber("success");
     } catch (err) {
-      // The backend rejects entry with MEMBERSHIP_REQUIRED when the user has no
-      // active membership — surface that specifically with a path to fix it.
+      // The backend requires an active membership before allowing event
+      // registration. Display a direct path to purchase one if needed.
       const code = (err as { code?: string })?.code;
       if (code === "MEMBERSHIP_REQUIRED") {
         setNeedsMembership(true);
       } else {
-        setSubmitError("Something went wrong submitting your entry. Please try again.");
+        setSubmitError(
+          "Something went wrong submitting your entry. Please try again.",
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -356,7 +359,9 @@ export default function EnterRodeoPage() {
 
               {needsMembership && (
                 <div className="mt-3 rounded-lg border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-900">
-                  <p className="font-medium">An active CCRA membership is required to enter events.</p>
+                  <p className="font-medium">
+                    An active CCRA membership is required to enter events.
+                  </p>
                   <a
                     href="/membership"
                     className="mt-2 inline-flex rounded-md bg-orange-600 px-4 py-2 text-xs font-semibold text-white hover:bg-orange-700"

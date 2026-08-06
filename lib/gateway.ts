@@ -71,12 +71,11 @@ export async function fetchFromGateway<T>(
 // ==========================================================================
 
 // A rodeo is the top-level container (multi-day, with an entry window).
-// (old db table)
 export type Rodeo = {
   id: string;
   rodeoTitle: string;
   entriesOpen: string | null; // ISO date "YYYY-MM-DD"
-  entriesClose: string | null;
+  entriesClose: string | null; // ISO date "YYYY-MM-DD"
   entryFee: number | null;
   location: string;
   image: string | null;
@@ -84,19 +83,6 @@ export type Rodeo = {
   capacity: number | null;
   createdAt: string;
 };
-// (current db table)
-// export type Rodeo = {
-//   id: string;
-//   rodeoTitle: string;
-//   entriesOpen: string | null; // ISO date "YYYY-MM-DD"
-//   entriesClose: string | null; // ISO date "YYYY-MM-DD"
-//   entryFee: number | null;
-//   location: string;
-//   image: string | null;
-//   description: string | null;
-//   capacity: number | null;
-//   createdAt: string;
-// };
 
 // An event is a single competition inside a rodeo, identified by its category
 // (e.g. "Bull Riding"). Matches the backend `events` table.
@@ -220,17 +206,11 @@ export function getEventRegistrations(id: string) {
   return fetchFromGateway<Registration[]>(`/api/events/${id}/registrations`);
 }
 
-export function registerForEvent(
-  eventId: string,
-  data: RegisterEventRequest,
-) {
-  return fetchFromGateway<Registration>(
-    `/api/events/${eventId}/register`,
-    {
-      method: "POST",
-      body: data,
-    },
-  );
+export function registerForEvent(eventId: string, data: RegisterEventRequest) {
+  return fetchFromGateway<Registration>(`/api/events/${eventId}/register`, {
+    method: "POST",
+    body: data,
+  });
 }
 
 // Results
