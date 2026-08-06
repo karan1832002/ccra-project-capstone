@@ -1,5 +1,10 @@
 "use server";
 
+// Each mutation revalidates both the admin edit path and the public-facing
+// minutes page, so the published list stays in sync with admin changes.
+// Errors are caught and returned as structured { success, message } objects
+// instead of throwing, so the client component can display inline feedback.
+
 import { revalidatePath } from "next/cache";
 import { createMinute, updateMinute, deleteMinute } from "@/lib/gateway-client";
 import { GatewayError } from "@/lib/gateway";

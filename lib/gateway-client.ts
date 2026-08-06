@@ -134,6 +134,11 @@ export async function callGateway<T>(
   }
 
   const session = await getVerifiedSession();
+
+  // Default to "member" when the session lacks a role field. The gateway
+  // enforces actual authorization, so a missing role here only means the
+  // frontend cannot pre-filter by role — the gateway will still reject
+  // unauthorized actions.
   const role = (session.user as { role?: string }).role ?? "member";
 
   // Build the full URL by appending the caller-supplied endpoint path
