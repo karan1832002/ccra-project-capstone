@@ -134,22 +134,6 @@ export type RegisterEventRequest = {
 };
 
 // Result for rodeo event
-// (old db table)
-// export type Result = {
-//   id: string;
-//   eventId: string;
-//   userId: string;
-//   entryId: string | null;
-//   category: string;
-//   score?: number | null;
-//   timeSeconds: number | null;
-//   placement: number | null;
-//   points: number;
-//   money: number;
-//   ground: number;
-//   recordedAt: string | null;
-// };
-// (current db table)
 export type Result = {
   id: string;
   rodeoId: string;
@@ -201,9 +185,9 @@ export function getEvent(id: string) {
   return fetchFromGateway<Event>(`/api/events/${id}`);
 }
 
-// Event Registrations (registrations for selected event)
-export function getEventRegistrations(id: string) {
-  return fetchFromGateway<Registration[]>(`/api/events/${id}/registrations`);
+// Event Registrations
+export function getEventRegistrations() {
+  return fetchFromGateway<Registration[]>(`/api/events/entries/current`);
 }
 
 export function registerForEvent(eventId: string, data: RegisterEventRequest) {
