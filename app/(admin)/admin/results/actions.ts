@@ -31,43 +31,82 @@ export async function fetchRodeosAndEvents(): Promise<{
   return { rodeos, events };
 }
 
-// Fetches registrations for a specific event. Returns the userIds of all
-// competitors registered for the given event so the form can filter the
-// Competitor dropdown to only show relevant contestants.
+// Fetches registrations for a specific event. Returns full registration
+// records so the form can resolve userId, entryId, and competitorName.
 export async function fetchEventRegistrations(eventId: string) {
-  const registrations = await callGateway<{ userId: string }[]>(
-    `/api/events/${eventId}/registrations`,
-  );
-  return registrations.map((r) => r.userId);
+  const registrations = await callGateway<
+    { id: string; userId: string; competitorName: string | null }[]
+  >(`/api/events/${eventId}/registrations`);
+  return registrations.map((r) => ({
+    entryId: r.id,
+    userId: r.userId,
+    competitorName: r.competitorName ?? "Unknown",
+  }));
 }
 
 export async function addRodeoResult(formData: FormData) {
+  // Form fields sent by the client.
   const userId = formData.get("userId") as string;
   const eventId = formData.get("eventId") as string;
-  const timeOrScore = parseFloat(formData.get("timeOrScore") as string);
+  const entryId = formData.get("entryId") as string;
+  const competitorName = formData.get("competitorName") as string;
+  const score = parseFloat(formData.get("score") as string);
   const placing = parseInt(formData.get("placing") as string, 10);
   const payoutMoney = parseFloat(formData.get("payoutMoney") as string);
   const groundMoney = parseFloat(formData.get("groundMoney") as string);
 
-  if (
-    !userId ||
-    !eventId ||
-    isNaN(timeOrScore) ||
-    isNaN(placing) ||
-    isNaN(payoutMoney) ||
-    isNaN(groundMoney)
-  ) {
-    return { error: "Missing or invalid required fields." };
+  if (!userId || !eventId || !entryId || !competitorName) {
+    return { error: "Missing required fields (user, event, entry, or competitor)." };
+  }
+  if (isNaN(score) || isNaN(placing) || isNaN(payoutMoney) || isNaN(groundMoney)) {
+    return { error: "Missing or invalid numeric fields." };
   }
 
   try {
+    // Fetch the event and its parent rodeo from the gateway so we can
+    // populate the denormalized rodeo/event snapshot fields that the
+    // results-service requires.
+    // Fetch event details and the parent rodeo (with nested dates) in
+    // parallel so we have everything needed for the denormalized snapshot.
+    const event = await callGateway<{
+      rodeoId: string;
+      category: string;
+      eventDate: string;
+      eventTime: string;
+    }>(`/api/events/${eventId}`);
+
+    const rodeoDetail = await callGateway<{
+      rodeoTitle: string;
+      location: string;
+      dates: { date: string }[];
+    }>(`/api/events/rodeos/${event.rodeoId}`);
+
+    // Derive rodeo date range from the nested performance dates.
+    // Falls back to the event date if no dates are attached.
+    const sortedDates = [...rodeoDetail.dates].sort(
+      (a, b) => a.date.localeCompare(b.date),
+    );
+    const rodeoStart = sortedDates[0]?.date ?? event.eventDate;
+    const rodeoEnd = sortedDates[sortedDates.length - 1]?.date ?? event.eventDate;
+
     await submitRodeoResult({
-      userId,
       eventId,
-      timeOrScore,
-      placing,
-      payoutMoney,
-      groundMoney,
+      competitorId: userId,
+      entryId,
+      category: event.category,
+      score,
+      placement: placing,
+      points: 0,
+      money: payoutMoney,
+      ground: groundMoney,
+      competitorName,
+      rodeoId: event.rodeoId,
+      rodeoTitle: rodeoDetail.rodeoTitle,
+      rodeoLocation: rodeoDetail.location,
+      rodeoStart,
+      rodeoEnd,
+      eventDate: event.eventDate,
+      eventTime: event.eventTime,
     });
 
     revalidatePath("/admin/results");

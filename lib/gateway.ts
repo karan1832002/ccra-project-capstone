@@ -108,25 +108,17 @@ export type RodeoDetail = Rodeo & {
 };
 
 // Competitor registration for rodeo event
-// (old db table)
 export type Registration = {
   id: string;
-  eventId: string;
-  userId: string;
-  partner: string | null;
-  category: string;
+  competitorName: string | null
   status: string;
-  registeredAt: string | null;
+  eventId: string;
+  category: string;
+  eventDate: string;
+  rodeoId: string;
+  rodeoTitle: string;
+  location: string;
 };
-// (current db table)
-// export type Registration = {
-//   id: string;
-//   eventId: string;
-//   userId: string;
-//   competitorName: string | null;
-//   status: string;
-//   registeredAt: string | null;
-// };
 
 export type RegisterEventRequest = {
   userId: string;

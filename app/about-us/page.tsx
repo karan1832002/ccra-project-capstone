@@ -1,10 +1,14 @@
+"use client";
 import Image from "next/image";
 import { HandCoins, Trophy, HeartHandshake } from "lucide-react";
 import Hero from "@/components/ui/Hero";
+import { useSession } from "@/lib/auth-client";
+import { buttons, layout, pageStructure } from "@/lib/styles";
 
 export default function AboutUsPage() {
+  const { data: session } = useSession();
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
+    <div className={pageStructure.pageWrapper}>
       {/* ================= HERO ================= */}
       <Hero
         badge="EST. 1985"
@@ -12,18 +16,18 @@ export default function AboutUsPage() {
         description="Celebrating 41 years of preserving Western heritage through competitive rodeo for athletes of all ages and skill levels."
       />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+      <div className={pageStructure.contentContainer}>
         {/* ================= MISSION / HISTORY ================= */}
-        <div className="grid lg:grid-cols-2 gap-16 py-20 items-center">
+        <div className={`${pageStructure.firstSectionWrapper} ${layout.twoColumnGrid}`}>
           <div>
-            <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-4 dark:text-stone-500">
+            <div className={pageStructure.eyebrowLabel}>
               OUR STORY
             </div>
-            <h2 className="text-4xl font-semibold text-stone-950 mb-8 dark:text-stone-100">
+            <h2 className={`${pageStructure.sectionHeading} mb-8`}>
               A Legacy of Western Spirit
             </h2>
 
-            <div className="prose prose-stone text-stone-600 space-y-6 text-lg dark:prose-invert dark:text-stone-300">
+            <div className="prose max-w-none space-y-6 text-lg text-muted-foreground dark:prose-invert">
               <p>
                 The Canadian Classic Rodeo Association (formerly the Canadian Senior Pro Rodeo
                 Association) was founded in 1985 to provide competitive rodeo opportunities for
@@ -41,15 +45,18 @@ export default function AboutUsPage() {
             </div>
 
             <div className="mt-10 flex items-center gap-4">
-              <a
-                href="/sign-up"
-                className="inline-flex items-center justify-center rounded-md bg-orange-600 px-8 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
-              >
-                Join the CCRA
-              </a>
+              {!session && (
+                <a
+                  href="/sign-up"
+                  className={buttons.primaryButton}
+                >
+                  Join the CCRA
+                </a>
+              )}
+
               <a
                 href="/schedule"
-                className="inline-flex items-center justify-center rounded-md border border-stone-200 bg-white px-8 py-3 text-sm font-semibold text-stone-950 transition hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:hover:bg-stone-800"
+                className={buttons.secondaryButton}
               >
                 View 2026 Schedule
               </a>
@@ -57,7 +64,7 @@ export default function AboutUsPage() {
           </div>
 
           {/* Visual */}
-          <div className="relative rounded-md shadow-sm overflow-hidden aspect-[16/10] bg-stone-200 dark:bg-stone-800">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-surface shadow-sm">
             <Image
               src="/images/ccralineup.jpg"
               alt="Canadian Classic Rodeo action"
@@ -75,51 +82,51 @@ export default function AboutUsPage() {
         </div>
 
         {/* ================= VALUES ================= */}
-        <div className="py-20 border-t border-stone-200 dark:border-stone-800">
+        <div className={pageStructure.sectionWrapper}>
           <div className="text-center mb-16">
-            <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-3 dark:text-stone-500">
+            <div className={pageStructure.eyebrowLabel}>
               OUR VALUES
             </div>
-            <h2 className="text-4xl font-semibold text-stone-950 dark:text-stone-100">
+            <h2 className={pageStructure.sectionHeading}>
               What Drives Us
             </h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="rounded-md border border-stone-200 bg-white p-8 shadow-sm hover:shadow-lg transition group dark:border-stone-700 dark:bg-stone-900">
-              <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-orange-100 text-orange-600 mx-auto dark:bg-orange-950/40 dark:text-orange-400">
+            <div className="group rounded-md border border-border bg-surface p-8 shadow-sm transition hover:shadow-lg">
+              <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-highlight text-accent-foreground">
                 <HeartHandshake className="h-6 w-6" />
               </div>
-              <h3 className="text-2xl font-semibold text-stone-950 mb-3 dark:text-stone-100">
+              <h3 className="mb-3 text-2xl font-semibold text-heading">
                 Heritage & Tradition
               </h3>
-              <p className="text-stone-600 dark:text-stone-300">
+              <p className="text-muted-foreground">
                 Honoring the rich history and traditions of Canadian rodeo while creating new
                 memories for future generations.
               </p>
             </div>
 
-            <div className="rounded-md border border-stone-200 bg-white p-8 shadow-sm hover:shadow-lg transition group dark:border-stone-700 dark:bg-stone-900">
-              <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-orange-100 text-orange-600 mx-auto dark:bg-orange-950/40 dark:text-orange-400">
+            <div className="group rounded-md border border-border bg-surface p-8 shadow-sm transition hover:shadow-lg">
+              <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-highlight text-accent-foreground">
                 <Trophy className="h-6 w-6" />
               </div>
-              <h3 className="text-2xl font-semibold text-stone-950 mb-3 dark:text-stone-100">
+              <h3 className="mb-3 text-2xl font-semibold text-heading">
                 Competition & Growth
               </h3>
-              <p className="text-stone-600 dark:text-stone-300">
+              <p className="text-muted-foreground">
                 Providing fair, safe, and exciting competition for athletes at every stage of their
                 rodeo journey.
               </p>
             </div>
 
-            <div className="rounded-md border border-stone-200 bg-white p-8 shadow-sm hover:shadow-lg transition group dark:border-stone-700 dark:bg-stone-900">
-              <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-orange-100 text-orange-600 mx-auto dark:bg-orange-950/40 dark:text-orange-400">
+            <div className="group rounded-md border border-border bg-surface p-8 shadow-sm transition hover:shadow-lg">
+              <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-highlight text-accent-foreground">
                 <HandCoins className="h-6 w-6" />
               </div>
-              <h3 className="text-2xl font-semibold text-stone-950 mb-3 dark:text-stone-100">
+              <h3 className="mb-3 text-2xl font-semibold text-heading">
                 Community & Family
               </h3>
-              <p className="text-stone-600 dark:text-stone-300">
+              <p className="text-muted-foreground">
                 Building lasting friendships and supporting one another both in and out of the
                 arena.
               </p>
@@ -128,19 +135,19 @@ export default function AboutUsPage() {
         </div>
 
         {/* ================= TIMELINE ================= */}
-        <div className="py-20 bg-white rounded-md border border-stone-200 p-12 dark:border-stone-700 dark:bg-stone-900">
-          <h2 className="text-3xl font-semibold text-stone-950 mb-12 text-center dark:text-stone-100">
+        <div className={`${pageStructure.sectionWrapper} ${pageStructure.contentPanel}`}>
+          <h2 className="mb-12 text-center text-3xl font-semibold text-heading">
             Our Journey
           </h2>
 
           <div className="max-w-3xl mx-auto space-y-12">
             <div className="flex gap-8">
               <div className="w-28 flex-shrink-0 text-right">
-                <div className="font-semibold text-orange-600 dark:text-orange-400">1985</div>
+                <div className="font-semibold text-accent-foreground">1985</div>
               </div>
               <div>
-                <div className="font-semibold text-stone-950 dark:text-stone-100">Foundation</div>
-                <p className="text-stone-600 mt-1 dark:text-stone-300">
+                <div className="font-semibold text-heading">Foundation</div>
+                <p className="mt-1 text-muted-foreground">
                   Established as the Canadian Senior Pro Rodeo Association to serve mature
                   competitors.
                 </p>
@@ -149,11 +156,11 @@ export default function AboutUsPage() {
 
             <div className="flex gap-8">
               <div className="w-28 flex-shrink-0 text-right">
-                <div className="font-semibold text-orange-600 dark:text-orange-400">2000s</div>
+                <div className="font-semibold text-accent-foreground">2000s</div>
               </div>
               <div>
-                <div className="font-semibold text-stone-950 dark:text-stone-100">Expansion</div>
-                <p className="text-stone-600 mt-1 dark:text-stone-300">
+                <div className="font-semibold text-heading">Expansion</div>
+                <p className="mt-1 text-muted-foreground">
                   Grew to include all skill levels and introduced new events.
                 </p>
               </div>
@@ -161,11 +168,11 @@ export default function AboutUsPage() {
 
             <div className="flex gap-8">
               <div className="w-28 flex-shrink-0 text-right">
-                <div className="font-semibold text-orange-600 dark:text-orange-400">2025-2026</div>
+                <div className="font-semibold text-accent-foreground">2025-2026</div>
               </div>
               <div>
-                <div className="font-semibold text-stone-950 dark:text-stone-100">Modern Era</div>
-                <p className="text-stone-600 mt-1 dark:text-stone-300">
+                <div className="font-semibold text-heading">Modern Era</div>
+                <p className="mt-1 text-muted-foreground">
                   Rebranded to Canadian Classic Rodeo Association. 41st anniversary season with
                   exciting new initiatives and continued growth.
                 </p>
@@ -175,18 +182,18 @@ export default function AboutUsPage() {
         </div>
 
         {/* ================= LEADERSHIP TEASER ================= */}
-        <div className="py-20 text-center">
+        <div className={`${pageStructure.sectionWrapper} text-center`}>
           <div className="max-w-md mx-auto">
-            <h2 className="text-3xl font-semibold text-stone-950 mb-4 dark:text-stone-100">
+            <h2 className="mb-4 text-3xl font-semibold text-heading">
               Led by Passionate Volunteers
             </h2>
-            <p className="text-stone-600 mb-8 dark:text-stone-300">
+            <p className="mb-8 text-muted-foreground">
               Our board and committees are made up of dedicated rodeo enthusiasts who give their
               time to keep the spirit of the CCRA alive.
             </p>
             <a
               href="/about-us/board-of-directors"
-              className="inline-flex items-center justify-center rounded-md bg-orange-600 px-8 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
+              className={buttons.primaryButton}
             >
               Meet Our Team
             </a>

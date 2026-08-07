@@ -58,7 +58,7 @@ export default async function NewsletterArticlePage({ params }: PageProps) {
 
         {/* --- Footer Divider --- */}
         <hr className="mt-12 border-stone-200" />
-        <p className="mt-6 text-center text-sm text-stone-400">
+        <p className="mt-6 text-center text-sm text-stone-600">
           CCRA Newsletter
         </p>
       </div>

@@ -321,7 +321,7 @@ function ContactsTable({
 }) {
   if (contacts.length === 0) {
     return (
-      <p className="py-12 text-center text-sm text-stone-500">
+      <p className="py-12 text-center text-sm text-stone-600">
         No contact submissions yet.
       </p>
     );
@@ -387,7 +387,7 @@ function ApprovalsTable({
 }) {
   if (approvals.length === 0) {
     return (
-      <p className="py-12 text-center text-sm text-stone-500">
+      <p className="py-12 text-center text-sm text-stone-600">
         No rodeo approval requests yet.
       </p>
     );

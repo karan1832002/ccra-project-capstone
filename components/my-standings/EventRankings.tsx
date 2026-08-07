@@ -26,7 +26,7 @@ export default function EventRankings({
     <section
       className={`rounded-md border border-stone-200 bg-white p-8 shadow-sm dark:border-stone-700 dark:bg-stone-900 ${className}`}
     >
-      <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-3 dark:text-stone-500">
+      <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-600 mb-3 dark:text-stone-600">
         {label}
       </div>
       <h2 className="text-xl font-semibold text-stone-950 mb-6 dark:text-stone-100">
@@ -34,7 +34,7 @@ export default function EventRankings({
       </h2>
 
       {items.length === 0 ? (
-        <p className="text-sm text-stone-500 dark:text-stone-400">
+        <p className="text-sm text-stone-600 dark:text-stone-600">
           No event rankings yet.
         </p>
       ) : (
@@ -49,7 +49,7 @@ export default function EventRankings({
                   <h3 className="font-semibold text-stone-950 dark:text-stone-100">
                     {item.event}
                   </h3>
-                  <p className="text-sm text-stone-500 mt-1 dark:text-stone-400">
+                  <p className="text-sm text-stone-600 mt-1 dark:text-stone-600">
                     Last: {item.lastResult}
                   </p>
                 </div>
@@ -64,7 +64,7 @@ export default function EventRankings({
                   <div className="text-lg font-semibold text-stone-950 dark:text-stone-100">
                     {item.points}
                   </div>
-                  <div className="text-xs text-stone-500 dark:text-stone-400">
+                  <div className="text-xs text-stone-600 dark:text-stone-600">
                     Points
                   </div>
                 </div>
@@ -72,7 +72,7 @@ export default function EventRankings({
                   <div className="text-lg font-semibold text-stone-950 dark:text-stone-100">
                     {item.entries}
                   </div>
-                  <div className="text-xs text-stone-500 dark:text-stone-400">
+                  <div className="text-xs text-stone-600 dark:text-stone-600">
                     Entries
                   </div>
                 </div>
@@ -80,7 +80,7 @@ export default function EventRankings({
                   <div className="text-lg font-semibold text-stone-950 dark:text-stone-100">
                     {item.bestScore}
                   </div>
-                  <div className="text-xs text-stone-500 dark:text-stone-400">
+                  <div className="text-xs text-stone-600 dark:text-stone-600">
                     Best Score
                   </div>
                 </div>

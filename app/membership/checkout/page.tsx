@@ -86,7 +86,7 @@ function PayForm({
   return (
     <form onSubmit={handlePay} className="space-y-7">
       <section>
-        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-stone-500">
+        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-stone-600">
           Payment
           <span className="flex items-center gap-1 text-[11px] font-medium normal-case tracking-normal text-green-700">
             <Lock className="h-3 w-3" /> Secured by Stripe
@@ -120,7 +120,7 @@ function PayForm({
         )}
       </button>
 
-      <p className="text-center text-xs text-stone-400">
+      <p className="text-center text-xs text-stone-600">
         Test card <span className="font-mono">4242 4242 4242 4242</span> · any future date · any CVC
       </p>
     </form>
@@ -212,7 +212,7 @@ function MembershipCheckout() {
         <div className="mb-6 text-center">
           <CheckCircle2 className="mx-auto mb-3 h-14 w-14 text-green-600" />
           <h1 className="text-2xl font-bold text-stone-900">Payment successful</h1>
-          <p className="mt-1 text-sm text-stone-500">
+          <p className="mt-1 text-sm text-stone-600">
             Your CCRA membership is now active. Keep this receipt for your records.
           </p>
         </div>
@@ -231,11 +231,11 @@ function MembershipCheckout() {
 
           <dl className="divide-y divide-stone-100 px-6">
             <div className="flex justify-between py-3 text-sm">
-              <dt className="text-stone-500">Item</dt>
+              <dt className="text-stone-600">Item</dt>
               <dd className="font-medium text-stone-900">CCRA Full Membership</dd>
             </div>
             <div className="flex justify-between py-3 text-sm">
-              <dt className="text-stone-500">Date</dt>
+              <dt className="text-stone-600">Date</dt>
               <dd className="text-stone-900">
                 {(paidAt ?? new Date()).toLocaleString("en-CA", {
                   dateStyle: "medium",
@@ -245,16 +245,16 @@ function MembershipCheckout() {
             </div>
             {expiryDate && (
               <div className="flex justify-between py-3 text-sm">
-                <dt className="text-stone-500">Valid through</dt>
+                <dt className="text-stone-600">Valid through</dt>
                 <dd className="text-stone-900">{expiryDate}</dd>
               </div>
             )}
             <div className="flex justify-between gap-4 py-3 text-sm">
-              <dt className="shrink-0 text-stone-500">Reference</dt>
+              <dt className="shrink-0 text-stone-600">Reference</dt>
               <dd className="truncate font-mono text-xs text-stone-600">{paymentId}</dd>
             </div>
             <div className="flex justify-between py-3 text-sm">
-              <dt className="text-stone-500">Payment method</dt>
+              <dt className="text-stone-600">Payment method</dt>
               <dd className="text-stone-900">Card · Stripe</dd>
             </div>
             <div className="flex items-baseline justify-between py-4">
@@ -288,7 +288,7 @@ function MembershipCheckout() {
       <div className="mx-auto max-w-5xl px-4 py-10">
         <a
           href="/membership"
-          className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 transition hover:text-orange-600"
+          className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-stone-600 transition hover:text-orange-600"
         >
           <ArrowLeft className="h-4 w-4" /> Back to membership
         </a>
@@ -298,7 +298,7 @@ function MembershipCheckout() {
           {/* LEFT — payment form */}
           <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm sm:p-8">
             {state === "loading" && (
-              <div className="flex flex-col items-center gap-3 py-16 text-stone-500">
+              <div className="flex flex-col items-center gap-3 py-16 text-stone-600">
                 <span className="h-8 w-8 animate-spin rounded-full border-2 border-orange-200 border-t-orange-500" />
                 Preparing secure checkout…
               </div>
@@ -327,7 +327,7 @@ function MembershipCheckout() {
                 <span className="text-stone-700">CCRA Full Membership</span>
                 <span className="font-medium text-stone-900">${total.toFixed(2)}</span>
               </div>
-              <p className="mt-1 text-xs text-stone-500">Valid through 2027-07-31</p>
+              <p className="mt-1 text-xs text-stone-600">Valid through 2027-07-31</p>
 
               <div className="mt-5 space-y-2 border-t border-stone-200 pt-4 text-sm">
                 <div className="flex justify-between text-stone-600">
@@ -344,7 +344,7 @@ function MembershipCheckout() {
                 An active membership is required to enter rodeo events.
               </p>
 
-              <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-stone-400">
+              <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-stone-600">
                 <ShieldCheck className="h-3.5 w-3.5" /> Secure SSL checkout · Powered by Stripe
               </p>
             </div>
@@ -359,7 +359,7 @@ export default function MembershipCheckoutPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center text-stone-500">Loading…</div>
+        <div className="flex min-h-screen items-center justify-center text-stone-600">Loading…</div>
       }
     >
       <MembershipCheckout />

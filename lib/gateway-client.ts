@@ -44,14 +44,26 @@ export interface User {
 }
 
 // Payload sent to the gateway when submitting a rodeo result via
-// POST /api/results. All monetary values are in dollars.
+// POST /api/results. All monetary values are in dollars. Field names
+// match the results-service recordSchema so validation passes.
 export interface RodeoResultData {
-  userId: string;
   eventId: string;
-  timeOrScore: number;
-  placing: number;
-  payoutMoney: number;
-  groundMoney: number;
+  competitorId: string;
+  entryId: string;
+  category: string;
+  score: number;
+  placement: number;
+  points: number;
+  money: number;
+  ground: number;
+  competitorName: string;
+  rodeoId: string;
+  rodeoTitle: string;
+  rodeoLocation: string;
+  rodeoStart: string;
+  rodeoEnd: string;
+  eventDate: string;
+  eventTime: string;
 }
 
 // A single date entry for a multi-day rodeo. Submitted as a nested array
@@ -210,12 +222,15 @@ export async function callGateway<T>(
 // ==========================================================================
 
 // Shape of a registration record returned by
-// GET /api/events/:eventId/registrations.
+// GET /api/events/:eventId/registrations. Maps to the event_registrations
+// table: id = entryId for results, userId + competitorName for the rider.
 export type Registration = {
   id: string;
   eventId: string;
   userId: string;
-  entryId?: string;
+  competitorName: string | null;
+  status: string;
+  registeredAt: string;
 };
 
 // Fetches all registrations for a given event from the gateway's

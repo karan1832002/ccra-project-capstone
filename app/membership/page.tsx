@@ -432,7 +432,7 @@ export default function MembershipPage() {
             </p>
             <div className="mt-2 rounded-lg border border-stone-200 bg-stone-50 p-3 text-sm space-y-1">
               {events.length === 0 && (
-                <p className="text-stone-500">No events selected yet.</p>
+                <p className="text-stone-600">No events selected yet.</p>
               )}
               {events.map((e) => (
                 <p key={e}>✓ {e}</p>

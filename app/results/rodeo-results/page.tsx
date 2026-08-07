@@ -121,7 +121,7 @@ export default function RodeoResultsPage() {
   );
 
   if (loading) {
-    return <p className="text-sm text-stone-400">Loading rodeo results...</p>;
+    return <p className="text-sm text-stone-600">Loading rodeo results...</p>;
   }
 
   return (
@@ -144,13 +144,13 @@ export default function RodeoResultsPage() {
         />
 
         {visibleRodeos.length === 0 && (
-          <p className="text-sm text-stone-400 py-6">No matching rodeos.</p>
+          <p className="text-sm text-stone-600 py-6">No matching rodeos.</p>
         )}
 
         {rodeosWithYearHeaders.map(({ event: rodeo, showYearHeader }) => (
           <React.Fragment key={rodeo.id}>
             {showYearHeader && (
-              <div className="text-xs font-semibold text-stone-400 mt-5 mb-2">
+              <div className="text-xs font-semibold text-stone-600 mt-5 mb-2">
                 {rodeo.year}
               </div>
             )}

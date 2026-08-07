@@ -84,17 +84,17 @@ export default function GalleryPage() {
           </div>
 
           {loading ? (
-            <div className="py-20 text-center text-stone-500 font-medium">
+            <div className="py-20 text-center text-stone-600 font-medium">
               <div className="inline-block animate-spin w-8 h-8 border-4 border-orange-600 border-t-transparent rounded-full mb-3" />
               <div>Loading gallery collection...</div>
             </div>
           ) : photos.length === 0 ? (
             <div className="rounded-md border border-dashed border-stone-300 bg-white/60 p-12 text-center dark:border-stone-700 dark:bg-stone-900/50">
-              <ImageIcon className="w-12 h-12 text-stone-400 mx-auto mb-4" />
+              <ImageIcon className="w-12 h-12 text-stone-600 mx-auto mb-4" />
               <h3 className="font-semibold text-lg text-stone-800 dark:text-stone-200 mb-1">
                 No photos in gallery yet
               </h3>
-              <p className="text-sm text-stone-500 max-w-md mx-auto">
+              <p className="text-sm text-stone-600 max-w-md mx-auto">
                 Check back soon as new event action shots are added throughout the season.
               </p>
             </div>
@@ -163,7 +163,7 @@ export default function GalleryPage() {
                 <p className="text-base font-semibold">
                   {selectedPhoto.fileName.replace(/^\d+-/, "").replace(/\.[^/.]+$/, "")}
                 </p>
-                <p className="text-xs text-stone-400 mt-1">
+                <p className="text-xs text-stone-600 mt-1">
                   Added on{" "}
                   {new Date(selectedPhoto.createdAt).toLocaleDateString("en-CA", {
                     month: "long",

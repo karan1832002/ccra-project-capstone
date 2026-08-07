@@ -35,7 +35,7 @@ export default function ContactInformationPage() {
                     >
                       403-875-3242
                     </a>
-                    <p className="text-sm text-stone-500 mt-1 dark:text-stone-400">
+                    <p className="text-sm text-stone-600 mt-1 dark:text-stone-600">
                       Monday – Friday, 9am – 5pm MST
                     </p>
                   </div>
@@ -79,7 +79,7 @@ export default function ContactInformationPage() {
 
               {/* Quick Links */}
               <div className="mt-12 pt-8 border-t border-stone-200 dark:border-stone-700">
-                <p className="text-sm font-semibold text-stone-400 mb-4 dark:text-stone-500">
+                <p className="text-sm font-semibold text-stone-600 mb-4 dark:text-stone-600">
                   QUICK LINKS
                 </p>
                 <div className="grid grid-cols-2 gap-4 text-sm">

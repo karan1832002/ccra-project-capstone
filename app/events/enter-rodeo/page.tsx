@@ -344,7 +344,7 @@ export default function EnterRodeoPage() {
                 {confirmationNumber ? "Entries Submitted" : "Your Entries"}
               </h2>
               {entries.length === 0 ? (
-                <p className="text-sm text-stone-400">
+                <p className="text-sm text-stone-600">
                   No entries yet — use "Add Entry" above to add your first
                   event.
                 </p>

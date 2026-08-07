@@ -24,9 +24,9 @@ function entryStatus(open: string | null, close: string | null) {
 
 const toneStyles: Record<string, string> = {
   open: "bg-emerald-50 text-emerald-700 ring-emerald-600/20",
-  closed: "bg-stone-100 text-stone-500 ring-stone-500/20",
+  closed: "bg-stone-100 text-stone-600 ring-stone-500/20",
   upcoming: "bg-amber-50 text-amber-700 ring-amber-600/20",
-  tba: "bg-stone-50 text-stone-400 ring-stone-400/20",
+  tba: "bg-stone-50 text-stone-600 ring-stone-400/20",
 };
 
 export default async function SchedulePage() {
@@ -60,10 +60,10 @@ export default async function SchedulePage() {
 
         {rodeos.length === 0 && !error ? (
           <div className="rounded-2xl border border-dashed border-stone-300 bg-white/50 py-24 text-center">
-            <p className="text-lg font-medium text-stone-500">
+            <p className="text-lg font-medium text-stone-600">
               No rodeos scheduled yet
             </p>
-            <p className="mt-1 text-sm text-stone-400">
+            <p className="mt-1 text-sm text-stone-600">
               Check back soon — the season lineup is being finalized.
             </p>
           </div>
@@ -74,19 +74,19 @@ export default async function SchedulePage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-stone-200 bg-stone-50">
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-stone-500">
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-stone-600">
                       Rodeo
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-stone-500">
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-stone-600">
                       Location
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-stone-500">
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-stone-600">
                       Entries Open
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-stone-500">
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-stone-600">
                       Entries Close
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-stone-500">
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-stone-600">
                       Status
                     </th>
                   </tr>
@@ -105,7 +105,7 @@ export default async function SchedulePage() {
                             {r.rodeoTitle}
                           </div>
                           {r.entryFee != null && (
-                            <div className="mt-0.5 text-xs text-stone-500">
+                            <div className="mt-0.5 text-xs text-stone-600">
                               Entry fee ${r.entryFee}
                             </div>
                           )}
@@ -153,11 +153,11 @@ export default async function SchedulePage() {
                       </span>
                     </div>
 
-                    <p className="mt-1 text-sm text-stone-500">{r.location}</p>
+                    <p className="mt-1 text-sm text-stone-600">{r.location}</p>
 
                     <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
                       <div>
-                        <dt className="text-xs uppercase tracking-wide text-stone-400">
+                        <dt className="text-xs uppercase tracking-wide text-stone-600">
                           Opens
                         </dt>
                         <dd className="mt-0.5 text-stone-700">
@@ -165,7 +165,7 @@ export default async function SchedulePage() {
                         </dd>
                       </div>
                       <div>
-                        <dt className="text-xs uppercase tracking-wide text-stone-400">
+                        <dt className="text-xs uppercase tracking-wide text-stone-600">
                           Closes
                         </dt>
                         <dd className="mt-0.5 text-stone-700">
@@ -175,7 +175,7 @@ export default async function SchedulePage() {
                     </dl>
 
                     {r.entryFee != null && (
-                      <p className="mt-3 text-xs text-stone-500">
+                      <p className="mt-3 text-xs text-stone-600">
                         Entry fee ${r.entryFee}
                       </p>
                     )}
@@ -186,7 +186,7 @@ export default async function SchedulePage() {
           </>
         )}
 
-        <p className="mt-8 text-center text-sm text-stone-400">
+        <p className="mt-8 text-center text-sm text-stone-600">
           Showing {rodeos.length} {rodeos.length === 1 ? "rodeo" : "rodeos"} for
           the 2026 season
         </p>

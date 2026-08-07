@@ -93,7 +93,7 @@ export default async function AdminSponsorsPage({
                 required
                 defaultValue={editingRow?.name ?? ""}
                 placeholder="Acme Corporation"
-                className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-400 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
+                className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-600 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
               />
             </div>
             <LogoUploader key={editingId ?? "new"} defaultLogo={editingRow?.logo ?? ""} />
@@ -108,7 +108,7 @@ export default async function AdminSponsorsPage({
               type="url"
               defaultValue={editingRow?.website ?? ""}
               placeholder="https://www.example.com"
-              className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-400 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
+              className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-600 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
             />
           </div>
 
@@ -156,7 +156,7 @@ export default async function AdminSponsorsPage({
           <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-stone-100">
               <svg
-                className="h-6 w-6 text-stone-400"
+                className="h-6 w-6 text-stone-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -173,7 +173,7 @@ export default async function AdminSponsorsPage({
             <h3 className="text-sm font-semibold text-stone-950">
               No sponsors yet
             </h3>
-            <p className="mt-1 text-sm text-stone-500">
+            <p className="mt-1 text-sm text-stone-600">
               Use the form above to add your first sponsor.
             </p>
           </div>
@@ -204,7 +204,7 @@ export default async function AdminSponsorsPage({
                   className="block mb-6 border border-stone-200 p-4 rounded-md bg-white sm:table-row sm:mb-0 sm:border-0 sm:p-0 sm:border-b sm:border-stone-100 sm:hover:bg-stone-50/50"
                 >
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm font-medium text-stone-950">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-500 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-600 mb-1">
                       Name
                     </span>
                     <div className="flex items-center gap-3">
@@ -216,7 +216,7 @@ export default async function AdminSponsorsPage({
                         />
                       ) : (
                         <div className="h-8 w-8 rounded bg-stone-100 flex items-center justify-center">
-                          <span className="text-xs text-stone-400 font-medium">
+                          <span className="text-xs text-stone-600 font-medium">
                             {row.name.charAt(0).toUpperCase()}
                           </span>
                         </div>
@@ -225,7 +225,7 @@ export default async function AdminSponsorsPage({
                     </div>
                   </td>
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-stone-600">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-500 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-600 mb-1">
                       Website
                     </span>
                     {row.website ? (
@@ -238,11 +238,11 @@ export default async function AdminSponsorsPage({
                         {row.website.replace(/^https?:\/\//, "").replace(/\/$/, "")}
                       </a>
                     ) : (
-                      <span className="text-stone-400">—</span>
+                      <span className="text-stone-600">—</span>
                     )}
                   </td>
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-500 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-600 mb-1">
                       Status
                     </span>
                     {row.visible ? (
@@ -256,7 +256,7 @@ export default async function AdminSponsorsPage({
                     )}
                   </td>
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-500 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-600 mb-1">
                       Actions
                     </span>
                     <div className="flex items-center gap-2">

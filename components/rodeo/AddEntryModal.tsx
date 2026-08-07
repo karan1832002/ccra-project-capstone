@@ -133,7 +133,10 @@ export default function AddEntryModal({
       // crypto.randomUUID() only exists in a secure context (HTTPS or localhost).
       // The deployed site is served over plain HTTP, so fall back to a simple
       // unique id there. This is only a client-side list key, not a DB id.
-      id: crypto.randomUUID(),
+      id:
+        typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+          ? crypto.randomUUID()
+          : `entry-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
 
       rodeoId: rodeo.rodeoId,
       rodeoName: rodeo.rodeoTitle,
@@ -177,7 +180,7 @@ export default function AddEntryModal({
               </label>
               <select
                 id="rodeoId"
-                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:bg-stone-100 disabled:text-stone-400"
+                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:bg-stone-100 disabled:text-stone-600"
                 {...register("rodeoId", {
                   required: "Please select a rodeo",
                 })}
@@ -219,7 +222,7 @@ export default function AddEntryModal({
               </label>
               <select
                 id="eventId"
-                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:bg-stone-100 disabled:text-stone-400"
+                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:bg-stone-100 disabled:text-stone-600"
                 disabled={!selectedRodeo}
                 {...register("eventId", { required: "Please select an event" })}
               >

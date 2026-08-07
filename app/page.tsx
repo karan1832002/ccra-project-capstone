@@ -18,6 +18,7 @@ import {
   Camera,
   ArrowRight,
 } from "lucide-react";
+import { pageStructure } from "@/lib/styles";
 
 const heroImages: CarouselImage[] = [
   {
@@ -78,23 +79,23 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
+    <div className={pageStructure.pageWrapper}>
       {/* ================= HERO ================= */}
       <section className="relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8 pb-16">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-md bg-orange-50 px-4 py-1 text-sm font-semibold text-orange-600 mb-6 dark:bg-orange-950/40 dark:text-orange-400">
+              <div className="inline-flex items-center gap-2 rounded-md bg-accent px-4 py-1 text-sm font-semibold text-primary mb-6">
                 EST. 1985 • 41ST ANNIVERSARY
               </div>
 
-              <h1 className="text-5xl sm:text-6xl font-semibold tracking-tight text-stone-950 dark:text-stone-100 leading-tight">
+              <h1 className="text-5xl sm:text-6xl font-semibold tracking-tight text-heading leading-tight">
                 Canadian Classic
                 <br />
                 Rodeo Association
               </h1>
 
-              <p className="mt-6 text-xl text-stone-600 dark:text-stone-300 max-w-lg leading-relaxed">
+              <p className="mt-6 text-xl text-foreground max-w-lg leading-relaxed">
                 Preserving Western heritage through competitive rodeo for
                 athletes of all ages and skill levels.
               </p>
@@ -103,7 +104,7 @@ export default function HomePage() {
                 {!session && (
                   <Link
                     href="/sign-up"
-                    className="inline-flex items-center justify-center rounded-md bg-orange-600 px-8 py-3.5 text-sm text-white font-semibold transition hover:bg-orange-700"
+                    className="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3.5 text-sm text-primary-foreground font-semibold transition hover:bg-primary-hover"
                   >
                     Join the CCRA
                   </Link>
@@ -126,7 +127,7 @@ export default function HomePage() {
       </section>
 
       {/* ================= QUICK LINKS ================= */}
-      <section className="border-y border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-900">
+      <section className="border-y border-border bg-surface">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
@@ -158,15 +159,15 @@ export default function HomePage() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="group flex flex-col items-center text-center p-6 rounded-md border border-stone-200 bg-stone-50 transition hover:border-orange-300 hover:shadow-md dark:border-stone-700 dark:bg-stone-950 dark:hover:border-orange-700"
+                className="group flex flex-col items-center text-center p-6 rounded-md border border-border bg-background transition hover:border-border-hover hover:shadow-md"
               >
-                <div className="w-12 h-12 rounded-md bg-orange-100 flex items-center justify-center text-orange-600 mb-4 group-hover:bg-orange-600 group-hover:text-white transition dark:bg-orange-950/40 dark:text-orange-400">
+                <div className="w-12 h-12 rounded-md bg-accent flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-primary-foreground transition dark:bg-accent/40 dark:text-accent-foreground">
                   <item.icon className="w-6 h-6" />
                 </div>
-                <span className="font-semibold text-stone-950 dark:text-stone-100">
+                <span className="font-semibold text-heading">
                   {item.label}
                 </span>
-                <span className="text-sm text-stone-500 mt-1 dark:text-stone-400">
+                <span className="text-sm text-foreground mt-1">
                   {item.desc}
                 </span>
               </Link>
@@ -176,16 +177,16 @@ export default function HomePage() {
       </section>
 
       {/* ================= SPONSORS ================= */}
-      <section className="py-10 bg-stone-50 dark:bg-stone-950">
+      <section className="py-10 bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-6">
-            <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-2 dark:text-stone-500">
+            <div className="uppercase tracking-[0.18em] text-xs font-semibold text-muted-foreground mb-2">
               SUPPORTING THE CCRA
             </div>
-            <h2 className="text-2xl font-semibold text-stone-950 dark:text-stone-100">
+            <h2 className="text-2xl font-semibold text-heading">
               Our Sponsors
             </h2>
-            <p className="mt-2 text-sm text-stone-600 dark:text-stone-300 max-w-xl mx-auto">
+            <p className="mt-2 text-sm text-foreground max-w-xl mx-auto">
               Thank you to the businesses and individuals who help keep classic
               rodeo alive in Canada.
             </p>
@@ -211,7 +212,7 @@ export default function HomePage() {
           <div className="mt-5 text-center">
             <Link
               href="/about-us/contact"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary-hover"
             >
               Interested in sponsoring?
               <ArrowRight className="w-4 h-4" />
@@ -225,13 +226,13 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-4 dark:text-stone-500">
+              <div className="uppercase tracking-[0.18em] text-xs font-semibold text-muted-foreground mb-4">
                 OUR STORY
               </div>
-              <h2 className="text-4xl font-semibold text-stone-950 dark:text-stone-100 mb-6">
+              <h2 className="text-4xl font-semibold text-heading mb-6">
                 A Legacy of Western Spirit
               </h2>
-              <p className="text-lg text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
+              <p className="text-lg text-foreground leading-relaxed mb-6">
                 Founded in 1985 as the Canadian Senior Pro Rodeo Association,
                 the CCRA has grown into a vibrant community of competitors from
                 beginner to professional. We celebrate the love of the sport,
@@ -240,14 +241,14 @@ export default function HomePage() {
               </p>
               <Link
                 href="/about-us"
-                className="inline-flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300"
+                className="inline-flex items-center gap-2 text-primary font-semibold hover:text-primary-hover"
               >
                 Learn more about us
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
-            <div className="relative aspect-4/3 rounded-md overflow-hidden border border-stone-200 dark:border-stone-700">
+            <div className="relative aspect-4/3 rounded-md overflow-hidden border border-border">
               <Image
                 src="/images/cowwrestler.jpg"
                 alt="CCRA competitors"
@@ -260,13 +261,13 @@ export default function HomePage() {
       </section>
 
       {/* ================= UPCOMING / NEWSLETTER ================= */}
-      <section className="py-20 bg-white dark:bg-stone-900 border-y border-stone-200 dark:border-stone-800">
+      <section className="py-20 bg-background border-y border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <div className="uppercase tracking-[0.18em] text-xs font-semibold text-stone-400 mb-3 dark:text-stone-500">
+            <div className="uppercase tracking-[0.18em] text-xs font-semibold text-muted-foreground mb-3">
               What’s Coming Up
             </div>
-            <h2 className="text-4xl font-semibold text-stone-950 dark:text-stone-100">
+            <h2 className="text-4xl font-semibold text-heading">
               Newsletter
             </h2>
           </div>
@@ -277,20 +278,20 @@ export default function HomePage() {
               Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="rounded-md border border-stone-200 bg-stone-50 p-8 shadow-sm animate-pulse"
+                  className="rounded-md border border-border bg-background p-8 shadow-sm animate-pulse"
                 >
-                  <div className="h-4 w-24 bg-stone-200 rounded mb-2" />
-                  <div className="h-6 w-48 bg-stone-200 rounded mb-3" />
-                  <div className="h-4 w-full bg-stone-200 rounded mb-6" />
-                  <div className="h-4 w-20 bg-stone-200 rounded" />
+                  <div className="h-4 w-24 bg-border rounded mb-2" />
+                  <div className="h-6 w-48 bg-border rounded mb-3" />
+                  <div className="h-4 w-full bg-border rounded mb-6" />
+                  <div className="h-4 w-20 bg-border rounded" />
                 </div>
               ))
             ) : newsletterItems.length === 0 ? (
               /* --- Empty State --- */
               <div className="col-span-full flex flex-col items-center justify-center py-12 text-center">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-stone-100">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-background">
                   <svg
-                    className="h-5 w-5 text-stone-400"
+                    className="h-5 w-5 text-muted-foreground"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -305,7 +306,7 @@ export default function HomePage() {
                   </svg>
                 </div>
 
-                <p className="text-sm text-stone-500">
+                <p className="text-sm text-foreground">
                   No recent updates. Check back soon.
                 </p>
               </div>
@@ -334,24 +335,24 @@ export default function HomePage() {
       {/* ================= CTA BANNER ================= */}
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-md bg-orange-600 px-8 py-14 text-center text-white">
+          <div className="rounded-md bg-primary px-8 py-14 text-center text-primary-foreground">
             <h2 className="text-3xl sm:text-4xl font-semibold mb-4">
               Ready to Hit the Grounds?
             </h2>
-            <p className="text-orange-100 text-lg max-w-2xl mx-auto mb-8">
+            <p className="text-primary-foreground text-lg max-w-2xl mx-auto mb-8">
               Get your membership today and be part of the Canadian Classic
               Rodeo family.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 href="/profile/membership"
-                className="inline-flex items-center justify-center rounded-md bg-white px-8 py-3.5 text-sm font-semibold text-orange-700 transition hover:bg-orange-50"
+                className="inline-flex items-center justify-center rounded-md bg-primary-foreground px-8 py-3.5 text-sm font-semibold text-primary transition hover:bg-accent"
               >
                 Membership
               </Link>
               <Link
                 href="/about-us/contact"
-                className="inline-flex items-center justify-center rounded-md border border-white/40 px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="inline-flex items-center justify-center rounded-md border border-primary-foreground px-8 py-3.5 text-sm font-semibold text-primary-foreground transition hover:bg-accent/10"
               >
                 Contact Us
               </Link>
