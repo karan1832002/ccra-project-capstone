@@ -20,7 +20,7 @@
 export const TABLE_LAYOUTS = {
   // Current Entries: Competitor, Event, Date
   currentEntries: {
-    columnWidths: ["35%", "40%", "25%"],
+    columnWidths: ["40%", "40%", "20%"],
     wrapColumns: [0, 1],
     alignColumns: ["left", "left", "center"],
   },
