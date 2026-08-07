@@ -81,7 +81,7 @@ export default function EditProfileModal({ isOpen, onClose, user }: EditProfileM
         <button
           type="button"
           onClick={handleClose}
-          className="absolute right-4 top-4 rounded-md p-1 text-stone-400 transition hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-stone-800 dark:hover:text-stone-200"
+          className="absolute right-4 top-4 rounded-md p-1 text-stone-600 transition hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-stone-800 dark:hover:text-stone-200"
           aria-label="Close"
         >
           <X className="w-5 h-5" />
@@ -105,7 +105,7 @@ export default function EditProfileModal({ isOpen, onClose, user }: EditProfileM
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-md border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-950 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 dark:placeholder:text-stone-500"
+              className="w-full rounded-md border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-950 placeholder:text-stone-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 dark:placeholder:text-stone-600"
               placeholder="Your name"
             />
           </div>
@@ -123,9 +123,9 @@ export default function EditProfileModal({ isOpen, onClose, user }: EditProfileM
               type="email"
               value={user.email}
               disabled
-              className="w-full rounded-md border border-stone-200 bg-stone-100 px-3 py-2 text-sm text-stone-400 cursor-not-allowed dark:border-stone-700 dark:bg-stone-800 dark:text-stone-500"
+              className="w-full rounded-md border border-stone-200 bg-stone-100 px-3 py-2 text-sm text-stone-600 cursor-not-allowed dark:border-stone-700 dark:bg-stone-800 dark:text-stone-600"
             />
-            <p className="mt-1 text-xs text-stone-400 dark:text-stone-500">
+            <p className="mt-1 text-xs text-stone-600 dark:text-stone-600">
               Email changes require verification via account settings.
             </p>
           </div>
@@ -151,7 +151,7 @@ export default function EditProfileModal({ isOpen, onClose, user }: EditProfileM
               {selectedFile ? selectedFile.name : "Choose image..."}
             </button>
             {selectedFile && (
-              <p className="mt-1 text-xs text-stone-400 dark:text-stone-500">
+              <p className="mt-1 text-xs text-stone-600 dark:text-stone-600">
                 {Math.round(selectedFile.size / 1024)} KB
               </p>
             )}

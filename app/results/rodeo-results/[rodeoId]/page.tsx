@@ -70,7 +70,7 @@ export default function RodeoResultsDetailPage({
   const backLink = (
     <Link
       href="/results/rodeo-results"
-      className="inline-block text-sm text-stone-500 hover:text-orange-600 mb-4"
+      className="inline-block text-sm text-stone-600 hover:text-orange-600 mb-4"
     >
       ← Back to all results
     </Link>

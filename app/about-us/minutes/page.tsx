@@ -145,7 +145,7 @@ export default function MinutesPage() {
 
         {/* ================= FOOTER NOTE ================= */}
         <div className="max-w-3xl mx-auto mt-16 text-center">
-          <p className="text-sm text-stone-500 dark:text-stone-400">
+          <p className="text-sm text-stone-600 dark:text-stone-600">
             Minutes are published after approval by the Board. For older records or official
             copies, please{" "}
             <a

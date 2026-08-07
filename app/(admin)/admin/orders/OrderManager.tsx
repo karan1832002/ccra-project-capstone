@@ -90,21 +90,21 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
     <div className="p-8">
       <div className="mb-6">
         <h1 className="text-2xl font-semibold text-stone-950">Orders</h1>
-        <p className="mt-1 text-sm text-stone-500">Manage customer orders and fulfilment.</p>
+        <p className="mt-1 text-sm text-stone-600">Manage customer orders and fulfilment.</p>
       </div>
 
       {/* Summary */}
       <div className="mb-6 grid gap-4 sm:grid-cols-3">
         <div className="rounded-xl border border-stone-200 bg-white p-4">
-          <p className="text-xs uppercase tracking-wide text-stone-500">Total orders</p>
+          <p className="text-xs uppercase tracking-wide text-stone-600">Total orders</p>
           <p className="mt-1 text-2xl font-semibold tabular-nums text-stone-900">{orders.length}</p>
         </div>
         <div className="rounded-xl border border-stone-200 bg-white p-4">
-          <p className="text-xs uppercase tracking-wide text-stone-500">Revenue (paid)</p>
+          <p className="text-xs uppercase tracking-wide text-stone-600">Revenue (paid)</p>
           <p className="mt-1 text-2xl font-semibold tabular-nums text-stone-900">{money(revenue)}</p>
         </div>
         <div className="rounded-xl border border-stone-200 bg-white p-4">
-          <p className="text-xs uppercase tracking-wide text-stone-500">Awaiting shipment</p>
+          <p className="text-xs uppercase tracking-wide text-stone-600">Awaiting shipment</p>
           <p className="mt-1 text-2xl font-semibold tabular-nums text-orange-600">{awaitingFulfilment}</p>
         </div>
       </div>
@@ -134,7 +134,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
       {visible.length === 0 ? (
         <div className="rounded-xl border border-dashed border-stone-300 bg-white p-16 text-center">
           <PackageX className="mx-auto mb-3 h-10 w-10 text-stone-300" />
-          <p className="text-stone-500">
+          <p className="text-stone-600">
             {orders.length === 0 ? "No orders yet." : `No ${filter} orders.`}
           </p>
         </div>
@@ -142,7 +142,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
         <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-stone-50 text-left text-xs uppercase tracking-wide text-stone-500">
+              <thead className="bg-stone-50 text-left text-xs uppercase tracking-wide text-stone-600">
                 <tr>
                   <th className="w-8 px-4 py-3" />
                   <th className="px-4 py-3 font-medium">Order</th>
@@ -162,7 +162,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                         <td className="px-4 py-3">
                           <button
                             onClick={() => setExpanded(isOpen ? null : o.id)}
-                            className="rounded p-1 text-stone-400 transition hover:bg-stone-100 hover:text-stone-700"
+                            className="rounded p-1 text-stone-600 transition hover:bg-stone-100 hover:text-stone-700"
                             title={isOpen ? "Hide items" : "Show items"}
                           >
                             {isOpen ? (
@@ -177,7 +177,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                             {o.id.slice(0, 8)}
                           </span>
                           {!o.paymentId && (
-                            <span className="ml-2 rounded bg-stone-100 px-1.5 py-0.5 text-[10px] font-medium text-stone-500">
+                            <span className="ml-2 rounded bg-stone-100 px-1.5 py-0.5 text-[10px] font-medium text-stone-600">
                               no payment
                             </span>
                           )}
@@ -190,7 +190,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                           })}
                         </td>
                         <td className="px-4 py-3">
-                          <span className="font-mono text-xs text-stone-500">
+                          <span className="font-mono text-xs text-stone-600">
                             {o.userId.slice(0, 12)}…
                           </span>
                         </td>
@@ -231,7 +231,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                               value={o.status}
                               onChange={(e) => handleStatusChange(o.id, e.target.value)}
                               disabled={busyId === o.id}
-                              className="h-7 rounded-md border border-stone-300 bg-white px-1.5 text-xs text-stone-500 outline-none transition focus:border-orange-500 disabled:opacity-50"
+                              className="h-7 rounded-md border border-stone-300 bg-white px-1.5 text-xs text-stone-600 outline-none transition focus:border-orange-500 disabled:opacity-50"
                               title="Change status manually"
                             >
                               {ORDER_STATUSES.map((s) => (
@@ -242,7 +242,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                             </select>
 
                             {busyId === o.id && !NEXT_STEP[o.status] && (
-                              <Loader2 className="h-4 w-4 animate-spin text-stone-400" />
+                              <Loader2 className="h-4 w-4 animate-spin text-stone-600" />
                             )}
                           </div>
                         </td>
@@ -254,7 +254,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                           <td />
                           <td colSpan={6} className="px-4 py-3">
                             {o.items.length === 0 ? (
-                              <p className="text-xs text-stone-500">
+                              <p className="text-xs text-stone-600">
                                 No line items recorded for this order.
                               </p>
                             ) : (
@@ -274,7 +274,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                                     <span className="flex-1 text-stone-700">
                                       {item.productName}
                                     </span>
-                                    <span className="text-stone-500">×{item.quantity}</span>
+                                    <span className="text-stone-600">×{item.quantity}</span>
                                     <span className="w-20 text-right tabular-nums text-stone-700">
                                       {money(item.unitPriceCents * item.quantity)}
                                     </span>
@@ -283,7 +283,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                               </ul>
                             )}
                             {o.paymentId && (
-                              <p className="mt-3 flex items-center gap-1.5 text-xs text-stone-400">
+                              <p className="mt-3 flex items-center gap-1.5 text-xs text-stone-600">
                                 <ShoppingCart className="h-3 w-3" />
                                 Payment ref{" "}
                                 <span className="font-mono">{o.paymentId}</span>
@@ -302,7 +302,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
           {/* Pagination — only shown once the list outgrows a single page */}
           {totalPages > 1 && (
             <div className="flex items-center justify-between border-t border-stone-200 bg-stone-50 px-4 py-3">
-              <p className="text-xs text-stone-500">
+              <p className="text-xs text-stone-600">
                 Showing <span className="font-medium text-stone-700">{start + 1}</span>–
                 <span className="font-medium text-stone-700">
                   {Math.min(start + PAGE_SIZE, visible.length)}
@@ -322,7 +322,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                   <ChevronLeft className="h-3.5 w-3.5" /> Previous
                 </button>
 
-                <span className="px-3 text-xs text-stone-500">
+                <span className="px-3 text-xs text-stone-600">
                   Page {safePage} of {totalPages}
                 </span>
 

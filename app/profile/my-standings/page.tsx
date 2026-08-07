@@ -74,7 +74,7 @@ export default function StandingsPage() {
   if (isPending || loading) {
     return (
       <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex items-center justify-center">
-        <div className="animate-pulse text-stone-400 text-sm">Loading standings...</div>
+        <div className="animate-pulse text-stone-600 text-sm">Loading standings...</div>
       </div>
     );
   }
@@ -154,7 +154,7 @@ export default function StandingsPage() {
         {/* Back link to Profile Page*/}
         <Link
           href="/profile"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 transition hover:text-orange-600 dark:text-stone-400 dark:hover:text-orange-400 mb-8"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-stone-600 transition hover:text-orange-600 dark:text-stone-600 dark:hover:text-orange-400 mb-8"
         >
           <ChevronLeft className="w-4 h-4" />
           Back to Profile
@@ -201,7 +201,7 @@ export default function StandingsPage() {
 
         {/* Footer note */}
         <div className="mt-12 text-center">
-          <p className="text-sm text-stone-500 dark:text-stone-400">
+          <p className="text-sm text-stone-600 dark:text-stone-600">
             Rankings update after each sanctioned CCRA event.{" "}
             <Link
               href="/results/standings"

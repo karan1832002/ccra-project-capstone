@@ -36,14 +36,14 @@ export default function MinuteEntry({ entry }: MinuteEntryProps) {
             <h2 className="text-xl font-semibold text-stone-950 dark:text-stone-100">
               {entry.title}
             </h2>
-            <span className="inline-flex items-center gap-1 text-sm text-stone-500 dark:text-stone-400">
+            <span className="inline-flex items-center gap-1 text-sm text-stone-600 dark:text-stone-600">
               <Calendar className="w-3.5 h-3.5" />
               {entry.date}
             </span>
           </div>
 
           {entry.location && (
-            <p className="text-sm text-stone-500 dark:text-stone-400 mb-2">
+            <p className="text-sm text-stone-600 dark:text-stone-600 mb-2">
               {entry.location}
             </p>
           )}
@@ -53,7 +53,7 @@ export default function MinuteEntry({ entry }: MinuteEntryProps) {
           </p>
         </div>
 
-        <div className="text-stone-400 dark:text-stone-500 mt-1">
+        <div className="text-stone-600 dark:text-stone-600 mt-1">
           {isExpanded ? (
             <ChevronUp className="w-5 h-5" />
           ) : (

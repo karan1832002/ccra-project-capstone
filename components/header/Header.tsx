@@ -233,7 +233,7 @@ export default function Header() {
             <button
               type="button"
               onClick={() => setShowSignOutConfirm(false)}
-              className="absolute right-4 top-4 rounded-md p-1 text-stone-400 transition hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-stone-800 dark:hover:text-stone-200"
+              className="absolute right-4 top-4 rounded-md p-1 text-stone-600 transition hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-stone-800 dark:hover:text-stone-200"
               aria-label="Close"
             >
               <X className="w-5 h-5" />
