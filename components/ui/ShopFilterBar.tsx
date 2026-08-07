@@ -23,7 +23,7 @@ export default function ShopFilterBar({
       {/* Search Bar */}
       <SearchInput
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(value) => setSearch(value)}
         placeholder="Search products..."
         className="w-full"
       />

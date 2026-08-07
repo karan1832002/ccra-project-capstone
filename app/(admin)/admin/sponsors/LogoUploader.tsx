@@ -118,7 +118,7 @@ export default function LogoUploader({ defaultLogo = "", name = "logo" }: LogoUp
             <button
               type="button"
               onClick={clearLogo}
-              className="inline-flex items-center gap-1 text-xs font-medium text-stone-500 hover:text-red-600 transition-colors"
+              className="inline-flex items-center gap-1 text-xs font-medium text-stone-600 hover:text-red-600 transition-colors"
             >
               <X className="h-3 w-3" />
               Remove
@@ -144,20 +144,20 @@ export default function LogoUploader({ defaultLogo = "", name = "logo" }: LogoUp
           } ${uploading ? "pointer-events-none opacity-60" : ""}`}
         >
           {uploading ? (
-            <div className="flex flex-col items-center gap-2 text-stone-500">
+            <div className="flex flex-col items-center gap-2 text-stone-600">
               <Loader2 className="h-8 w-8 animate-spin text-orange-600" />
               <span className="text-sm">Uploading...</span>
             </div>
           ) : (
             <>
-              <Upload className="mb-2 h-8 w-8 text-stone-400" />
+              <Upload className="mb-2 h-8 w-8 text-stone-600" />
               <label
                 htmlFor="logo-upload"
                 className="cursor-pointer text-sm font-medium text-orange-600 hover:text-orange-500"
               >
                 Click to upload
               </label>
-              <p className="mt-1 text-xs text-stone-400">
+              <p className="mt-1 text-xs text-stone-600">
                 or drag and drop, or paste from clipboard
               </p>
             </>

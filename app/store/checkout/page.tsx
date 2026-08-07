@@ -88,7 +88,7 @@ function PayForm({
     <form onSubmit={handlePay} className="space-y-7">
       {/* Contact + shipping */}
       <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-stone-500">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-stone-600">
           Shipping details
         </h2>
         <div className="space-y-3">
@@ -105,7 +105,7 @@ function PayForm({
 
       {/* Payment */}
       <section>
-        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-stone-500">
+        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-stone-600">
           Payment
           <span className="flex items-center gap-1 text-[11px] font-medium normal-case tracking-normal text-green-700">
             <Lock className="h-3 w-3" /> Secured by Stripe
@@ -139,7 +139,7 @@ function PayForm({
         )}
       </button>
 
-      <p className="text-center text-xs text-stone-400">
+      <p className="text-center text-xs text-stone-600">
         Test card <span className="font-mono">4242 4242 4242 4242</span> · any future date · any CVC
       </p>
     </form>
@@ -251,7 +251,7 @@ export default function CheckoutPage() {
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <ShoppingBag className="mx-auto mb-4 h-12 w-12 text-stone-300" />
         <h1 className="mb-2 text-2xl font-bold text-stone-900">Your cart is empty</h1>
-        <p className="mb-6 text-stone-500">Add some CCRA gear before checking out.</p>
+        <p className="mb-6 text-stone-600">Add some CCRA gear before checking out.</p>
         <a
           href="/store"
           className="inline-flex rounded-lg bg-orange-600 px-6 py-3 text-sm font-semibold text-white hover:bg-orange-700"
@@ -267,7 +267,7 @@ export default function CheckoutPage() {
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <CheckCircle2 className="mx-auto mb-4 h-16 w-16 text-green-600" />
         <h1 className="mb-2 text-3xl font-bold text-stone-900">Payment successful</h1>
-        <p className="mb-8 text-stone-500">
+        <p className="mb-8 text-stone-600">
           Thanks for supporting CCRA — your order is confirmed. A receipt is on its way.
         </p>
         <a
@@ -286,7 +286,7 @@ export default function CheckoutPage() {
       <div className="mx-auto max-w-5xl px-4 py-10">
         <a
           href="/cart"
-          className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 transition hover:text-orange-600"
+          className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-stone-600 transition hover:text-orange-600"
         >
           <ArrowLeft className="h-4 w-4" /> Back to cart
         </a>
@@ -296,7 +296,7 @@ export default function CheckoutPage() {
           {/* LEFT — form */}
           <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm sm:p-8">
             {state === "loading" && (
-              <div className="flex flex-col items-center gap-3 py-16 text-stone-500">
+              <div className="flex flex-col items-center gap-3 py-16 text-stone-600">
                 <span className="h-8 w-8 animate-spin rounded-full border-2 border-orange-200 border-t-orange-500" />
                 Preparing secure checkout…
               </div>
@@ -359,7 +359,7 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              <p className="mt-5 flex items-center justify-center gap-1.5 text-xs text-stone-400">
+              <p className="mt-5 flex items-center justify-center gap-1.5 text-xs text-stone-600">
                 <ShieldCheck className="h-3.5 w-3.5" /> Secure SSL checkout · Powered by Stripe
               </p>
             </div>

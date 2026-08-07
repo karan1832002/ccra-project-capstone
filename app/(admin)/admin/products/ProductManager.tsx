@@ -226,7 +226,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold text-stone-950">Products</h1>
-          <p className="mt-1 text-sm text-stone-500">Manage store products and inventory.</p>
+          <p className="mt-1 text-sm text-stone-600">Manage store products and inventory.</p>
         </div>
         <button
           onClick={openCreate}
@@ -251,13 +251,13 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
       {products.length === 0 ? (
         <div className="rounded-xl border border-dashed border-stone-300 bg-white p-16 text-center">
           <PackageX className="mx-auto mb-3 h-10 w-10 text-stone-300" />
-          <p className="text-stone-500">No products yet. Add your first one.</p>
+          <p className="text-stone-600">No products yet. Add your first one.</p>
         </div>
       ) : (
         <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-stone-50 text-left text-xs uppercase tracking-wide text-stone-500">
+              <thead className="bg-stone-50 text-left text-xs uppercase tracking-wide text-stone-600">
                 <tr>
                   <th className="px-4 py-3 font-medium">Product</th>
                   <th className="px-4 py-3 font-medium">Category</th>
@@ -305,7 +305,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                       <div className="flex items-center justify-end gap-1">
                         <button
                           onClick={() => openEdit(p)}
-                          className="rounded-md p-2 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900"
+                          className="rounded-md p-2 text-stone-600 transition hover:bg-stone-100 hover:text-stone-900"
                           title="Edit"
                         >
                           <Pencil className="h-4 w-4" />
@@ -313,7 +313,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                         <button
                           onClick={() => handleToggleActive(p)}
                           disabled={busyId === p.id}
-                          className="rounded-md p-2 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900 disabled:opacity-50"
+                          className="rounded-md p-2 text-stone-600 transition hover:bg-stone-100 hover:text-stone-900 disabled:opacity-50"
                           title={p.active ? "Hide from store" : "Restore to store"}
                         >
                           {busyId === p.id ? (
@@ -327,7 +327,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                         <button
                           onClick={() => handleDelete(p)}
                           disabled={busyId === p.id}
-                          className="rounded-md p-2 text-stone-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                          className="rounded-md p-2 text-stone-600 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
                           title="Delete permanently (only if never ordered)"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -343,7 +343,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
           {/* Pagination — only shown once the list outgrows a single page */}
           {totalPages > 1 && (
             <div className="flex items-center justify-between border-t border-stone-200 bg-stone-50 px-4 py-3">
-              <p className="text-xs text-stone-500">
+              <p className="text-xs text-stone-600">
                 Showing <span className="font-medium text-stone-700">{start + 1}</span>–
                 <span className="font-medium text-stone-700">
                   {Math.min(start + PAGE_SIZE, products.length)}
@@ -360,7 +360,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                   <ChevronLeft className="h-3.5 w-3.5" /> Previous
                 </button>
 
-                <span className="px-3 text-xs text-stone-500">
+                <span className="px-3 text-xs text-stone-600">
                   Page {safePage} of {totalPages}
                 </span>
 
@@ -387,7 +387,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
               </h2>
               <button
                 onClick={() => setShowForm(false)}
-                className="rounded-md p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-700"
+                className="rounded-md p-1.5 text-stone-600 transition hover:bg-stone-100 hover:text-stone-700"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -477,7 +477,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                     </ul>
                   )}
                 </div>
-                <p className="mt-1 text-xs text-stone-400">
+                <p className="mt-1 text-xs text-stone-600">
                   Leave blank for no category, or type a new one to create it.
                 </p>
               </div>
@@ -524,13 +524,13 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                         <button
                           type="button"
                           onClick={() => setForm({ ...form, image: "" })}
-                          className="rounded-lg px-3 py-2 text-sm font-medium text-stone-500 transition hover:bg-stone-100 hover:text-stone-700"
+                          className="rounded-lg px-3 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-700"
                         >
                           Remove
                         </button>
                       )}
                     </div>
-                    <p className="mt-1.5 truncate text-xs text-stone-400">
+                    <p className="mt-1.5 truncate text-xs text-stone-600">
                       {form.image ? form.image : "PNG or JPG, up to 25 MB. Optional."}
                     </p>
                   </div>

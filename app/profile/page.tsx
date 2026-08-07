@@ -43,7 +43,7 @@ export default function ProfilePage() {
   if (isPending) {
     return (
       <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex items-center justify-center">
-        <div className="animate-pulse text-stone-400 text-sm">
+        <div className="animate-pulse text-stone-600 text-sm">
           Loading profile...
         </div>
       </div>
@@ -53,7 +53,7 @@ export default function ProfilePage() {
   if (!session) {
     return (
       <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex items-center justify-center">
-        <div className="text-stone-400 text-sm">Not signed in</div>
+        <div className="text-stone-600 text-sm">Not signed in</div>
       </div>
     );
   }
@@ -128,11 +128,11 @@ export default function ProfilePage() {
                   {roleLabel}
                 </div>
 
-                <p className="mt-4 text-sm text-stone-400 dark:text-stone-500">
+                <p className="mt-4 text-sm text-stone-600 dark:text-stone-600">
                   {email}
                 </p>
 
-                <p className="mt-1 text-sm text-stone-400 dark:text-stone-500">
+                <p className="mt-1 text-sm text-stone-600 dark:text-stone-600">
                   Member since {memberSince}
                 </p>
               </div>
@@ -148,21 +148,21 @@ export default function ProfilePage() {
                     <Edit3 className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                     Edit Profile
                   </span>
-                  <ChevronRight className="w-4 h-4 text-stone-400" />
+                  <ChevronRight className="w-4 h-4 text-stone-600" />
                 </button>
               </div>
             </div>
 
             <div className="space-y-3">
               <Link
-                href="/membership/renew"
+                href="/membership"
                 className="flex items-center justify-between w-full rounded-md border border-stone-200 bg-stone-50 px-4 py-3 text-sm font-semibold text-stone-950 transition hover:border-orange-300 hover:bg-orange-50 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 dark:hover:border-orange-700 dark:hover:bg-orange-950/20"
               >
                 <span className="flex items-center gap-2">
                   <CreditCard className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                   Membership & Fees
                 </span>
-                <ChevronRight className="w-4 h-4 text-stone-400" />
+                <ChevronRight className="w-4 h-4 text-stone-600" />
               </Link>
 
               <button
@@ -176,10 +176,10 @@ export default function ProfilePage() {
                 </span>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-stone-500 dark:text-stone-400">
+                  <span className="text-xs text-stone-600 dark:text-stone-600">
                     {isDarkMode ? "Dark" : "Light"}
                   </span>
-                  <ChevronRight className="w-4 h-4 text-stone-400" />
+                  <ChevronRight className="w-4 h-4 text-stone-600" />
                 </div>
               </button>
 
@@ -192,7 +192,7 @@ export default function ProfilePage() {
                   <LogOut className="w-4 h-4 text-red-600 dark:text-red-400" />
                   Sign Out
                 </span>
-                <ChevronRight className="w-4 h-4 text-stone-400" />
+                <ChevronRight className="w-4 h-4 text-stone-600" />
               </button>
             </div>
           </div>
@@ -211,7 +211,7 @@ export default function ProfilePage() {
                   <div className="font-semibold text-stone-950 dark:text-stone-100">
                     Enter a Rodeo
                   </div>
-                  <div className="text-sm text-stone-500 dark:text-stone-400">
+                  <div className="text-sm text-stone-600 dark:text-stone-600">
                     Submit entries for upcoming events
                   </div>
                 </div>
@@ -228,7 +228,7 @@ export default function ProfilePage() {
                   <div className="font-semibold text-stone-950 dark:text-stone-100">
                     My Standings
                   </div>
-                  <div className="text-sm text-stone-500 dark:text-stone-400">
+                  <div className="text-sm text-stone-600 dark:text-stone-600">
                     View full rankings & points
                   </div>
                 </div>
@@ -262,7 +262,7 @@ export default function ProfilePage() {
             <button
               type="button"
               onClick={() => setShowSignOutConfirm(false)}
-              className="absolute right-4 top-4 rounded-md p-1 text-stone-400 transition hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-stone-800 dark:hover:text-stone-200"
+              className="absolute right-4 top-4 rounded-md p-1 text-stone-600 transition hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-stone-800 dark:hover:text-stone-200"
               aria-label="Close"
             >
               <X className="w-5 h-5" />

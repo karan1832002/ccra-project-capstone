@@ -190,7 +190,7 @@ export default function NavList({
       {showAdminLinks && (
         <>
           <hr className="border-t border-stone-200" />
-          <span className="px-3 pt-2 text-xs font-semibold uppercase tracking-wider text-stone-500">
+          <span className="px-3 pt-2 text-xs font-semibold uppercase tracking-wider text-stone-600">
             Admin
           </span>
 

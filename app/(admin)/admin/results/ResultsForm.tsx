@@ -16,6 +16,13 @@ export interface UserOption {
   name: string;
 }
 
+/** A competitor registration record returned by the server action. */
+interface CompetitorEntry {
+  entryId: string;
+  userId: string;
+  competitorName: string;
+}
+
 interface ResultsFormProps {
   users: UserOption[];
   rodeos: Rodeo[];
@@ -50,11 +57,11 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
   const formRef = useRef<HTMLFormElement>(null);
   const [selectedRodeoId, setSelectedRodeoId] = useState("");
   const [selectedEventId, setSelectedEventId] = useState("");
-  const [registeredUserIds, setRegisteredUserIds] = useState<string[]>([]);
+  const [entries, setEntries] = useState<CompetitorEntry[]>([]);
   const [registrationsLoading, setRegistrationsLoading] = useState(false);
 
-  // When the event changes, fetch the userIds of registered competitors
-  // from the gateway so the Competitor dropdown only shows relevant entrants.
+  // When the event changes, fetch the full registration records from the
+  // gateway so we can resolve userId, entryId, and competitorName together.
   useEffect(() => {
     if (!selectedEventId) {
       return;
@@ -65,8 +72,8 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
     setRegistrationsLoading(true);
 
     fetchEventRegistrations(selectedEventId)
-      .then((ids) => { if (!cancelled) setRegisteredUserIds(ids); })
-      .catch(() => { if (!cancelled) setRegisteredUserIds([]); })
+      .then((data) => { if (!cancelled) setEntries(data); })
+      .catch(() => { if (!cancelled) setEntries([]); })
       .finally(() => { if (!cancelled) setRegistrationsLoading(false); });
 
     return () => { cancelled = true; };
@@ -81,7 +88,7 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
       formRef.current?.reset();
       setSelectedRodeoId("");
       setSelectedEventId("");
-      setRegisteredUserIds([]);
+      setEntries([]);
       return { error: null, success: true };
     },
     initialState,
@@ -91,10 +98,10 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
     ? events.filter((e) => e.rodeoId === selectedRodeoId)
     : [];
 
-  // Only show users who are registered for the selected event.
-  const registeredUserIdSet = new Set(registeredUserIds);
+  // Only show users who have a registration entry for the selected event.
+  const entryUserIds = new Set(entries.map((e) => e.userId));
   const filteredUsers = selectedEventId
-    ? users.filter((u) => registeredUserIdSet.has(u.id))
+    ? users.filter((u) => entryUserIds.has(u.id))
     : [];
 
   const sortedRodeos = [...rodeos].sort(
@@ -133,7 +140,7 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
             onChange={(e) => {
               setSelectedRodeoId(e.target.value);
               setSelectedEventId("");
-              setRegisteredUserIds([]);
+              setEntries([]);
             }}
             className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white"
           >
@@ -159,7 +166,10 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
             name="eventId"
             required
             value={selectedEventId}
-            onChange={(e) => setSelectedEventId(e.target.value)}
+            onChange={(e) => {
+              setSelectedEventId(e.target.value);
+              setEntries([]);
+            }}
             disabled={!selectedRodeoId || filteredEvents.length === 0}
             className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
           >
@@ -189,6 +199,21 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
             name="userId"
             required
             defaultValue=""
+            onChange={(e) => {
+              // Find the matching entry so we can attach hidden fields.
+              const uid = e.target.value;
+              const match = entries.find((en) => en.userId === uid);
+              // Update hidden inputs via DOM since React controlled state
+              // for hidden fields is tricky with server actions.
+              const entryIdInput = document.querySelector<HTMLInputElement>(
+                'input[name="entryId"]',
+              );
+              const nameInput = document.querySelector<HTMLInputElement>(
+                'input[name="competitorName"]',
+              );
+              if (entryIdInput) entryIdInput.value = match?.entryId ?? "";
+              if (nameInput) nameInput.value = match?.competitorName ?? "";
+            }}
             disabled={!selectedEventId || registrationsLoading || filteredUsers.length === 0}
             className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
           >
@@ -212,14 +237,20 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
           )}
         </div>
 
+        {/* Hidden fields for entryId and competitorName — populated by the
+            competitor dropdown's onChange handler so the server action can
+            receive them. */}
+        <input type="hidden" name="entryId" value="" />
+        <input type="hidden" name="competitorName" value="" />
+
         {/* --- 4. Performance Metrics (disabled until competitor available) --- */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label htmlFor="timeOrScore" className="block text-sm font-medium mb-1 text-gray-700">
+            <label htmlFor="score" className="block text-sm font-medium mb-1 text-gray-700">
               Time or Score
             </label>
             <input
-              type="number" step="0.01" id="timeOrScore" name="timeOrScore" required
+              type="number" step="0.01" id="score" name="score" required
               disabled={!selectedEventId || filteredUsers.length === 0}
               className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
             />

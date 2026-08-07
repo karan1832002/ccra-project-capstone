@@ -26,7 +26,7 @@ function formatCurrency(amount: number): string {
 
 export function ResultsPreview({ rodeoId, entries }: ResultsPreviewProps) {
   if (entries.length === 0) {
-    return <p className="text-sm text-stone-400">No results posted yet.</p>;
+    return <p className="text-sm text-stone-600">No results posted yet.</p>;
   }
 
   // Total payout across every placing (money + ground money), and the

@@ -47,7 +47,7 @@ export function CurrentEntriesTable({ entries }: CurrentEntriesTableProps) {
   });
 
   if (rodeoIds.length === 0) {
-    return <p className="text-sm text-stone-400">No entries posted yet.</p>;
+    return <p className="text-sm text-stone-600">No entries posted yet.</p>;
   }
 
   return (

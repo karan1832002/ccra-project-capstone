@@ -61,7 +61,7 @@ export default async function AdminInboxPage() {
           <h1 className="text-2xl font-semibold text-stone-950 dark:text-stone-100">
             Inbox
           </h1>
-          <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
+          <p className="mt-1 text-sm text-stone-600 dark:text-stone-600">
             Contact submissions and rodeo approval requests.
           </p>
         </div>

@@ -163,7 +163,7 @@ export default function BoardOfDirectorsPage() {
               <p className="text-sm font-medium text-orange-600 mt-1 dark:text-orange-400">
                 {director.role}
               </p>
-              <p className="text-sm text-stone-400 mt-1 dark:text-stone-500">
+              <p className="text-sm text-stone-600 mt-1 dark:text-stone-600">
                 {director.location}
               </p>
               <p className="text-stone-600 mt-4 text-sm leading-relaxed line-clamp-3 dark:text-stone-300">
@@ -209,7 +209,7 @@ export default function BoardOfDirectorsPage() {
           <div className="relative w-full max-w-2xl rounded-md bg-white shadow-lg overflow-hidden dark:bg-stone-900 dark:border dark:border-stone-700">
             <button
               onClick={() => setSelected(null)}
-              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-md flex items-center justify-center text-stone-400 hover:text-stone-950 hover:bg-stone-100 transition dark:text-stone-400 dark:hover:text-stone-100 dark:hover:bg-stone-800"
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-md flex items-center justify-center text-stone-600 hover:text-stone-950 hover:bg-stone-100 transition dark:text-stone-600 dark:hover:text-stone-100 dark:hover:bg-stone-800"
               aria-label="Close"
             >
               <svg
@@ -241,7 +241,7 @@ export default function BoardOfDirectorsPage() {
               <p className="text-lg font-medium text-orange-600 mt-1 dark:text-orange-400">
                 {selected.role}
               </p>
-              <p className="text-sm text-stone-400 mt-1 dark:text-stone-500">
+              <p className="text-sm text-stone-600 mt-1 dark:text-stone-600">
                 {selected.location}
               </p>
 

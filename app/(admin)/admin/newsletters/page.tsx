@@ -93,7 +93,7 @@ export default async function AdminNewslettersPage({
                 required
                 defaultValue={editingRow?.title ?? ""}
                 placeholder="Monthly Update"
-                className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-400 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
+                className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-600 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
               />
             </div>
             <div>
@@ -106,7 +106,7 @@ export default async function AdminNewslettersPage({
                 required
                 defaultValue={editingRow?.date ?? ""}
                 placeholder="August 2026"
-                className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-400 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
+                className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-600 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
               />
             </div>
           </div>
@@ -121,14 +121,14 @@ export default async function AdminNewslettersPage({
               rows={2}
               defaultValue={editingRow?.description ?? ""}
               placeholder="Brief summary shown on cards and listings..."
-              className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-400 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
+              className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-600 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-stone-700 mb-2">
               Content
-              <span className="ml-1 text-xs font-normal text-stone-400">
+              <span className="ml-1 text-xs font-normal text-stone-600">
                 (Markdown supported)
               </span>
             </label>
@@ -184,7 +184,7 @@ export default async function AdminNewslettersPage({
           <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-stone-100">
               <svg
-                className="h-6 w-6 text-stone-400"
+                className="h-6 w-6 text-stone-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -201,7 +201,7 @@ export default async function AdminNewslettersPage({
             <h3 className="text-sm font-semibold text-stone-950">
               No newsletters yet
             </h3>
-            <p className="mt-1 text-sm text-stone-500">
+            <p className="mt-1 text-sm text-stone-600">
               Use the form above to create your first newsletter edition.
             </p>
           </div>
@@ -232,19 +232,19 @@ export default async function AdminNewslettersPage({
                   className="block mb-6 border border-stone-200 p-4 rounded-md bg-white sm:table-row sm:mb-0 sm:border-0 sm:p-0 sm:border-b sm:border-stone-100 sm:hover:bg-stone-50/50"
                 >
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-stone-600">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-500 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-600 mb-1">
                       Date
                     </span>
                     {row.date}
                   </td>
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm font-medium text-stone-950">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-500 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-600 mb-1">
                       Title
                     </span>
                     {row.title}
                   </td>
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-500 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-600 mb-1">
                       Status
                     </span>
                     {row.published ? (
@@ -258,7 +258,7 @@ export default async function AdminNewslettersPage({
                     )}
                   </td>
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-500 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-600 mb-1">
                       Actions
                     </span>
                     <div className="flex items-center gap-2">

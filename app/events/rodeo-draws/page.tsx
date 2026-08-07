@@ -82,7 +82,7 @@ export default function RodeoDrawsPage() {
   );
 
   if (loading) {
-    return <p className="text-sm text-stone-400">Loading draw sheets...</p>;
+    return <p className="text-sm text-stone-600">Loading draw sheets...</p>;
   }
   return (
     <div className={pageStructure.pageWrapper}>
@@ -126,7 +126,7 @@ export default function RodeoDrawsPage() {
         </section>
 
         {visibleEvents.length === 0 && (
-          <p className="text-sm text-stone-400 py-6">
+          <p className="text-sm text-stone-600 py-6">
             No matching draw sheets.
           </p>
         )}
@@ -134,7 +134,7 @@ export default function RodeoDrawsPage() {
         {eventsWithYearHeaders.map(({ event, showYearHeader }) => (
           <React.Fragment key={event.id}>
             {showYearHeader && (
-              <div className="text-xs font-semibold text-stone-400 mt-5 mb-2">
+              <div className="text-xs font-semibold text-stone-600 mt-5 mb-2">
                 {event.year}
               </div>
             )}
