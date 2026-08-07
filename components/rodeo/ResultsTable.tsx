@@ -10,6 +10,7 @@
  */
 
 import Table from "@/components/ui/Table";
+import { TABLE_LAYOUTS } from "@/lib/tableLayouts";
 import { Result } from "@/lib/gateway";
 
 interface ResultsTableProps {
@@ -36,6 +37,13 @@ function formatScore(entry: Result): string {
   return entry.score != null ? entry.score.toString() : "-";
 }
 
+// Formats an event time for display.
+// Converts backend time values from "HH:mm:ss" format to "HH:mm".
+function formatTime(time?: string | null): string {
+  if (!time) return "-";
+  return time.slice(0, 5);
+}
+
 // Converts a result's event date and time into a readable display format.
 // Example: "Jul 21 @ 9 am".
 function formatDateTimeLabel(entry: Result): string {
@@ -46,7 +54,7 @@ function formatDateTimeLabel(entry: Result): string {
     day: "numeric",
   });
 
-  return `${dateLabel} @ ${entry.eventTime}`;
+  return `${dateLabel} @ ${formatTime(entry.eventTime)}`;
 }
 
 export function ResultsTable({ entries }: ResultsTableProps) {
@@ -73,8 +81,8 @@ export function ResultsTable({ entries }: ResultsTableProps) {
     "Placing",
     "Score",
     "Competitor",
-    "Money $",
-    "Ground $",
+    "Money",
+    "Ground",
     "Points",
   ];
 
@@ -106,7 +114,13 @@ export function ResultsTable({ entries }: ResultsTableProps) {
                 {eventName}
               </h2>
 
-              <Table columns={columns} data={data} />
+              <Table
+                columns={columns}
+                data={data}
+                columnWidths={TABLE_LAYOUTS.results.columnWidths}
+                wrapColumns={TABLE_LAYOUTS.results.wrapColumns}
+                alignColumns={TABLE_LAYOUTS.results.alignColumns}
+              />
             </div>
           );
         },

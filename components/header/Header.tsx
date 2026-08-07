@@ -16,13 +16,15 @@
 
 import Link from "next/link";
 import DropdownMenu from "./DropdownMenu";
-import ProfileMenu from "./ProfileMenu";
 import MobileNav from "./MobileNav";
-import ThemeToggle from "../ui/ThemeToggle";
-import { LogIn, ShoppingCart, Shield } from "lucide-react";
-import { useSession } from "@/lib/auth-client";
-import { usePathname } from "next/navigation";
+import { LogIn, LogOut, ShoppingCart, Shield, UserRound } from "lucide-react";
+import { signOut, useSession } from "@/lib/auth-client";
 import { buttons } from "@/lib/styles";
+import { useCart } from "@/app/context/CartContext";
+import { usePathname } from "next/navigation";
+
+// Routes that shouldn't display the header.
+const hiddenRoutes = ["/sign-in", "/sign-up", "/forgot-password", "/reset-password"];
 
 // A sub-item is always a simple link — no further nesting, path required.
 export interface NavSubItem {
@@ -86,6 +88,17 @@ export default function Header() {
   const isSignedIn = Boolean(session?.user);
   const role = (session?.user as { role?: string } | undefined)?.role;
   const isAdmin = role === "admin" || role === "superadmin";
+  const pathname = usePathname();
+  const { cartCount } = useCart();
+
+  if (hiddenRoutes.includes(pathname)) {
+    return null;
+  }
+
+  async function handleLogout() {
+    await signOut();
+    window.location.href = "/";
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/90 backdrop-blur">
@@ -123,14 +136,22 @@ export default function Header() {
         <div className="flex shrink-0 items-center gap-2">
           <MobileNav items={NAV_ITEMS} />
 
-          <ThemeToggle />
-
           <Link
             href="/cart"
-            className={buttons.iconButton}
+            className={`${buttons.iconButton} relative group`}
             aria-label="View cart"
           >
-            <ShoppingCart className="h-5 w-5" />
+            <ShoppingCart
+              className={`h-5 w-5 transition ${
+                cartCount > 0 ? "text-red-700 scale-110" : ""
+              }`}
+            />
+
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-700 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
+                {cartCount}
+              </span>
+            )}
           </Link>
 
           {isAdmin && (
@@ -148,7 +169,27 @@ export default function Header() {
           {isPending ? (
             <div className="h-10 w-10" aria-hidden="true" />
           ) : isSignedIn ? (
-            <ProfileMenu />
+            <>
+              <Link
+                href="/profile"
+                className={buttons.iconButton}
+                aria-label="View profile"
+              >
+                <UserRound className="h-5 w-5" />
+              </Link>
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover lg:px-5 lg:py-3"
+                aria-label="Sign out"
+              >
+                <LogOut className="h-4 w-4 shrink-0" />
+                <span className="hidden whitespace-nowrap lg:inline">
+                  Sign Out
+                </span>
+              </button>
+            </>
           ) : (
             <Link
               href="/sign-in"

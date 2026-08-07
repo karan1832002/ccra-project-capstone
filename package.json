@@ -14,8 +14,9 @@
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
     "@stripe/react-stripe-js": "^6.8.0",
-    "@stripe/stripe-js": "^9.12.1",
+    "@stripe/stripe-js": "^9.13.0",
     "@tailwindcss/typography": "^0.5.20",
+    "@uiw/react-markdown-preview": "^5.2.1",
     "@uiw/react-md-editor": "^4.1.1",
     "better-auth": "^1.6.20",
     "date-fns": "^4.4.0",

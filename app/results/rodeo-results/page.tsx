@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { RodeoEventCard } from "@/components/rodeo/RodeoEventCard";
 import { ResultsPreview } from "@/components/rodeo/ResultsPreview";
-import { EventFilterBar } from "@/components/rodeo/EventFilterBar";
+import SearchAndFilterBar from "@/components/ui/SearchAndFilterBar";
 import Hero from "@/components/ui/Hero";
 import { pageStructure } from "@/lib/styles";
 import { getResults, Result } from "@/lib/gateway";
@@ -88,11 +88,16 @@ export default function RodeoResultsPage() {
   }, [results]);
 
   // Build the year filter options from the loaded rodeo summaries.
-  const years = useMemo(
-    () =>
-      Array.from(
-        new Set(Array.from(rodeoMap.values()).map((r) => r.year)),
-      ).sort((a, b) => b - a),
+  const yearOptions = useMemo(
+    () => [
+      { label: "All Years", value: "all" },
+      ...Array.from(new Set(Array.from(rodeoMap.values()).map((r) => r.year)))
+        .sort((a, b) => b - a)
+        .map((year) => ({
+          label: String(year),
+          value: String(year),
+        })),
+    ],
     [rodeoMap],
   );
 
@@ -129,12 +134,13 @@ export default function RodeoResultsPage() {
       />
 
       <div className={pageStructure.contentContainer}>
-        <EventFilterBar
+        <SearchAndFilterBar
           search={search}
           onSearchChange={setSearch}
-          year={year}
-          onYearChange={setYear}
-          years={years}
+          searchPlaceholder="Search rodeos..."
+          filterValue={year}
+          onFilterChange={setYear}
+          filterOptions={yearOptions}
         />
 
         {visibleRodeos.length === 0 && (
