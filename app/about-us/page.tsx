@@ -1,8 +1,11 @@
+"use client";
 import Image from "next/image";
 import { HandCoins, Trophy, HeartHandshake } from "lucide-react";
 import Hero from "@/components/ui/Hero";
+import { useSession } from "@/lib/auth-client";
 
 export default function AboutUsPage() {
+  const { data: session } = useSession();
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
       {/* ================= HERO ================= */}
@@ -41,12 +44,15 @@ export default function AboutUsPage() {
             </div>
 
             <div className="mt-10 flex items-center gap-4">
-              <a
-                href="/sign-up"
-                className="inline-flex items-center justify-center rounded-md bg-orange-600 px-8 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
-              >
-                Join the CCRA
-              </a>
+              {!session && (
+                <a
+                  href="/sign-up"
+                  className="inline-flex items-center justify-center rounded-md bg-orange-600 px-8 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
+                >
+                  Join the CCRA
+                </a>
+              )}
+
               <a
                 href="/schedule"
                 className="inline-flex items-center justify-center rounded-md border border-stone-200 bg-white px-8 py-3 text-sm font-semibold text-stone-950 transition hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:hover:bg-stone-800"
