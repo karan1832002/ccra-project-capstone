@@ -22,7 +22,10 @@ import { LogIn, LogOut, ShoppingCart, Shield, UserRound } from "lucide-react";
 import { signOut, useSession } from "@/lib/auth-client";
 import { buttons } from "@/lib/styles";
 import { useCart } from "@/app/context/CartContext";
+import { usePathname } from "next/navigation";
 
+// Routes that shouldn't display the header.
+const hiddenRoutes = ["/sign-in", "/sign-up", "/forgot-password", "/reset-password"];
 
 // A sub-item is always a simple link — no further nesting, path required.
 export interface NavSubItem {
@@ -86,8 +89,12 @@ export default function Header() {
   const isSignedIn = Boolean(session?.user);
   const role = (session?.user as { role?: string } | undefined)?.role;
   const isAdmin = role === "admin" || role === "superadmin";
+  const pathname = usePathname();
   const { cartCount } = useCart();
 
+  if (hiddenRoutes.includes(pathname)) {
+    return null;
+  }
 
   async function handleLogout() {
     await signOut();
@@ -132,25 +139,23 @@ export default function Header() {
 
           <ThemeToggle />
 
-        <Link
-          href="/cart"
-          className={`${buttons.iconButton} relative group`}
-          aria-label="View cart"
-        >
-        <ShoppingCart
-          className={`h-5 w-5 transition ${
-          cartCount > 0 ? "text-red-700 scale-110" : ""
-        }`}
-       />
+          <Link
+            href="/cart"
+            className={`${buttons.iconButton} relative group`}
+            aria-label="View cart"
+          >
+            <ShoppingCart
+              className={`h-5 w-5 transition ${
+                cartCount > 0 ? "text-red-700 scale-110" : ""
+              }`}
+            />
 
-        {cartCount > 0 && (
-        <span
-          className="absolute -top-2 -right-2 bg-red-700 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse"
-        >
-        {cartCount}
-        </span>
-        )}
-        </Link>
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-700 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
+                {cartCount}
+              </span>
+            )}
+          </Link>
 
           {isAdmin && (
             <Link
