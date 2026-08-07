@@ -23,7 +23,9 @@ export default function ProfilePage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    setIsDarkMode(document.documentElement.classList.contains("dark"));
+    requestAnimationFrame(() => {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    });
   }, []);
 
   const toggleTheme = () => {

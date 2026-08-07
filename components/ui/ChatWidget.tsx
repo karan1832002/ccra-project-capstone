@@ -74,6 +74,21 @@ function ThinkingHorse() {
   );
 }
 
+async function readAssistantStream(
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  onUpdate: (accumulatedText: string) => void,
+) {
+  const decoder = new TextDecoder();
+  let fullText = "";
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    fullText += decoder.decode(value, { stream: true });
+    onUpdate(fullText);
+  }
+  return fullText;
+}
+
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -109,31 +124,24 @@ export default function ChatWidget() {
       if (!res.body) throw new Error("No response body");
 
       const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let assistantText = "";
       let started = false;
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        assistantText += decoder.decode(value, { stream: true });
-
+      await readAssistantStream(reader, (accumulatedText) => {
         // Only add the assistant bubble once the first content arrives, so the
         // thinking dots stay visible for the whole wait instead of being
         // replaced by an empty bubble.
         if (!started) {
           started = true;
           setLoading(false);
-          setMessages((prev) => [...prev, { role: "assistant", content: assistantText }]);
+          setMessages((prev) => [...prev, { role: "assistant", content: accumulatedText }]);
         } else {
           setMessages((prev) => {
             const updated = [...prev];
-            updated[updated.length - 1] = { role: "assistant", content: assistantText };
+            updated[updated.length - 1] = { role: "assistant", content: accumulatedText };
             return updated;
           });
         }
-      }
+      });
 
       // Empty response guard.
       if (!started) {
