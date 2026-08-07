@@ -64,11 +64,11 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
   // gateway so we can resolve userId, entryId, and competitorName together.
   useEffect(() => {
     if (!selectedEventId) {
-      setEntries([]);
       return;
     }
 
     let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRegistrationsLoading(true);
 
     fetchEventRegistrations(selectedEventId)
