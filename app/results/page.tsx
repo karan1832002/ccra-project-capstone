@@ -119,7 +119,7 @@ export default function ResultsPage() {
           {/* Visual: image + overlay caption. */}
           <div className="relative rounded-md shadow-sm overflow-hidden aspect-[16/10] bg-background">
             <Image
-              src="/images/ccraresults.jpg"
+              src="/images/barrelracing.jpg"
               alt="Competitor celebrating a result at a Canadian Classic Rodeo event"
               fill
               className="object-cover"
