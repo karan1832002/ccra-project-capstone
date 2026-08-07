@@ -25,6 +25,7 @@ type CartContextType = {
   increaseQty: (index: number) => void;
   decreaseQty: (index: number) => void;
   clearCart: () => void;
+  cartCount: number;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -39,6 +40,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return [];
     }
   });
+
+  const cartCount = cartItems.reduce((sum, item) => sum + item.qty, 0);
 
   // Save to localStorage whenever cartItems updates
   useEffect(() => {
@@ -98,6 +101,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         increaseQty,
         decreaseQty,
         clearCart,
+        cartCount,
       }}
     >
       {children}

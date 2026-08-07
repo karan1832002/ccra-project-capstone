@@ -23,6 +23,8 @@ import { LogIn, ShoppingCart, Shield } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import { usePathname } from "next/navigation";
 import { buttons } from "@/lib/styles";
+import { useCart } from "@/app/context/CartContext";
+
 
 // A sub-item is always a simple link — no further nesting, path required.
 export interface NavSubItem {
@@ -86,6 +88,8 @@ export default function Header() {
   const isSignedIn = Boolean(session?.user);
   const role = (session?.user as { role?: string } | undefined)?.role;
   const isAdmin = role === "admin" || role === "superadmin";
+  const { cartCount } = useCart();
+
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/90 backdrop-blur">
@@ -125,13 +129,25 @@ export default function Header() {
 
           <ThemeToggle />
 
-          <Link
-            href="/cart"
-            className={buttons.iconButton}
-            aria-label="View cart"
-          >
-            <ShoppingCart className="h-5 w-5" />
-          </Link>
+        <Link
+          href="/cart"
+          className={`${buttons.iconButton} relative group`}
+          aria-label="View cart"
+        >
+        <ShoppingCart
+          className={`h-5 w-5 transition ${
+          cartCount > 0 ? "text-red-700 scale-110" : ""
+        }`}
+       />
+
+        {cartCount > 0 && (
+        <span
+          className="absolute -top-2 -right-2 bg-red-700 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse"
+        >
+        {cartCount}
+        </span>
+        )}
+        </Link>
 
           {isAdmin && (
             <Link

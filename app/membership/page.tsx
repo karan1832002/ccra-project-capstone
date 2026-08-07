@@ -478,7 +478,7 @@ export default function MembershipPage() {
 
           <div className="border rounded-lg p-6 bg-stone-50">
             <div className="flex justify-between mb-2">
-              <span>Full Membership 2024</span>
+              <span>Full Membership 2026</span>
               <span>$175.00</span>
             </div>
 
