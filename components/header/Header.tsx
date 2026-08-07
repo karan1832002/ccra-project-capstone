@@ -17,7 +17,6 @@
 import Link from "next/link";
 import DropdownMenu from "./DropdownMenu";
 import MobileNav from "./MobileNav";
-import ThemeToggle from "../ui/ThemeToggle";
 import { LogIn, LogOut, ShoppingCart, Shield, UserRound } from "lucide-react";
 import { signOut, useSession } from "@/lib/auth-client";
 import { buttons } from "@/lib/styles";
@@ -136,8 +135,6 @@ export default function Header() {
         {/* Mobile Nav + Cart + Admin + Profile */}
         <div className="flex shrink-0 items-center gap-2">
           <MobileNav items={NAV_ITEMS} />
-
-          <ThemeToggle />
 
           <Link
             href="/cart"
