@@ -145,7 +145,7 @@ export default function EventsPage() {
           {/* Visual: image + overlay caption. */}
           <div className="relative rounded-md shadow-sm overflow-hidden aspect-[16/10] bg-background">
             <Image
-              src="/images/ccraevents.jpg"
+              src="/images/cowwrestler.jpg"
               alt="Competitor entering the arena at a Canadian Classic Rodeo event"
               fill
               className="object-cover"
