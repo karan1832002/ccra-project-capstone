@@ -4,6 +4,7 @@ import Header from "@/components/header/Header";
 import ChatWidget from "@/components/ui/ChatWidget";
 import { CartProvider } from "@/app/context/CartContext";
 import Footer from "@/components/footer/footer";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "CCRA Rodeo",
@@ -19,7 +20,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script
+        <Script
+        id="set-dark-mode"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
