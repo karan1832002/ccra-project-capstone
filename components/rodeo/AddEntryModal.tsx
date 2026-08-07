@@ -133,7 +133,10 @@ export default function AddEntryModal({
       // crypto.randomUUID() only exists in a secure context (HTTPS or localhost).
       // The deployed site is served over plain HTTP, so fall back to a simple
       // unique id there. This is only a client-side list key, not a DB id.
-      id: crypto.randomUUID(),
+      id:
+        typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+          ? crypto.randomUUID()
+          : `entry-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
 
       rodeoId: rodeo.rodeoId,
       rodeoName: rodeo.rodeoTitle,

@@ -88,8 +88,10 @@ export default function ChatWidget() {
     });
   }, [messages, loading]);
 
-  async function sendMessage() {
-    const text = input.trim();
+  // `override` lets the starter-question chips send text directly without
+  // going through the input box.
+  async function sendMessage(override?: string) {
+    const text = (override ?? input).trim();
     if (!text || loading) return;
 
     const nextMessages: Message[] = [...messages, { role: "user", content: text }];
@@ -173,12 +175,14 @@ export default function ChatWidget() {
       {open && (
         <div
           style={{
-            width: 320,
-            height: 420,
+            width: 380,
+            height: 540,
+            maxWidth: "calc(100vw - 32px)",
+            maxHeight: "calc(100vh - 140px)",
             background: "#fff",
-            border: "1px solid #ddd",
-            borderRadius: 12,
-            boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+            border: "1px solid #e7e5e4",
+            borderRadius: 16,
+            boxShadow: "0 12px 32px rgba(0,0,0,0.18)",
             display: "flex",
             flexDirection: "column",
             marginBottom: 12,
@@ -187,39 +191,71 @@ export default function ChatWidget() {
         >
           <div
             style={{
-              padding: "10px 14px",
-              background: "#1a1a1a",
+              padding: "12px 16px",
+              background: "linear-gradient(135deg,#ea580c,#c2410c)",
               color: "#fff",
-              fontWeight: 600,
             }}
           >
-            CCRA Assistant
+            <div style={{ fontWeight: 600, fontSize: 15 }}>CCRA Assistant</div>
+            <div style={{ fontSize: 12, opacity: 0.85 }}>
+              Rules, events, standings &amp; store
+            </div>
           </div>
 
           <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", padding: 12 }}>
             {messages.length === 0 && !loading && (
-              <p style={{ color: "#888", fontSize: 14 }}>
-                Ask me about events, standings, the rulebook, or the store.
-              </p>
+              <div>
+                <p style={{ color: "#78716c", fontSize: 14, margin: "4px 0 12px" }}>
+                  Ask me about rodeo rules, upcoming events, standings, or the store.
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {[
+                    "What are the bull riding rules?",
+                    "Upcoming rodeos",
+                    "How do I become a member?",
+                    "Current standings",
+                  ].map((q) => (
+                    <button
+                      key={q}
+                      onClick={() => sendMessage(q)}
+                      style={{
+                        border: "1px solid #e7e5e4",
+                        background: "#fff",
+                        color: "#44403c",
+                        borderRadius: 999,
+                        padding: "6px 11px",
+                        fontSize: 12.5,
+                        cursor: "pointer",
+                      }}
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
             )}
 
             {messages.map((m, i) => (
               <div
                 key={i}
                 style={{
-                  marginBottom: 8,
+                  marginBottom: 10,
                   textAlign: m.role === "user" ? "right" : "left",
                 }}
               >
                 <span
                   style={{
                     display: "inline-block",
-                    padding: "6px 10px",
-                    borderRadius: 8,
-                    background: m.role === "user" ? "#1a1a1a" : "#f1f1f1",
-                    color: m.role === "user" ? "#fff" : "#111",
+                    padding: "9px 13px",
+                    // Flatten the corner nearest the sender so bubbles read as a conversation.
+                    borderRadius:
+                      m.role === "user" ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
+                    background: m.role === "user" ? "#ea580c" : "#f5f5f4",
+                    color: m.role === "user" ? "#fff" : "#1c1917",
                     fontSize: 14,
-                    maxWidth: 220,
+                    lineHeight: 1.5,
+                    maxWidth: 285,
+                    textAlign: "left",
                     whiteSpace: "pre-wrap",
                   }}
                 >
@@ -252,12 +288,13 @@ export default function ChatWidget() {
               }}
             />
             <button
-              onClick={sendMessage}
+              onClick={() => sendMessage()}
               disabled={loading}
               style={{
                 border: "none",
-                background: loading ? "#666" : "#1a1a1a",
+                background: loading ? "#d6d3d1" : "#ea580c",
                 color: "#fff",
+                fontWeight: 600,
                 padding: "0 16px",
                 cursor: loading ? "default" : "pointer",
               }}
