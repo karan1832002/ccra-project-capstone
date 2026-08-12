@@ -2,32 +2,32 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="mt-16 border-t border-border bg-surface py-10 px-6 text-foreground text-sm">
+    <footer className="mt-16 border-t border-border bg-surface py-10 px-6 text-body-text text-sm">
       <div className="flex flex-col items-center gap-3">
 
-        <p className="text-heading font-semibold tracking-wide">
+        <p className="text-heading-text font-semibold tracking-wide">
           Canadian Classic Rodeo Association
         </p>
 
-        <div className="flex gap-6 text-foreground">
-          <Link href="/about-us" className="hover:text-heading hover:underline underline-offset-4 transition">
+        <div className="flex gap-6 text-body-text">
+          <Link href="/about-us" className="hover:text-heading-text hover:underline underline-offset-4 transition">
             About
           </Link>
-          <Link href="/schedule" className="hover:text-heading hover:underline underline-offset-4 transition">
+          <Link href="/schedule" className="hover:text-heading-text hover:underline underline-offset-4 transition">
             Schedule
           </Link>
-          <Link href="/events" className="hover:text-heading hover:underline underline-offset-4 transition">
+          <Link href="/events" className="hover:text-heading-text hover:underline underline-offset-4 transition">
             Events
           </Link>
-          <Link href="/results" className="hover:text-heading hover:underline underline-offset-4 transition">
+          <Link href="/results" className="hover:text-heading-text hover:underline underline-offset-4 transition">
             Results
           </Link>
-          <Link href="/about-us/contact" className="hover:text-heading hover:underline underline-offset-4 transition">
+          <Link href="/about-us/contact" className="hover:text-heading-text hover:underline underline-offset-4 transition">
             Contact
           </Link>
         </div>
 
-        <p className="text-xs text-muted-foreground mt-4">
+        <p className="text-xs text-caption-text mt-4">
           © 2024 CCRA. All rights reserved.
         </p>
       </div>

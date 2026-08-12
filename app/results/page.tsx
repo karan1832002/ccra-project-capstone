@@ -86,7 +86,7 @@ export default function ResultsPage() {
               Every Run Counted
             </h2>
 
-            <div className="prose text-foreground space-y-6 text-lg">
+            <div className="prose text-body-text space-y-6 text-lg">
               <p>
                 Every rodeo on the schedule adds to the story of the season. As
                 soon as a rodeo wraps up, its results are posted event by event,
@@ -125,7 +125,7 @@ export default function ResultsPage() {
               className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <div className="absolute bottom-8 left-8 text-white">
+            <div className="absolute bottom-8 left-8 text-primary-text">
               <div className="text-sm uppercase tracking-widest opacity-75">
                 Season Standings
               </div>
@@ -154,13 +154,13 @@ export default function ResultsPage() {
                 href={href}
                 className="group rounded-md border border-border bg-surface p-8 shadow-sm hover:shadow-lg transition"
               >
-                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-foreground">
+                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-text">
                   <Icon className="h-6 w-6" />
                 </div>
-                <h3 className="text-2xl font-semibold text-heading mb-3">
+                <h3 className="text-2xl font-semibold text-heading-text mb-3">
                   {title}
                 </h3>
-                <p className="text-foreground mb-4">
+                <p className="text-body-text mb-4">
                   {description}
                 </p>
                 <div className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
@@ -194,10 +194,10 @@ export default function ResultsPage() {
                     </div>
                   </div>
                   <div>
-                    <div className="font-semibold text-heading">
+                    <div className="font-semibold text-heading-text">
                       {title}
                     </div>
-                    <p className="text-foreground mt-1">
+                    <p className="text-body-text mt-1">
                       {description}
                     </p>
                   </div>
@@ -219,7 +219,7 @@ export default function ResultsPage() {
 
           <div className={pageStructure.contentPanel}>
             <div className="max-w-md mx-auto text-center">
-              <p className="text-foreground mb-8">
+              <p className="text-body-text mb-8">
                 Past Champions has the top competitor in every event category
                 from previous seasons — a running record of who's stood at the
                 top of the CCRA.

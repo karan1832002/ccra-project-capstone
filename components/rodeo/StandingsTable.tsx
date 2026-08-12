@@ -31,7 +31,7 @@ interface CompetitorTotals {
 
 export function StandingsTable({ entries }: StandingsTableProps) {
   if (entries.length === 0) {
-    return <p className="text-sm text-foreground">No standings posted yet.</p>;
+    return <p className="text-sm text-body-text">No standings posted yet.</p>;
   }
 
   // Group results by competition category so each category receives
@@ -103,7 +103,7 @@ export function StandingsTable({ entries }: StandingsTableProps) {
 
           return (
             <div key={category} className="w-full max-w-6xl">
-              <h2 className="text-xl font-bold text-heading mb-4">
+              <h2 className="text-xl font-bold text-heading-text mb-4">
                 {category}
               </h2>
 

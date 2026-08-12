@@ -32,7 +32,7 @@ export function FilterSelect({ value, onChange, options, className }: FilterSele
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className={`rounded-md border border-border px-3 h-12 text-sm text-foreground bg-surface outline-none transition focus:border-primary ${className ?? ""}`}
+      className={`rounded-md border border-border px-3 h-12 text-sm text-body-text bg-surface outline-none transition focus:border-primary ${className ?? ""}`}
     >
       {options.map((opt) => (
         <option key={opt.value} value={opt.value}>

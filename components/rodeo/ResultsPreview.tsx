@@ -26,7 +26,7 @@ function formatCurrency(amount: number): string {
 
 export function ResultsPreview({ rodeoId, entries }: ResultsPreviewProps) {
   if (entries.length === 0) {
-    return <p className="text-sm text-stone-600">No results posted yet.</p>;
+    return <p className="text-sm text-body-text">No results posted yet.</p>;
   }
 
   // Total payout across every placing (money + ground money), and the
@@ -41,26 +41,26 @@ export function ResultsPreview({ rodeoId, entries }: ResultsPreviewProps) {
 
   return (
     <div className="flex items-center justify-between flex-wrap gap-3">
-      <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-stone-600">
+      <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-body-text">
         <span>
-          <span className="font-semibold text-stone-950">
+          <span className="font-semibold text-heading-text">
             {formatCurrency(totalPayout)}
           </span>{" "}
           paid out
         </span>
         <span>
-          <span className="font-semibold text-stone-950">{eventCount}</span>{" "}
+          <span className="font-semibold text-heading-text">{eventCount}</span>{" "}
           {eventCount === 1 ? "event" : "events"}
         </span>
         <span>
-          <span className="font-semibold text-stone-950">{entries.length}</span>{" "}
+          <span className="font-semibold text-heading-text">{entries.length}</span>{" "}
           {entries.length === 1 ? "result" : "results"}
         </span>
       </div>
 
       <Link
         href={`/results/rodeo-results/${rodeoId}`}
-        className="shrink-0 rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700"
+        className="shrink-0 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-text hover:bg-primary-dark"
       >
         View Full Results
       </Link>

@@ -31,7 +31,7 @@ export default function PastChampionsTable({
   entries,
 }: PastChampionsTableProps) {
   if (entries.length === 0) {
-    return <p className="text-sm text-foreground">No champions available.</p>;
+    return <p className="text-sm text-body-text">No champions available.</p>;
   }
 
   // Group all results by category.
@@ -99,7 +99,7 @@ export default function PastChampionsTable({
 
           return (
             <div key={category} className="w-full max-w-6xl">
-              <h2 className="text-xl font-bold text-heading mb-4">
+              <h2 className="text-xl font-bold text-heading-text mb-4">
                 {category}
               </h2>
 
