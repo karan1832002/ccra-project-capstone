@@ -1,5 +1,5 @@
 "use client";
-
+ 
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
@@ -11,10 +11,11 @@ import {
 import { ArrowLeft, Lock, BadgeCheck, CheckCircle2, ShieldCheck } from "lucide-react";
 import { stripePromise } from "@/lib/stripe";
 import { useSession } from "@/lib/auth-client";
-
+import { membershipExpiryDate } from "@/lib/season";
+ 
 // Membership fee (test): $183.75. Kept in cents to match the payment-service.
 const MEMBERSHIP_AMOUNT_CENTS = 18375;
-
+ 
 // -------------------------------------------------------------------------
 // Payment form — lives inside <Elements> so it can use the mounted card input.
 // On success it confirms with our backend, which (via webhook too) activates
@@ -33,14 +34,14 @@ function PayForm({
   const elements = useElements();
   const [error, setError] = useState("");
   const [processing, setProcessing] = useState(false);
-
+ 
   async function handlePay(e: React.FormEvent) {
     e.preventDefault();
     if (!stripe || !elements) return;
-
+ 
     setProcessing(true);
     setError("");
-
+ 
     const { error: stripeError, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
@@ -51,13 +52,13 @@ function PayForm({
       },
       redirect: "if_required",
     });
-
+ 
     if (stripeError) {
       setError(stripeError.message ?? "Payment failed. Please try again.");
       setProcessing(false);
       return;
     }
-
+ 
     if (paymentIntent?.status === "succeeded") {
       try {
         const res = await fetch(`/api/gateway/api/payments/${paymentId}/confirm`, {
@@ -82,7 +83,7 @@ function PayForm({
       setProcessing(false);
     }
   }
-
+ 
   return (
     <form onSubmit={handlePay} className="space-y-7">
       <section>
@@ -96,13 +97,13 @@ function PayForm({
           <PaymentElement />
         </div>
       </section>
-
+ 
       {error && (
         <div className="rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-700">
           {error}
         </div>
       )}
-
+ 
       <button
         type="submit"
         disabled={!stripe || processing}
@@ -119,14 +120,14 @@ function PayForm({
           </>
         )}
       </button>
-
+ 
       <p className="text-center text-xs text-stone-600">
         Test card <span className="font-mono">4242 4242 4242 4242</span> · any future date · any CVC
       </p>
     </form>
   );
 }
-
+ 
 // -------------------------------------------------------------------------
 // Checkout: creates a "membership" PaymentIntent (referenceId = membership id)
 // so a cleared payment activates that membership.
@@ -135,7 +136,7 @@ function MembershipCheckout() {
   const params = useSearchParams();
   const membershipId = params.get("mid");
   const { data: session, isPending: sessionLoading } = useSession();
-
+ 
   const [clientSecret, setClientSecret] = useState("");
   const [paymentId, setPaymentId] = useState("");
   const [state, setState] = useState<"loading" | "ready" | "paid" | "error">("loading");
@@ -144,17 +145,17 @@ function MembershipCheckout() {
   // Receipt details, captured at the moment payment succeeds.
   const [paidAt, setPaidAt] = useState<Date | null>(null);
   const [expiryDate, setExpiryDate] = useState<string | null>(null);
-
+ 
   const total = MEMBERSHIP_AMOUNT_CENTS / 100;
-
+ 
   useEffect(() => {
     if (sessionLoading || clientSecret) return;
     if (!membershipId) return;
     if (startedRef.current) return; // guard against StrictMode double-run
     startedRef.current = true;
-
+ 
     const userId = session?.user?.id ?? "guest";
-
+ 
     async function startCheckout() {
       if (!membershipId) {
         setErrorMsg("Missing membership reference. Please start from the membership page.");
@@ -187,10 +188,10 @@ function MembershipCheckout() {
         setState("error");
       }
     }
-
+ 
     startCheckout();
   }, [membershipId, session, sessionLoading, clientSecret]);
-
+ 
   // Record the receipt details, then pull the real expiry date the backend set.
   async function handlePaid() {
     setPaidAt(new Date());
@@ -205,7 +206,7 @@ function MembershipCheckout() {
       // Non-fatal: the receipt just omits the expiry line.
     }
   }
-
+ 
   if (state === "paid") {
     return (
       <div className="mx-auto max-w-lg px-4 py-14">
@@ -216,7 +217,7 @@ function MembershipCheckout() {
             Your CCRA membership is now active. Keep this receipt for your records.
           </p>
         </div>
-
+ 
         {/* Receipt */}
         <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
           <div className="flex items-center justify-between border-b border-stone-200 bg-stone-50 px-6 py-4">
@@ -228,7 +229,7 @@ function MembershipCheckout() {
               PAID
             </span>
           </div>
-
+ 
           <dl className="divide-y divide-stone-100 px-6">
             <div className="flex justify-between py-3 text-sm">
               <dt className="text-stone-600">Item</dt>
@@ -263,7 +264,7 @@ function MembershipCheckout() {
             </div>
           </dl>
         </div>
-
+ 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <a
             href="/events/enter-rodeo"
@@ -282,7 +283,7 @@ function MembershipCheckout() {
       </div>
     );
   }
-
+ 
   return (
     <div className="min-h-screen bg-stone-50">
       <div className="mx-auto max-w-5xl px-4 py-10">
@@ -293,7 +294,7 @@ function MembershipCheckout() {
           <ArrowLeft className="h-4 w-4" /> Back to membership
         </a>
         <h1 className="mb-8 text-3xl font-bold tracking-tight text-stone-900">Complete your membership</h1>
-
+ 
         <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
           {/* LEFT — payment form */}
           <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm sm:p-8">
@@ -314,7 +315,7 @@ function MembershipCheckout() {
               </Elements>
             )}
           </div>
-
+ 
           {/* RIGHT — summary */}
           <aside className="h-fit lg:sticky lg:top-10">
             <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
@@ -322,13 +323,15 @@ function MembershipCheckout() {
                 <BadgeCheck className="h-4 w-4 text-orange-600" />
                 Membership summary
               </h2>
-
+ 
               <div className="flex items-center justify-between text-sm">
                 <span className="text-stone-700">CCRA Full Membership</span>
                 <span className="font-medium text-stone-900">${total.toFixed(2)}</span>
               </div>
-              <p className="mt-1 text-xs text-stone-600">Valid through 2027-07-31</p>
-
+              <p className="mt-1 text-xs text-stone-600">
+                Valid through {membershipExpiryDate()}
+              </p>
+ 
               <div className="mt-5 space-y-2 border-t border-stone-200 pt-4 text-sm">
                 <div className="flex justify-between text-stone-600">
                   <span>Subtotal</span>
@@ -339,11 +342,11 @@ function MembershipCheckout() {
                   <span>${total.toFixed(2)}</span>
                 </div>
               </div>
-
+ 
               <p className="mt-5 rounded-lg bg-orange-50 px-3 py-2 text-xs text-orange-800">
                 An active membership is required to enter rodeo events.
               </p>
-
+ 
               <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-stone-600">
                 <ShieldCheck className="h-3.5 w-3.5" /> Secure SSL checkout · Powered by Stripe
               </p>
@@ -354,7 +357,7 @@ function MembershipCheckout() {
     </div>
   );
 }
-
+ 
 export default function MembershipCheckoutPage() {
   return (
     <Suspense
@@ -366,3 +369,5 @@ export default function MembershipCheckoutPage() {
     </Suspense>
   );
 }
+ 
+ 

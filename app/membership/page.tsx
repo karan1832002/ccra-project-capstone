@@ -1,52 +1,54 @@
 "use client";
-
+ 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Hero from "@/components/ui/Hero";
-
+import { membershipExpiryDate } from "@/lib/season";
+ 
 export default function MembershipPage() {
   const router = useRouter();
-
+ 
   const [session, setSession] = useState<{ id?: string; name?: string; email?: string } | null>(null);
   const [loadingSession, setLoadingSession] = useState(true);
   const [membershipStatus, setMembershipStatus] = useState<{
     status: string;
     expiryDate?: string;
   } | null>(null);
-
+ 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-
+ 
   const [division, setDivision] = useState("");
   const [events, setEvents] = useState<string[]>([]);
-
+ 
   const [signature, setSignature] = useState("");
-
+ 
   const [paymentMethod, setPaymentMethod] = useState("");
-
+ 
   const [errors, setErrors] = useState<Record<string, string>>({});
-
+ 
   const [submitting, setSubmitting] = useState(false);
   const [captchaChecked, setCaptchaChecked] = useState(false);
   const [agreeInfoCorrect, setAgreeInfoCorrect] = useState(false);
   const [agreeRules, setAgreeRules] = useState(false);
-
+ 
   const LOCAL_STORAGE_KEY = "ccra_membership_draft_v1";
-
+ 
   // LOAD SESSION AND DRAFT
   useEffect(() => {
     async function loadData() {
       try {
         const res = await fetch("/api/auth/get-session");
         const data = await res.json();
-
+ 
         if (data?.user) {
           setSession(data.user);
           setFullName(data.user.name ?? "");
           setEmail(data.user.email ?? "");
-
+ 
           // Already a member? Show their status instead of the apply form.
           try {
             const statusRes = await fetch(`/api/gateway/api/memberships/status/${data.user.id}`);
@@ -63,7 +65,7 @@ export default function MembershipPage() {
       } finally {
         setLoadingSession(false);
       }
-
+ 
       const draft = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (draft) {
         try {
@@ -78,10 +80,10 @@ export default function MembershipPage() {
         } catch {}
       }
     }
-
+ 
     loadData();
   }, []);
-
+ 
   // PHONE FORMATTER
   function formatPhone(value: string) {
     const digits = value.replace(/\D/g, "").slice(0, 10);
@@ -89,11 +91,11 @@ export default function MembershipPage() {
     if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
     return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
   }
-
+ 
   // VALIDATION
   function validate() {
     const newErrors: Record<string, string> = {};
-
+ 
     if (!fullName.trim()) newErrors.fullName = "Full name is required";
     if (!email.trim()) newErrors.email = "Email is required";
     if (!phone.trim()) newErrors.phone = "Contact number is required";
@@ -101,16 +103,16 @@ export default function MembershipPage() {
     if (events.length === 0) newErrors.events = "Select at least one event";
     if (!signature.trim()) newErrors.signature = "Digital signature is required";
     if (!paymentMethod) newErrors.paymentMethod = "Select a payment method";
-
+ 
     if (!agreeInfoCorrect || !agreeRules) {
       newErrors.agreements =
         "You must certify info, and accept CCRA rules.";
     }
-
+ 
     setErrors(newErrors);
     return newErrors;
   }
-
+ 
   // EVENT TOGGLE
   function toggleEvent(eventName: string) {
     if (events.includes(eventName)) {
@@ -119,7 +121,7 @@ export default function MembershipPage() {
       setEvents([...events, eventName]);
     }
   }
-
+ 
   // SAVE DRAFT
   function saveDraft() {
     localStorage.setItem(
@@ -135,7 +137,7 @@ export default function MembershipPage() {
       })
     );
   }
-
+ 
   // SUBMIT MEMBERSHIP
   async function handleSubmit() {
     if (submitting) return;
@@ -150,16 +152,17 @@ export default function MembershipPage() {
       alert("Please sign in before submitting a membership application.");
       return;
     }
-
+ 
     setSubmitting(true);
-
+ 
     const userId = session.id;
-
+ 
     try {
       // 1. Create the membership application. It starts as "pending" and only
       //    becomes "active" once payment clears (via the payment-service webhook).
-      const startDate = new Date().toISOString().split("T")[0];
-      const expiryDate = "2027-07-31"; // TODO: calculate +1 year from startDate
+      const start = new Date();
+      const startDate = start.toISOString().split("T")[0];
+      const expiryDate = membershipExpiryDate(start);
       const membershipRes = await fetch("/api/gateway/api/memberships", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -176,7 +179,7 @@ export default function MembershipPage() {
           events,
         }),
       });
-
+ 
       const membershipJson = await membershipRes.json();
       if (!membershipRes.ok || !membershipJson?.data?.id) {
         console.error("[membership] create failed:", membershipJson);
@@ -185,19 +188,19 @@ export default function MembershipPage() {
         return;
       }
       const membershipId = membershipJson.data.id;
-
+ 
       if (paymentMethod === "card") {
         // 2. Hand off to the Stripe checkout page for this membership. Payment
         //    success there activates the membership.
         router.push(`/membership/checkout?mid=${membershipId}`);
         return; // keep spinner while navigating
       }
-
+ 
       if (paymentMethod === "etransfer") {
         router.push("/membership/etransfer-instructions");
         return;
       }
-
+ 
       setSubmitting(false);
     } catch (err) {
       console.error("[membership] submit error:", err);
@@ -205,7 +208,7 @@ export default function MembershipPage() {
       setSubmitting(false);
     }
   }
-
+ 
   // LOADING SCREEN
   if (loadingSession) {
     return (
@@ -218,7 +221,7 @@ export default function MembershipPage() {
       </div>
     );
   }
-
+ 
   // NOT SIGNED IN
   if (!session) {
     return (
@@ -228,7 +231,7 @@ export default function MembershipPage() {
           title="Membership Registration"
           description="Become an official CCRA member."
         />
-
+ 
         <section className="mt-8 rounded-md border border-stone-200 bg-white p-6 text-center shadow-sm">
           <h2 className="text-xl font-semibold">Please sign in to continue</h2>
           <p className="mt-2 text-sm text-stone-600">
@@ -244,37 +247,79 @@ export default function MembershipPage() {
       </main>
     );
   }
-
+ 
   // ALREADY AN ACTIVE MEMBER — no need to apply again.
   if (membershipStatus?.status === "active") {
     return (
-      <main className="mx-auto max-w-4xl px-4 py-10">
+      <main className="mx-auto max-w-4xl px-4 pb-12 pt-0">
         <Hero
           badge="CCRA MEMBERSHIP"
-          title="Membership Registration"
-          description="Become an official CCRA member."
+          title="My Membership"
+          description="Your CCRA membership details and status."
         />
-
-        <section className="mt-8 rounded-md border border-green-200 bg-green-50 p-8 text-center shadow-sm">
-          <div className="mb-3 text-4xl">✅</div>
-          <h2 className="text-xl font-semibold text-green-800">
-            Your membership is active
-          </h2>
-          <p className="mt-2 text-sm text-green-700">
-            You&apos;re all set{membershipStatus.expiryDate ? ` through ${membershipStatus.expiryDate}` : ""}.
-            You can now enter rodeo events.
-          </p>
+ 
+        {/* Membership summary — photo fills the left, details on the right. */}
+        <section className="mx-auto mt-8 max-w-3xl overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
+          <div className="grid sm:grid-cols-2">
+            {/* Photo column — decorative, hidden on narrow screens */}
+            <div className="relative hidden min-h-[300px] sm:block">
+              <Image
+                src="/images/ccralineup.jpg"
+                alt=""
+                fill
+                sizes="(min-width: 640px) 50vw, 0px"
+                className="object-cover object-center"
+                priority
+              />
+            </div>
+ 
+            {/* Details column */}
+            <div className="p-6 sm:p-7">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h2 className="truncate text-xl font-semibold tracking-tight text-stone-900">
+                {session.name || "Member"}
+              </h2>
+              <p className="mt-0.5 truncate text-sm text-stone-500">{session.email}</p>
+            </div>
+            <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-700 ring-1 ring-green-200">
+              <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
+              Active
+            </span>
+          </div>
+ 
+          <dl className="mt-6 space-y-3 border-t border-stone-100 pt-5 text-sm">
+            <div className="flex justify-between gap-4">
+              <dt className="text-stone-500">Membership</dt>
+              <dd className="font-medium text-stone-900">Full Membership</dd>
+            </div>
+            <div className="flex justify-between gap-4">
+              <dt className="text-stone-500">Valid through</dt>
+              <dd className="font-medium tabular-nums text-stone-900">
+                {membershipStatus.expiryDate ?? "—"}
+              </dd>
+            </div>
+          </dl>
+ 
           <Link
             href="/events/enter-rodeo"
-            className="mt-5 inline-flex rounded-md bg-orange-600 px-5 py-2.5 text-white transition-all hover:scale-105 hover:bg-orange-700 active:scale-95"
+            className="mt-6 flex w-full items-center justify-center rounded-lg bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-700"
           >
             Enter a Rodeo
           </Link>
+              <Link
+                href="/profile"
+                className="mt-3 block text-center text-sm font-medium text-stone-500 underline-offset-4 transition hover:text-stone-900 hover:underline"
+              >
+                View profile
+              </Link>
+            </div>
+          </div>
         </section>
       </main>
     );
   }
-
+ 
   return (
     <div className="min-h-screen bg-stone-50">
       <main className="mx-auto max-w-4xl px-6 py-8">
@@ -285,15 +330,15 @@ export default function MembershipPage() {
           description="Become an official CCRA member by completing the application below."
         />
         </div>
-
+ 
         {/* FORM CONTAINER */}
         <div className="mt-10 bg-white border border-stone-200 rounded-xl shadow-sm p-8">
-
+ 
           {/* PERSONAL INFORMATION */}
           <h2 className="text-2xl font-bold text-stone-800 mb-6">
             Personal Information
           </h2>
-
+ 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* FULL NAME */}
             <div>
@@ -312,7 +357,7 @@ export default function MembershipPage() {
                 <p className="text-xs text-red-500 mt-1">✖ {errors.fullName}</p>
               )}
             </div>
-
+ 
             {/* EMAIL */}
             <div>
               <label className="block text-gray-700 font-semibold mb-2">
@@ -332,7 +377,7 @@ export default function MembershipPage() {
                 <p className="text-xs text-green-600 mt-1">✔ Looks good</p>
               ) : null}
             </div>
-
+ 
             {/* PHONE */}
             <div>
               <label className="block text-gray-700 font-semibold mb-2">
@@ -351,12 +396,12 @@ export default function MembershipPage() {
               )}
             </div>
           </div>
-
+ 
           {/* EVENT DECLARATIONS */}
           <h2 className="text-2xl font-bold text-stone-800 mt-12 mb-6">
             Event Declarations
           </h2>
-
+ 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* DIVISION */}
             <div>
@@ -374,7 +419,7 @@ export default function MembershipPage() {
                 >
                   Men’s
                 </button>
-
+ 
                 <button
                   onClick={() => setDivision("Ladies")}
                   className={`px-4 py-2 rounded-md border transition-all shadow-sm hover:scale-105 active:scale-95 ${
@@ -390,7 +435,7 @@ export default function MembershipPage() {
                 <p className="text-xs text-red-500 mt-1">✖ {errors.division}</p>
               )}
             </div>
-
+ 
             {/* EVENTS */}
             <div>
               <label className="block text-gray-700 font-semibold mb-2">
@@ -424,7 +469,7 @@ export default function MembershipPage() {
               )}
             </div>
           </div>
-
+ 
           {/* SELECTED EVENTS */}
           <div className="mt-6">
             <p className="text-sm font-semibold">
@@ -439,19 +484,19 @@ export default function MembershipPage() {
               ))}
             </div>
           </div>
-
+ 
           {/* LIABILITY */}
           <h2 className="text-2xl font-bold text-stone-800 mt-12 mb-4">
             Liability & Rulebook Agreement
           </h2>
-
+ 
           <p className="text-stone-700 leading-relaxed mb-6">
             Rodeo is a dangerous activity. By submitting this application, you
             acknowledge that you assume all risks of injury or damage while
             participating in CCRA‑sanctioned events. You agree to abide by all
             rules and regulations outlined in the 2024 CCRA Rulebook.
           </p>
-
+ 
           {/* SIGNATURE */}
           <div className="mt-6">
             <label className="block text-gray-700 font-semibold mb-2">
@@ -468,36 +513,36 @@ export default function MembershipPage() {
             {errors.signature && (
               <p className="text-xs text-red-500 mt-1">✖ {errors.signature}</p>
             )}
-
+ 
           </div>
-
+ 
           {/* ORDER SUMMARY */}
           <h2 className="text-2xl font-bold text-stone-800 mt-12 mb-6">
             Order Summary
           </h2>
-
+ 
           <div className="border rounded-lg p-6 bg-stone-50">
             <div className="flex justify-between mb-2">
               <span>Full Membership 2026</span>
               <span>$175.00</span>
             </div>
-
+ 
             <div className="flex justify-between mb-2">
               <span>Processing Fee (5%)</span>
               <span>$8.75</span>
             </div>
-
+ 
             <div className="flex justify-between font-bold text-lg mt-4">
               <span>Total</span>
               <span>$183.75</span>
             </div>
           </div>
-
+ 
           {/* PAYMENT METHOD */}
           <h2 className="text-2xl font-bold text-stone-800 mt-12 mb-6">
             Payment Method
           </h2>
-
+ 
           <div className="flex flex-col md:flex-row gap-4">
             {/* CARD */}
             <button
@@ -513,7 +558,7 @@ export default function MembershipPage() {
                 Pay instantly with Visa, MasterCard, or Amex.
               </div>
             </button>
-
+ 
             {/* E-TRANSFER */}
             <button
               onClick={() => setPaymentMethod("etransfer")}
@@ -531,11 +576,11 @@ export default function MembershipPage() {
               </div>
             </button>
           </div>
-
+ 
           {errors.paymentMethod && (
             <p className="text-xs text-red-500 mt-1">✖ {errors.paymentMethod}</p>
           )}
-
+ 
           {/* CONFIRMATION CHECKBOXES */}
           <div className="mt-6 space-y-2 text-xs">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -547,7 +592,7 @@ export default function MembershipPage() {
               />
               <span>I certify all information is correct.</span>
               </label>
-
+ 
           <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
@@ -557,11 +602,11 @@ export default function MembershipPage() {
           />
           <span>I accept the CCRA Rules.</span>
           </label>
-
+ 
           {errors.agreements && (
           <p className="text-xs text-red-500 mt-1">✖ {errors.agreements}</p>
         )}
-
+ 
           {/* Simple bot check. validate() requires this before submitting. */}
           <label className="flex items-center gap-2 cursor-pointer pt-2">
             <input
@@ -572,12 +617,12 @@ export default function MembershipPage() {
             />
             <span>I&apos;m not a robot.</span>
           </label>
-
+ 
           {errors.captcha && (
             <p className="text-xs text-red-500 mt-1">✖ {errors.captcha}</p>
           )}
         </div>
-
+ 
         {/* SUBMIT BUTTON */}
         <button
         onClick={handleSubmit}
@@ -595,13 +640,15 @@ export default function MembershipPage() {
         "Submit Application"
         )}
        </button>
-
+ 
        <p className="text-xs text-stone-600 mt-3 text-center">
        By clicking submit, you agree to the CCRA bylaws and 2024 competition terms.
        </p>
       </div>
-
+ 
       </main>
     </div>
   );
 }
+ 
+ 
