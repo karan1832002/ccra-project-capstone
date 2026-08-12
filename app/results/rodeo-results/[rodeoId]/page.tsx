@@ -70,7 +70,7 @@ export default function RodeoResultsDetailPage({
   const backLink = (
     <Link
       href="/results/rodeo-results"
-      className="inline-block text-sm text-stone-600 hover:text-orange-600 mb-4"
+      className="inline-block text-sm text-body-text hover:text-primary mb-4"
     >
       ← Back to all results
     </Link>
@@ -80,7 +80,7 @@ export default function RodeoResultsDetailPage({
     return (
       <div className="max-w-4xl mx-auto py-8 px-4">
         {backLink}
-        <p className="text-sm text-muted-foreground">Loading results...</p>
+        <p className="text-sm text-caption-text">Loading results...</p>
       </div>
     );
   }
@@ -89,7 +89,7 @@ export default function RodeoResultsDetailPage({
     return (
       <div className="max-w-4xl mx-auto py-8 px-4">
         {backLink}
-        <p className="text-sm text-foreground">
+        <p className="text-sm text-body-text">
           We couldn't find results for that rodeo.
         </p>
       </div>
@@ -114,11 +114,11 @@ export default function RodeoResultsDetailPage({
             overall payout totals on the right. */}
         <div className="flex items-start justify-between gap-6 mb-6">
           <div>
-            <h1 className="text-3xl font-semibold text-heading">
+            <h1 className="text-3xl font-semibold text-heading-text">
               {results[0].rodeoTitle} Results
             </h1>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-caption-text">
               {dateLabel}
               {results[0].rodeoLocation ? ` · ${results[0].rodeoLocation}` : ""}
             </p>
@@ -126,18 +126,18 @@ export default function RodeoResultsDetailPage({
 
           {/* Summary of all prize money awarded across this rodeo.
               A grid keeps labels and values aligned regardless of label length. */}
-          <div className="text-sm text-foreground shrink-0">
+          <div className="text-sm text-body-text shrink-0">
             <div className="grid grid-cols-[auto_auto] gap-x-2 gap-y-1">
               <span className="text-right">Money:</span>
-              <span className="font-semibold text-heading">
+              <span className="font-semibold text-heading-text">
                 {formatCurrency(totalMoney)}
               </span>
               <span className="text-right">Ground:</span>
-              <span className="font-semibold text-heading">
+              <span className="font-semibold text-heading-text">
                 {formatCurrency(totalGroundMoney)}
               </span>
               <span className="text-right">Total Payout:</span>
-              <span className="font-semibold text-heading">
+              <span className="font-semibold text-heading-text">
                 {formatCurrency(totalPayout)}
               </span>
             </div>

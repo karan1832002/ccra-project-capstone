@@ -28,7 +28,7 @@ function fileIcon(fileType: SheetFile["fileType"]) {
 // clickable chip linking straight to the PDF/XLSX (no intermediate page).
 export function DrawFileList({ files }: DrawFileListProps) {
   if (files.length === 0) {
-    return <p className="text-sm text-stone-600">No sheets posted yet.</p>;
+    return <p className="text-sm text-body-text">No sheets posted yet.</p>;
   }
 
   return (
@@ -39,13 +39,13 @@ export function DrawFileList({ files }: DrawFileListProps) {
           href={file.url}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center gap-2 text-sm px-3 py-1.5 rounded-md border border-stone-200 text-stone-600 hover:bg-stone-50"
+          className="flex items-center gap-2 text-sm px-3 py-1.5 rounded-md border border-border text-body-text hover:bg-highlight"
         >
-          <span className="text-xs font-semibold text-stone-600">
+          <span className="text-xs font-semibold text-body-text">
             {fileIcon(file.fileType)}
           </span>
           <span>{file.label}</span>
-          <span className="text-xs text-stone-600">({typeLabel[file.type]})</span>
+          <span className="text-xs text-body-text">({typeLabel[file.type]})</span>
         </a>
       ))}
     </div>

@@ -5,65 +5,83 @@
 
 /* Light-mode/Default values */
 :root {
-  /* General */
-  --background: #fafaf9; /* page bg */
-  --foreground: #44403b; /* body text */
-  --heading: #0c0a09; /* headings */
-  --muted-foreground: #57534e; /* secondary text */
+  /* ============================================
+     ADAPTIVE — flip value in dark mode
+     ============================================ */
+  --background: theme("colors.stone.50");
+  --surface: theme("colors.white");
+  --accent: theme("colors.orange.100");
+  --highlight: theme("colors.orange.50");
+  --border: theme("color.stone.200");
 
-  /* Base Colours */
-  --primary: #f54900;
-  --primary-foreground: #ffffff;
-  --primary-hover: #ca3500;
-  --accent: #ffedd4;
-  --accent-foreground: #f54900;
+  --heading-text: theme("colors.stone.900");
+  --body-text: theme("colors.stone.600");
+  --caption-text: theme("colors.stone.500");
+  --accent-text: theme("colors.orange.600");
 
-  /* Features */
-  --surface: #ffffff; /* background */
-  --highlight: #fff7ed;
-  --border: #e7e5e4;
-  --border-hover: #ffb86a;
+
+  /* ============================================
+     STATIC — same value in both modes
+     ============================================ */
+  --primary: theme("colors.orange.600");
+  --primary-dark: theme("colors.orange.700");
+  --primary-text: theme("colors.white");
+
+  --overlay-blur: theme("colors.stone.950 / 60%");
+  --focus-ring: theme("colors.orange.600");
+
+  --success: theme("colors.green.600");
+  --success-dark: theme("colors.green.700");
+  --success-text: theme("colors.white");
+  --danger: theme("colors.red.600");
+  --danger-dark: theme("colors.red.700");
+  --danger-text: theme("colors.white");
+  --disabled: theme("colors.stone.100");
+  --disabled-text: theme("colors.stone.600");
 }
 
 /* Dark-mode values */
 .dark {
-  /* General Page */
-  --background: #18120e;
-  --foreground: #d6d1cb;
-  --heading: #f5f2ee;
-  --muted-foreground: #8a8178;
+  --background: theme("colors.orange.900");
+  --surface: theme("colors.stone.700");
+  --accent: theme("colors.orange.950");
+  --highlight: theme("colors.orange.950");
+  --border: theme("color.stone.800");
 
-  /* Base Colours */
-  --accent: #441306;
-  --accent-foreground: #ff8904;
-
-  /* Features */
-  --surface: #231b15;
-  --highlight: #2c2118;
-  --border: #292524;
-  --border-hover: #ca3500;
+  --heading-text: theme("colors.stone.100");
+  --body-text: theme("colors.stone.300");
+  --caption-text: theme("colors.stone.400");
+  --accent-text: theme("colors.orange.400");
 }
 
 /* Pass above values to Tailwind; keeps page reactive to .dark class */
 @theme inline {
-  /* General Page */
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-heading: var(--heading);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-
-  /* Base Colours */
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary-hover: var(--primary-hover);
-
-  /* Features */
   --color-surface: var(--surface);
+  --color-accent: var(--accent);
   --color-highlight: var(--highlight);
   --color-border: var(--border);
-  --color-border-hover: var(--border-hover);
+
+  --color-heading-text: var(--heading-text);
+  --color-body-text: var(--body-text);
+  --color-caption-text: var(--caption-text);
+  --color-accent-text: var(--accent-text);
+
+  --color-success: var(--success);
+  --color-success-dark: var(--success-dark);
+  --color-success-text: var(--success-text);
+  --color-danger: var(--danger);
+  --color-danger-dark: var(--danger-dark);
+  --color-danger-text: var(--danger-text);
+  --color-disabled: var(--disabled);
+  --color-disabled-text: var(--disabled-text);
+
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-text: var(--primary-text);
+  
+  --color-overlay-blur: var(--overlay-blur);
+  --color-focus-ring: var(--focus-ring);
 }
 
 body {

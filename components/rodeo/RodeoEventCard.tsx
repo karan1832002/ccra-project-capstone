@@ -22,9 +22,9 @@ export function RodeoEventCard({ event, children }: RodeoEventCardProps) {
   return (
     <div className="rounded-md border border-border shadow-sm bg-surface p-6 mb-3">
       <div className="flex justify-between items-baseline mb-3 flex-wrap gap-1">
-        <span className="font-semibold text-xl text-heading">{event.name}</span>
+        <span className="font-semibold text-xl text-heading-text">{event.name}</span>
 
-        <span className="text-sm text-muted-foreground">
+        <span className="text-sm text-caption-text">
           {/* Dates are optional in the database, so only format when a value exists. */}
           {event.startDate ? formatShortDate(event.startDate) : "—"}
 

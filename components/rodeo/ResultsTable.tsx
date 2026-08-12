@@ -59,7 +59,7 @@ function formatDateTimeLabel(entry: Result): string {
 
 export function ResultsTable({ entries }: ResultsTableProps) {
   if (entries.length === 0) {
-    return <p className="text-sm text-foreground">No results posted yet.</p>;
+    return <p className="text-sm text-body-text">No results posted yet.</p>;
   }
 
   // Group results by competition category so each category receives
@@ -110,7 +110,7 @@ export function ResultsTable({ entries }: ResultsTableProps) {
 
           return (
             <div key={eventName}>
-              <h2 className="text-lg font-semibold text-heading mb-2">
+              <h2 className="text-lg font-semibold text-heading-text mb-2">
                 {eventName}
               </h2>
 

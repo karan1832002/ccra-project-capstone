@@ -18,7 +18,7 @@ interface CurrentEntriesTableProps {
 
 export function CurrentEntriesTable({ entries }: CurrentEntriesTableProps) {
   if (entries.length === 0) {
-    return <p className="text-sm text-foreground">No entries posted yet.</p>;
+    return <p className="text-sm text-body-text">No entries posted yet.</p>;
   }
 
   // Column labels displayed by the shared Table component.
@@ -47,7 +47,7 @@ export function CurrentEntriesTable({ entries }: CurrentEntriesTableProps) {
   });
 
   if (rodeoIds.length === 0) {
-    return <p className="text-sm text-stone-600">No entries posted yet.</p>;
+    return <p className="text-sm text-body-text">No entries posted yet.</p>;
   }
 
   return (
@@ -75,11 +75,11 @@ export function CurrentEntriesTable({ entries }: CurrentEntriesTableProps) {
         return (
           <div key={rodeoId}>
             <div className="mb-2">
-              <h2 className="text-xl font-semibold text-heading">
+              <h2 className="text-xl font-semibold text-heading-text">
                 {rodeoEntries[0].rodeoTitle}
               </h2>
 
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-caption-text">
                 {rodeoEntries[0].location}
               </p>
             </div>

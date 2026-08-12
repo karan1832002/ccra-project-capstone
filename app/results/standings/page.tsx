@@ -64,7 +64,7 @@ export default function RodeoStandingsPage() {
   if (loading) {
     return (
       <div className="w-full py-8 px-4">
-        <p className="text-sm text-muted-foreground">Loading standings...</p>
+        <p className="text-sm text-caption-text">Loading standings...</p>
       </div>
     );
   }
@@ -92,7 +92,7 @@ export default function RodeoStandingsPage() {
 
           {/* NO RESULTS */}
           {filteredEntries.length === 0 && (
-            <p className="text-sm text-foreground py-6 text-center">
+            <p className="text-sm text-body-text py-6 text-center">
               No standings found.
             </p>
           )}

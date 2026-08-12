@@ -31,7 +31,7 @@ export function SearchInput({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder ?? "Search"}
-      className={`w-full rounded-md border border-border px-3 h-12 text-sm text-foreground bg-surface placeholder-muted-foreground outline-none transition focus:border-primary ${className ?? ""}`}
+      className={`w-full rounded-md border border-border px-3 h-12 text-sm text-body-text bg-surface placeholder-caption-text outline-none transition focus:border-primary ${className ?? ""}`}
     />
   );
 }

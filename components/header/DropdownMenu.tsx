@@ -47,7 +47,7 @@ export default function DropdownMenu({
             ${
               isActiveTop
                 ? "text-primary font-semibold underline underline-offset-4"
-                : "text-foreground hover:text-heading"
+                : "text-body-text hover:text-heading-text"
             }
           `}
         >
@@ -61,7 +61,7 @@ export default function DropdownMenu({
             ${
               isActiveTop
                 ? "text-primary font-semibold underline underline-offset-4"
-                : "text-foreground hover:text-heading"
+                : "text-body-text hover:text-heading-text"
             }
           `}
           aria-haspopup={hasSubItems ? "true" : undefined}
@@ -86,7 +86,7 @@ export default function DropdownMenu({
                       ${
                         subActive
                           ? "text-primary font-semibold underline underline-offset-4"
-                          : "text-foreground hover:text-heading"
+                          : "text-body-text hover:text-heading-text"
                       }
                     `}
                   >

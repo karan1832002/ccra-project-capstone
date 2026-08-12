@@ -90,7 +90,7 @@ export default function NavList({
                   item.action!();
                   onNavigate();
                 }}
-                className="rounded-md px-3 py-3 text-sm font-medium text-primary-foreground bg-primary transition hover:bg-primary-hover w-full text-left"
+                className="rounded-md px-3 py-3 text-sm font-medium text-primary-text bg-primary transition hover:bg-primary-dark w-full text-left"
               >
                 {item.label}
               </button>
@@ -106,7 +106,7 @@ export default function NavList({
               className={`rounded-md px-3 py-3 text-sm ${
                 isActive(item.path)
                   ? "font-semibold text-primary underline underline-offset-4"
-                  : "font-medium text-foreground transition hover:bg-highlight"
+                  : "font-medium text-body-text transition hover:bg-highlight"
               }`}
             >
               {item.label}
@@ -124,8 +124,8 @@ export default function NavList({
           labelActive
             ? "font-semibold text-primary underline underline-offset-4"
             : item.path
-              ? "font-medium text-foreground transition hover:bg-highlight"
-              : "font-medium text-foreground"
+              ? "font-medium text-body-text transition hover:bg-highlight"
+              : "font-medium text-body-text"
         }`;
 
         return (
@@ -174,7 +174,7 @@ export default function NavList({
                         ${
                           subActive
                             ? "font-semibold text-primary underline underline-offset-4"
-                            : "text-foreground transition hover:bg-highlight hover:text-heading"
+                            : "text-body-text transition hover:bg-highlight hover:text-heading-text"
                         }`}
                     >
                       {subItem.label}
@@ -189,8 +189,8 @@ export default function NavList({
 
       {showAdminLinks && (
         <>
-          <hr className="border-t border-stone-200" />
-          <span className="px-3 pt-2 text-xs font-semibold uppercase tracking-wider text-stone-600">
+          <hr className="border-t border-border" />
+          <span className="px-3 pt-2 text-xs font-semibold uppercase tracking-wider text-body-text">
             Admin
           </span>
 
@@ -199,8 +199,8 @@ export default function NavList({
             onClick={onNavigate}
             className={
               isActive("/admin") && pathname === "/admin"
-                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
-                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-primary underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-heading-text transition hover:bg-highlight"
             }
           >
             Dashboard
@@ -212,8 +212,8 @@ export default function NavList({
               onClick={onNavigate}
               className={
                 isActive("/admin/users")
-                  ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
-                  : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+                  ? "rounded-md px-3 py-3 text-sm font-semibold text-primary underline underline-offset-4"
+                  : "rounded-md px-3 py-3 text-sm font-medium text-heading-text transition hover:bg-highlight"
               }
             >
               Users
@@ -225,8 +225,8 @@ export default function NavList({
             onClick={onNavigate}
             className={
               isActive("/admin/events")
-                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
-                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-primary underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-heading-text transition hover:bg-highlight"
             }
           >
             Events
@@ -237,8 +237,8 @@ export default function NavList({
             onClick={onNavigate}
             className={
               isActive("/admin/results")
-                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
-                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-primary underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-heading-text transition hover:bg-highlight"
             }
           >
             Results
@@ -249,8 +249,8 @@ export default function NavList({
             onClick={onNavigate}
             className={
               isActive("/admin/products")
-                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
-                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-primary underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-heading-text transition hover:bg-highlight"
             }
           >
             Products
@@ -261,8 +261,8 @@ export default function NavList({
             onClick={onNavigate}
             className={
               isActive("/admin/orders")
-                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
-                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-primary underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-heading-text transition hover:bg-highlight"
             }
           >
             Orders
@@ -273,8 +273,8 @@ export default function NavList({
             onClick={onNavigate}
             className={
               isActive("/admin/newsletters")
-                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
-                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-primary underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-heading-text transition hover:bg-highlight"
             }
           >
             Newsletters
@@ -285,8 +285,8 @@ export default function NavList({
             onClick={onNavigate}
             className={
               isActive("/admin/gallery")
-                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
-                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-primary underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-heading-text transition hover:bg-highlight"
             }
           >
             Gallery
@@ -297,8 +297,8 @@ export default function NavList({
             onClick={onNavigate}
             className={
               isActive("/admin/sponsors")
-                ? "rounded-md px-3 py-3 text-sm font-semibold text-orange-600 underline underline-offset-4"
-                : "rounded-md px-3 py-3 text-sm font-medium text-stone-950 transition hover:bg-orange-50"
+                ? "rounded-md px-3 py-3 text-sm font-semibold text-primary underline underline-offset-4"
+                : "rounded-md px-3 py-3 text-sm font-medium text-heading-text transition hover:bg-highlight"
             }
           >
             Sponsors

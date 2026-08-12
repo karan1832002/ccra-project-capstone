@@ -32,7 +32,7 @@ export default function PastChampionsPage() {
   if (loading) {
     return (
       <div className="w-full py-8 px-4">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-caption-text">
           Loading past champions...
         </p>
       </div>
@@ -57,12 +57,12 @@ export default function PastChampionsPage() {
           {/* 2026 Schedule */}
           <Link
             href="/schedule"
-            className="bg-white shadow-md rounded-lg p-5 text-center hover:shadow-lg transition block"
+            className="bg-surface shadow-md rounded-lg p-5 text-center hover:shadow-lg transition block"
           >
-            <h3 className="text-lg font-semibold text-orange-700 mb-2">
+            <h3 className="text-lg font-semibold text-primary mb-2">
               2026 Schedule
             </h3>
-            <p className="text-gray-600 text-sm">
+            <p className="text-caption-text text-sm">
               Explore the upcoming 2026 rodeo season and mark your calendar for
               major events.
             </p>
