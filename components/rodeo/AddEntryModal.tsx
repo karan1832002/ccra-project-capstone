@@ -256,7 +256,7 @@ export default function AddEntryModal({
                   readOnly
                   value={selectedRodeo ? fmtFee(selectedRodeo.entryFee) : ""}
                   placeholder="—"
-                  className="mt-1 block w-full rounded-md border border-border bg-disabled px-3 py-2 text-sm text-disabled"
+                  className="mt-1 block w-full rounded-md border border-border bg-disabled px-3 py-2 text-sm text-disabled-text"
                 />
               </div>
               <div>
@@ -271,7 +271,7 @@ export default function AddEntryModal({
                   readOnly
                   value={selectedEvent ? fmtFee(selectedEvent.eventFee) : ""}
                   placeholder="—"
-                  className="mt-1 block w-full rounded-md border border-border bg-disabled px-3 py-2 text-sm text-disabled"
+                  className="mt-1 block w-full rounded-md border border-border bg-disabled px-3 py-2 text-sm text-disabled-text"
                 />
               </div>
             </div>
