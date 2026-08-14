@@ -156,17 +156,17 @@ export default function AddEntryModal({
   return (
     // Backdrop — clicking outside the panel behaves the same as Cancel.
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/50 px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-blur px-4"
       onClick={onClose}
     >
       {/* Stop propagation so clicks inside the panel don't bubble to the backdrop */}
       <div
-        className="w-full max-w-md rounded-lg bg-white shadow-xl"
+        className="w-full max-w-md rounded-lg bg-surface shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="border-b border-stone-200 px-6 py-4">
-            <h2 className="text-lg font-semibold text-stone-800">Add Entry</h2>
+          <div className="border-b border-border px-6 py-4">
+            <h2 className="text-lg font-semibold text-heading-text">Add Entry</h2>
           </div>
 
           <div className="space-y-4 px-6 py-5">
@@ -174,13 +174,13 @@ export default function AddEntryModal({
             <div>
               <label
                 htmlFor="rodeoId"
-                className="block text-sm font-medium text-stone-700"
+                className="block text-sm font-medium text-body-text"
               >
                 Rodeo
               </label>
               <select
                 id="rodeoId"
-                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:bg-stone-100 disabled:text-stone-600"
+                className="mt-1 block w-full rounded-md border border-border bg-highlight px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-focus-ring disabled:bg-disabled disabled:text-disabled-text"
                 {...register("rodeoId", {
                   required: "Please select a rodeo",
                 })}
@@ -205,7 +205,7 @@ export default function AddEntryModal({
                 })}
               </select>
               {errors.rodeoId && (
-                <p className="mt-1 text-sm text-red-600">
+                <p className="mt-1 text-sm text-danger">
                   {errors.rodeoId.message}
                 </p>
               )}
@@ -216,13 +216,13 @@ export default function AddEntryModal({
             <div>
               <label
                 htmlFor="eventId"
-                className="block text-sm font-medium text-stone-700"
+                className="block text-sm font-medium text-body-text"
               >
                 Event
               </label>
               <select
                 id="eventId"
-                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 disabled:bg-stone-100 disabled:text-stone-600"
+                className="mt-1 block w-full rounded-md border border-border bg-highlight px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary disabled:bg-disabled disabled:text-disabled-text"
                 disabled={!selectedRodeo}
                 {...register("eventId", { required: "Please select an event" })}
               >
@@ -236,7 +236,7 @@ export default function AddEntryModal({
                 ))}
               </select>
               {errors.eventId && (
-                <p className="mt-1 text-sm text-red-600">
+                <p className="mt-1 text-sm text-danger">
                   {errors.eventId.message}
                 </p>
               )}
@@ -247,7 +247,7 @@ export default function AddEntryModal({
               <div>
                 <label
                   htmlFor="entryFee"
-                  className="block text-sm font-medium text-stone-700"
+                  className="block text-sm font-medium text-body-text"
                 >
                   Entry Fee
                 </label>
@@ -256,13 +256,13 @@ export default function AddEntryModal({
                   readOnly
                   value={selectedRodeo ? fmtFee(selectedRodeo.entryFee) : ""}
                   placeholder="—"
-                  className="mt-1 block w-full cursor-not-allowed rounded-md border border-stone-300 bg-stone-100 px-3 py-2 text-sm text-stone-600"
+                  className="mt-1 block w-full rounded-md border border-border bg-disabled px-3 py-2 text-sm text-disabled"
                 />
               </div>
               <div>
                 <label
                   htmlFor="eventFee"
-                  className="block text-sm font-medium text-stone-700"
+                  className="block text-sm font-medium text-body-text"
                 >
                   Event Fee
                 </label>
@@ -271,25 +271,25 @@ export default function AddEntryModal({
                   readOnly
                   value={selectedEvent ? fmtFee(selectedEvent.eventFee) : ""}
                   placeholder="—"
-                  className="mt-1 block w-full cursor-not-allowed rounded-md border border-stone-300 bg-stone-100 px-3 py-2 text-sm text-stone-600"
+                  className="mt-1 block w-full rounded-md border border-border bg-disabled px-3 py-2 text-sm text-disabled"
                 />
               </div>
             </div>
           </div>
 
           {/* Footer buttons */}
-          <div className="flex justify-end gap-3 border-t border-stone-200 px-6 py-4">
+          <div className="flex justify-end gap-3 border-t border-border px-6 py-4">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-md border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:bg-stone-50"
+              className="rounded-md border border-border px-4 py-2 text-sm font-medium text-body-text hover:bg-highlight"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700 disabled:opacity-50"
+              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-text hover:bg-primary-dark disabled:opacity-50"
             >
               Add Entry
             </button>

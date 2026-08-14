@@ -82,7 +82,7 @@ export default function RodeoDrawsPage() {
   );
 
   if (loading) {
-    return <p className="text-sm text-stone-600">Loading draw sheets...</p>;
+    return <p className="text-sm text-body-text">Loading draw sheets...</p>;
   }
   return (
     <div className={pageStructure.pageWrapper}>
@@ -95,13 +95,13 @@ export default function RodeoDrawsPage() {
 
       <div className={pageStructure.contentContainer}>
         {/* Notice */}
-        <section className="mb-8 rounded-xl border border-orange-200 bg-orange-50 shadow-sm">
+        <section className="mb-8 rounded-xl border border-border bg-surface shadow-sm">
           <div className="p-8">
-            <h2 className="text-2xl font-bold text-stone-900 mb-3">
+            <h2 className="text-2xl font-bold text-heading-text mb-3">
               Important Call Back Instructions
             </h2>
 
-            <p className="text-stone-700 leading-7">
+            <p className="text-body-text leading-7">
               If you notice an issue with the draw (wrong event, missing entry,
               etc.), contact the office on <strong>Friday</strong> with your
               confirmation number. After Friday, the draw is final and cannot be
@@ -126,7 +126,7 @@ export default function RodeoDrawsPage() {
         </section>
 
         {visibleEvents.length === 0 && (
-          <p className="text-sm text-stone-600 py-6">
+          <p className="text-sm text-body-text py-6">
             No matching draw sheets.
           </p>
         )}
@@ -134,7 +134,7 @@ export default function RodeoDrawsPage() {
         {eventsWithYearHeaders.map(({ event, showYearHeader }) => (
           <React.Fragment key={event.id}>
             {showYearHeader && (
-              <div className="text-xs font-semibold text-stone-600 mt-5 mb-2">
+              <div className="text-xs font-semibold text-body-text mt-5 mb-2">
                 {event.year}
               </div>
             )}

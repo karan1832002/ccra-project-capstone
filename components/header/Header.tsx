@@ -16,6 +16,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { signOut, useSession } from "@/lib/auth-client";
+import { buttons } from "@/lib/styles";
+import { useCart } from "@/app/context/CartContext";
 import DropdownMenu from "./DropdownMenu";
 import MobileNav from "./MobileNav";
 import {
@@ -26,10 +30,6 @@ import {
   UserRound,
   X,
 } from "lucide-react";
-import { signOut, useSession } from "@/lib/auth-client";
-import { buttons } from "@/lib/styles";
-import { useCart } from "@/app/context/CartContext";
-import { usePathname } from "next/navigation";
 
 // Routes that shouldn't display the header.
 const hiddenRoutes = [
@@ -124,7 +124,7 @@ export default function Header() {
             className="flex shrink-0 items-center gap-3"
             aria-label="Go to homepage"
           >
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-text">
               CCRA
             </span>
           </Link>
@@ -175,7 +175,7 @@ export default function Header() {
             {isAdmin && (
               <Link
                 href="/admin"
-                className={`${buttons.iconButtonHighlight} text-accent-foreground hover:text-accent-foreground`}
+                className={`${buttons.iconButtonHighlight} text-accent-text`}
                 aria-label="Admin Dashboard"
               >
                 <Shield className="h-5 w-5" />
@@ -199,7 +199,7 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={() => setShowSignOutConfirm(true)}
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover lg:px-5 lg:py-3"
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-primary-text transition hover:bg-primary-dark lg:px-5 lg:py-3"
                   aria-label="Sign out"
                 >
                   <LogOut className="h-4 w-4 shrink-0" />
@@ -211,7 +211,7 @@ export default function Header() {
             ) : (
               <Link
                 href="/sign-in"
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover lg:px-5 lg:py-3"
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-primary-text transition hover:bg-primary-dark lg:px-5 lg:py-3"
                 aria-label="Sign In"
               >
                 <LogIn className="h-4 w-4 shrink-0" />
@@ -227,32 +227,32 @@ export default function Header() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-stone-950/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-overlay-blur backdrop-blur-sm"
             onClick={() => setShowSignOutConfirm(false)}
           />
 
           {/* Dialog */}
-          <div className="relative w-full max-w-md rounded-md border border-stone-200 bg-white p-6 shadow-xl dark:border-stone-700 dark:bg-stone-900">
+          <div className="relative w-full max-w-md rounded-md border border-border bg-surface p-6 shadow-xl">
             <button
               type="button"
               onClick={() => setShowSignOutConfirm(false)}
-              className="absolute right-4 top-4 rounded-md p-1 text-stone-600 transition hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-stone-800 dark:hover:text-stone-200"
+              className="absolute right-4 top-4 rounded-md p-1 text-body-text transition hover:bg-highlight"
               aria-label="Close"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-md bg-red-100 flex items-center justify-center text-red-600 dark:bg-red-950/40 dark:text-red-400">
+              <div className="w-10 h-10 rounded-md bg-danger flex items-center justify-center text-danger-text">
                 <LogOut className="w-5 h-5" />
               </div>
 
-              <h3 className="text-lg font-semibold text-stone-950 dark:text-stone-100">
+              <h3 className="text-lg font-semibold text-heading-text">
                 Sign out?
               </h3>
             </div>
 
-            <p className="text-sm text-stone-600 dark:text-stone-300 mb-6">
+            <p className="text-sm text-body-text mb-6">
               Are you sure you want to sign out of your CCRA account? You can
               always sign back in later.
             </p>
@@ -261,7 +261,7 @@ export default function Header() {
               <button
                 type="button"
                 onClick={() => setShowSignOutConfirm(false)}
-                className="inline-flex items-center justify-center rounded-md border border-stone-200 bg-white px-4 py-2.5 text-sm font-semibold text-stone-950 transition hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 dark:hover:bg-stone-800"
+                className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2.5 text-sm font-semibold text-heading-text transition hover:bg-highlight"
               >
                 Cancel
               </button>
@@ -269,7 +269,7 @@ export default function Header() {
               <button
                 type="button"
                 onClick={handleSignOut}
-                className="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700"
+                className="inline-flex items-center justify-center rounded-md bg-danger px-4 py-2.5 text-sm font-semibold text-danger-text transition hover:bg-danger-dark"
               >
                 Sign Out
               </button>

@@ -159,7 +159,7 @@ export default function EnterRodeoPage() {
       <button
         type="button"
         onClick={() => handleRemoveEntry(entry.id)}
-        className="text-sm font-medium text-red-600 hover:text-red-800"
+        className="text-sm font-medium text-danger hover:text-danger-dark"
       >
         Remove
       </button>
@@ -235,17 +235,17 @@ export default function EnterRodeoPage() {
           <div className="h-10 w-10" aria-hidden="true" />
         ) : !isSignedIn ? (
           // User is not signed in. Show login prompt and hide the entry form.
-          <section className="mt-8 rounded-md border border-stone-200 bg-white p-6 text-center shadow-sm">
-            <h2 className="text-xl font-semibold text-stone-950">
+          <section className="mt-8 rounded-md border border-border bg-surface p-6 text-center shadow-sm">
+            <h2 className="text-xl font-semibold text-heading-text">
               Please sign in to enter a rodeo
             </h2>
-            <p className="mt-2 text-sm text-stone-600">
+            <p className="mt-2 text-sm text-body-text">
               You must have an account to submit rodeo entries.
             </p>
 
             <Link
               href="/sign-in"
-              className="mt-4 inline-flex items-center justify-center rounded-md bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-orange-700"
+              className="mt-4 inline-flex items-center justify-center rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-text hover:bg-primary-dark"
             >
               Sign In
             </Link>
@@ -273,8 +273,8 @@ export default function EnterRodeoPage() {
               </section>
             ) : (
               // --- Competitor info -----------------------------------------------
-              <section className="mb-8 rounded-md border border-stone-200 bg-white p-6 shadow-sm">
-                <h2 className="mb-4 text-lg font-semibold text-stone-950">
+              <section className="mb-8 rounded-md border border-border bg-surface p-6 shadow-sm">
+                <h2 className="mb-4 text-lg font-semibold text-heading-text">
                   Your Information
                 </h2>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -282,7 +282,7 @@ export default function EnterRodeoPage() {
                   <div>
                     <label
                       htmlFor="competitorName"
-                      className="block text-sm font-medium text-stone-600"
+                      className="block text-sm font-medium text-body-text"
                     >
                       Competitor Name
                     </label>
@@ -291,14 +291,14 @@ export default function EnterRodeoPage() {
                       type="text"
                       value={competitorName}
                       readOnly
-                      className="mt-1 block w-full rounded-md border border-stone-200 bg-stone-100 px-3 py-2 text-sm"
+                      className="mt-1 block w-full rounded-md border border-border bg-disabled px-3 py-2 text-sm text-disabled-text"
                     />
                   </div>
                   {/* Email */}
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium text-stone-600"
+                      className="block text-sm font-medium text-body-text"
                     >
                       Email
                     </label>
@@ -307,7 +307,7 @@ export default function EnterRodeoPage() {
                       type="email"
                       value={email}
                       readOnly
-                      className="mt-1 block w-full rounded-md border border-stone-200 bg-stone-100 px-3 py-2 text-sm"
+                      className="mt-1 block w-full rounded-md border border-border bg-disabled px-3 py-2 text-sm text-disabled-text"
                     />
                   </div>
                 </div>
@@ -322,7 +322,7 @@ export default function EnterRodeoPage() {
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(true)}
-                    className="rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700"
+                    className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-text hover:bg-primary-dark"
                   >
                     + Add Entry
                   </button>
@@ -340,18 +340,18 @@ export default function EnterRodeoPage() {
             {/* --- Entries table ---------------------------------------------------
           Left in place after submission too, as a summary of what was entered. */}
             <section className="mb-8">
-              <h2 className="mb-4 text-xl font-semibold text-stone-950">
+              <h2 className="mb-4 text-xl font-semibold text-heading-text">
                 {confirmationNumber ? "Entries Submitted" : "Your Entries"}
               </h2>
               {entries.length === 0 ? (
-                <p className="text-sm text-stone-600">
+                <p className="text-sm text-body-text">
                   No entries yet — use "Add Entry" above to add your first
                   event.
                 </p>
               ) : (
                 <>
                   <Table columns={columns} data={tableRows} />
-                  <p className="mt-3 text-sm font-medium text-stone-600">
+                  <p className="mt-3 text-sm font-medium text-body-text">
                     Total fees: ${totalFees.toFixed(2)}
                   </p>
                 </>
@@ -378,13 +378,13 @@ export default function EnterRodeoPage() {
                 <button
                   type="button"
                   onClick={handleStartNewEntry}
-                  className="rounded-md border border-stone-200 px-5 py-2.5 text-sm font-medium text-stone-600 hover:bg-stone-200"
+                  className="rounded-md border border-border px-5 py-2.5 text-sm font-medium text-body-text hover:bg-highlight"
                 >
                   New Entry
                 </button>
                 <Link
                   href="/events/pay-fees"
-                  className="rounded-md bg-orange-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-orange-700"
+                  className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-text hover:bg-primary-dark"
                 >
                   Pay Fees
                 </Link>
@@ -396,12 +396,12 @@ export default function EnterRodeoPage() {
                   type="button"
                   onClick={handleSubmitEntries}
                   disabled={entries.length === 0 || isSubmitting}
-                  className="rounded-md bg-stone-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-stone-900 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-text hover:bg-primary-dark disabled:hover:bg-primary disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {isSubmitting ? "Submitting…" : "Submit Entry"}
                 </button>
                 {submitError && (
-                  <p className="mt-2 text-sm text-red-700">{submitError}</p>
+                  <p className="mt-2 text-sm text-danger">{submitError}</p>
                 )}
               </div>
             )}

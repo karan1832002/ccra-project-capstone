@@ -35,7 +35,7 @@
  */
 
 export const pageStructure = {
-  pageWrapper: "min-h-screen bg-background text-foreground transition-colors",
+  pageWrapper: "min-h-screen bg-background text-body-text transition-colors",
 
   contentContainer: "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12",
 
@@ -44,9 +44,9 @@ export const pageStructure = {
   firstSectionWrapper: "py-20",
 
   eyebrowLabel:
-    "uppercase tracking-[0.18em] text-xs font-semibold text-muted-foreground mb-3",
+    "uppercase tracking-[0.18em] text-xs font-semibold text-caption-text mb-3",
 
-  sectionHeading: "text-4xl font-semibold text-heading",
+  sectionHeading: "text-4xl font-semibold text-heading-text",
 
   contentPanel: "bg-surface rounded-md border border-border p-12",
 };
@@ -57,14 +57,14 @@ export const layout = {
 
 export const buttons = {
   primaryButton:
-    "inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover",
+    "inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-sm font-semibold text-primary-text transition hover:bg-primary-dark",
 
   secondaryButton:
-    "inline-flex items-center justify-center rounded-md border border-border bg-surface px-8 py-3 text-sm font-semibold text-foreground transition hover:bg-muted-foreground",
+    "inline-flex items-center justify-center rounded-md border border-border bg-surface px-8 py-3 text-sm font-semibold text-body-text transition hover:bg-accent",
 
   iconButton:
-    "inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground transition hover:bg-highlight hover:text-heading",
+    "inline-flex h-10 w-10 items-center justify-center rounded-md text-body-text transition hover:bg-highlight hover:text-heading-text",
 
   iconButtonHighlight:
-    "inline-flex h-10 w-10 items-center justify-center rounded-md text-accent-foreground transition hover:bg-highlight",
+    "inline-flex h-10 w-10 items-center justify-center rounded-md text-accent-text transition hover:bg-highlight",
 };

@@ -55,7 +55,7 @@ function Table<T extends Record<string, React.ReactNode>>({
               <th
                 key={index}
                 scope="col"
-                className={`px-1 py-5 first:pl-5 last:pr-3 text-sm font-semibold text-primary-foreground uppercase tracking-wider ${
+                className={`px-1 py-5 first:pl-5 last:pr-3 text-sm font-semibold text-primary-text uppercase tracking-wider ${
                   alignColumns?.[index] === "left"
                     ? "text-left"
                     : alignColumns?.[index] === "right"
@@ -79,7 +79,7 @@ function Table<T extends Record<string, React.ReactNode>>({
               {Object.values(row).map((cell, cellIndex) => (
                 <td
                   key={cellIndex}
-                  className={`px-1 py-3 first:pl-5 last:pr-5 text-sm text-foreground ${
+                  className={`px-1 py-3 first:pl-5 last:pr-5 text-sm text-body-text ${
                     wrapColumns.includes(cellIndex)
                       ? "whitespace-normal"
                       : "whitespace-nowrap"

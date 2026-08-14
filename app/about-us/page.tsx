@@ -27,7 +27,7 @@ export default function AboutUsPage() {
               A Legacy of Western Spirit
             </h2>
 
-            <div className="prose max-w-none space-y-6 text-lg text-muted-foreground dark:prose-invert">
+            <div className="prose max-w-none space-y-6 text-lg text-body-text dark:prose-invert">
               <p>
                 The Canadian Classic Rodeo Association (formerly the Canadian Senior Pro Rodeo
                 Association) was founded in 1985 to provide competitive rodeo opportunities for
@@ -72,7 +72,7 @@ export default function AboutUsPage() {
               className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <div className="absolute bottom-8 left-8 text-white">
+            <div className="absolute bottom-8 left-8 text-primary-text">
               <div className="text-sm uppercase tracking-widest opacity-75">
                 41st Anniversary Season
               </div>
@@ -94,41 +94,40 @@ export default function AboutUsPage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             <div className="group rounded-md border border-border bg-surface p-8 shadow-sm transition hover:shadow-lg">
-              <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-highlight text-accent-foreground">
+              <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-text">
                 <HeartHandshake className="h-6 w-6" />
               </div>
-              <h3 className="mb-3 text-2xl font-semibold text-heading">
+              <h3 className="mb-3 text-2xl font-semibold text-heading-text">
                 Heritage & Tradition
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-body-text">
                 Honoring the rich history and traditions of Canadian rodeo while creating new
                 memories for future generations.
               </p>
             </div>
 
             <div className="group rounded-md border border-border bg-surface p-8 shadow-sm transition hover:shadow-lg">
-              <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-highlight text-accent-foreground">
+              <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-text">
                 <Trophy className="h-6 w-6" />
               </div>
-              <h3 className="mb-3 text-2xl font-semibold text-heading">
+              <h3 className="mb-3 text-2xl font-semibold text-heading-text">
                 Competition & Growth
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-body-text">
                 Providing fair, safe, and exciting competition for athletes at every stage of their
                 rodeo journey.
               </p>
             </div>
 
             <div className="group rounded-md border border-border bg-surface p-8 shadow-sm transition hover:shadow-lg">
-              <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-highlight text-accent-foreground">
+              <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-text">
                 <HandCoins className="h-6 w-6" />
               </div>
-              <h3 className="mb-3 text-2xl font-semibold text-heading">
+              <h3 className="mb-3 text-2xl font-semibold text-heading-text">
                 Community & Family
               </h3>
-              <p className="text-muted-foreground">
-                Building lasting friendships and supporting one another both in and out of the
-                arena.
+              <p className="text-body-text">
+                Building lasting friendships and supporting one another both in and out of the arena.
               </p>
             </div>
           </div>
@@ -136,31 +135,30 @@ export default function AboutUsPage() {
 
         {/* ================= TIMELINE ================= */}
         <div className={`${pageStructure.sectionWrapper} ${pageStructure.contentPanel}`}>
-          <h2 className="mb-12 text-center text-3xl font-semibold text-heading">
+          <h2 className="mb-12 text-center text-3xl font-semibold text-heading-text">
             Our Journey
           </h2>
 
           <div className="max-w-3xl mx-auto space-y-12">
             <div className="flex gap-8">
               <div className="w-28 flex-shrink-0 text-right">
-                <div className="font-semibold text-accent-foreground">1985</div>
+                <div className="font-semibold text-accent-text">1985</div>
               </div>
               <div>
-                <div className="font-semibold text-heading">Foundation</div>
-                <p className="mt-1 text-muted-foreground">
-                  Established as the Canadian Senior Pro Rodeo Association to serve mature
-                  competitors.
+                <div className="font-semibold text-heading-text">Foundation</div>
+                <p className="mt-1 text-body-text">
+                  Established as the Canadian Senior Pro Rodeo Association to serve mature competitors.
                 </p>
               </div>
             </div>
 
             <div className="flex gap-8">
               <div className="w-28 flex-shrink-0 text-right">
-                <div className="font-semibold text-accent-foreground">2000s</div>
+                <div className="font-semibold text-accent-text">2000s</div>
               </div>
               <div>
-                <div className="font-semibold text-heading">Expansion</div>
-                <p className="mt-1 text-muted-foreground">
+                <div className="font-semibold text-heading-text">Expansion</div>
+                <p className="mt-1 text-body-text">
                   Grew to include all skill levels and introduced new events.
                 </p>
               </div>
@@ -168,13 +166,12 @@ export default function AboutUsPage() {
 
             <div className="flex gap-8">
               <div className="w-28 flex-shrink-0 text-right">
-                <div className="font-semibold text-accent-foreground">2025-2026</div>
+                <div className="font-semibold text-accent-text">2025-2026</div>
               </div>
               <div>
-                <div className="font-semibold text-heading">Modern Era</div>
-                <p className="mt-1 text-muted-foreground">
-                  Rebranded to Canadian Classic Rodeo Association. 41st anniversary season with
-                  exciting new initiatives and continued growth.
+                <div className="font-semibold text-heading-text">Modern Era</div>
+                <p className="mt-1 text-body-text">
+                  Rebranded to Canadian Classic Rodeo Association. 41st anniversary season with exciting new initiatives and continued growth.
                 </p>
               </div>
             </div>
@@ -184,12 +181,11 @@ export default function AboutUsPage() {
         {/* ================= LEADERSHIP TEASER ================= */}
         <div className={`${pageStructure.sectionWrapper} text-center`}>
           <div className="max-w-md mx-auto">
-            <h2 className="mb-4 text-3xl font-semibold text-heading">
+            <h2 className="mb-4 text-3xl font-semibold text-heading-text">
               Led by Passionate Volunteers
             </h2>
-            <p className="mb-8 text-muted-foreground">
-              Our board and committees are made up of dedicated rodeo enthusiasts who give their
-              time to keep the spirit of the CCRA alive.
+            <p className="mb-8 text-body-text">
+              Our board and committees are made up of dedicated rodeo enthusiasts who give their time to keep the spirit of the CCRA alive.
             </p>
             <a
               href="/about-us/board-of-directors"

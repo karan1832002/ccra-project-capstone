@@ -28,22 +28,22 @@ export default function Hero({
 }: HeroProps) {
   return (
     // Hero section with centered content and a bottom border.
-    <section className="text-center py-20 border-b border-stone-200 dark:border-stone-800">
+    <section className="text-center py-20 border-b border-border">
 
       {/* Only render the badge if one is provided. */}
       {badge && (
-        <div className="inline-flex items-center justify-center rounded-md bg-orange-50 px-4 py-1 text-sm font-semibold text-orange-600 mb-6 dark:bg-orange-950/40 dark:text-orange-400">
+        <div className="inline-flex items-center justify-center rounded-md bg-accent/40 px-4 py-1 text-sm font-semibold text-accent-text mb-6">
           {badge}
         </div>
       )}
 
       {/* Page title */}
-      <h1 className="text-5xl font-semibold tracking-tight text-stone-950 mb-6 dark:text-stone-100">
+      <h1 className="text-5xl font-semibold tracking-tight text-heading-text mb-6">
         {title}
       </h1>
 
       {/* Short page description */}
-      <p className="max-w-2xl mx-auto text-xl text-stone-600 dark:text-stone-300">
+      <p className="max-w-2xl mx-auto text-xl text-body-text">
         {description}
       </p>
     </section>
