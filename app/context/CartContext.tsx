@@ -31,15 +31,22 @@ type CartContextType = {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
-    if (typeof window === "undefined") return [];
+
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  useEffect(() => {
     try {
       const raw = localStorage.getItem("ccra-cart");
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
+      if (raw) {
+         Promise.resolve().then(() => {
+        setCartItems(JSON.parse(raw));
+      });
     }
-  });
+    } catch {
+      // ignore
+    }
+  }, []);
+  
 
   const cartCount = cartItems.reduce((sum, item) => sum + item.qty, 0);
 

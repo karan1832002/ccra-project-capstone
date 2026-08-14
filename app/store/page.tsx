@@ -22,11 +22,13 @@ export default function StorePage() {
   const [error, setError] = useState("");
   const [addedId, setAddedId] = useState<string | null>(null);
 
-  // Search + Filter
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
 
   const { addToCart } = useCart();
+
+  const [hoveredProduct, setHoveredProduct] = useState<Product | null>(null);
+  const [popupPos, setPopupPos] = useState({ top: 0, left: 0 });
 
   function handleAddToCart(product: Product) {
     addToCart({
@@ -62,7 +64,6 @@ export default function StorePage() {
     loadProducts();
   }, []);
 
-  // Filter + Search Logic
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
       const matchesSearch =
@@ -77,12 +78,11 @@ export default function StorePage() {
   }, [products, search, category]);
 
   if (loading)
-    return <div className="text-center py-20">Loading products...</div>;
+    return <div className="text-center py-20 text-foreground">Loading products...</div>;
 
   if (error)
     return <div className="text-center py-20 text-red-600">{error}</div>;
 
-  // Extract unique categories
   const categories = Array.from(
     new Set(
       products
@@ -92,15 +92,14 @@ export default function StorePage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+    <div className="min-h-screen bg-background">
+
       <Hero
         badge="OFFICIAL MERCHANDISE"
         title="CCRA Store"
-        description="Shop official CCRA apparel, accessories, and merchandise. Show your support for the Canadian Cowboys Rodeo Association on and off the rodeo grounds."
+        description="Shop official CCRA apparel, accessories, and merchandise."
       />
 
-      {/* Search + Filter Bar */}
       <div className="max-w-6xl mx-auto px-6 mt-10 mb-10">
         <ShopFilterBar
           search={search}
@@ -111,10 +110,10 @@ export default function StorePage() {
         />
       </div>
 
-      {/* Product Grid */}
-      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-6 pb-20">
+      {/* PRODUCT GRID */}
+      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-6 pb-20 relative">
         {filteredProducts.length === 0 && (
-          <div className="text-gray-600 text-lg col-span-3">
+          <div className="text-muted-foreground text-lg col-span-3">
             No products match your search.
           </div>
         )}
@@ -122,25 +121,34 @@ export default function StorePage() {
         {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition p-6 flex flex-col"
+            className="bg-card rounded-xl shadow border border-border hover:shadow-md transition p-6 flex flex-col relative"
           >
-            {product.image && (
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-48 object-cover rounded-lg mb-4"
-              />
-            )}
+            {/* IMAGE triggers popup */}
+            <div
+              onMouseEnter={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                setPopupPos({
+                  top: rect.top + window.scrollY,
+                  left: rect.right + 20,
+                });
+                setHoveredProduct(product);
+              }}
+              onMouseLeave={() => setHoveredProduct(null)}
+            >
+              {product.image && (
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-48 object-cover rounded-lg mb-4"
+                />
+              )}
+            </div>
 
-            <h3 className="text-xl font-semibold text-gray-900 mb-1">
+            <h3 className="text-xl font-semibold text-foreground mb-1">
               {product.name}
             </h3>
 
-            {product.description && (
-              <p className="text-gray-600 text-sm mb-3">{product.description}</p>
-            )}
-
-            <p className="text-gray-700 mb-4 font-medium">
+            <p className="text-muted-foreground mb-4 font-medium">
               ${(product.priceCents / 100).toFixed(2)}
             </p>
 
@@ -158,6 +166,35 @@ export default function StorePage() {
           </div>
         ))}
       </div>
+
+      {/* POPUP */}
+      {hoveredProduct && (
+        <div
+          className="
+            absolute w-72 p-4 rounded-xl shadow-xl
+            bg-card border border-border
+            pointer-events-auto z-[9999]
+          "
+          style={{
+            top: popupPos.top,
+            left: popupPos.left,
+          }}
+        >
+          <h3 className="text-lg font-semibold text-foreground">
+            {hoveredProduct.name}
+          </h3>
+
+          {hoveredProduct.description && (
+            <p className="text-sm text-muted-foreground mt-2">
+              {hoveredProduct.description}
+            </p>
+          )}
+
+          <p className="text-red-700 font-bold mt-3">
+            ${(hoveredProduct.priceCents / 100).toFixed(2)}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

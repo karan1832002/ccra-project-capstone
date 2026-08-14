@@ -156,18 +156,21 @@ export default function Header() {
               className={`${buttons.iconButton} relative group`}
               aria-label="View cart"
             >
-              <ShoppingCart
-                className={`h-5 w-5 transition ${
-                  cartCount > 0 ? "text-red-700 scale-110" : ""
-                }`}
-              />
+            <div className="relative flex items-center justify-center">
+            <ShoppingCart
+            className={`h-5 w-5 transition ${
+            cartCount > 0  && pathname !== "/cart" ? "text-red-700 scale-110" : ""
+            }`}
+            />
 
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-700 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
-                  {cartCount}
-                </span>
-              )}
+            {cartCount > 0 &&  pathname !== "/cart" && (
+            <span className="absolute -top-2 -right-2 bg-red-700 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
+            {cartCount}
+            </span>
+             )}
+             </div>
             </Link>
+
 
             {isAdmin && (
               <Link

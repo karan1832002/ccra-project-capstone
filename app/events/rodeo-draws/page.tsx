@@ -138,7 +138,13 @@ export default function RodeoDrawsPage() {
                 {event.year}
               </div>
             )}
-            <RodeoEventCard event={event}>
+            <RodeoEventCard
+              event={{
+                ...event,
+                endDate: event.startDate,
+                location: event.location ?? "",
+              }}
+            >
               <DrawFileList files={filesByEvent.get(event.id) ?? []} />
             </RodeoEventCard>
           </React.Fragment>

@@ -7,15 +7,20 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { ArrowLeft, Lock, ShoppingBag, CheckCircle2, ShieldCheck } from "lucide-react";
+
+import {
+  ArrowLeft,
+  Lock,
+  ShoppingBag,
+  CheckCircle2,
+  ShieldCheck,
+} from "lucide-react";
+
 import { stripePromise } from "@/lib/stripe";
 import { useCart } from "@/app/context/CartContext";
 import { useSession } from "@/lib/auth-client";
 
-
-// The payment form. Lives inside <Elements> so it can use the Stripe
-// instance and the mounted PaymentElement (the secure card input).
-
+// Payment Form
 function PayForm({
   paymentId,
   total,
@@ -27,6 +32,7 @@ function PayForm({
 }) {
   const stripe = useStripe();
   const elements = useElements();
+
   const [error, setError] = useState("");
   const [processing, setProcessing] = useState(false);
 
@@ -37,7 +43,6 @@ function PayForm({
     setProcessing(true);
     setError("");
 
-    // Collect card details and confirm the payment with Stripe.
     const { error: stripeError, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
@@ -57,17 +62,21 @@ function PayForm({
 
     if (paymentIntent?.status === "succeeded") {
       try {
-        // Tell our backend to mark the payment paid (it re-verifies with Stripe).
-        const res = await fetch(`/api/gateway/api/payments/${paymentId}/confirm`, {
-          method: "POST",
-        });
+        const res = await fetch(
+          `/api/gateway/api/payments/${paymentId}/confirm`,
+          {
+            method: "POST",
+          }
+        );
+
         const json = await res.json();
+
         if (res.ok && json.success) {
           onPaid();
         } else {
           setError(
             json?.error?.message ??
-            "Payment succeeded in Stripe but couldn’t be verified by the server.",
+              "Payment succeeded in Stripe but couldn’t be verified by the server."
           );
           setProcessing(false);
         }
@@ -82,42 +91,54 @@ function PayForm({
   }
 
   const inputCls =
-    "h-11 w-full rounded-lg border border-stone-300 px-3.5 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20";
+    "h-11 w-full rounded-lg border border-border px-3.5 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 bg-card text-foreground";
 
   return (
     <form onSubmit={handlePay} className="space-y-7">
-      {/* Contact + shipping */}
+      {/* Shipping */}
       <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-stone-600">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Shipping details
         </h2>
+
         <div className="space-y-3">
           <div>
-            <label className="mb-1 block text-sm font-medium text-stone-700">Full name</label>
+            <label className="mb-1 block text-sm font-medium text-muted-foreground">
+              Full name
+            </label>
             <input type="text" className={inputCls} placeholder="Jane Rider" required />
           </div>
+
           <div>
-            <label className="mb-1 block text-sm font-medium text-stone-700">Address</label>
-            <input type="text" className={inputCls} placeholder="123 Rodeo Rd, Calgary, AB" required />
+            <label className="mb-1 block text-sm font-medium text-muted-foreground">
+              Address
+            </label>
+            <input
+              type="text"
+              className={inputCls}
+              placeholder="123 Rodeo Rd, Calgary, AB"
+              required
+            />
           </div>
         </div>
       </section>
 
       {/* Payment */}
       <section>
-        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-stone-600">
+        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Payment
-          <span className="flex items-center gap-1 text-[11px] font-medium normal-case tracking-normal text-green-700">
+          <span className="flex items-center gap-1 text-[11px] font-medium normal-case tracking-normal text-green-600">
             <Lock className="h-3 w-3" /> Secured by Stripe
           </span>
         </h2>
-        <div className="rounded-lg border border-stone-300 p-3.5">
+
+        <div className="rounded-lg border border-border p-3.5 bg-card">
           <PaymentElement />
         </div>
       </section>
 
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-700">
+        <div className="rounded-lg border border-red-300 bg-red-100 px-3.5 py-2.5 text-sm text-red-700 dark:bg-red-900/40 dark:text-red-300">
           {error}
         </div>
       )}
@@ -139,17 +160,14 @@ function PayForm({
         )}
       </button>
 
-      <p className="text-center text-xs text-stone-600">
+      <p className="text-center text-xs text-muted-foreground">
         Test card <span className="font-mono">4242 4242 4242 4242</span> · any future date · any CVC
       </p>
     </form>
   );
 }
 
-
-// Checkout page: creates a Stripe PaymentIntent for the cart total, then
-// shows the payment form beside a live order summary.
-
+// Checkout Page
 export default function CheckoutPage() {
   const { cartItems, clearCart } = useCart();
   const { data: session, isPending: sessionLoading } = useSession();
@@ -158,19 +176,19 @@ export default function CheckoutPage() {
   const [paymentId, setPaymentId] = useState("");
   const [state, setState] = useState<"loading" | "ready" | "paid" | "error">("loading");
   const [errorMsg, setErrorMsg] = useState("");
-  // Guards against React StrictMode running the effect twice in dev, which would
-  // otherwise create two orders + two payments for a single checkout.
+
   const startedRef = useRef(false);
 
   const total = cartItems.reduce((sum, i) => sum + i.price * i.qty, 0);
   const itemCount = cartItems.reduce((sum, i) => sum + i.qty, 0);
   const amountCents = Math.round(total * 100);
 
-  // Create a PaymentIntent for the cart total and grab its client_secret.
   useEffect(() => {
     if (cartItems.length === 0 || amountCents <= 0 || sessionLoading || clientSecret) return;
-    if (startedRef.current) return; // don't create a second order on StrictMode's re-run
+    if (startedRef.current) return;
+
     startedRef.current = true;
+
     const userId = session?.user?.id ?? "guest";
 
     async function startCheckout() {
@@ -182,42 +200,36 @@ export default function CheckoutPage() {
         let paymentData: { clientSecret: string; id: string } | null = null;
 
         if (validOrderItems.length === cartItems.length) {
-          // Preferred path: create a real order (order + items + stock decrement +
-          // linked payment). referenceId ties the payment back to the order so a
-          // cleared payment can mark the order paid.
-          console.log("[checkout] using order flow (all items have a product id)");
           const res = await fetch("/api/gateway/api/store/orders", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userId, items: validOrderItems }),
           });
+
           const json = await res.json();
+
           if (res.ok && json?.data?.payment?.clientSecret) {
-            paymentData = { clientSecret: json.data.payment.clientSecret, id: json.data.payment.id };
-          } else {
-            console.warn("[checkout] order flow returned no clientSecret:", json);
+            paymentData = {
+              clientSecret: json.data.payment.clientSecret,
+              id: json.data.payment.id,
+            };
           }
-        } else {
-          // Some cart items predate the `id` field (stale localStorage cart), so we
-          // can't build a proper order. Clear the cart and re-add from the store.
-          console.warn(
-            `[checkout] ${cartItems.length - validOrderItems.length} cart item(s) have no product id ` +
-            "(stale cart) — skipping order flow. The order will NOT be recorded. " +
-            "Clear your cart and re-add items to fix this.",
-          );
         }
 
-        // Fallback: create the payment directly if the order route didn't produce one.
-        // NOTE: this creates a payment with no linked order (orphan). It exists only
-        // so a demo can still pay when the order flow can't run.
         if (!paymentData) {
-          console.warn("[checkout] using direct-payment FALLBACK — no order will be created");
           const res = await fetch("/api/gateway/api/payments", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId, purpose: "store_order", amountCents, currency: "CAD" }),
+            body: JSON.stringify({
+              userId,
+              purpose: "store_order",
+              amountCents,
+              currency: "CAD",
+            }),
           });
+
           const json = await res.json();
+
           if (json?.data?.clientSecret) {
             paymentData = { clientSecret: json.data.clientSecret, id: json.data.id };
           }
@@ -228,7 +240,7 @@ export default function CheckoutPage() {
           setPaymentId(paymentData.id);
           setState("ready");
         } else {
-          setErrorMsg("Payments aren’t configured on the server yet (missing Stripe key).");
+          setErrorMsg("Payments aren’t configured on the server yet.");
           setState("error");
         }
       } catch {
@@ -245,13 +257,14 @@ export default function CheckoutPage() {
     setState("paid");
   }
 
-  // ---- Full-width states: empty cart / success ----
+  // Empty cart
   if (cartItems.length === 0 && state !== "paid") {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
-        <ShoppingBag className="mx-auto mb-4 h-12 w-12 text-stone-300" />
-        <h1 className="mb-2 text-2xl font-bold text-stone-900">Your cart is empty</h1>
-        <p className="mb-6 text-stone-600">Add some CCRA gear before checking out.</p>
+        <ShoppingBag className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+        <h1 className="mb-2 text-2xl font-bold text-foreground">Your cart is empty</h1>
+        <p className="mb-6 text-muted-foreground">Add some CCRA gear before checking out.</p>
+
         <a
           href="/store"
           className="inline-flex rounded-lg bg-orange-600 px-6 py-3 text-sm font-semibold text-white hover:bg-orange-700"
@@ -262,14 +275,16 @@ export default function CheckoutPage() {
     );
   }
 
+  // Paid
   if (state === "paid") {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <CheckCircle2 className="mx-auto mb-4 h-16 w-16 text-green-600" />
-        <h1 className="mb-2 text-3xl font-bold text-stone-900">Payment successful</h1>
-        <p className="mb-8 text-stone-600">
-          Thanks for supporting CCRA — your order is confirmed. A receipt is on its way.
+        <h1 className="mb-2 text-3xl font-bold text-foreground">Payment successful</h1>
+        <p className="mb-8 text-muted-foreground">
+          Thanks for supporting CCRA — your order is confirmed.
         </p>
+
         <a
           href="/store"
           className="inline-flex rounded-lg bg-orange-600 px-6 py-3 text-sm font-semibold text-white hover:bg-orange-700"
@@ -280,32 +295,35 @@ export default function CheckoutPage() {
     );
   }
 
-  // ---- Main checkout: form + order summary ----
+  // Main checkout
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-5xl px-4 py-10">
         <a
           href="/cart"
-          className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-stone-600 transition hover:text-orange-600"
+          className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition hover:text-orange-600"
         >
           <ArrowLeft className="h-4 w-4" /> Back to cart
         </a>
-        <h1 className="mb-8 text-3xl font-bold tracking-tight text-stone-900">Checkout</h1>
+
+        <h1 className="mb-8 text-3xl font-bold tracking-tight text-foreground">Checkout</h1>
 
         <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-          {/* LEFT — form */}
-          <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm sm:p-8">
+          {/* LEFT */}
+          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
             {state === "loading" && (
-              <div className="flex flex-col items-center gap-3 py-16 text-stone-600">
+              <div className="flex flex-col items-center gap-3 py-16 text-muted-foreground">
                 <span className="h-8 w-8 animate-spin rounded-full border-2 border-orange-200 border-t-orange-500" />
                 Preparing secure checkout…
               </div>
             )}
+
             {state === "error" && (
-              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-8 text-center text-red-700">
+              <div className="rounded-lg border border-red-300 bg-red-100 px-4 py-8 text-center text-red-700 dark:bg-red-900/40 dark:text-red-300">
                 {errorMsg}
               </div>
             )}
+
             {state === "ready" && clientSecret && paymentId && (
               <Elements key={paymentId} stripe={stripePromise} options={{ clientSecret }}>
                 <PayForm paymentId={paymentId} total={total} onPaid={handlePaid} />
@@ -313,13 +331,13 @@ export default function CheckoutPage() {
             )}
           </div>
 
-          {/* RIGHT — order summary (sticky) */}
+          {/* RIGHT */}
           <aside className="h-fit lg:sticky lg:top-10">
-            <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-              <h2 className="mb-4 flex items-center gap-2 text-base font-semibold text-stone-900">
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+              <h2 className="mb-4 flex items-center gap-2 text-base font-semibold text-foreground">
                 <ShoppingBag className="h-4 w-4 text-orange-600" />
                 Order summary
-                <span className="ml-auto rounded-full bg-stone-100 px-2 py-0.5 text-xs font-medium text-stone-600">
+                <span className="ml-auto rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                   {itemCount} {itemCount === 1 ? "item" : "items"}
                 </span>
               </h2>
@@ -327,39 +345,44 @@ export default function CheckoutPage() {
               <ul className="space-y-3">
                 {cartItems.map((item, i) => (
                   <li key={i} className="flex items-center gap-3">
-                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md border border-stone-200 bg-stone-100">
+                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md border border-border bg-muted">
                       {item.image && (
-                        // eslint-disable-next-line @next/next/no-img-element
                         <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
                       )}
-                      <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-stone-800 px-1 text-[11px] font-semibold text-white">
+                      <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-foreground px-1 text-[11px] font-semibold text-white">
                         {item.qty}
                       </span>
                     </div>
-                    <span className="flex-1 truncate text-sm text-stone-700">{item.title}</span>
-                    <span className="text-sm font-medium text-stone-900">
+
+                    <span className="flex-1 truncate text-sm text-muted-foreground">
+                      {item.title}
+                    </span>
+
+                    <span className="text-sm font-medium text-foreground">
                       ${(item.price * item.qty).toFixed(2)}
                     </span>
                   </li>
                 ))}
               </ul>
 
-              <div className="mt-5 space-y-2 border-t border-stone-200 pt-4 text-sm">
-                <div className="flex justify-between text-stone-600">
+              <div className="mt-5 space-y-2 border-t border-border pt-4 text-sm">
+                <div className="flex justify-between text-muted-foreground">
                   <span>Subtotal</span>
                   <span>${total.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-stone-600">
+
+                <div className="flex justify-between text-muted-foreground">
                   <span>Shipping</span>
                   <span className="text-green-600">Free</span>
                 </div>
-                <div className="flex justify-between border-t border-stone-200 pt-3 text-base font-semibold text-stone-900">
+
+                <div className="flex justify-between border-t border-border pt-3 text-base font-semibold text-foreground">
                   <span>Total</span>
                   <span>${total.toFixed(2)}</span>
                 </div>
               </div>
 
-              <p className="mt-5 flex items-center justify-center gap-1.5 text-xs text-stone-600">
+              <p className="mt-5 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
                 <ShieldCheck className="h-3.5 w-3.5" /> Secure SSL checkout · Powered by Stripe
               </p>
             </div>
