@@ -21,10 +21,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Trash2, X } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import Table from "@/components/ui/Table";
 import AddEntryModal from "@/components/rodeo/AddEntryModal";
 import Hero from "@/components/ui/Hero";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { pageStructure } from "@/lib/styles";
 import { RodeoEntry, RodeoEventData } from "@/types/rodeoEntry";
 import { formatShortDate } from "@/lib/rodeoDateUtils";
@@ -164,7 +165,6 @@ export default function EnterRodeoPage() {
       <button
         type="button"
         onClick={() => setEntryPendingRemoval(entry)}
-        // onClick={() => handleRemoveEntry(entry.id)}
         className="text-sm font-medium text-danger hover:text-danger-dark"
       >
         Remove
@@ -416,60 +416,18 @@ export default function EnterRodeoPage() {
           )}
         </div>
       </main>
-      {entryPendingRemoval && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-overlay-blur backdrop-blur-sm"
-            onClick={() => setEntryPendingRemoval(null)}
-          />
-
-          <div className="relative w-full max-w-md rounded-md border border-border bg-surface p-6 shadow-xl">
-            <button
-              type="button"
-              onClick={() => setEntryPendingRemoval(null)}
-              className="absolute right-4 top-4 rounded-md p-1 text-body-text transition hover:bg-highlight"
-              aria-label="Close"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-md bg-danger flex items-center justify-center text-danger-text">
-                <Trash2 className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-semibold text-heading-text">
-                Remove entry?
-              </h3>
-            </div>
-
-            <p className="text-sm text-body-text mb-6">
-              Are you sure you want to remove {entryPendingRemoval.eventName}{" "}
-              from your entries? This can't be undone.
-            </p>
-
-            <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
-              <button
-                type="button"
-                onClick={() => setEntryPendingRemoval(null)}
-                className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2.5 text-sm font-semibold text-heading-text transition hover:bg-highlight"
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  handleRemoveEntry(entryPendingRemoval.id);
-                  setEntryPendingRemoval(null);
-                }}
-                className="inline-flex items-center justify-center rounded-md bg-danger px-4 py-2.5 text-sm font-semibold text-danger-text transition hover:bg-danger-dark"
-              >
-                Remove
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        open={entryPendingRemoval !== null}
+        icon={Trash2}
+        title="Remove entry?"
+        message={`Are you sure you want to remove ${entryPendingRemoval?.eventName ?? "this entry"} from your entries?`}
+        confirmLabel="Remove"
+        onConfirm={() => {
+          if (entryPendingRemoval) handleRemoveEntry(entryPendingRemoval.id);
+          setEntryPendingRemoval(null);
+        }}
+        onClose={() => setEntryPendingRemoval(null)}
+      />
     </>
   );
 }
