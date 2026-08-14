@@ -20,6 +20,7 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "@/lib/auth-client";
 import { buttons } from "@/lib/styles";
 import { useCart } from "@/app/context/CartContext";
+import ConfirmDialog from "../ui/ConfirmDialog";
 import DropdownMenu from "./DropdownMenu";
 import MobileNav from "./MobileNav";
 import {
@@ -28,7 +29,6 @@ import {
   ShoppingCart,
   Shield,
   UserRound,
-  X,
 } from "lucide-react";
 
 // Routes that shouldn't display the header.
@@ -156,21 +156,22 @@ export default function Header() {
               className={`${buttons.iconButton} relative group`}
               aria-label="View cart"
             >
-            <div className="relative flex items-center justify-center">
-            <ShoppingCart
-            className={`h-5 w-5 transition ${
-            cartCount > 0  && pathname !== "/cart" ? "text-red-700 scale-110" : ""
-            }`}
-            />
+              <div className="relative flex items-center justify-center">
+                <ShoppingCart
+                  className={`h-5 w-5 transition ${
+                    cartCount > 0 && pathname !== "/cart"
+                      ? "text-red-700 scale-110"
+                      : ""
+                  }`}
+                />
 
-            {cartCount > 0 &&  pathname !== "/cart" && (
-            <span className="absolute -top-2 -right-2 bg-red-700 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
-            {cartCount}
-            </span>
-             )}
-             </div>
+                {cartCount > 0 && pathname !== "/cart" && (
+                  <span className="absolute -top-2 -right-2 bg-red-700 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
+                    {cartCount}
+                  </span>
+                )}
+              </div>
             </Link>
-
 
             {isAdmin && (
               <Link
@@ -223,60 +224,18 @@ export default function Header() {
           </div>
         </div>
       </header>
-      {showSignOutConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-overlay-blur backdrop-blur-sm"
-            onClick={() => setShowSignOutConfirm(false)}
-          />
-
-          {/* Dialog */}
-          <div className="relative w-full max-w-md rounded-md border border-border bg-surface p-6 shadow-xl">
-            <button
-              type="button"
-              onClick={() => setShowSignOutConfirm(false)}
-              className="absolute right-4 top-4 rounded-md p-1 text-body-text transition hover:bg-highlight"
-              aria-label="Close"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-md bg-danger flex items-center justify-center text-danger-text">
-                <LogOut className="w-5 h-5" />
-              </div>
-
-              <h3 className="text-lg font-semibold text-heading-text">
-                Sign out?
-              </h3>
-            </div>
-
-            <p className="text-sm text-body-text mb-6">
-              Are you sure you want to sign out of your CCRA account? You can
-              always sign back in later.
-            </p>
-
-            <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
-              <button
-                type="button"
-                onClick={() => setShowSignOutConfirm(false)}
-                className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2.5 text-sm font-semibold text-heading-text transition hover:bg-highlight"
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                onClick={handleSignOut}
-                className="inline-flex items-center justify-center rounded-md bg-danger px-4 py-2.5 text-sm font-semibold text-danger-text transition hover:bg-danger-dark"
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        open={showSignOutConfirm}
+        icon={LogOut}
+        title="Sign out?"
+        message="Are you sure you want to sign out of your CCRA account? You can always sign back in later."
+        confirmLabel="Sign Out"
+        onConfirm={() => {
+          setShowSignOutConfirm(false);
+          handleSignOut();
+        }}
+        onClose={() => setShowSignOutConfirm(false)}
+      />
     </>
   );
 }

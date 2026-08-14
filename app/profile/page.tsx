@@ -10,11 +10,11 @@ import {
   ClipboardList,
   ChevronRight,
   LogOut,
-  X,
   Moon,
 } from "lucide-react";
 import { signOut, useSession } from "@/lib/auth-client";
 import EditProfileModal from "@/components/profile/EditProfileModal";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 
 export default function ProfilePage() {
   const { data: session, isPending } = useSession();
@@ -249,58 +249,18 @@ export default function ProfilePage() {
       />
 
       {/* ================= SIGN OUT CONFIRMATION MODAL ================= */}
-      {showSignOutConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-stone-950/60 backdrop-blur-sm"
-            onClick={() => setShowSignOutConfirm(false)}
-          />
-
-          {/* Dialog */}
-          <div className="relative w-full max-w-md rounded-md border border-stone-200 bg-white p-6 shadow-xl dark:border-stone-700 dark:bg-stone-900">
-            <button
-              type="button"
-              onClick={() => setShowSignOutConfirm(false)}
-              className="absolute right-4 top-4 rounded-md p-1 text-stone-600 transition hover:bg-stone-100 hover:text-stone-600 dark:hover:bg-stone-800 dark:hover:text-stone-200"
-              aria-label="Close"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-md bg-red-100 flex items-center justify-center text-red-600 dark:bg-red-950/40 dark:text-red-400">
-                <LogOut className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-semibold text-stone-950 dark:text-stone-100">
-                Sign out?
-              </h3>
-            </div>
-
-            <p className="text-sm text-stone-600 dark:text-stone-300 mb-6">
-              Are you sure you want to sign out of your CCRA account? You can
-              always sign back in later.
-            </p>
-
-            <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
-              <button
-                type="button"
-                onClick={() => setShowSignOutConfirm(false)}
-                className="inline-flex items-center justify-center rounded-md border border-stone-200 bg-white px-4 py-2.5 text-sm font-semibold text-stone-950 transition hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100 dark:hover:bg-stone-800"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleSignOut}
-                className="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700"
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        open={showSignOutConfirm}
+        icon={LogOut}
+        title="Sign out?"
+        message="Are you sure you want to sign out of your CCRA account? You can always sign back in later."
+        confirmLabel="Sign Out"
+        onConfirm={() => {
+          setShowSignOutConfirm(false);
+          handleSignOut();
+        }}
+        onClose={() => setShowSignOutConfirm(false)}
+      />
     </div>
   );
 }
