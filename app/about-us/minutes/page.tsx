@@ -2,6 +2,7 @@
 
 import React from "react";
 import Hero from "@/components/ui/Hero";
+import { pageStructure } from "@/lib/styles";
 import MinuteEntry, { MinuteEntryData } from "@/components/ui/MinuteEntry";
 
 const minutesData: MinuteEntryData[] = [
@@ -127,7 +128,7 @@ const minutesData: MinuteEntryData[] = [
 
 export default function MinutesPage() {
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
+    <div className={pageStructure.pageWrapper}>
       {/* ================= HERO ================= */}
       <Hero
         badge="GOVERNANCE"
@@ -135,7 +136,7 @@ export default function MinutesPage() {
         description="Official records of Board of Directors meetings for the Canadian Classic Rodeo Association."
       />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+      <div className={pageStructure.contentContainer}>
         {/* ================= MINUTES LIST ================= */}
         <div className="max-w-3xl mx-auto space-y-6">
           {minutesData.map((entry) => (
@@ -145,12 +146,12 @@ export default function MinutesPage() {
 
         {/* ================= FOOTER NOTE ================= */}
         <div className="max-w-3xl mx-auto mt-16 text-center">
-          <p className="text-sm text-stone-600 dark:text-stone-600">
+          <p className="text-sm text-body-text">
             Minutes are published after approval by the Board. For older records or official
             copies, please{" "}
             <a
               href="/about-us/contact"
-              className="text-orange-600 hover:underline dark:text-orange-400"
+              className="text-accent-text hover:underline"
             >
               contact the office
             </a>

@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { submitContactAction } from "./actions";
 import type { ContactFormState } from "./actions";
+import { buttons, inputField } from "@/lib/styles";
 
 const initialState: ContactFormState = { success: false, message: "" };
 
@@ -14,7 +15,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="w-full md:w-auto inline-flex items-center justify-center rounded-md bg-orange-600 px-10 py-3.5 text-sm font-semibold text-white transition hover:bg-orange-700 disabled:opacity-60"
+      className={buttons.primaryButton}
     >
       {pending ? "Sending..." : "Send Message"}
     </button>
@@ -25,8 +26,8 @@ export default function ContactForm() {
   const [state, formAction] = useActionState(submitContactAction, initialState);
 
   return (
-    <div className="bg-white rounded-md border border-stone-200 shadow-sm p-10 dark:border-stone-700 dark:bg-stone-900">
-      <h2 className="text-2xl font-semibold text-stone-950 mb-8 dark:text-stone-100">
+    <div className="bg-surface rounded-md border border-border shadow-sm p-10">
+      <h2 className="text-2xl font-semibold text-heading-text mb-8">
         Send Us a Message
       </h2>
 
@@ -35,7 +36,7 @@ export default function ContactForm() {
           <div>
             <label
               htmlFor="firstName"
-              className="block text-sm font-medium text-stone-700 mb-2 dark:text-stone-300"
+              className={inputField.label}
             >
               First Name
             </label>
@@ -44,14 +45,14 @@ export default function ContactForm() {
               name="firstName"
               type="text"
               required
-              className="h-12 w-full rounded-md border border-stone-200 bg-white px-4 text-sm text-stone-900 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-300 transition dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
+              className={`${inputField.input} ${inputField.inputHeight}`}
               placeholder="Enter first name"
             />
           </div>
           <div>
             <label
               htmlFor="lastName"
-              className="block text-sm font-medium text-stone-700 mb-2 dark:text-stone-300"
+              className={inputField.label}
             >
               Last Name
             </label>
@@ -60,7 +61,7 @@ export default function ContactForm() {
               name="lastName"
               type="text"
               required
-              className="h-12 w-full rounded-md border border-stone-200 bg-white px-4 text-sm text-stone-900 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-300 transition dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
+              className={`${inputField.input} ${inputField.inputHeight}`}
               placeholder="Enter last name"
             />
           </div>
@@ -69,7 +70,7 @@ export default function ContactForm() {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-stone-700 mb-2 dark:text-stone-300"
+            className={inputField.label}
           >
             Email Address
           </label>
@@ -78,7 +79,7 @@ export default function ContactForm() {
             name="email"
             type="email"
             required
-            className="h-12 w-full rounded-md border border-stone-200 bg-white px-4 text-sm text-stone-900 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-300 transition dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
+            className={`${inputField.input} ${inputField.inputHeight}`}
             placeholder="your@email.com"
           />
         </div>
@@ -86,7 +87,7 @@ export default function ContactForm() {
         <div>
           <label
             htmlFor="phone"
-            className="block text-sm font-medium text-stone-700 mb-2 dark:text-stone-300"
+            className={inputField.label}
           >
             Phone (optional)
           </label>
@@ -94,7 +95,7 @@ export default function ContactForm() {
             id="phone"
             name="phone"
             type="tel"
-            className="h-12 w-full rounded-md border border-stone-200 bg-white px-4 text-sm text-stone-900 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-300 transition dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
+            className={`${inputField.input} ${inputField.inputHeight}`}
             placeholder="403-555-0123"
           />
         </div>
@@ -102,7 +103,7 @@ export default function ContactForm() {
         <div>
           <label
             htmlFor="message"
-            className="block text-sm font-medium text-stone-700 mb-2 dark:text-stone-300"
+            className={inputField.label}
           >
             Message
           </label>
@@ -111,7 +112,7 @@ export default function ContactForm() {
             name="message"
             required
             rows={6}
-            className="w-full rounded-md border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-300 transition resize-y dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
+            className={`${inputField.input} ${inputField.textBoxHeight}`}
             placeholder="How can we help you today?"
           />
         </div>
