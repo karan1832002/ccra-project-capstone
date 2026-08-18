@@ -13,6 +13,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { buttons } from "@/lib/styles";
 import { Result } from "@/lib/gateway";
 
 interface ResultsPreviewProps {
@@ -60,7 +61,7 @@ export function ResultsPreview({ rodeoId, entries }: ResultsPreviewProps) {
 
       <Link
         href={`/results/rodeo-results/${rodeoId}`}
-        className="shrink-0 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-text hover:bg-primary-dark"
+        className={buttons.primaryButton}
       >
         View Full Results
       </Link>

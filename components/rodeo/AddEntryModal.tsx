@@ -21,6 +21,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { RodeoEntry, RodeoEventData } from "@/types/rodeoEntry";
+import { buttons } from "@/lib/styles";
 
 interface AddEntryModalProps {
   isOpen: boolean;
@@ -282,14 +283,14 @@ export default function AddEntryModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-md border border-border px-4 py-2 text-sm font-medium text-body-text hover:bg-highlight"
+              className={buttons.secondaryButton}
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-text hover:bg-primary-dark disabled:opacity-50"
+              className={buttons.primaryButton}
             >
               Add Entry
             </button>
