@@ -18,7 +18,7 @@ import {
   Camera,
   ArrowRight,
 } from "lucide-react";
-import { pageStructure } from "@/lib/styles";
+import { pageStructure, buttons } from "@/lib/styles";
 
 const heroImages: CarouselImage[] = [
   {
@@ -104,7 +104,7 @@ export default function HomePage() {
                 {!session && (
                   <Link
                     href="/sign-up"
-                    className="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3.5 text-sm text-primary-text font-semibold transition hover:bg-primary-dark"
+                    className={buttons.primaryButton}
                   >
                     Join the CCRA
                   </Link>
@@ -161,7 +161,7 @@ export default function HomePage() {
                 href={item.href}
                 className="group flex flex-col items-center text-center p-6 rounded-md border border-border bg-background transition hover:border-highlight hover:shadow-md"
               >
-                <div className="w-12 h-12 rounded-md bg-accent flex items-center justify-center text-accent-text mb-4 group-hover:bg-primary group-hover:text-primary-text transition dark:bg-accent/40">
+                <div className="w-12 h-12 rounded-md bg-accent flex items-center justify-center text-accent-text mb-4 group-hover:bg-highlight transition dark:bg-accent/40">
                   <item.icon className="w-6 h-6" />
                 </div>
                 <span className="font-semibold text-heading-text">

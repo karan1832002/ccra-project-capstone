@@ -18,6 +18,13 @@
   --body-text: theme("colors.stone.600");
   --caption-text: theme("colors.stone.500");
   --accent-text: theme("colors.orange.600");
+  
+  --input-field: theme("colors.white");
+  --input-border: theme("colors.stone.200");
+  --input-field-text: theme("colors.stone.900");
+
+  --disabled: theme("colors.stone.100");
+  --disabled-text: theme("colors.stone.600");
 
 
   /* ============================================
@@ -36,22 +43,27 @@
   --danger: theme("colors.red.600");
   --danger-dark: theme("colors.red.700");
   --danger-text: theme("colors.white");
-  --disabled: theme("colors.stone.100");
-  --disabled-text: theme("colors.stone.600");
 }
 
 /* Dark-mode values */
 .dark {
   --background: theme("colors.orange.900");
-  --surface: theme("colors.stone.700");
+  --surface: theme("colors.stone.900");
   --accent: theme("colors.orange.950");
   --highlight: theme("colors.orange.950");
   --border: theme("color.stone.800");
 
   --heading-text: theme("colors.stone.100");
   --body-text: theme("colors.stone.300");
-  --caption-text: theme("colors.stone.400");
+  --caption-text: theme("colors.stone.500");
   --accent-text: theme("colors.orange.400");
+  
+  --input-field: theme("colors.stone.950");
+  --input-border: theme("colors.stone.700");
+  --input-field-text: theme("colors.stone.100");
+  
+  --disabled: theme("colors.stone.800");
+  --disabled-text: theme("colors.stone.400");
 }
 
 /* Pass above values to Tailwind; keeps page reactive to .dark class */
@@ -66,6 +78,10 @@
   --color-body-text: var(--body-text);
   --color-caption-text: var(--caption-text);
   --color-accent-text: var(--accent-text);
+  
+  --color-input-field: var(--input-field);
+  --color-input-border: var(--input-border);
+  --color-input-field-text: var(--input-textt);
 
   --color-success: var(--success);
   --color-success-dark: var(--success-dark);

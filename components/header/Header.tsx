@@ -200,7 +200,7 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={() => setShowSignOutConfirm(true)}
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-primary-text transition hover:bg-primary-dark lg:px-5 lg:py-3"
+                  className={buttons.primaryButton}
                   aria-label="Sign out"
                 >
                   <LogOut className="h-4 w-4 shrink-0" />
@@ -212,7 +212,7 @@ export default function Header() {
             ) : (
               <Link
                 href="/sign-in"
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-primary-text transition hover:bg-primary-dark lg:px-5 lg:py-3"
+                className={buttons.primaryButton}
                 aria-label="Sign In"
               >
                 <LogIn className="h-4 w-4 shrink-0" />

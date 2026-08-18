@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { pageStructure, cards } from "@/lib/styles";
 import Hero from "@/components/ui/Hero";
 
 interface Director {
@@ -132,7 +133,7 @@ export default function BoardOfDirectorsPage() {
   }, [selected]);
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
+    <div className={pageStructure.pageWrapper}>
       {/* ================= HERO ================= */}
       <Hero
         badge="LEADERSHIP"
@@ -140,33 +141,33 @@ export default function BoardOfDirectorsPage() {
         description="The Canadian Classic Rodeo Association is guided by a dedicated group of volunteers who give their time to preserve and grow our sport."
       />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+      <div className={pageStructure.contentContainer}>
         {/* ================= BOARD GRID ================= */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className={cards.grid}>
           {directors.map((director) => (
             <button
               key={director.name}
               onClick={() => setSelected(director)}
-              className="text-left rounded-md border border-stone-200 bg-white p-8 shadow-sm transition duration-200 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2 dark:border-stone-700 dark:bg-stone-900 dark:focus:ring-offset-stone-950"
+              className={`${cards.layout} ${cards.interactive}`}
             >
               {/* Avatar initials */}
-              <div className="w-16 h-16 rounded-md bg-orange-100 flex items-center justify-center text-2xl font-semibold text-orange-700 mb-6 dark:bg-orange-950/40 dark:text-orange-400">
+              <div className={cards.iconContainer}>
                 {director.name
                   .split(" ")
                   .map((n) => n[0])
                   .join("")}
               </div>
 
-              <h3 className="text-xl font-semibold text-stone-950 dark:text-stone-100">
+              <h3 className={"text-xl font-semibold text-heading-text"}>
                 {director.name}
               </h3>
-              <p className="text-sm font-medium text-orange-600 mt-1 dark:text-orange-400">
+              <p className="text-sm font-medium text-accent-text mt-1">
                 {director.role}
               </p>
-              <p className="text-sm text-stone-600 mt-1 dark:text-stone-600">
+              <p className="text-sm text-body-text mt-1">
                 {director.location}
               </p>
-              <p className="text-stone-600 mt-4 text-sm leading-relaxed line-clamp-3 dark:text-stone-300">
+              <p className="text-body-text mt-4 text-sm leading-relaxed line-clamp-3">
                 {director.bio}
               </p>
             </button>
@@ -174,17 +175,17 @@ export default function BoardOfDirectorsPage() {
         </div>
 
         {/* ================= BOTTOM CTA ================= */}
-        <div className="mt-20 rounded-md border border-stone-200 bg-white p-10 text-center shadow-sm dark:border-stone-700 dark:bg-stone-900">
-          <h2 className="text-2xl font-semibold text-stone-950 mb-3 dark:text-stone-100">
+        <div className="mt-20 rounded-md border border-border bg-surface p-10 text-center shadow-sm">
+          <h2 className="text-2xl font-semibold text-heading-text mb-3">
             Interested in Serving?
           </h2>
-          <p className="text-stone-600 max-w-xl mx-auto mb-8 dark:text-stone-300">
+          <p className="text-body-text max-w-xl mx-auto mb-8">
             The CCRA is always looking for passionate members who want to contribute to the
             future of classic rodeo in Canada.
           </p>
           <a
             href="/about-us/contact"
-            className="inline-flex items-center justify-center rounded-md bg-orange-600 px-8 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
+            className="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-sm font-semibold text-primary-text transition hover:bg-primary-dark"
           >
             Contact the Board
           </a>
@@ -201,15 +202,15 @@ export default function BoardOfDirectorsPage() {
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-stone-950/60 backdrop-blur-sm transition-opacity dark:bg-stone-950/80"
+            className="absolute inset-0 bg-overlay-blur backdrop-blur-sm transition-opacity"
             onClick={() => setSelected(null)}
           />
 
           {/* Modal panel */}
-          <div className="relative w-full max-w-2xl rounded-md bg-white shadow-lg overflow-hidden dark:bg-stone-900 dark:border dark:border-stone-700">
+          <div className="relative w-full max-w-2xl rounded-md border border-border bg-surface shadow-lg overflow-hidden">
             <button
               onClick={() => setSelected(null)}
-              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-md flex items-center justify-center text-stone-600 hover:text-stone-950 hover:bg-stone-100 transition dark:text-stone-600 dark:hover:text-stone-100 dark:hover:bg-stone-800"
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-md flex items-center justify-center text-body-text hover:bg-highlight transition"
               aria-label="Close"
             >
               <svg
@@ -225,7 +226,7 @@ export default function BoardOfDirectorsPage() {
             </button>
 
             <div className="p-8 sm:p-10">
-              <div className="w-24 h-24 rounded-md bg-orange-100 flex items-center justify-center text-4xl font-semibold text-orange-700 mb-6 dark:bg-orange-950/40 dark:text-orange-400">
+              <div className="w-24 h-24 rounded-md bg-accent flex items-center justify-center text-4xl font-semibold text-accent-text mb-6">
                 {selected.name
                   .split(" ")
                   .map((n) => n[0])
@@ -234,19 +235,19 @@ export default function BoardOfDirectorsPage() {
 
               <h2
                 id="director-modal-title"
-                className="text-3xl font-semibold text-stone-950 dark:text-stone-100"
+                className="text-3xl font-semibold text-heading-text"
               >
                 {selected.name}
               </h2>
-              <p className="text-lg font-medium text-orange-600 mt-1 dark:text-orange-400">
+              <p className="text-lg font-medium text-accent-text mt-1">
                 {selected.role}
               </p>
-              <p className="text-sm text-stone-600 mt-1 dark:text-stone-600">
+              <p className="text-sm text-caption-text mt-1">
                 {selected.location}
               </p>
 
-              <div className="mt-8 border-t border-stone-200 pt-8 dark:border-stone-700">
-                <p className="text-stone-600 leading-relaxed text-base dark:text-stone-300">
+              <div className="mt-8 border-t border-border pt-8">
+                <p className="text-body-text leading-relaxed text-base">
                   {selected.longBio || selected.bio}
                 </p>
               </div>
@@ -254,7 +255,7 @@ export default function BoardOfDirectorsPage() {
               <div className="mt-10 flex justify-end">
                 <button
                   onClick={() => setSelected(null)}
-                  className="inline-flex items-center justify-center rounded-md bg-orange-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-700"
+                  className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-2.5 text-sm font-semibold text-primary-text transition hover:bg-primary-dark"
                 >
                   Close
                 </button>

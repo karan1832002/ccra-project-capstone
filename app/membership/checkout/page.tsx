@@ -2,6 +2,7 @@
  
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { pageStructure, buttons } from "@/lib/styles";
 import {
   Elements,
   PaymentElement,
@@ -87,13 +88,13 @@ function PayForm({
   return (
     <form onSubmit={handlePay} className="space-y-7">
       <section>
-        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-stone-600">
+        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-text-body">
           Payment
           <span className="flex items-center gap-1 text-[11px] font-medium normal-case tracking-normal text-green-700">
             <Lock className="h-3 w-3" /> Secured by Stripe
           </span>
         </h2>
-        <div className="rounded-lg border border-stone-300 p-3.5">
+        <div className="rounded-lg border border-border p-3.5">
           <PaymentElement />
         </div>
       </section>
@@ -107,7 +108,7 @@ function PayForm({
       <button
         type="submit"
         disabled={!stripe || processing}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-orange-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3.5 text-sm font-semibold text-primary-text shadow-sm transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
       >
         {processing ? (
           <>
@@ -121,7 +122,7 @@ function PayForm({
         )}
       </button>
  
-      <p className="text-center text-xs text-stone-600">
+      <p className="text-center text-xs text-body-text">
         Test card <span className="font-mono">4242 4242 4242 4242</span> · any future date · any CVC
       </p>
     </form>
@@ -211,33 +212,33 @@ function MembershipCheckout() {
     return (
       <div className="mx-auto max-w-lg px-4 py-14">
         <div className="mb-6 text-center">
-          <CheckCircle2 className="mx-auto mb-3 h-14 w-14 text-green-600" />
-          <h1 className="text-2xl font-bold text-stone-900">Payment successful</h1>
-          <p className="mt-1 text-sm text-stone-600">
+          <CheckCircle2 className="mx-auto mb-3 h-14 w-14 text-success" />
+          <h1 className="text-2xl font-bold text-heading-text">Payment successful</h1>
+          <p className="mt-1 text-sm text-body-text">
             Your CCRA membership is now active. Keep this receipt for your records.
           </p>
         </div>
  
         {/* Receipt */}
-        <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
-          <div className="flex items-center justify-between border-b border-stone-200 bg-stone-50 px-6 py-4">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+          <div className="flex items-center justify-between border-b border-border bg-accent px-6 py-4">
             <div className="flex items-center gap-2">
-              <BadgeCheck className="h-5 w-5 text-orange-600" />
-              <span className="font-semibold text-stone-900">CCRA Receipt</span>
+              <BadgeCheck className="h-5 w-5 text-primary" />
+              <span className="font-semibold text-heading-text">CCRA Receipt</span>
             </div>
             <span className="rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-800">
               PAID
             </span>
           </div>
  
-          <dl className="divide-y divide-stone-100 px-6">
+          <dl className="divide-y divide-border px-6">
             <div className="flex justify-between py-3 text-sm">
-              <dt className="text-stone-600">Item</dt>
-              <dd className="font-medium text-stone-900">CCRA Full Membership</dd>
+              <dt className="text-body-text">Item</dt>
+              <dd className="font-medium text-heading-text">CCRA Full Membership</dd>
             </div>
             <div className="flex justify-between py-3 text-sm">
-              <dt className="text-stone-600">Date</dt>
-              <dd className="text-stone-900">
+              <dt className="text-body-text">Date</dt>
+              <dd className="text-heading-text">
                 {(paidAt ?? new Date()).toLocaleString("en-CA", {
                   dateStyle: "medium",
                   timeStyle: "short",
@@ -246,21 +247,21 @@ function MembershipCheckout() {
             </div>
             {expiryDate && (
               <div className="flex justify-between py-3 text-sm">
-                <dt className="text-stone-600">Valid through</dt>
-                <dd className="text-stone-900">{expiryDate}</dd>
+                <dt className="text-body-text">Valid through</dt>
+                <dd className="text-heading-text">{expiryDate}</dd>
               </div>
             )}
             <div className="flex justify-between gap-4 py-3 text-sm">
-              <dt className="shrink-0 text-stone-600">Reference</dt>
-              <dd className="truncate font-mono text-xs text-stone-600">{paymentId}</dd>
+              <dt className="shrink-0 text-body-text">Reference</dt>
+              <dd className="truncate font-mono text-xs text-heading-text">{paymentId}</dd>
             </div>
             <div className="flex justify-between py-3 text-sm">
-              <dt className="text-stone-600">Payment method</dt>
-              <dd className="text-stone-900">Card · Stripe</dd>
+              <dt className="text-body-text">Payment method</dt>
+              <dd className="text-heading-text">Card · Stripe</dd>
             </div>
             <div className="flex items-baseline justify-between py-4">
-              <dt className="font-semibold text-stone-900">Total paid</dt>
-              <dd className="text-xl font-bold text-stone-900">${total.toFixed(2)} CAD</dd>
+              <dt className="font-semibold text-heading-text">Total paid</dt>
+              <dd className="text-xl font-bold text-heading-text">${total.toFixed(2)} CAD</dd>
             </div>
           </dl>
         </div>
@@ -268,14 +269,14 @@ function MembershipCheckout() {
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <a
             href="/events/enter-rodeo"
-            className="inline-flex items-center justify-center rounded-lg bg-orange-600 px-6 py-3 text-sm font-semibold text-white hover:bg-orange-700"
+            className={buttons.primaryButton}
           >
             Enter a Rodeo
           </a>
           <button
             type="button"
             onClick={() => window.print()}
-            className="inline-flex items-center justify-center rounded-lg border border-stone-300 bg-white px-6 py-3 text-sm font-semibold text-stone-700 hover:bg-stone-50"
+            className={buttons.secondaryButton}
           >
             Print receipt
           </button>
@@ -285,27 +286,27 @@ function MembershipCheckout() {
   }
  
   return (
-    <div className="min-h-screen bg-stone-50">
-      <div className="mx-auto max-w-5xl px-4 py-10">
+    <div className={pageStructure.pageWrapper}>
+      <div className={"mx-auto max-w-5xl px-4 py-10"}>
         <a
           href="/membership"
-          className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-stone-600 transition hover:text-orange-600"
+          className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-caption-text transition hover:text-body-text"
         >
           <ArrowLeft className="h-4 w-4" /> Back to membership
         </a>
-        <h1 className="mb-8 text-3xl font-bold tracking-tight text-stone-900">Complete your membership</h1>
+        <h1 className="mb-8 text-3xl font-bold tracking-tight text-heading-text">Complete your membership</h1>
  
         <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
           {/* LEFT — payment form */}
-          <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm sm:p-8">
+          <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm sm:p-8">
             {state === "loading" && (
-              <div className="flex flex-col items-center gap-3 py-16 text-stone-600">
-                <span className="h-8 w-8 animate-spin rounded-full border-2 border-orange-200 border-t-orange-500" />
+              <div className="flex flex-col items-center gap-3 py-16 text-body-text">
+                <span className="h-8 w-8 animate-spin rounded-full border-2 border-orange-200 border-t-primary" />
                 Preparing secure checkout…
               </div>
             )}
             {state === "error" && (
-              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-8 text-center text-red-700">
+              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-8 text-center text-danger">
                 {errorMsg}
               </div>
             )}
@@ -318,36 +319,36 @@ function MembershipCheckout() {
  
           {/* RIGHT — summary */}
           <aside className="h-fit lg:sticky lg:top-10">
-            <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-              <h2 className="mb-4 flex items-center gap-2 text-base font-semibold text-stone-900">
-                <BadgeCheck className="h-4 w-4 text-orange-600" />
+            <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
+              <h2 className="mb-4 flex items-center gap-2 text-base font-semibold text-heading-text">
+                <BadgeCheck className="h-4 w-4 text-primary" />
                 Membership summary
               </h2>
  
               <div className="flex items-center justify-between text-sm">
-                <span className="text-stone-700">CCRA Full Membership</span>
-                <span className="font-medium text-stone-900">${total.toFixed(2)}</span>
+                <span className="text-body-text">CCRA Full Membership</span>
+                <span className="font-medium text-heading-text">${total.toFixed(2)}</span>
               </div>
-              <p className="mt-1 text-xs text-stone-600">
+              <p className="mt-1 text-xs text-body-text">
                 Valid through {membershipExpiryDate()}
               </p>
  
-              <div className="mt-5 space-y-2 border-t border-stone-200 pt-4 text-sm">
-                <div className="flex justify-between text-stone-600">
+              <div className="mt-5 space-y-2 border-t border-border pt-4 text-sm">
+                <div className="flex justify-between text-body-text">
                   <span>Subtotal</span>
                   <span>${total.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between border-t border-stone-200 pt-3 text-base font-semibold text-stone-900">
+                <div className="flex justify-between border-t border-border pt-3 text-base font-semibold text-heading-text">
                   <span>Total</span>
                   <span>${total.toFixed(2)}</span>
                 </div>
               </div>
  
-              <p className="mt-5 rounded-lg bg-orange-50 px-3 py-2 text-xs text-orange-800">
+              <p className="mt-5 rounded-lg bg-highlight px-3 py-2 text-xs text-accent-text">
                 An active membership is required to enter rodeo events.
               </p>
  
-              <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-stone-600">
+              <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-caption-text">
                 <ShieldCheck className="h-3.5 w-3.5" /> Secure SSL checkout · Powered by Stripe
               </p>
             </div>
@@ -362,7 +363,7 @@ export default function MembershipCheckoutPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center text-stone-600">Loading…</div>
+        <div className="flex min-h-screen items-center justify-center text-body-text">Loading…</div>
       }
     >
       <MembershipCheckout />

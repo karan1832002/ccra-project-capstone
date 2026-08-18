@@ -3,7 +3,28 @@ import Image from "next/image";
 import { HandCoins, Trophy, HeartHandshake } from "lucide-react";
 import Hero from "@/components/ui/Hero";
 import { useSession } from "@/lib/auth-client";
-import { buttons, layout, pageStructure } from "@/lib/styles";
+import { pageStructure, layout, buttons, cards } from "@/lib/styles";
+
+const values = [
+  {
+    icon: HeartHandshake,
+    title: "Heritage & Tradition",
+    description:
+      "Honoring the rich history and traditions of Canadian rodeo while creating new memories for future generations.",
+  },
+  {
+    icon: Trophy,
+    title: "Competition & Growth",
+    description:
+      "Providing fair, safe, and exciting competition for athletes at every stage of their rodeo journey.",
+  },
+  {
+    icon: HandCoins,
+    title: "Community & Family",
+    description:
+      "Building lasting friendships and supporting one another both in and out of the arena.",
+  },
+];
 
 export default function AboutUsPage() {
   const { data: session } = useSession();
@@ -18,46 +39,42 @@ export default function AboutUsPage() {
 
       <div className={pageStructure.contentContainer}>
         {/* ================= MISSION / HISTORY ================= */}
-        <div className={`${pageStructure.firstSectionWrapper} ${layout.twoColumnGrid}`}>
+        <div
+          className={`${pageStructure.firstSectionWrapper} ${layout.twoColumnGrid}`}
+        >
           <div>
-            <div className={pageStructure.eyebrowLabel}>
-              OUR STORY
-            </div>
+            <div className={pageStructure.eyebrowLabel}>OUR STORY</div>
             <h2 className={`${pageStructure.sectionHeading} mb-8`}>
               A Legacy of Western Spirit
             </h2>
 
             <div className="prose max-w-none space-y-6 text-lg text-body-text dark:prose-invert">
               <p>
-                The Canadian Classic Rodeo Association (formerly the Canadian Senior Pro Rodeo
-                Association) was founded in 1985 to provide competitive rodeo opportunities for
-                athletes aged 40 and older.
+                The Canadian Classic Rodeo Association (formerly the Canadian
+                Senior Pro Rodeo Association) was founded in 1985 to provide
+                competitive rodeo opportunities for athletes aged 40 and older.
               </p>
               <p>
-                Today, the CCRA welcomes competitors of all ages and skill levels — from beginners
-                to seasoned professionals — united by their passion for the sport, appreciation of
-                Western values, and commitment to excellence.
+                Today, the CCRA welcomes competitors of all ages and skill
+                levels — from beginners to seasoned professionals — united by
+                their passion for the sport, appreciation of Western values, and
+                commitment to excellence.
               </p>
               <p>
-                For over four decades, we have championed the traditions of rodeo while fostering
-                community, sportsmanship, and the Western lifestyle across Canada.
+                For over four decades, we have championed the traditions of
+                rodeo while fostering community, sportsmanship, and the Western
+                lifestyle across Canada.
               </p>
             </div>
 
             <div className="mt-10 flex items-center gap-4">
               {!session && (
-                <a
-                  href="/sign-up"
-                  className={buttons.primaryButton}
-                >
+                <a href="/sign-up" className={buttons.primaryButton}>
                   Join the CCRA
                 </a>
               )}
 
-              <a
-                href="/schedule"
-                className={buttons.secondaryButton}
-              >
+              <a href="/schedule" className={buttons.secondaryButton}>
                 View 2026 Schedule
               </a>
             </div>
@@ -72,7 +89,7 @@ export default function AboutUsPage() {
               className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <div className="absolute bottom-8 left-8 text-primary-text">
+            <div className="absolute bottom-8 left-8 text-white">
               <div className="text-sm uppercase tracking-widest opacity-75">
                 41st Anniversary Season
               </div>
@@ -84,57 +101,27 @@ export default function AboutUsPage() {
         {/* ================= VALUES ================= */}
         <div className={pageStructure.sectionWrapper}>
           <div className="text-center mb-16">
-            <div className={pageStructure.eyebrowLabel}>
-              OUR VALUES
-            </div>
-            <h2 className={pageStructure.sectionHeading}>
-              What Drives Us
-            </h2>
+            <div className={pageStructure.eyebrowLabel}>OUR VALUES</div>
+            <h2 className={pageStructure.sectionHeading}>What Drives Us</h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="group rounded-md border border-border bg-surface p-8 shadow-sm transition hover:shadow-lg">
-              <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-text">
-                <HeartHandshake className="h-6 w-6" />
+          <div className={cards.grid}>
+            {values.map(({ icon: Icon, title, description }) => (
+              <div key={title} className={cards.layout}>
+                <div className={cards.iconContainer}>
+                  <Icon className={cards.icon} />
+                </div>
+                <h3 className={cards.title}>{title}</h3>
+                <p className={cards.description}>{description}</p>
               </div>
-              <h3 className="mb-3 text-2xl font-semibold text-heading-text">
-                Heritage & Tradition
-              </h3>
-              <p className="text-body-text">
-                Honoring the rich history and traditions of Canadian rodeo while creating new
-                memories for future generations.
-              </p>
-            </div>
-
-            <div className="group rounded-md border border-border bg-surface p-8 shadow-sm transition hover:shadow-lg">
-              <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-text">
-                <Trophy className="h-6 w-6" />
-              </div>
-              <h3 className="mb-3 text-2xl font-semibold text-heading-text">
-                Competition & Growth
-              </h3>
-              <p className="text-body-text">
-                Providing fair, safe, and exciting competition for athletes at every stage of their
-                rodeo journey.
-              </p>
-            </div>
-
-            <div className="group rounded-md border border-border bg-surface p-8 shadow-sm transition hover:shadow-lg">
-              <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-text">
-                <HandCoins className="h-6 w-6" />
-              </div>
-              <h3 className="mb-3 text-2xl font-semibold text-heading-text">
-                Community & Family
-              </h3>
-              <p className="text-body-text">
-                Building lasting friendships and supporting one another both in and out of the arena.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
 
         {/* ================= TIMELINE ================= */}
-        <div className={`${pageStructure.sectionWrapper} ${pageStructure.contentPanel}`}>
+        <div
+          className={`${pageStructure.sectionWrapper} ${pageStructure.contentPanel}`}
+        >
           <h2 className="mb-12 text-center text-3xl font-semibold text-heading-text">
             Our Journey
           </h2>
@@ -145,9 +132,12 @@ export default function AboutUsPage() {
                 <div className="font-semibold text-accent-text">1985</div>
               </div>
               <div>
-                <div className="font-semibold text-heading-text">Foundation</div>
+                <div className="font-semibold text-heading-text">
+                  Foundation
+                </div>
                 <p className="mt-1 text-body-text">
-                  Established as the Canadian Senior Pro Rodeo Association to serve mature competitors.
+                  Established as the Canadian Senior Pro Rodeo Association to
+                  serve mature competitors.
                 </p>
               </div>
             </div>
@@ -169,9 +159,13 @@ export default function AboutUsPage() {
                 <div className="font-semibold text-accent-text">2025-2026</div>
               </div>
               <div>
-                <div className="font-semibold text-heading-text">Modern Era</div>
+                <div className="font-semibold text-heading-text">
+                  Modern Era
+                </div>
                 <p className="mt-1 text-body-text">
-                  Rebranded to Canadian Classic Rodeo Association. 41st anniversary season with exciting new initiatives and continued growth.
+                  Rebranded to Canadian Classic Rodeo Association. 41st
+                  anniversary season with exciting new initiatives and continued
+                  growth.
                 </p>
               </div>
             </div>
@@ -185,7 +179,9 @@ export default function AboutUsPage() {
               Led by Passionate Volunteers
             </h2>
             <p className="mb-8 text-body-text">
-              Our board and committees are made up of dedicated rodeo enthusiasts who give their time to keep the spirit of the CCRA alive.
+              Our board and committees are made up of dedicated rodeo
+              enthusiasts who give their time to keep the spirit of the CCRA
+              alive.
             </p>
             <a
               href="/about-us/board-of-directors"

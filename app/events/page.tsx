@@ -9,7 +9,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Hero from "@/components/ui/Hero";
-import { pageStructure, layout, buttons } from "@/lib/styles";
+import { pageStructure, layout, buttons, cards } from "@/lib/styles";
 
 // One card per Events submenu item (see the header nav). Update this array
 // if a submenu item is renamed, added, or removed so the cards stay in sync
@@ -151,7 +151,7 @@ export default function EventsPage() {
               className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <div className="absolute bottom-8 left-8 text-primary-text">
+            <div className="absolute bottom-8 left-8 text-white">
               <div className="text-sm uppercase tracking-widest opacity-75">
                 Rodeos This Season
               </div>
@@ -174,24 +174,24 @@ export default function EventsPage() {
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className={cards.grid}>
             {/* icon is renamed to Icon (capitalized) so it can be rendered as a component */}
             {eventLinks.map(({ href, icon: Icon, title, description }) => (
               <Link
                 key={href}
                 href={href}
-                className="group rounded-md border border-border bg-surface p-8 shadow-sm hover:shadow-lg transition"
+                className={`${cards.layout} ${cards.interactive}`}
               >
-                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-text">
-                  <Icon className="h-6 w-6" />
+                <div className={cards.iconContainer}>
+                  <Icon className={cards.icon} />
                 </div>
-                <h3 className="text-2xl font-semibold text-heading-text mb-3">
+                <h3 className={cards.title}>
                   {title}
                 </h3>
-                <p className="text-body-text mb-4">{description}</p>
-                <div className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                <p className={cards.description}>{description}</p>
+                <div className={cards.link}>
                   Go to {title}
-                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                  <ArrowRight className={cards.arrow} />
                 </div>
               </Link>
             ))}

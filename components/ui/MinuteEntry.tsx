@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { FileText, ChevronDown, ChevronUp, ExternalLink, Calendar } from "lucide-react";
+import { buttons, cards } from "@/lib/styles";
 
 export interface MinuteEntryData {
   id: string;
@@ -21,39 +22,39 @@ export default function MinuteEntry({ entry }: MinuteEntryProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="rounded-md border border-stone-200 bg-white shadow-sm overflow-hidden dark:border-stone-700 dark:bg-stone-900">
+    <div className="rounded-md border border-border bg-surface shadow-sm overflow-hidden">
       {/* Card Header - always visible */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full text-left p-6 sm:p-8 flex items-start gap-4 hover:bg-stone-50 transition dark:hover:bg-stone-800/50"
+        className="w-full text-left p-6 sm:p-8 flex items-start gap-4 hover:bg-highlight transition"
       >
-        <div className="w-12 h-12 rounded-md bg-orange-100 flex items-center justify-center text-orange-600 flex-shrink-0 dark:bg-orange-950/40 dark:text-orange-400">
-          <FileText className="w-6 h-6" />
+        <div className={cards.iconContainer}>
+          <FileText className={cards.icon} />
         </div>
 
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-1">
-            <h2 className="text-xl font-semibold text-stone-950 dark:text-stone-100">
+            <h2 className="text-xl font-semibold text-heading-text">
               {entry.title}
             </h2>
-            <span className="inline-flex items-center gap-1 text-sm text-stone-600 dark:text-stone-600">
+            <span className="inline-flex items-center gap-1 text-sm text-caption-text">
               <Calendar className="w-3.5 h-3.5" />
               {entry.date}
             </span>
           </div>
 
           {entry.location && (
-            <p className="text-sm text-stone-600 dark:text-stone-600 mb-2">
+            <p className="text-sm text-caption-text mb-2">
               {entry.location}
             </p>
           )}
 
-          <p className="text-stone-600 dark:text-stone-300 text-sm leading-relaxed">
+          <p className="text-body-text text-sm leading-relaxed">
             {entry.summary}
           </p>
         </div>
 
-        <div className="text-stone-600 dark:text-stone-600 mt-1">
+        <div className="text-caption-text mt-1">
           {isExpanded ? (
             <ChevronUp className="w-5 h-5" />
           ) : (
@@ -64,11 +65,11 @@ export default function MinuteEntry({ entry }: MinuteEntryProps) {
 
       {/* Expanded Content */}
       {isExpanded && (
-        <div className="px-6 sm:px-8 pb-8 border-t border-stone-200 dark:border-stone-700">
+        <div className="px-6 sm:px-8 pb-8 border-t border-border">
           {/* Text content (if provided) */}
           {entry.fullContent && (
             <div className="pt-6">
-              <pre className="whitespace-pre-wrap text-sm text-stone-600 dark:text-stone-300 font-sans leading-relaxed">
+              <pre className="whitespace-pre-wrap text-sm text-body-text font-sans leading-relaxed">
                 {entry.fullContent}
               </pre>
             </div>
@@ -81,7 +82,7 @@ export default function MinuteEntry({ entry }: MinuteEntryProps) {
                 href={entry.googleDocUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-700"
+                className={buttons.primaryButton}
               >
                 <ExternalLink className="w-4 h-4" />
                 Open Google Doc

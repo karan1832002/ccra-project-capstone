@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { pageStructure } from "@/lib/styles";
 import Hero from "@/components/ui/Hero";
 import ImageCarousel from "@/components/ui/ImageCarousel";
 import { Image as ImageIcon, X } from "lucide-react";
@@ -43,7 +44,7 @@ export default function GalleryPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
+    <div className={pageStructure.pageWrapper}>
       {/* ================= HERO ================= */}
       <Hero
         badge="OFFICIAL RODEO MEDIA"
@@ -51,12 +52,12 @@ export default function GalleryPage() {
         description="Relive the action, grit, and unforgettable moments from the Canadian Classic Rodeo Association season."
       />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+      <div className={pageStructure.contentContainer}>
         {/* ================= FEATURED SLIDESHOW ================= */}
         {photos.length > 0 && (
           <section className="mb-20">
-            <h2 className="text-2xl font-semibold text-stone-950 mb-6 dark:text-stone-100 flex items-center gap-2">
-              <span className="w-2.5 h-6 bg-orange-600 rounded-full inline-block" />
+            <h2 className="text-2xl font-semibold text-heading-text mb-6 flex items-center gap-2">
+              <span className="w-2.5 h-6 bg-primary rounded-full inline-block" />
               Featured Highlights
             </h2>
             <ImageCarousel
@@ -72,29 +73,29 @@ export default function GalleryPage() {
         {/* ================= PHOTO GRID ================= */}
         <section>
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-semibold text-stone-950 dark:text-stone-100 flex items-center gap-2">
-              <ImageIcon className="w-6 h-6 text-orange-600" />
+            <h2 className="text-2xl font-semibold text-heading-text flex items-center gap-2">
+              <ImageIcon className="w-6 h-6 text-primary" />
               Rodeo Season Collection
             </h2>
             {photos.length > 0 && (
-              <span className="text-xs font-semibold px-3 py-1 bg-stone-200 text-stone-700 rounded-md dark:bg-stone-800 dark:text-stone-300">
+              <span className="text-xs font-semibold px-3 py-1 bg-accent text-body-text rounded-md">
                 {photos.length} {photos.length === 1 ? "Photo" : "Photos"}
               </span>
             )}
           </div>
 
           {loading ? (
-            <div className="py-20 text-center text-stone-600 font-medium">
-              <div className="inline-block animate-spin w-8 h-8 border-4 border-orange-600 border-t-transparent rounded-full mb-3" />
+            <div className="py-20 text-center text-body-text font-medium">
+              <div className="inline-block animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mb-3" />
               <div>Loading gallery collection...</div>
             </div>
           ) : photos.length === 0 ? (
-            <div className="rounded-md border border-dashed border-stone-300 bg-white/60 p-12 text-center dark:border-stone-700 dark:bg-stone-900/50">
-              <ImageIcon className="w-12 h-12 text-stone-600 mx-auto mb-4" />
-              <h3 className="font-semibold text-lg text-stone-800 dark:text-stone-200 mb-1">
+            <div className="rounded-md border border-dashed border-border bg-surface/60 p-12 text-center">
+              <ImageIcon className="w-12 h-12 text-caption-text mx-auto mb-4" />
+              <h3 className="font-semibold text-lg text-heading-text mb-1">
                 No photos in gallery yet
               </h3>
-              <p className="text-sm text-stone-600 max-w-md mx-auto">
+              <p className="text-sm text-caption-text max-w-md mx-auto">
                 Check back soon as new event action shots are added throughout the season.
               </p>
             </div>
@@ -108,7 +109,7 @@ export default function GalleryPage() {
                   <div
                     key={item.id}
                     onClick={() => setSelectedPhoto(item)}
-                    className="group relative aspect-square overflow-hidden rounded-md border border-stone-200 bg-stone-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-stone-700 dark:bg-stone-900 cursor-pointer"
+                    className="group relative aspect-square overflow-hidden rounded-md border border-border bg-surface shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer"
                   >
                     <Image
                       src={item.blobUrl}
