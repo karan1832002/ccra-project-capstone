@@ -57,10 +57,10 @@ export const layout = {
 
 export const buttons = {
   primaryButton:
-    "inline-flex px-5 py-2.5 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-text transition hover:bg-primary-dark disabled:hover:bg-primary disabled:cursor-not-allowed disabled:opacity-40",
+    "inline-flex px-5 py-2.5 items-center gap-2 justify-center rounded-md bg-primary text-sm font-semibold text-primary-text transition hover:bg-primary-dark disabled:hover:bg-primary disabled:cursor-not-allowed disabled:opacity-40",
 
   secondaryButton:
-    "inline-flex px-5 py-2.5 items-center justify-center rounded-md border border-border bg-surface text-sm font-semibold text-body-text transition hover:bg-accent disabled:hover:bg-surface disabled:cursor-not-allowed disabled:opacity-40",
+    "inline-flex px-5 py-2.5 items-center gap-2 justify-center rounded-md border border-border bg-surface text-sm font-semibold text-body-text transition hover:bg-accent disabled:hover:bg-surface disabled:cursor-not-allowed disabled:opacity-40",
 
   iconButton:
     "inline-flex h-10 w-10 items-center justify-center rounded-md text-body-text transition hover:bg-highlight hover:text-heading-text",
