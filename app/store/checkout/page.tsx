@@ -19,6 +19,7 @@ import {
 import { stripePromise } from "@/lib/stripe";
 import { useCart } from "@/app/context/CartContext";
 import { useSession } from "@/lib/auth-client";
+import { buttons, pageStructure, cards, inputField } from "@/lib/styles";
 
 // Payment Form
 function PayForm({
@@ -90,32 +91,34 @@ function PayForm({
     }
   }
 
-  const inputCls =
-    "h-11 w-full rounded-lg border border-border px-3.5 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 bg-card text-foreground";
-
   return (
     <form onSubmit={handlePay} className="space-y-7">
       {/* Shipping */}
       <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-heading-text">
           Shipping details
         </h2>
 
         <div className="space-y-3">
           <div>
-            <label className="mb-1 block text-sm font-medium text-muted-foreground">
+            <label className={inputField.label}>
               Full name
             </label>
-            <input type="text" className={inputCls} placeholder="Jane Rider" required />
+            <input
+              type="text"
+              className={`${inputField.input} ${inputField.inputHeight}`}
+              placeholder="Jane Rider"
+              required
+            />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-muted-foreground">
+            <label className={inputField.label}>
               Address
             </label>
             <input
               type="text"
-              className={inputCls}
+              className={`${inputField.input} ${inputField.inputHeight}`}
               placeholder="123 Rodeo Rd, Calgary, AB"
               required
             />
@@ -125,14 +128,14 @@ function PayForm({
 
       {/* Payment */}
       <section>
-        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-heading-text">
           Payment
           <span className="flex items-center gap-1 text-[11px] font-medium normal-case tracking-normal text-green-600">
             <Lock className="h-3 w-3" /> Secured by Stripe
           </span>
         </h2>
 
-        <div className="rounded-lg border border-border p-3.5 bg-card">
+        <div className="rounded-lg border border-border p-3.5 bg-surface">
           <PaymentElement />
         </div>
       </section>
@@ -146,7 +149,7 @@ function PayForm({
       <button
         type="submit"
         disabled={!stripe || processing}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-orange-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-60"
+        className={`${buttons.primaryButton} w-full`}
       >
         {processing ? (
           <>
@@ -160,9 +163,9 @@ function PayForm({
         )}
       </button>
 
-      <p className="text-center text-xs text-muted-foreground">
+      {/* <p className="text-center text-xs text-muted-foreground">
         Test card <span className="font-mono">4242 4242 4242 4242</span> · any future date · any CVC
-      </p>
+      </p> */}
     </form>
   );
 }
@@ -261,13 +264,13 @@ export default function CheckoutPage() {
   if (cartItems.length === 0 && state !== "paid") {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
-        <ShoppingBag className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-        <h1 className="mb-2 text-2xl font-bold text-foreground">Your cart is empty</h1>
-        <p className="mb-6 text-muted-foreground">Add some CCRA gear before checking out.</p>
+        <ShoppingBag className="mx-auto mb-4 h-12 w-12 text-accent-text" />
+        <h1 className="mb-2 text-2xl font-bold text-heading-text">Your cart is empty</h1>
+        <p className="mb-6 text-body-text">Add some CCRA gear before checking out.</p>
 
         <a
           href="/store"
-          className="inline-flex rounded-lg bg-orange-600 px-6 py-3 text-sm font-semibold text-white hover:bg-orange-700"
+          className={buttons.primaryButton}
         >
           Go to Store
         </a>
@@ -280,14 +283,14 @@ export default function CheckoutPage() {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <CheckCircle2 className="mx-auto mb-4 h-16 w-16 text-green-600" />
-        <h1 className="mb-2 text-3xl font-bold text-foreground">Payment successful</h1>
-        <p className="mb-8 text-muted-foreground">
+        <h1 className="mb-2 text-3xl font-bold text-heading-text">Payment successful</h1>
+        <p className="mb-8 text-body-text">
           Thanks for supporting CCRA — your order is confirmed.
         </p>
 
         <a
           href="/store"
-          className="inline-flex rounded-lg bg-orange-600 px-6 py-3 text-sm font-semibold text-white hover:bg-orange-700"
+          className={buttons.primaryButton}
         >
           Continue shopping
         </a>
@@ -297,23 +300,23 @@ export default function CheckoutPage() {
 
   // Main checkout
   return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-5xl px-4 py-10">
+    <div className={pageStructure.pageWrapper}>
+      <div className={pageStructure.contentContainer}>
         <a
           href="/cart"
-          className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition hover:text-orange-600"
+          className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-body-text transition hover:text-accent-text"
         >
           <ArrowLeft className="h-4 w-4" /> Back to cart
         </a>
 
-        <h1 className="mb-8 text-3xl font-bold tracking-tight text-foreground">Checkout</h1>
+        <h1 className="mb-8 text-3xl font-bold tracking-tight text-heading-text">Checkout</h1>
 
         <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
           {/* LEFT */}
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
+          <div className={cards.layout}>
             {state === "loading" && (
-              <div className="flex flex-col items-center gap-3 py-16 text-muted-foreground">
-                <span className="h-8 w-8 animate-spin rounded-full border-2 border-orange-200 border-t-orange-500" />
+              <div className="flex flex-col items-center gap-3 py-16 text-body-text">
+                <span className="h-8 w-8 animate-spin rounded-full border-2 border-orange-200 border-t-primary" />
                 Preparing secure checkout…
               </div>
             )}
@@ -333,11 +336,11 @@ export default function CheckoutPage() {
 
           {/* RIGHT */}
           <aside className="h-fit lg:sticky lg:top-10">
-            <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-              <h2 className="mb-4 flex items-center gap-2 text-base font-semibold text-foreground">
-                <ShoppingBag className="h-4 w-4 text-orange-600" />
+            <div className={cards.layout}>
+              <h2 className="mb-4 flex items-center gap-2 text-base font-semibold text-heading-text">
+                <ShoppingBag className="h-4 w-4 text-accent-text" />
                 Order summary
-                <span className="ml-auto rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                <span className="ml-auto rounded-full bg-highlight px-2 py-0.5 text-xs font-medium text-accent-text">
                   {itemCount} {itemCount === 1 ? "item" : "items"}
                 </span>
               </h2>
@@ -345,20 +348,20 @@ export default function CheckoutPage() {
               <ul className="space-y-3">
                 {cartItems.map((item, i) => (
                   <li key={i} className="flex items-center gap-3">
-                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md border border-border bg-muted">
+                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md border border-border bg-surface">
                       {item.image && (
                         <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
                       )}
-                      <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-foreground px-1 text-[11px] font-semibold text-white">
+                      <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-highlight px-1 text-[11px] font-semibold text-accent-text">
                         {item.qty}
                       </span>
                     </div>
 
-                    <span className="flex-1 truncate text-sm text-muted-foreground">
+                    <span className="flex-1 truncate text-sm text-body-text">
                       {item.title}
                     </span>
 
-                    <span className="text-sm font-medium text-foreground">
+                    <span className="text-sm font-medium text-body-text">
                       ${(item.price * item.qty).toFixed(2)}
                     </span>
                   </li>
@@ -366,23 +369,23 @@ export default function CheckoutPage() {
               </ul>
 
               <div className="mt-5 space-y-2 border-t border-border pt-4 text-sm">
-                <div className="flex justify-between text-muted-foreground">
+                <div className="flex justify-between text-body-text">
                   <span>Subtotal</span>
                   <span>${total.toFixed(2)}</span>
                 </div>
 
-                <div className="flex justify-between text-muted-foreground">
+                <div className="flex justify-between text-body-text">
                   <span>Shipping</span>
                   <span className="text-green-600">Free</span>
                 </div>
 
-                <div className="flex justify-between border-t border-border pt-3 text-base font-semibold text-foreground">
+                <div className="flex justify-between border-t border-border pt-3 text-base font-semibold text-heading-text">
                   <span>Total</span>
                   <span>${total.toFixed(2)}</span>
                 </div>
               </div>
 
-              <p className="mt-5 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+              <p className="mt-5 flex items-center justify-center gap-1.5 text-xs text-caption-text">
                 <ShieldCheck className="h-3.5 w-3.5" /> Secure SSL checkout · Powered by Stripe
               </p>
             </div>
