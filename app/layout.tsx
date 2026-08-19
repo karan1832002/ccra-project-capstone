@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <Script
-        id="set-dark-mode"
+          id="set-dark-mode"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -51,10 +51,10 @@ export default function RootLayout({
         />
       </head>
 
-      <body>
+      <body className="min-h-screen flex flex-col">
         <CartProvider>
           <Header />
-          {children}
+          <div className="flex-1">{children}</div>
           <ChatWidget />
           <Footer />
         </CartProvider>
