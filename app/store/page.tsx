@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import { buttons, pageStructure } from "@/lib/styles";
 import Hero from "@/components/ui/Hero";
 import { useCart } from "@/app/context/CartContext";
 import ShopFilterBar from "@/components/ui/ShopFilterBar";
@@ -78,123 +79,128 @@ export default function StorePage() {
   }, [products, search, category]);
 
   if (loading)
-    return <div className="text-center py-20 text-foreground">Loading products...</div>;
+    return (
+      <div className="text-center py-20 text-caption-text">
+        Loading products...
+      </div>
+    );
 
   if (error)
-    return <div className="text-center py-20 text-red-600">{error}</div>;
+    return <div className="text-center py-20 text-danger">{error}</div>;
 
   const categories = Array.from(
     new Set(
       products
         .map((p) => p.category)
-        .filter((category): category is string => category !== undefined)
-    )
+        .filter((category): category is string => category !== undefined),
+    ),
   );
 
   return (
-    <div className="min-h-screen bg-background">
-
+    <div className={pageStructure.pageWrapper}>
       <Hero
         badge="OFFICIAL MERCHANDISE"
         title="CCRA Store"
         description="Shop official CCRA apparel, accessories, and merchandise."
       />
 
-      <div className="max-w-6xl mx-auto px-6 mt-10 mb-10">
-        <ShopFilterBar
-          search={search}
-          setSearch={setSearch}
-          category={category}
-          setCategory={setCategory}
-          categories={categories}
-        />
-      </div>
+      <div className={pageStructure.contentContainer}>
+        <div className="mt-10 mb-10">
+          <ShopFilterBar
+            search={search}
+            setSearch={setSearch}
+            category={category}
+            setCategory={setCategory}
+            categories={categories}
+          />
+        </div>
 
-      {/* PRODUCT GRID */}
-      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-6 pb-20 relative">
-        {filteredProducts.length === 0 && (
-          <div className="text-muted-foreground text-lg col-span-3">
-            No products match your search.
-          </div>
-        )}
-
-        {filteredProducts.map((product) => (
-          <div
-            key={product.id}
-            className="bg-card rounded-xl shadow border border-border hover:shadow-md transition p-6 flex flex-col relative"
-          >
-            {/* IMAGE triggers popup */}
-            <div
-              onMouseEnter={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                setPopupPos({
-                  top: rect.top + window.scrollY,
-                  left: rect.right + 20,
-                });
-                setHoveredProduct(product);
-              }}
-              onMouseLeave={() => setHoveredProduct(null)}
-            >
-              {product.image && (
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-48 object-cover rounded-lg mb-4"
-                />
-              )}
+        {/* PRODUCT GRID */}
+        <div className="grid md:grid-cols-3 gap-6 relative">
+          {filteredProducts.length === 0 && (
+            <div className="text-body-text text-lg col-span-3">
+              No products match your search.
             </div>
-
-            <h3 className="text-xl font-semibold text-foreground mb-1">
-              {product.name}
-            </h3>
-
-            <p className="text-muted-foreground mb-4 font-medium">
-              ${(product.priceCents / 100).toFixed(2)}
-            </p>
-
-            <button
-              onClick={() => handleAddToCart(product)}
-              disabled={product.stock <= 0}
-              className="w-full bg-red-700 hover:bg-red-800 text-white py-2 rounded-lg transition disabled:bg-gray-400 disabled:cursor-not-allowed mt-auto"
-            >
-              {product.stock <= 0
-                ? "Out of Stock"
-                : addedId === product.id
-                ? "Added ✓"
-                : "Add to Cart"}
-            </button>
-          </div>
-        ))}
-      </div>
-
-      {/* POPUP */}
-      {hoveredProduct && (
-        <div
-          className="
-            absolute w-72 p-4 rounded-xl shadow-xl
-            bg-card border border-border
-            pointer-events-auto z-[9999]
-          "
-          style={{
-            top: popupPos.top,
-            left: popupPos.left,
-          }}
-        >
-          <h3 className="text-lg font-semibold text-foreground">
-            {hoveredProduct.name}
-          </h3>
-
-          {hoveredProduct.description && (
-            <p className="text-sm text-muted-foreground mt-2">
-              {hoveredProduct.description}
-            </p>
           )}
 
-          <p className="text-red-700 font-bold mt-3">
-            ${(hoveredProduct.priceCents / 100).toFixed(2)}
-          </p>
+          {filteredProducts.map((product) => (
+            <div
+              key={product.id}
+              className="bg-surface rounded-xl shadow border border-border hover:shadow-md transition p-6 flex flex-col relative"
+            >
+              {/* IMAGE triggers popup */}
+              <div
+                onMouseEnter={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  setPopupPos({
+                    top: rect.top + window.scrollY,
+                    left: rect.right + 20,
+                  });
+                  setHoveredProduct(product);
+                }}
+                onMouseLeave={() => setHoveredProduct(null)}
+              >
+                {product.image && (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-48 object-cover rounded-lg mb-4"
+                  />
+                )}
+              </div>
+
+              <h3 className="text-xl font-semibold text-heading-text mb-1">
+                {product.name}
+              </h3>
+
+              <p className="text-caption-text mb-4 font-medium">
+                ${(product.priceCents / 100).toFixed(2)}
+              </p>
+
+              <button
+                onClick={() => handleAddToCart(product)}
+                disabled={product.stock <= 0}
+                className={`${buttons.primaryButton} mt-auto`}
+              >
+                {product.stock <= 0
+                  ? "Out of Stock"
+                  : addedId === product.id
+                    ? "Added ✓"
+                    : "Add to Cart"}
+              </button>
+            </div>
+          ))}
         </div>
-      )}
+
+        {/* POPUP */}
+        {hoveredProduct && (
+          <div
+            className="
+            absolute w-72 p-4 rounded-xl shadow-xl
+            bg-surface border border-border
+            pointer-events-auto z-[9999]
+          "
+            style={{
+              top: popupPos.top,
+              left: popupPos.left,
+            }}
+          >
+            <h3 className="text-lg font-semibold text-heading-text">
+              {hoveredProduct.name}
+            </h3>
+
+            {hoveredProduct.description && (
+              <p className="text-sm text-body-text mt-2">
+                {hoveredProduct.description}
+              </p>
+            )}
+
+            <p className="text-body-text font-bold mt-3">
+              ${(hoveredProduct.priceCents / 100).toFixed(2)}
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -34,6 +34,7 @@ import EventRankings, { type EventStanding } from "@/components/my-standings/Eve
 import RecentResults, { type RecentResult } from "@/components/my-standings/RecentResults";
 import { useSession } from "@/lib/auth-client";
 import { getResults, type Result } from "@/lib/gateway";
+import { pageStructure, buttons } from "@/lib/styles";
 
 /**
  * Returns the English ordinal suffix for a positive integer.
@@ -73,16 +74,16 @@ export default function StandingsPage() {
 
   if (isPending || loading) {
     return (
-      <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex items-center justify-center">
-        <div className="animate-pulse text-stone-600 text-sm">Loading standings...</div>
+      <div className={`${pageStructure.pageWrapper} flex items-center justify-center`}>
+        <div className="animate-pulse text-body-text text-sm">Loading standings...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex items-center justify-center">
-        <div className="text-red-600 text-sm">{error}</div>
+      <div className={`${pageStructure.pageWrapper} flex items-center justify-center`}>
+        <div className="text-danger text-sm">{error}</div>
       </div>
     );
   }
@@ -148,13 +149,13 @@ export default function StandingsPage() {
 
   const season = String(new Date().getFullYear());
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors dark:bg-stone-950 dark:text-stone-100">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+    <div className={pageStructure.pageWrapper}>
+      <div className={pageStructure.contentContainer}>
 
         {/* Back link to Profile Page*/}
         <Link
           href="/profile"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-stone-600 transition hover:text-orange-600 dark:text-stone-600 dark:hover:text-orange-400 mb-8"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-body-text transition hover:text-primary mb-8"
         >
           <ChevronLeft className="w-4 h-4" />
           Back to Profile
@@ -163,13 +164,13 @@ export default function StandingsPage() {
         {/* Header */}
         <div className="mb-10 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-md bg-orange-50 px-4 py-1 text-sm font-semibold text-orange-600 mb-6 dark:bg-orange-950/40 dark:text-orange-400">
+            <div className="inline-flex items-center gap-2 rounded-md bg-accent/40 px-4 py-1 text-sm font-semibold text-accent-text mb-6">
               {season} SEASON
             </div>
-            <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-stone-950 dark:text-stone-100">
+            <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-heading-text">
               My Standings
             </h1>
-            <p className="mt-3 text-lg text-stone-600 dark:text-stone-300 max-w-xl">
+            <p className="mt-3 text-lg text-body-text max-w-xl">
               Track your points, rankings, and results for the current CCRA season.
             </p>
           </div>
@@ -178,14 +179,14 @@ export default function StandingsPage() {
           <div className="flex flex-wrap gap-3 shrink-0">
             <Link
               href="/events/enter-rodeo"
-              className="inline-flex items-center gap-2 rounded-md bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-700"
+              className={buttons.primaryButton}
             >
               <ClipboardList className="w-4 h-4" />
               Enter a Rodeo
             </Link>
             <Link
               href="/schedule"
-              className="inline-flex items-center gap-2 rounded-md border border-stone-200 bg-white px-5 py-2.5 text-sm font-semibold text-stone-950 transition hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:hover:bg-stone-800"
+              className={buttons.secondaryButton}
             >
               <Calendar className="w-4 h-4" />
               Full Schedule
@@ -201,11 +202,11 @@ export default function StandingsPage() {
 
         {/* Footer note */}
         <div className="mt-12 text-center">
-          <p className="text-sm text-stone-600 dark:text-stone-600">
+          <p className="text-sm text-caption-text">
             Rankings update after each sanctioned CCRA event.{" "}
             <Link
               href="/results/standings"
-              className="inline-flex items-center gap-1 font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400"
+              className="inline-flex items-center gap-1 font-semibold text-accent-text hover:text-primary-dark"
             >
               View full association standings
               <ArrowRight className="w-3.5 h-3.5" />
