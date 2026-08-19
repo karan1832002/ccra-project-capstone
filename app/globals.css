@@ -106,6 +106,37 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
+/* ============================================================
+   Markdown editor theme
+   Remap the @uiw/react-md-editor internal variables onto the
+   site design tokens so the editor matches the rest of the UI
+   and flips automatically with the .dark class.
+   ============================================================ */
+.w-md-editor,
+.wmde-markdown,
+.wmde-markdown-var {
+  --color-canvas-default: var(--surface) !important;
+  --color-canvas-subtle: var(--highlight) !important;
+  --color-fg-default: var(--heading-text) !important;
+  --color-fg-muted: var(--body-text) !important;
+  --color-fg-subtle: var(--caption-text) !important;
+  --color-border-default: var(--border) !important;
+  --color-border-muted: var(--border) !important;
+  --color-accent-fg: var(--accent-text) !important;
+  --color-accent-emphasis: var(--primary) !important;
+  --color-neutral-muted: var(--highlight) !important;
+  --color-danger-fg: var(--danger) !important;
+  --color-danger-emphasis: var(--danger) !important;
+  --color-attention-fg: var(--accent-text) !important;
+  --color-attention-emphasis: var(--primary) !important;
+  --color-attention-subtle: var(--accent) !important;
+  --color-done-fg: var(--success) !important;
+  --color-done-emphasis: var(--success) !important;
+  --color-success-fg: var(--success) !important;
+  --color-success-emphasis: var(--success) !important;
+  --color-copied-active-bg: var(--success) !important;
+}
+
 /* Custom design system utilities */
 @layer components {
   .leather-shadow {

@@ -18,8 +18,7 @@
 //     is actually exported from if it's not lib/auth.ts.
 
 import "server-only";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { getCachedSession } from "@/lib/auth-session";
 import { GatewayError } from "@/lib/gateway";
 import type { Rodeo, Event, RodeoDetail } from "@/lib/gateway";
 
@@ -27,6 +26,10 @@ import type { Rodeo, Event, RodeoDetail } from "@/lib/gateway";
 // cluster routing variable — never exposed to the client.
 const GATEWAY_URL = process.env.GATEWAY_URL ?? "http://localhost:4000";
 const FRONTEND_GATEWAY_KEY = process.env.FRONTEND_GATEWAY_KEY;
+const GATEWAY_TIMEOUT_MS = (() => {
+  const parsed = Number(process.env.GATEWAY_TIMEOUT_MS);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 10_000;
+})();
 
 type ApiResponse<T> =
   | { success: true; data: T }
@@ -99,8 +102,7 @@ export interface EventPayload {
 // ==========================================================================
 
 async function getVerifiedSession() {
-  const incomingHeaders = await headers();
-  const session = await auth.api.getSession({ headers: incomingHeaders });
+  const session = await getCachedSession();
   if (!session?.user) {
     throw new GatewayError("UNAUTHENTICATED", "No active session.");
   }
@@ -157,18 +159,34 @@ export async function callGateway<T>(
   // Merge the caller's headers with the authentication headers required
   // by the gateway. Caller-supplied headers take precedence so that
   // methods can override Content-Type or pass additional custom headers.
-  const res = await fetch(url, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      "x-gateway-key": FRONTEND_GATEWAY_KEY,
-      "x-user-id": session.user.id,
-      "x-user-role": role,
-      ...options.headers,
-    },
-    // Admin data must not be served from Next.js's fetch cache.
-    cache: "no-store",
-  });
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        "x-gateway-key": FRONTEND_GATEWAY_KEY,
+        "x-user-id": session.user.id,
+        "x-user-role": role,
+        ...options.headers,
+      },
+      // Admin data must not be served from Next.js's fetch cache.
+      cache: "no-store",
+      // Abort so a hung gateway can't leave the page waiting forever.
+      signal: options.signal ?? AbortSignal.timeout(GATEWAY_TIMEOUT_MS),
+    });
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new GatewayError(
+        "GATEWAY_TIMEOUT",
+        `Gateway did not respond within ${GATEWAY_TIMEOUT_MS}ms.`,
+      );
+    }
+    throw new GatewayError(
+      "GATEWAY_UNREACHABLE",
+      "Could not reach the API gateway.",
+    );
+  }
 
   // Read the raw body before attempting JSON parse so that non-JSON
   // error responses (e.g. plain-text 4xx from a misrouted request)

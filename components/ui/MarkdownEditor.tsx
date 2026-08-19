@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 
 // Dynamic import with SSR disabled — the editor relies on browser APIs
@@ -14,12 +14,19 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 // from FormData via the hidden field, while the user interacts with
 // the rich MD editor UI.
 //
-// Wrapped in data-color-mode="light" to enforce light-mode theming
-// regardless of system preferences.
+// The editor theme follows the site's dark mode: a MutationObserver
+// watches the .dark class on <html> and toggles the data-color-mode
+// attribute so the editor's built-in dark/light palettes stay in sync
+// with the rest of the admin UI.
 
 interface MarkdownEditorProps {
   name: string;
   defaultValue?: string;
+}
+
+function readColorMode(): "light" | "dark" {
+  if (typeof document === "undefined") return "light";
+  return document.documentElement.classList.contains("dark") ? "dark" : "light";
 }
 
 export default function MarkdownEditor({
@@ -27,6 +34,24 @@ export default function MarkdownEditor({
   defaultValue = "",
 }: MarkdownEditorProps) {
   const [value, setValue] = useState(defaultValue);
+  const [colorMode, setColorMode] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    // Defaults to "light" on the server to match SSR; correct to the live
+    // theme once mounted, then keep watching for future toggles.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setColorMode(readColorMode());
+
+    const observer = new MutationObserver(() => {
+      setColorMode(readColorMode());
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleChange = useCallback(
     (val: string | undefined) => {
@@ -36,7 +61,10 @@ export default function MarkdownEditor({
   );
 
   return (
-    <div data-color-mode="light" className="rounded-md border border-stone-200 overflow-hidden shadow-sm">
+    <div
+      data-color-mode={colorMode}
+      className="rounded-md border border-border overflow-hidden shadow-sm"
+    >
       <MDEditor
         value={value}
         onChange={handleChange}

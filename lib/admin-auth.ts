@@ -1,18 +1,16 @@
 import "server-only";
 
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getCachedSession } from "@/lib/auth-session";
 
 export type AdminRole = "admin" | "superadmin";
-export type AdminSession = Awaited<ReturnType<typeof auth.api.getSession>>;
+export type AdminSession = Awaited<ReturnType<typeof getCachedSession>>;
 
 export async function requireAdmin(targetRole?: AdminRole): Promise<{
   session: NonNullable<AdminSession>;
   role: AdminRole;
 }> {
-  const incomingHeaders = await headers();
-  const session = await auth.api.getSession({ headers: incomingHeaders });
+  const session = await getCachedSession();
 
   if (!session?.user) {
     redirect("/sign-in");
