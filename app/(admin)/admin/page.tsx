@@ -49,13 +49,13 @@ export default async function AdminDashboardPage() {
   ];
 
   return (
-    <div className="space-y-6 p-4 md:p-8 bg-gray-50">
+    <div className="space-y-6 p-4 md:p-8 bg-background">
       <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-heading-text">
             Dashboard Overview
           </h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-body-text">
             Key metrics across the CCRA platform.
           </p>
         </div>
@@ -63,11 +63,11 @@ export default async function AdminDashboardPage() {
 
       {/* --- Error Banner --- */}
       {fetchError ? (
-        <div className="rounded-md border border-red-200 bg-red-50 p-6">
-          <p className="text-sm font-medium text-red-800">
+        <div className="rounded-md border border-red-200 bg-red-50 p-6 dark:border-red-800 dark:bg-red-950/40">
+          <p className="text-sm font-medium text-red-800 dark:text-red-300">
             Could not load dashboard metrics.
           </p>
-          <p className="mt-1 text-sm text-red-600">
+          <p className="mt-1 text-sm text-red-600 dark:text-red-400">
             {fetchError}
           </p>
         </div>
@@ -79,17 +79,17 @@ export default async function AdminDashboardPage() {
             return (
               <div
                 key={stat.label}
-                className="rounded-md border border-gray-200 bg-white p-6 shadow-sm"
+                className="rounded-md border border-border bg-surface p-6 shadow-sm"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-md bg-orange-100 text-orange-600">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-md bg-accent text-accent-text">
                     <Icon className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-caption-text">
                       {stat.label}
                     </p>
-                    <p className="text-xl font-semibold text-gray-900">
+                    <p className="text-xl font-semibold text-heading-text">
                       {stat.value}
                     </p>
                   </div>

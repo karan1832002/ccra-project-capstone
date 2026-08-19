@@ -91,8 +91,8 @@ export default function AdminGalleryPage() {
     <div className="p-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-stone-950 dark:text-stone-100">Photo Gallery</h1>
-          <p className="mt-1 text-sm text-stone-600 dark:text-stone-600">
+          <h1 className="text-2xl font-semibold text-heading-text">Photo Gallery</h1>
+          <p className="mt-1 text-sm text-body-text">
             Upload and manage the public photo gallery images.
           </p>
         </div>
@@ -110,7 +110,7 @@ export default function AdminGalleryPage() {
           />
           <label
             htmlFor="gallery-upload"
-            className={`inline-flex cursor-pointer items-center gap-2 rounded-md bg-orange-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-orange-700 ${
+            className={`inline-flex cursor-pointer items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-text transition hover:bg-primary-dark ${
               uploading ? "pointer-events-none opacity-70" : ""
             }`}
           >
@@ -129,21 +129,21 @@ export default function AdminGalleryPage() {
       {/* Photo grid */}
       <div className="mt-8">
         {loading ? (
-          <div className="py-20 text-center text-stone-600">
-            <Loader2 className="mx-auto mb-3 h-8 w-8 animate-spin text-orange-600" />
+          <div className="py-20 text-center text-body-text">
+            <Loader2 className="mx-auto mb-3 h-8 w-8 animate-spin text-accent-text" />
             Loading gallery...
           </div>
         ) : photos.length === 0 ? (
-          <div className="rounded-md border border-dashed border-stone-300 bg-white/60 p-12 text-center dark:border-stone-700 dark:bg-stone-900/50">
-            <ImageIcon className="mx-auto mb-4 h-12 w-12 text-stone-600" />
-            <h3 className="mb-1 text-lg font-semibold text-stone-800 dark:text-stone-200">No photos yet</h3>
-            <p className="mx-auto max-w-md text-sm text-stone-600">
+          <div className="rounded-md border border-dashed border-border bg-surface/60 p-12 text-center">
+            <ImageIcon className="mx-auto mb-4 h-12 w-12 text-body-text" />
+            <h3 className="mb-1 text-lg font-semibold text-heading-text">No photos yet</h3>
+            <p className="mx-auto max-w-md text-sm text-body-text">
               Use &quot;Upload Photo&quot; above to add the first image to the gallery.
             </p>
           </div>
         ) : (
           <>
-            <p className="mb-4 text-xs font-semibold text-stone-600">
+            <p className="mb-4 text-xs font-semibold text-caption-text">
               {photos.length} {photos.length === 1 ? "photo" : "photos"}
             </p>
             <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
@@ -152,7 +152,7 @@ export default function AdminGalleryPage() {
                 return (
                   <div
                     key={item.id}
-                    className="group relative aspect-square overflow-hidden rounded-md border border-stone-200 bg-stone-100 shadow-sm dark:border-stone-700 dark:bg-stone-900"
+                    className="group relative aspect-square overflow-hidden rounded-md border border-border bg-highlight shadow-sm"
                   >
                     <Image
                       src={item.blobUrl}

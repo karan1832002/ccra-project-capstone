@@ -26,11 +26,11 @@ export default async function AdminEventsPage() {
   }
 
   return (
-    <div className="space-y-6 p-4 md:p-8 bg-gray-50">
+    <div className="space-y-6 p-4 md:p-8 bg-background">
       <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Events</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-heading-text">Events</h1>
+          <p className="mt-1 text-sm text-body-text">
             Manage rodeos, dates, draws, and event details.
           </p>
         </div>
@@ -41,14 +41,14 @@ export default async function AdminEventsPage() {
 
       {/* --- Rodeo List Table --- */}
       {fetchError ? (
-        <div className="rounded-md border border-red-200 bg-red-50 p-6">
-          <p className="text-sm font-medium text-red-800">
+        <div className="rounded-md border border-red-200 bg-red-50 p-6 dark:border-red-800 dark:bg-red-950/40">
+          <p className="text-sm font-medium text-red-800 dark:text-red-300">
             Could not load rodeos.
           </p>
-          <p className="mt-1 text-sm text-red-600">{fetchError}</p>
+          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{fetchError}</p>
         </div>
       ) : !rodeos || rodeos.length === 0 ? (
-        <p className="text-sm text-gray-500">No rodeos found.</p>
+        <p className="text-sm text-body-text">No rodeos found.</p>
       ) : (
         <RodeoTable data={rodeos} />
       )}

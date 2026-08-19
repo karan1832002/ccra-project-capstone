@@ -49,14 +49,14 @@ export default async function AdminLayout({
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-background flex">
       {/* --- Sidebar (desktop only) --- */}
-      <aside className="hidden md:flex w-64 shrink-0 border-r border-gray-200 bg-white flex flex-col">
-        <div className="px-6 py-5 border-b border-gray-200">
-          <Link href="/admin" className="text-lg font-semibold text-gray-900">
+      <aside className="hidden md:flex w-64 shrink-0 border-r border-border bg-surface flex flex-col">
+        <div className="px-6 py-5 border-b border-border">
+          <Link href="/admin" className="text-lg font-semibold text-heading-text">
             CCRA Admin
           </Link>
-          <p className="text-xs text-gray-400 mt-0.5 capitalize">{role}</p>
+          <p className="text-xs text-caption-text mt-0.5 capitalize">{role}</p>
         </div>
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {visibleNavItems.map((item) => {
@@ -65,7 +65,7 @@ export default async function AdminLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-orange-50 hover:text-orange-600"
+                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-body-text transition hover:bg-accent hover:text-accent-text"
               >
                 <Icon className="w-4 h-4" />
                 {item.label}

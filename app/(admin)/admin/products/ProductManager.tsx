@@ -200,7 +200,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
   }
 
   const inputCls =
-    "h-10 w-full rounded-lg border border-stone-300 px-3 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20";
+    "h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20";
 
   // Dropdown options: the standard list plus any category already saved on a
   // product (so editing an old product doesn't silently blank its category).
@@ -225,23 +225,23 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
     <div className="p-8">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold text-stone-950">Products</h1>
-          <p className="mt-1 text-sm text-stone-600">Manage store products and inventory.</p>
+          <h1 className="text-2xl font-semibold text-heading-text">Products</h1>
+          <p className="mt-1 text-sm text-body-text">Manage store products and inventory.</p>
         </div>
         <button
           onClick={openCreate}
-          className="inline-flex items-center gap-2 rounded-lg bg-orange-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-700"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-text transition hover:bg-primary-dark"
         >
           <Plus className="h-4 w-4" /> Add product
         </button>
       </div>
 
       {tableError && (
-        <div className="mb-4 flex items-start justify-between gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div className="mb-4 flex items-start justify-between gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
           <span>{tableError}</span>
           <button
             onClick={() => setTableError("")}
-            className="shrink-0 rounded p-0.5 text-red-400 transition hover:bg-red-100 hover:text-red-600"
+            className="shrink-0 rounded p-0.5 text-red-400 transition hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/40 dark:hover:text-red-300"
           >
             <X className="h-4 w-4" />
           </button>
@@ -249,15 +249,15 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
       )}
 
       {products.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-stone-300 bg-white p-16 text-center">
-          <PackageX className="mx-auto mb-3 h-10 w-10 text-stone-300" />
-          <p className="text-stone-600">No products yet. Add your first one.</p>
+        <div className="rounded-xl border border-dashed border-border bg-surface p-16 text-center">
+          <PackageX className="mx-auto mb-3 h-10 w-10 text-caption-text" />
+          <p className="text-body-text">No products yet. Add your first one.</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-stone-50 text-left text-xs uppercase tracking-wide text-stone-600">
+              <thead className="bg-highlight text-left text-xs uppercase tracking-wide text-caption-text">
                 <tr>
                   <th className="px-4 py-3 font-medium">Product</th>
                   <th className="px-4 py-3 font-medium">Category</th>
@@ -267,36 +267,36 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                   <th className="px-4 py-3 text-right font-medium">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-100">
+              <tbody className="divide-y divide-border">
                 {paged.map((p) => (
-                  <tr key={p.id} className={p.active ? "" : "bg-stone-50/60"}>
+                  <tr key={p.id} className={p.active ? "" : "bg-highlight"}>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-md border border-stone-200 bg-stone-100">
+                        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-md border border-border bg-highlight">
                           {p.image && (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
                           )}
                         </div>
-                        <span className="font-medium text-stone-900">{p.name}</span>
+                        <span className="font-medium text-heading-text">{p.name}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-stone-600">{p.category ?? "—"}</td>
-                    <td className="px-4 py-3 text-right tabular-nums text-stone-900">
+                    <td className="px-4 py-3 text-body-text">{p.category ?? "—"}</td>
+                    <td className="px-4 py-3 text-right tabular-nums text-heading-text">
                       ${(p.priceCents / 100).toFixed(2)}
                     </td>
                     <td className="px-4 py-3 text-right tabular-nums">
-                      <span className={p.stock === 0 ? "font-semibold text-red-600" : "text-stone-900"}>
+                      <span className={p.stock === 0 ? "font-semibold text-danger" : "text-heading-text"}>
                         {p.stock}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       {p.active ? (
-                        <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+                        <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900/40 dark:text-green-300">
                           Active
                         </span>
                       ) : (
-                        <span className="rounded-full bg-stone-200 px-2 py-0.5 text-xs font-medium text-stone-600">
+                        <span className="rounded-full bg-disabled px-2 py-0.5 text-xs font-medium text-disabled-text">
                           Hidden
                         </span>
                       )}
@@ -305,7 +305,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                       <div className="flex items-center justify-end gap-1">
                         <button
                           onClick={() => openEdit(p)}
-                          className="rounded-md p-2 text-stone-600 transition hover:bg-stone-100 hover:text-stone-900"
+                          className="rounded-md p-2 text-body-text transition hover:bg-highlight hover:text-heading-text"
                           title="Edit"
                         >
                           <Pencil className="h-4 w-4" />
@@ -313,7 +313,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                         <button
                           onClick={() => handleToggleActive(p)}
                           disabled={busyId === p.id}
-                          className="rounded-md p-2 text-stone-600 transition hover:bg-stone-100 hover:text-stone-900 disabled:opacity-50"
+                          className="rounded-md p-2 text-body-text transition hover:bg-highlight hover:text-heading-text disabled:opacity-50"
                           title={p.active ? "Hide from store" : "Restore to store"}
                         >
                           {busyId === p.id ? (
@@ -327,7 +327,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                         <button
                           onClick={() => handleDelete(p)}
                           disabled={busyId === p.id}
-                          className="rounded-md p-2 text-stone-600 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                          className="rounded-md p-2 text-body-text transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50 dark:hover:bg-red-950/30 dark:hover:text-red-400"
                           title="Delete permanently (only if never ordered)"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -342,32 +342,32 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
 
           {/* Pagination — only shown once the list outgrows a single page */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between border-t border-stone-200 bg-stone-50 px-4 py-3">
-              <p className="text-xs text-stone-600">
-                Showing <span className="font-medium text-stone-700">{start + 1}</span>–
-                <span className="font-medium text-stone-700">
+            <div className="flex items-center justify-between border-t border-border bg-highlight px-4 py-3">
+              <p className="text-xs text-body-text">
+                Showing <span className="font-medium text-body-text">{start + 1}</span>–
+                <span className="font-medium text-body-text">
                   {Math.min(start + PAGE_SIZE, products.length)}
                 </span>{" "}
-                of <span className="font-medium text-stone-700">{products.length}</span>
+                of <span className="font-medium text-body-text">{products.length}</span>
               </p>
 
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => setPage(safePage - 1)}
                   disabled={safePage === 1}
-                  className="inline-flex items-center gap-1 rounded-md border border-stone-300 bg-white px-2.5 py-1.5 text-xs font-medium text-stone-600 transition hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center gap-1 rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs font-medium text-body-text transition hover:bg-highlight disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <ChevronLeft className="h-3.5 w-3.5" /> Previous
                 </button>
 
-                <span className="px-3 text-xs text-stone-600">
+                <span className="px-3 text-xs text-body-text">
                   Page {safePage} of {totalPages}
                 </span>
 
                 <button
                   onClick={() => setPage(safePage + 1)}
                   disabled={safePage === totalPages}
-                  className="inline-flex items-center gap-1 rounded-md border border-stone-300 bg-white px-2.5 py-1.5 text-xs font-medium text-stone-600 transition hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center gap-1 rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs font-medium text-body-text transition hover:bg-highlight disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Next <ChevronRight className="h-3.5 w-3.5" />
                 </button>
@@ -380,14 +380,14 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
       {/* Create / edit modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
+          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-surface p-6 shadow-xl">
             <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-stone-900">
+              <h2 className="text-lg font-semibold text-heading-text">
                 {editing ? "Edit product" : "Add product"}
               </h2>
               <button
                 onClick={() => setShowForm(false)}
-                className="rounded-md p-1.5 text-stone-600 transition hover:bg-stone-100 hover:text-stone-700"
+                className="rounded-md p-1.5 text-body-text transition hover:bg-highlight hover:text-heading-text"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -395,7 +395,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="mb-1 block text-sm font-medium text-stone-700">Name</label>
+                <label className="mb-1 block text-sm font-medium text-body-text">Name</label>
                 <input
                   className={inputCls}
                   value={form.name}
@@ -405,9 +405,9 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-stone-700">Description</label>
+                <label className="mb-1 block text-sm font-medium text-body-text">Description</label>
                 <textarea
-                  className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
+                  className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                   rows={3}
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
@@ -417,7 +417,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-stone-700">Price (CAD)</label>
+                  <label className="mb-1 block text-sm font-medium text-body-text">Price (CAD)</label>
                   <input
                     className={inputCls}
                     type="number"
@@ -429,7 +429,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-stone-700">Stock</label>
+                  <label className="mb-1 block text-sm font-medium text-body-text">Stock</label>
                   <input
                     className={inputCls}
                     type="number"
@@ -441,7 +441,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-stone-700">Category</label>
+                <label className="mb-1 block text-sm font-medium text-body-text">Category</label>
                 <div className="relative">
                   <input
                     className={inputCls}
@@ -458,7 +458,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                   />
 
                   {categoryOpen && categoryMatches.length > 0 && (
-                    <ul className="absolute z-10 mt-1 max-h-52 w-full overflow-y-auto rounded-lg border border-stone-200 bg-white py-1 shadow-lg">
+                    <ul className="absolute z-10 mt-1 max-h-52 w-full overflow-y-auto rounded-lg border border-border bg-surface py-1 shadow-lg">
                       {categoryMatches.map((c) => (
                         <li key={c}>
                           <button
@@ -468,7 +468,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                               setForm({ ...form, category: c });
                               setCategoryOpen(false);
                             }}
-                            className="block w-full px-3 py-2 text-left text-sm text-stone-700 transition hover:bg-orange-50 hover:text-orange-700"
+                            className="block w-full px-3 py-2 text-left text-sm text-body-text transition hover:bg-accent hover:text-accent-text"
                           >
                             {c}
                           </button>
@@ -477,21 +477,21 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                     </ul>
                   )}
                 </div>
-                <p className="mt-1 text-xs text-stone-600">
+                <p className="mt-1 text-xs text-body-text">
                   Leave blank for no category, or type a new one to create it.
                 </p>
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-stone-700">Image</label>
+                <label className="mb-1 block text-sm font-medium text-body-text">Image</label>
                 <div className="flex items-start gap-3">
                   {/* Preview */}
-                  <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-stone-200 bg-stone-50">
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-highlight">
                     {form.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={form.image} alt="Preview" className="h-full w-full object-cover" />
                     ) : (
-                      <ImageOff className="h-6 w-6 text-stone-300" />
+                      <ImageOff className="h-6 w-6 text-caption-text" />
                     )}
                   </div>
 
@@ -508,7 +508,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploading}
-                        className="inline-flex items-center gap-2 rounded-lg border border-stone-300 px-3 py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-50 disabled:opacity-60"
+                        className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium text-body-text transition hover:bg-highlight disabled:opacity-60"
                       >
                         {uploading ? (
                           <>
@@ -524,13 +524,13 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                         <button
                           type="button"
                           onClick={() => setForm({ ...form, image: "" })}
-                          className="rounded-lg px-3 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-700"
+                          className="rounded-lg px-3 py-2 text-sm font-medium text-body-text transition hover:bg-highlight hover:text-heading-text"
                         >
                           Remove
                         </button>
                       )}
                     </div>
-                    <p className="mt-1.5 truncate text-xs text-stone-600">
+                    <p className="mt-1.5 truncate text-xs text-body-text">
                       {form.image ? form.image : "PNG or JPG, up to 25 MB. Optional."}
                     </p>
                   </div>
@@ -538,7 +538,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
               </div>
 
               {error && (
-                <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
                   {error}
                 </div>
               )}
@@ -547,14 +547,14 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="rounded-lg border border-stone-300 px-4 py-2.5 text-sm font-medium text-stone-700 transition hover:bg-stone-50"
+                  className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-body-text transition hover:bg-highlight"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="inline-flex items-center gap-2 rounded-lg bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-700 disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-text transition hover:bg-primary-dark disabled:opacity-60"
                 >
                   {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                   {editing ? "Save changes" : "Create product"}
@@ -568,28 +568,30 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
       {/* Confirm dialog for destructive actions */}
       {confirmTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+          <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-xl">
             <div className="flex gap-4">
               <div
                 className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${
-                  confirmTarget.action === "delete" ? "bg-red-100" : "bg-amber-100"
+                  confirmTarget.action === "delete"
+                    ? "bg-red-100 dark:bg-red-950/40"
+                    : "bg-amber-100 dark:bg-amber-950/40"
                 }`}
               >
                 {confirmTarget.action === "delete" ? (
-                  <Trash2 className="h-5 w-5 text-red-600" />
+                  <Trash2 className="h-5 w-5 text-red-600 dark:text-red-400" />
                 ) : (
-                  <EyeOff className="h-5 w-5 text-amber-600" />
+                  <EyeOff className="h-5 w-5 text-amber-600 dark:text-amber-400" />
                 )}
               </div>
 
               <div className="min-w-0 flex-1">
-                <h2 className="text-base font-semibold text-stone-900">
+                <h2 className="text-base font-semibold text-heading-text">
                   {confirmTarget.action === "delete" ? "Delete product?" : "Hide from store?"}
                 </h2>
-                <p className="mt-1.5 text-sm text-stone-600">
+                <p className="mt-1.5 text-sm text-body-text">
                   {confirmTarget.action === "delete" ? (
                     <>
-                      <span className="font-medium text-stone-900">
+                      <span className="font-medium text-heading-text">
                         {confirmTarget.product.name}
                       </span>{" "}
                       will be permanently removed. This can&apos;t be undone — and products that
@@ -597,7 +599,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                     </>
                   ) : (
                     <>
-                      <span className="font-medium text-stone-900">
+                      <span className="font-medium text-heading-text">
                         {confirmTarget.product.name}
                       </span>{" "}
                       will stop showing in the store. Order history is kept and you can restore it
@@ -612,7 +614,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
               <button
                 type="button"
                 onClick={() => setConfirmTarget(null)}
-                className="rounded-lg border border-stone-300 px-4 py-2.5 text-sm font-medium text-stone-700 transition hover:bg-stone-50"
+                className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-body-text transition hover:bg-highlight"
               >
                 Cancel
               </button>
@@ -621,7 +623,7 @@ export default function ProductManager({ products }: { products: AdminProduct[] 
                 onClick={() => runAction(confirmTarget.product, confirmTarget.action)}
                 className={`rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition ${
                   confirmTarget.action === "delete"
-                    ? "bg-red-600 hover:bg-red-700"
+                    ? "bg-danger hover:bg-danger-dark"
                     : "bg-amber-600 hover:bg-amber-700"
                 }`}
               >

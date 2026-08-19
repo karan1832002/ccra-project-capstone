@@ -51,7 +51,7 @@ export default function RoleSelect({ userId, currentRole }: RoleSelectProps) {
       value={selectedRole}
       onChange={(e) => handleChange(e.target.value)}
       disabled={isPending}
-      className="rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 min-h-[44px] outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+      className="rounded-md border border-border bg-surface px-3 py-2.5 text-sm text-heading-text min-h-[44px] outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {ROLE_OPTIONS.map((opt) => (
         <option key={opt.value} value={opt.value}>

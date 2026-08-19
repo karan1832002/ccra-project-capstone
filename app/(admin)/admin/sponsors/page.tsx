@@ -57,20 +57,20 @@ export default async function AdminSponsorsPage({
   const isEditing = editingId !== null && editingRow !== null;
 
   return (
-    <div className="space-y-6 p-4 md:p-8 bg-stone-50 min-h-screen">
+    <div className="space-y-6 p-4 md:p-8 bg-background min-h-screen">
       {/* --- Page Header --- */}
       <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h1 className="text-2xl font-bold text-stone-950">Sponsors</h1>
-          <p className="mt-1 text-sm text-stone-600">
+          <h1 className="text-2xl font-bold text-heading-text">Sponsors</h1>
+          <p className="mt-1 text-sm text-body-text">
             Manage sponsor logos, links, and visibility.
           </p>
         </div>
       </div>
 
       {/* --- Create / Edit Form --- */}
-      <div className="rounded-md border border-stone-200 bg-white p-6 shadow-sm">
-        <h2 className="text-base font-semibold text-stone-950 mb-4">
+      <div className="rounded-md border border-border bg-surface p-6 shadow-sm">
+        <h2 className="text-base font-semibold text-heading-text mb-4">
           {isEditing ? "Edit Sponsor" : "New Sponsor"}
         </h2>
 
@@ -84,7 +84,7 @@ export default async function AdminSponsorsPage({
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-stone-700">
+              <label className="block text-sm font-medium text-body-text">
                 Name
               </label>
               <input
@@ -93,14 +93,14 @@ export default async function AdminSponsorsPage({
                 required
                 defaultValue={editingRow?.name ?? ""}
                 placeholder="Acme Corporation"
-                className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-600 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
+                className="mt-1 block w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text shadow-sm placeholder:text-caption-text focus:border-primary focus:ring-1 focus:ring-primary"
               />
             </div>
             <LogoUploader key={editingId ?? "new"} defaultLogo={editingRow?.logo ?? ""} />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-stone-700">
+            <label className="block text-sm font-medium text-body-text">
               Website URL
             </label>
             <input
@@ -108,24 +108,24 @@ export default async function AdminSponsorsPage({
               type="url"
               defaultValue={editingRow?.website ?? ""}
               placeholder="https://www.example.com"
-              className="mt-1 block w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-950 shadow-sm placeholder:text-stone-600 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
+              className="mt-1 block w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text shadow-sm placeholder:text-caption-text focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
 
           <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-body-text cursor-pointer">
               <input
                 name="visible"
                 type="checkbox"
                 defaultChecked={editingRow?.visible ?? true}
-                className="h-4 w-4 rounded border-stone-300 text-orange-600 focus:ring-orange-600"
+                className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
               />
               Visible on public site
             </label>
 
             <button
               type="submit"
-              className="rounded-md bg-orange-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2"
+              className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-text shadow-sm hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               {isEditing ? "Save Changes" : "Create Sponsor"}
             </button>
@@ -133,7 +133,7 @@ export default async function AdminSponsorsPage({
             {isEditing && (
               <Link
                 href="/admin/sponsors"
-                className="rounded-md bg-stone-100 px-4 py-2 text-sm font-semibold text-stone-700 ring-1 ring-inset ring-stone-200 hover:bg-stone-200 transition-colors"
+                className="rounded-md bg-highlight px-4 py-2 text-sm font-semibold text-body-text ring-1 ring-inset ring-border hover:bg-accent transition-colors"
               >
                 Cancel
               </Link>
@@ -144,19 +144,19 @@ export default async function AdminSponsorsPage({
 
       {/* --- Data Table --- */}
       {fetchError ? (
-        <div className="rounded-md border border-red-200 bg-red-50 p-6">
-          <p className="text-sm font-medium text-red-800">
+        <div className="rounded-md border border-red-200 bg-red-50 p-6 dark:border-red-800 dark:bg-red-950/40">
+          <p className="text-sm font-medium text-red-800 dark:text-red-300">
             Could not load sponsors.
           </p>
-          <p className="mt-1 text-sm text-red-600">{fetchError}</p>
+          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{fetchError}</p>
         </div>
       ) : rows.length === 0 ? (
         /* --- Empty State --- */
-        <div className="rounded-md border border-stone-200 bg-white shadow-sm">
+        <div className="rounded-md border border-border bg-surface shadow-sm">
           <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-stone-100">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-highlight">
               <svg
-                className="h-6 w-6 text-stone-600"
+                className="h-6 w-6 text-body-text"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -170,29 +170,29 @@ export default async function AdminSponsorsPage({
                 />
               </svg>
             </div>
-            <h3 className="text-sm font-semibold text-stone-950">
+            <h3 className="text-sm font-semibold text-heading-text">
               No sponsors yet
             </h3>
-            <p className="mt-1 text-sm text-stone-600">
+            <p className="mt-1 text-sm text-body-text">
               Use the form above to add your first sponsor.
             </p>
           </div>
         </div>
       ) : (
-        <div className="w-full overflow-x-auto rounded-md border border-stone-200 bg-white shadow-sm">
+        <div className="w-full overflow-x-auto rounded-md border border-border bg-surface shadow-sm">
           <table className="min-w-full text-sm">
-            <thead className="hidden sm:table-header-group bg-stone-50">
+            <thead className="hidden sm:table-header-group bg-highlight">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-600">
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
                   Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-600">
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
                   Website
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-600">
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-600">
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
                   Actions
                 </th>
               </tr>
@@ -201,10 +201,10 @@ export default async function AdminSponsorsPage({
               {rows.map((row) => (
                 <tr
                   key={row.id}
-                  className="block mb-6 border border-stone-200 p-4 rounded-md bg-white sm:table-row sm:mb-0 sm:border-0 sm:p-0 sm:border-b sm:border-stone-100 sm:hover:bg-stone-50/50"
+                  className="block mb-6 border border-border p-4 rounded-md bg-surface sm:table-row sm:mb-0 sm:border-0 sm:p-0 sm:border-b sm:border-border sm:hover:bg-highlight"
                 >
-                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm font-medium text-stone-950">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-600 mb-1">
+                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm font-medium text-heading-text">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                       Name
                     </span>
                     <div className="flex items-center gap-3">
@@ -215,8 +215,8 @@ export default async function AdminSponsorsPage({
                           className="h-8 w-8 rounded object-contain"
                         />
                       ) : (
-                        <div className="h-8 w-8 rounded bg-stone-100 flex items-center justify-center">
-                          <span className="text-xs text-stone-600 font-medium">
+                        <div className="h-8 w-8 rounded bg-highlight flex items-center justify-center">
+                          <span className="text-xs text-body-text font-medium">
                             {row.name.charAt(0).toUpperCase()}
                           </span>
                         </div>
@@ -224,8 +224,8 @@ export default async function AdminSponsorsPage({
                       {row.name}
                     </div>
                   </td>
-                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-stone-600">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-600 mb-1">
+                  <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-body-text">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                       Website
                     </span>
                     {row.website ? (
@@ -233,37 +233,37 @@ export default async function AdminSponsorsPage({
                         href={row.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-orange-600 hover:text-orange-500 underline break-all"
+                        className="text-accent-text hover:text-accent-text underline break-all"
                       >
                         {row.website.replace(/^https?:\/\//, "").replace(/\/$/, "")}
                       </a>
                     ) : (
-                      <span className="text-stone-600">—</span>
+                      <span className="text-body-text">—</span>
                     )}
                   </td>
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-600 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                       Status
                     </span>
                     {row.visible ? (
-                      <span className="inline-flex items-center rounded-full bg-orange-50 px-2.5 py-0.5 text-xs font-medium text-orange-700 border border-orange-200">
+                      <span className="inline-flex items-center rounded-full bg-accent px-2.5 py-0.5 text-xs font-medium text-accent-text border border-border">
                         Visible
                       </span>
                     ) : (
-                      <span className="inline-flex items-center rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-medium text-stone-700 border border-stone-200">
+                      <span className="inline-flex items-center rounded-full bg-highlight px-2.5 py-0.5 text-xs font-medium text-body-text border border-border">
                         Hidden
                       </span>
                     )}
                   </td>
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-stone-600 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                       Actions
                     </span>
                     <div className="flex items-center gap-2">
                       {/* --- Edit Link --- */}
                       <Link
                         href={`/admin/sponsors?edit=${row.id}`}
-                        className="rounded-md bg-stone-100 px-3 py-1 text-xs font-semibold text-stone-700 ring-1 ring-inset ring-stone-200 hover:bg-stone-200 transition-colors"
+                        className="rounded-md bg-highlight px-3 py-1 text-xs font-semibold text-body-text ring-1 ring-inset ring-border hover:bg-accent transition-colors"
                       >
                         Edit
                       </Link>
@@ -285,7 +285,7 @@ export default async function AdminSponsorsPage({
                         />
                         <button
                           type="submit"
-                          className="rounded-md bg-stone-100 px-3 py-1 text-xs font-semibold text-stone-700 ring-1 ring-inset ring-stone-200 hover:bg-stone-200 transition-colors"
+                          className="rounded-md bg-highlight px-3 py-1 text-xs font-semibold text-body-text ring-1 ring-inset ring-border hover:bg-accent transition-colors"
                         >
                           {row.visible ? "Hide" : "Show"}
                         </button>
@@ -299,7 +299,7 @@ export default async function AdminSponsorsPage({
                         <input type="hidden" name="id" value={row.id} />
                         <button
                           type="submit"
-                          className="rounded-md bg-red-50 px-3 py-1 text-xs font-semibold text-red-700 ring-1 ring-inset ring-red-200 hover:bg-red-100 transition-colors"
+                          className="rounded-md bg-red-50 px-3 py-1 text-xs font-semibold text-red-700 ring-1 ring-inset ring-red-200 hover:bg-red-100 transition-colors dark:bg-red-950/40 dark:text-red-300 dark:ring-red-800 dark:hover:bg-red-900/40"
                         >
                           Delete
                         </button>

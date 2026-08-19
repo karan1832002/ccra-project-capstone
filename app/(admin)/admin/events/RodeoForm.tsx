@@ -199,20 +199,20 @@ export default function RodeoForm({
   }
 
   return (
-    <div className="rounded-md border border-gray-200 bg-white p-6 shadow-sm">
-      <h2 className="text-lg font-semibold text-gray-900 mb-6">
+    <div className="rounded-md border border-border bg-surface p-6 shadow-sm">
+      <h2 className="text-lg font-semibold text-heading-text mb-6">
         {isEditing ? "Edit Rodeo" : "Create New Rodeo"}
       </h2>
 
       {/* --- Feedback Banners --- */}
       {error && (
-        <div className="mb-6 whitespace-pre-wrap rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div className="mb-6 whitespace-pre-wrap rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="mb-6 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+        <div className="mb-6 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-800 dark:bg-green-950/40 dark:text-green-300">
           {success}
         </div>
       )}
@@ -223,7 +223,7 @@ export default function RodeoForm({
           <div>
             <label
               htmlFor="rodeo-title"
-              className="block text-xs font-medium uppercase tracking-wider text-gray-500 mb-1"
+              className="block text-xs font-medium uppercase tracking-wider text-caption-text mb-1"
             >
               Rodeo Title
             </label>
@@ -233,7 +233,7 @@ export default function RodeoForm({
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
               placeholder="Spring Classic Rodeo"
             />
           </div>
@@ -242,7 +242,7 @@ export default function RodeoForm({
           <div>
             <label
               htmlFor="rodeo-location"
-              className="block text-xs font-medium uppercase tracking-wider text-gray-500 mb-1"
+              className="block text-xs font-medium uppercase tracking-wider text-caption-text mb-1"
             >
               Location
             </label>
@@ -252,7 +252,7 @@ export default function RodeoForm({
               required
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
               placeholder="City, Province"
             />
           </div>
@@ -261,7 +261,7 @@ export default function RodeoForm({
           <div>
             <label
               htmlFor="rodeo-fee"
-              className="block text-xs font-medium uppercase tracking-wider text-gray-500 mb-1"
+              className="block text-xs font-medium uppercase tracking-wider text-caption-text mb-1"
             >
               Entry Fee ($)
             </label>
@@ -272,7 +272,7 @@ export default function RodeoForm({
               min="0"
               value={entryFee}
               onChange={(e) => setEntryFee(e.target.value)}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
               placeholder="50.00"
             />
           </div>
@@ -281,7 +281,7 @@ export default function RodeoForm({
           <div>
             <label
               htmlFor="rodeo-open"
-              className="block text-xs font-medium uppercase tracking-wider text-gray-500 mb-1"
+              className="block text-xs font-medium uppercase tracking-wider text-caption-text mb-1"
             >
               Entries Open
             </label>
@@ -290,7 +290,7 @@ export default function RodeoForm({
               type="date"
               value={entriesOpen}
               onChange={(e) => setEntriesOpen(e.target.value)}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
             />
           </div>
 
@@ -298,7 +298,7 @@ export default function RodeoForm({
           <div>
             <label
               htmlFor="rodeo-close"
-              className="block text-xs font-medium uppercase tracking-wider text-gray-500 mb-1"
+              className="block text-xs font-medium uppercase tracking-wider text-caption-text mb-1"
             >
               Entries Close
             </label>
@@ -307,19 +307,19 @@ export default function RodeoForm({
               type="date"
               value={entriesClose}
               onChange={(e) => setEntriesClose(e.target.value)}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
             />
           </div>
         </div>
 
         {/* --- Rodeo Dates --- */}
-        <fieldset className="rounded-md border border-gray-200 p-4">
-          <legend className="px-2 text-xs font-medium uppercase tracking-wider text-gray-500">
+        <fieldset className="rounded-md border border-border p-4">
+          <legend className="px-2 text-xs font-medium uppercase tracking-wider text-caption-text">
             Rodeo Dates
           </legend>
 
           {rodeoDates.length === 0 && (
-            <p className="mb-3 text-sm text-gray-400">
+            <p className="mb-3 text-sm text-caption-text">
               No dates added. A rodeo with no dates will use the entries window as its date range.
             </p>
           )}
@@ -328,13 +328,13 @@ export default function RodeoForm({
             {rodeoDates.map((row, index) => (
               <div
                 key={index}
-                className="flex flex-wrap items-end gap-3 rounded-md border border-gray-100 bg-gray-50 p-3"
+                className="flex flex-wrap items-end gap-3 rounded-md border border-border bg-highlight p-3"
               >
                 {/* Date */}
                 <div className="flex-1 min-w-[160px]">
                   <label
                     htmlFor={`date-${index}`}
-                    className="block text-xs font-medium text-gray-500 mb-1"
+                    className="block text-xs font-medium text-caption-text mb-1"
                   >
                     Date
                   </label>
@@ -344,7 +344,7 @@ export default function RodeoForm({
                     required
                     value={row.date}
                     onChange={(e) => updateDateRow(index, "date", e.target.value)}
-                    className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                    className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
                   />
                 </div>
 
@@ -352,7 +352,7 @@ export default function RodeoForm({
                 <div className="flex-1 min-w-[140px]">
                   <label
                     htmlFor={`time-${index}`}
-                    className="block text-xs font-medium text-gray-500 mb-1"
+                    className="block text-xs font-medium text-caption-text mb-1"
                   >
                     Start Time
                   </label>
@@ -362,7 +362,7 @@ export default function RodeoForm({
                     required
                     value={row.startTime}
                     onChange={(e) => updateDateRow(index, "startTime", e.target.value)}
-                    className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                    className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
                   />
                 </div>
 
@@ -370,7 +370,7 @@ export default function RodeoForm({
                 <button
                   type="button"
                   onClick={() => removeDateRow(index)}
-                  className="inline-flex items-center gap-1 rounded-md border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
+                  className="inline-flex items-center gap-1 rounded-md border border-red-200 bg-surface px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/30"
                   aria-label={`Remove date row ${index + 1}`}
                 >
                   <svg
@@ -397,7 +397,7 @@ export default function RodeoForm({
           <button
             type="button"
             onClick={addDateRow}
-            className="mt-3 inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+            className="mt-3 inline-flex items-center gap-1 rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium text-body-text transition hover:bg-highlight"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -421,7 +421,7 @@ export default function RodeoForm({
         <div>
           <label
             htmlFor="rodeo-desc"
-            className="block text-xs font-medium uppercase tracking-wider text-gray-500 mb-1"
+            className="block text-xs font-medium uppercase tracking-wider text-caption-text mb-1"
           >
             Description
           </label>
@@ -430,7 +430,7 @@ export default function RodeoForm({
             rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
+            className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
             placeholder="Brief description of the rodeo..."
           />
         </div>
@@ -440,7 +440,7 @@ export default function RodeoForm({
             <button
               type="button"
               onClick={onCancel}
-              className="inline-flex items-center rounded-md border border-stone-300 bg-white px-5 py-2.5 text-sm font-medium text-stone-700 transition hover:bg-stone-50"
+              className="inline-flex items-center rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-medium text-body-text transition hover:bg-highlight"
             >
               Cancel
             </button>
@@ -449,7 +449,7 @@ export default function RodeoForm({
           <button
             type="submit"
             disabled={isPending}
-            className="inline-flex items-center gap-2 rounded-md bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-700 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-text transition hover:bg-primary-dark disabled:opacity-50"
           >
             {isPending
               ? isEditing

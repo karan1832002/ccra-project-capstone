@@ -68,7 +68,7 @@ export default function RodeoTable({ data }: { data: Rodeo[] }) {
         <button
           type="button"
           onClick={() => setManagingRodeoId(null)}
-          className="inline-flex items-center rounded-md border border-stone-300 bg-white px-5 py-2.5 text-sm font-medium text-stone-700 transition hover:bg-stone-50"
+          className="inline-flex items-center rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-medium text-body-text transition hover:bg-highlight"
         >
           Back to Rodeo List
         </button>
@@ -79,29 +79,29 @@ export default function RodeoTable({ data }: { data: Rodeo[] }) {
 
   // --- Table mode ---
   return (
-    <div className="w-full overflow-x-auto rounded-md border border-gray-200 bg-white shadow-sm">
+    <div className="w-full overflow-x-auto rounded-md border border-border bg-surface shadow-sm">
       <table className="min-w-full text-sm">
-        <thead className="hidden sm:table-header-group bg-gray-50">
+        <thead className="hidden sm:table-header-group bg-highlight">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
               Title
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
               Location
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
               Entry Fee
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
               Entries Open
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
               Entries Close
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
               Capacity
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
               Actions
             </th>
           </tr>
@@ -110,48 +110,48 @@ export default function RodeoTable({ data }: { data: Rodeo[] }) {
           {data.map((rodeo) => (
             <tr
               key={rodeo.id}
-              className="block mb-6 border border-stone-200 p-4 rounded-md bg-white sm:table-row sm:mb-0 sm:border-0 sm:p-0 sm:border-b sm:border-gray-100 sm:hover:bg-gray-50/50"
+              className="block mb-6 border border-border p-4 rounded-md bg-surface sm:table-row sm:mb-0 sm:border-0 sm:p-0 sm:border-b sm:border-border sm:hover:bg-highlight"
             >
-              <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+              <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm font-medium text-heading-text">
+                <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                   Title
                 </span>
                 {rodeo.rodeoTitle}
               </td>
-              <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+              <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-body-text">
+                <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                   Location
                 </span>
                 {rodeo.location}
               </td>
-              <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+              <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-body-text">
+                <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                   Entry Fee
                 </span>
                 {rodeo.entryFee != null
                   ? `$${rodeo.entryFee.toFixed(2)}`
                   : "\u2014"}
               </td>
-              <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+              <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-body-text">
+                <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                   Entries Open
                 </span>
                 {fmtDate(rodeo.entriesOpen)}
               </td>
-              <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+              <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-body-text">
+                <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                   Entries Close
                 </span>
                 {fmtDate(rodeo.entriesClose)}
               </td>
-              <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+              <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-sm text-body-text">
+                <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                   Capacity
                 </span>
                 {rodeo.capacity ?? "\u2014"}
               </td>
               <td className="block sm:table-cell px-6 py-4 whitespace-nowrap">
-                <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-2">
+                <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-2">
                   Actions
                 </span>
                 <div className="flex items-center gap-2">
@@ -170,7 +170,7 @@ export default function RodeoTable({ data }: { data: Rodeo[] }) {
                       }
                     }}
                     disabled={loadingDetail}
-                    className="inline-flex items-center rounded-md border border-orange-200 bg-orange-50 px-3 py-1.5 text-xs font-medium text-orange-700 transition hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50"
+                    className="inline-flex items-center rounded-md border border-border bg-accent px-3 py-1.5 text-xs font-medium text-accent-text transition hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
                   >
                     {loadingDetail ? "Loading..." : "Edit Rodeo"}
                   </button>
@@ -181,7 +181,7 @@ export default function RodeoTable({ data }: { data: Rodeo[] }) {
                   <button
                     type="button"
                     onClick={() => setManagingRodeoId(rodeo.id)}
-                    className="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 transition hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    className="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 transition hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-300 dark:hover:bg-blue-900/40"
                   >
                     Manage Events
                   </button>
@@ -200,7 +200,7 @@ export default function RodeoTable({ data }: { data: Rodeo[] }) {
                     <button
                       type="submit"
                       disabled={isPending}
-                      className="inline-flex items-center rounded-md border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-medium text-red-700 transition hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="inline-flex items-center rounded-md border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-medium text-red-700 transition hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed dark:border-red-800 dark:bg-red-950/40 dark:text-red-300 dark:hover:bg-red-900/40"
                     >
                       {isPending ? "Deleting..." : "Delete"}
                     </button>

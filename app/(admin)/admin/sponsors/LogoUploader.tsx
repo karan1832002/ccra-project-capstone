@@ -86,7 +86,7 @@ export default function LogoUploader({ defaultLogo = "", name = "logo" }: LogoUp
 
   return (
     <div onPaste={handlePaste}>
-      <label className="block text-sm font-medium text-stone-700">
+      <label className="block text-sm font-medium text-body-text">
         Logo
       </label>
 
@@ -104,7 +104,7 @@ export default function LogoUploader({ defaultLogo = "", name = "logo" }: LogoUp
 
       {preview ? (
         <div className="mt-1 flex items-start gap-3">
-          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md border border-stone-200 bg-stone-50">
+          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md border border-border bg-highlight">
             <Image
               src={preview}
               alt="Logo preview"
@@ -118,14 +118,14 @@ export default function LogoUploader({ defaultLogo = "", name = "logo" }: LogoUp
             <button
               type="button"
               onClick={clearLogo}
-              className="inline-flex items-center gap-1 text-xs font-medium text-stone-600 hover:text-red-600 transition-colors"
+              className="inline-flex items-center gap-1 text-xs font-medium text-body-text hover:text-red-600 transition-colors dark:hover:text-red-400"
             >
               <X className="h-3 w-3" />
               Remove
             </button>
             <label
               htmlFor="logo-upload"
-              className="inline-flex cursor-pointer items-center gap-1 text-xs font-medium text-orange-600 hover:text-orange-500 transition-colors"
+              className="inline-flex cursor-pointer items-center gap-1 text-xs font-medium text-accent-text hover:text-accent-text transition-colors"
             >
               <Upload className="h-3 w-3" />
               Replace
@@ -139,25 +139,25 @@ export default function LogoUploader({ defaultLogo = "", name = "logo" }: LogoUp
           onDrop={handleDrop}
           className={`mt-1 flex flex-col items-center justify-center rounded-md border-2 border-dashed p-6 transition-colors ${
             dragOver
-              ? "border-orange-500 bg-orange-50"
-              : "border-stone-200 bg-stone-50/50 hover:border-stone-300"
+              ? "border-primary bg-accent"
+              : "border-border bg-highlight hover:border-primary"
           } ${uploading ? "pointer-events-none opacity-60" : ""}`}
         >
           {uploading ? (
-            <div className="flex flex-col items-center gap-2 text-stone-600">
-              <Loader2 className="h-8 w-8 animate-spin text-orange-600" />
+            <div className="flex flex-col items-center gap-2 text-body-text">
+              <Loader2 className="h-8 w-8 animate-spin text-accent-text" />
               <span className="text-sm">Uploading...</span>
             </div>
           ) : (
             <>
-              <Upload className="mb-2 h-8 w-8 text-stone-600" />
+              <Upload className="mb-2 h-8 w-8 text-body-text" />
               <label
                 htmlFor="logo-upload"
-                className="cursor-pointer text-sm font-medium text-orange-600 hover:text-orange-500"
+                className="cursor-pointer text-sm font-medium text-accent-text hover:text-accent-text"
               >
                 Click to upload
               </label>
-              <p className="mt-1 text-xs text-stone-600">
+              <p className="mt-1 text-xs text-body-text">
                 or drag and drop, or paste from clipboard
               </p>
             </>
@@ -166,7 +166,7 @@ export default function LogoUploader({ defaultLogo = "", name = "logo" }: LogoUp
       )}
 
       {error && (
-        <p className="mt-1 text-xs text-red-600">{error}</p>
+        <p className="mt-1 text-xs text-red-600 dark:text-red-400">{error}</p>
       )}
     </div>
   );

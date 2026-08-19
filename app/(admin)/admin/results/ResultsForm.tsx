@@ -41,7 +41,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="w-full bg-orange-600 text-white font-semibold px-4 py-2 rounded hover:bg-orange-700 transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+      className="w-full bg-primary text-primary-text font-semibold px-4 py-2 rounded hover:bg-primary-dark transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {pending ? "Submitting..." : "Submit Result"}
     </button>
@@ -109,12 +109,12 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
   );
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md max-w-xl">
-      <h2 className="text-xl font-semibold mb-4">Submit New Result</h2>
+    <div className="bg-surface p-6 rounded-lg border border-border shadow-md max-w-xl">
+      <h2 className="text-xl font-semibold mb-4 text-heading-text">Submit New Result</h2>
 
       {state.success && (
-        <div className="rounded-md border border-green-200 bg-green-50 p-4 mb-4">
-          <p className="text-sm font-medium text-green-800">
+        <div className="rounded-md border border-green-200 bg-green-50 p-4 mb-4 dark:border-green-800 dark:bg-green-950/40">
+          <p className="text-sm font-medium text-green-800 dark:text-green-300">
             Result submitted successfully. The public results pages will reflect
             the update on their next visit.
           </p>
@@ -122,15 +122,15 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
       )}
 
       {state.error && (
-        <div className="rounded-md border border-red-200 bg-red-50 p-4 mb-4">
-          <p className="text-sm font-medium text-red-800">{state.error}</p>
+        <div className="rounded-md border border-red-200 bg-red-50 p-4 mb-4 dark:border-red-800 dark:bg-red-950/40">
+          <p className="text-sm font-medium text-red-800 dark:text-red-300">{state.error}</p>
         </div>
       )}
 
       <form ref={formRef} action={formAction} className="space-y-4">
         {/* --- 1. Rodeo Dropdown --- */}
         <div>
-          <label htmlFor="rodeoId" className="block text-sm font-medium mb-1 text-gray-700">
+          <label htmlFor="rodeoId" className="block text-sm font-medium mb-1 text-body-text">
             Rodeo
           </label>
           <select
@@ -142,7 +142,7 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
               setSelectedEventId("");
               setEntries([]);
             }}
-            className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white"
+            className="w-full border border-border bg-surface p-2 rounded text-heading-text focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
           >
             <option value="" disabled>Select a rodeo...</option>
             {sortedRodeos.map((r) => (
@@ -150,7 +150,7 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
             ))}
           </select>
           {rodeos.length === 0 && (
-            <p className="mt-1 text-xs text-amber-600">
+            <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
               No rodeos found. Create a rodeo first under <strong>Events</strong>.
             </p>
           )}
@@ -158,7 +158,7 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
 
         {/* --- 2. Event Dropdown (filtered by selected rodeo) --- */}
         <div>
-          <label htmlFor="eventId" className="block text-sm font-medium mb-1 text-gray-700">
+          <label htmlFor="eventId" className="block text-sm font-medium mb-1 text-body-text">
             Event
           </label>
           <select
@@ -171,7 +171,7 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
               setEntries([]);
             }}
             disabled={!selectedRodeoId || filteredEvents.length === 0}
-            className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="w-full border border-border bg-surface p-2 rounded text-heading-text focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:bg-disabled disabled:text-disabled-text disabled:cursor-not-allowed"
           >
             <option value="" disabled>
               {selectedRodeoId
@@ -191,7 +191,7 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
 
         {/* --- 3. Competitor Dropdown (filtered by event registrations) --- */}
         <div>
-          <label htmlFor="userId" className="block text-sm font-medium mb-1 text-gray-700">
+          <label htmlFor="userId" className="block text-sm font-medium mb-1 text-body-text">
             Competitor
           </label>
           <select
@@ -215,7 +215,7 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
               if (nameInput) nameInput.value = match?.competitorName ?? "";
             }}
             disabled={!selectedEventId || registrationsLoading || filteredUsers.length === 0}
-            className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="w-full border border-border bg-surface p-2 rounded text-heading-text focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:bg-disabled disabled:text-disabled-text disabled:cursor-not-allowed"
           >
             <option value="" disabled>
               {!selectedEventId
@@ -231,7 +231,7 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
             ))}
           </select>
           {selectedEventId && !registrationsLoading && filteredUsers.length === 0 && (
-            <p className="mt-1 text-xs text-amber-600">
+            <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
               No competitors registered for this event.
             </p>
           )}
@@ -246,23 +246,23 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
         {/* --- 4. Performance Metrics (disabled until competitor available) --- */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label htmlFor="score" className="block text-sm font-medium mb-1 text-gray-700">
+            <label htmlFor="score" className="block text-sm font-medium mb-1 text-body-text">
               Time or Score
             </label>
             <input
               type="number" step="0.01" id="score" name="score" required
               disabled={!selectedEventId || filteredUsers.length === 0}
-              className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className="w-full border border-border bg-surface p-2 rounded text-heading-text focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:bg-disabled disabled:text-disabled-text disabled:cursor-not-allowed"
             />
           </div>
           <div>
-            <label htmlFor="placing" className="block text-sm font-medium mb-1 text-gray-700">
+            <label htmlFor="placing" className="block text-sm font-medium mb-1 text-body-text">
               Placing
             </label>
             <input
               type="number" id="placing" name="placing" required
               disabled={!selectedEventId || filteredUsers.length === 0}
-              className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className="w-full border border-border bg-surface p-2 rounded text-heading-text focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:bg-disabled disabled:text-disabled-text disabled:cursor-not-allowed"
             />
           </div>
         </div>
@@ -270,23 +270,23 @@ export default function ResultsForm({ users, rodeos, events }: ResultsFormProps)
         {/* --- 5. Payouts (disabled until competitor available) --- */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label htmlFor="payoutMoney" className="block text-sm font-medium mb-1 text-gray-700">
+            <label htmlFor="payoutMoney" className="block text-sm font-medium mb-1 text-body-text">
               Payout Money ($)
             </label>
             <input
               type="number" step="0.01" id="payoutMoney" name="payoutMoney" required
               disabled={!selectedEventId || filteredUsers.length === 0}
-              className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className="w-full border border-border bg-surface p-2 rounded text-heading-text focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:bg-disabled disabled:text-disabled-text disabled:cursor-not-allowed"
             />
           </div>
           <div>
-            <label htmlFor="groundMoney" className="block text-sm font-medium mb-1 text-gray-700">
+            <label htmlFor="groundMoney" className="block text-sm font-medium mb-1 text-body-text">
               Ground Money ($)
             </label>
             <input
               type="number" step="0.01" id="groundMoney" name="groundMoney" required
               disabled={!selectedEventId || filteredUsers.length === 0}
-              className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className="w-full border border-border bg-surface p-2 rounded text-heading-text focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:bg-disabled disabled:text-disabled-text disabled:cursor-not-allowed"
             />
           </div>
         </div>

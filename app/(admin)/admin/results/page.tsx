@@ -30,21 +30,21 @@ export default async function AdminResultsPage() {
   }
 
   return (
-    <div className="space-y-6 p-4 md:p-8 bg-gray-50 min-h-screen">
+    <div className="space-y-6 p-4 md:p-8 bg-background min-h-screen">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Manage Rodeo Results</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-heading-text">Manage Rodeo Results</h1>
+        <p className="mt-1 text-sm text-body-text">
           Submit official results for completed rodeo events. Select a
           rodeo, event, and competitor from the dropdowns below.
         </p>
       </div>
 
       {fetchError ? (
-        <div className="rounded-md border border-red-200 bg-red-50 p-6">
-          <p className="text-sm font-medium text-red-800">
+        <div className="rounded-md border border-red-200 bg-red-50 p-6 dark:border-red-800 dark:bg-red-950/40">
+          <p className="text-sm font-medium text-red-800 dark:text-red-300">
             Could not load reference data.
           </p>
-          <p className="mt-1 text-sm text-red-600">{fetchError}</p>
+          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{fetchError}</p>
         </div>
       ) : (
         <ResultsForm users={users} rodeos={rodeos} events={events} />

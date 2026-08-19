@@ -58,10 +58,10 @@ export default async function AdminInboxPage() {
     <div className="p-6 md:p-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-stone-950 dark:text-stone-100">
+          <h1 className="text-2xl font-semibold text-heading-text">
             Inbox
           </h1>
-          <p className="mt-1 text-sm text-stone-600 dark:text-stone-600">
+          <p className="mt-1 text-sm text-body-text">
             Contact submissions and rodeo approval requests.
           </p>
         </div>
@@ -72,7 +72,7 @@ export default async function AdminInboxPage() {
           {errors.map((err, i) => (
             <div
               key={i}
-              className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+              className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-300"
               role="alert"
             >
               {err}

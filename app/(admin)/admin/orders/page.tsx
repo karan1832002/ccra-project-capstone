@@ -18,8 +18,8 @@ export default async function AdminOrdersPage() {
   if (errorMsg || !orders) {
     return (
       <div className="p-8">
-        <h1 className="text-2xl font-semibold text-stone-950">Orders</h1>
-        <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <h1 className="text-2xl font-semibold text-heading-text">Orders</h1>
+        <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
           Could not load orders: {errorMsg ?? "unknown error"}
         </div>
       </div>

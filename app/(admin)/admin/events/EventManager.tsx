@@ -92,19 +92,19 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
   }
 
   return (
-    <div className="rounded-md border border-gray-200 bg-white p-6 shadow-sm space-y-6">
-      <h3 className="text-lg font-semibold text-gray-900">
+    <div className="rounded-md border border-border bg-surface p-6 shadow-sm space-y-6">
+      <h3 className="text-lg font-semibold text-heading-text">
         Manage Competition Events
       </h3>
 
       {/* --- Add Event Form --- */}
       <form onSubmit={handleAddEvent} className="space-y-4">
-        <h4 className="text-sm font-medium text-gray-700">
+        <h4 className="text-sm font-medium text-body-text">
           Add a New Discipline
         </h4>
 
         {addError && (
-          <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
             {addError}
           </div>
         )}
@@ -114,7 +114,7 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
           <div>
             <label
               htmlFor="event-category"
-              className="block text-xs font-medium uppercase tracking-wider text-gray-500 mb-1"
+              className="block text-xs font-medium uppercase tracking-wider text-caption-text mb-1"
             >
               Category
             </label>
@@ -122,7 +122,7 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
               id="event-category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -136,7 +136,7 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
           <div>
             <label
               htmlFor="event-date"
-              className="block text-xs font-medium uppercase tracking-wider text-gray-500 mb-1"
+              className="block text-xs font-medium uppercase tracking-wider text-caption-text mb-1"
             >
               Date
             </label>
@@ -146,7 +146,7 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
               required
               value={eventDate}
               onChange={(e) => setEventDate(e.target.value)}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
             />
           </div>
 
@@ -154,7 +154,7 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
           <div>
             <label
               htmlFor="event-time"
-              className="block text-xs font-medium uppercase tracking-wider text-gray-500 mb-1"
+              className="block text-xs font-medium uppercase tracking-wider text-caption-text mb-1"
             >
               Time
             </label>
@@ -164,7 +164,7 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
               required
               value={eventTime}
               onChange={(e) => setEventTime(e.target.value)}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
             />
           </div>
 
@@ -172,7 +172,7 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
           <div>
             <label
               htmlFor="event-fee"
-              className="block text-xs font-medium uppercase tracking-wider text-gray-500 mb-1"
+              className="block text-xs font-medium uppercase tracking-wider text-caption-text mb-1"
             >
               Event Fee ($)
             </label>
@@ -184,7 +184,7 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
               required
               value={eventFee}
               onChange={(e) => setEventFee(e.target.value)}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
               placeholder="50.00"
             />
           </div>
@@ -194,7 +194,7 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
           <button
             type="submit"
             disabled={addPending}
-            className="inline-flex items-center gap-2 rounded-md bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-700 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-text transition hover:bg-primary-dark disabled:opacity-50"
           >
             {addPending ? "Adding..." : "Add Event"}
           </button>
@@ -203,38 +203,38 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
 
       {/* --- Existing Events List --- */}
       <div>
-        <h4 className="text-sm font-medium text-gray-700 mb-3">
+        <h4 className="text-sm font-medium text-body-text mb-3">
           Assigned Disciplines
         </h4>
 
         {loadingEvents ? (
-          <p className="text-sm text-gray-500">Loading events...</p>
+          <p className="text-sm text-body-text">Loading events...</p>
         ) : loadError ? (
-          <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
             {loadError}
           </div>
         ) : events.length === 0 ? (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-body-text">
             No disciplines assigned yet.
           </p>
         ) : (
-          <div className="overflow-x-auto rounded-md border border-gray-100">
+          <div className="overflow-x-auto rounded-md border border-border">
             <table className="min-w-full text-sm">
-              <thead className="bg-gray-50">
+              <thead className="bg-highlight">
                 <tr>
-                  <th className="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
                     Category
                   </th>
-                  <th className="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
                     Date
                   </th>
-                  <th className="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
                     Time
                   </th>
-                  <th className="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
                     Fee
                   </th>
-                  <th className="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-caption-text">
                     Actions
                   </th>
                 </tr>
@@ -243,18 +243,18 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
                 {events.map((evt) => (
                   <tr
                     key={evt.id}
-                    className="border-b border-gray-100 hover:bg-gray-50/50"
+                    className="border-b border-border hover:bg-highlight"
                   >
-                    <td className="px-4 py-2.5 text-sm font-medium text-gray-900">
+                    <td className="px-4 py-2.5 text-sm font-medium text-heading-text">
                       {evt.category}
                     </td>
-                    <td className="px-4 py-2.5 text-sm text-gray-600">
+                    <td className="px-4 py-2.5 text-sm text-body-text">
                       {evt.eventDate}
                     </td>
-                    <td className="px-4 py-2.5 text-sm text-gray-600">
+                    <td className="px-4 py-2.5 text-sm text-body-text">
                       {evt.eventTime}
                     </td>
-                    <td className="px-4 py-2.5 text-sm text-gray-600">
+                    <td className="px-4 py-2.5 text-sm text-body-text">
                       ${evt.eventFee.toFixed(2)}
                     </td>
                     <td className="px-4 py-2.5">
@@ -264,7 +264,7 @@ export default function EventManager({ rodeoId }: EventManagerProps) {
                       >
                         <button
                           type="submit"
-                          className="inline-flex items-center rounded-md border border-red-200 bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 transition hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500/20"
+                          className="inline-flex items-center rounded-md border border-red-200 bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 transition hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300 dark:hover:bg-red-900/40"
                         >
                           Remove
                         </button>

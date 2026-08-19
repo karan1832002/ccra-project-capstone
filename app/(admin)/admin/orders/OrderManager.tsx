@@ -18,11 +18,11 @@ const ORDER_STATUSES = ["pending", "paid", "shipped", "delivered", "cancelled"] 
 
 // Colour per lifecycle stage so the table can be scanned at a glance.
 const STATUS_STYLES: Record<string, string> = {
-  pending: "bg-amber-100 text-amber-800",
-  paid: "bg-green-100 text-green-800",
-  shipped: "bg-blue-100 text-blue-800",
-  delivered: "bg-stone-800 text-white",
-  cancelled: "bg-red-100 text-red-700",
+  pending: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
+  paid: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
+  shipped: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
+  delivered: "bg-stone-800 text-white dark:bg-stone-600",
+  cancelled: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
 };
 
 // The obvious next step for an order, surfaced as a one-click button so the
@@ -89,23 +89,23 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
   return (
     <div className="p-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-stone-950">Orders</h1>
-        <p className="mt-1 text-sm text-stone-600">Manage customer orders and fulfilment.</p>
+        <h1 className="text-2xl font-semibold text-heading-text">Orders</h1>
+        <p className="mt-1 text-sm text-body-text">Manage customer orders and fulfilment.</p>
       </div>
 
       {/* Summary */}
       <div className="mb-6 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-stone-200 bg-white p-4">
-          <p className="text-xs uppercase tracking-wide text-stone-600">Total orders</p>
-          <p className="mt-1 text-2xl font-semibold tabular-nums text-stone-900">{orders.length}</p>
+        <div className="rounded-xl border border-border bg-surface p-4">
+          <p className="text-xs uppercase tracking-wide text-caption-text">Total orders</p>
+          <p className="mt-1 text-2xl font-semibold tabular-nums text-heading-text">{orders.length}</p>
         </div>
-        <div className="rounded-xl border border-stone-200 bg-white p-4">
-          <p className="text-xs uppercase tracking-wide text-stone-600">Revenue (paid)</p>
-          <p className="mt-1 text-2xl font-semibold tabular-nums text-stone-900">{money(revenue)}</p>
+        <div className="rounded-xl border border-border bg-surface p-4">
+          <p className="text-xs uppercase tracking-wide text-caption-text">Revenue (paid)</p>
+          <p className="mt-1 text-2xl font-semibold tabular-nums text-heading-text">{money(revenue)}</p>
         </div>
-        <div className="rounded-xl border border-stone-200 bg-white p-4">
-          <p className="text-xs uppercase tracking-wide text-stone-600">Awaiting shipment</p>
-          <p className="mt-1 text-2xl font-semibold tabular-nums text-orange-600">{awaitingFulfilment}</p>
+        <div className="rounded-xl border border-border bg-surface p-4">
+          <p className="text-xs uppercase tracking-wide text-caption-text">Awaiting shipment</p>
+          <p className="mt-1 text-2xl font-semibold tabular-nums text-accent-text">{awaitingFulfilment}</p>
         </div>
       </div>
 
@@ -117,8 +117,8 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
             onClick={() => changeFilter(s)}
             className={`rounded-full px-3 py-1.5 text-xs font-medium capitalize transition ${
               filter === s
-                ? "bg-stone-900 text-white"
-                : "border border-stone-300 bg-white text-stone-600 hover:bg-stone-50"
+                ? "bg-stone-900 text-white dark:bg-stone-100 dark:text-stone-900"
+                : "border border-border bg-surface text-body-text hover:bg-highlight"
             }`}
           >
             {s}
@@ -132,17 +132,17 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
       </div>
 
       {visible.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-stone-300 bg-white p-16 text-center">
-          <PackageX className="mx-auto mb-3 h-10 w-10 text-stone-300" />
-          <p className="text-stone-600">
+        <div className="rounded-xl border border-dashed border-border bg-surface p-16 text-center">
+          <PackageX className="mx-auto mb-3 h-10 w-10 text-caption-text" />
+          <p className="text-body-text">
             {orders.length === 0 ? "No orders yet." : `No ${filter} orders.`}
           </p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-stone-50 text-left text-xs uppercase tracking-wide text-stone-600">
+              <thead className="bg-highlight text-left text-xs uppercase tracking-wide text-caption-text">
                 <tr>
                   <th className="w-8 px-4 py-3" />
                   <th className="px-4 py-3 font-medium">Order</th>
@@ -153,16 +153,16 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                   <th className="px-4 py-3 font-medium">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-100">
+              <tbody className="divide-y divide-border">
                 {paged.map((o) => {
                   const isOpen = expanded === o.id;
                   return (
                     <Fragment key={o.id}>
-                      <tr className="hover:bg-stone-50/60">
+                      <tr className="hover:bg-highlight">
                         <td className="px-4 py-3">
                           <button
                             onClick={() => setExpanded(isOpen ? null : o.id)}
-                            className="rounded p-1 text-stone-600 transition hover:bg-stone-100 hover:text-stone-700"
+                            className="rounded p-1 text-body-text transition hover:bg-highlight hover:text-heading-text"
                             title={isOpen ? "Hide items" : "Show items"}
                           >
                             {isOpen ? (
@@ -173,16 +173,16 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                           </button>
                         </td>
                         <td className="px-4 py-3">
-                          <span className="font-mono text-xs text-stone-600">
+                          <span className="font-mono text-xs text-body-text">
                             {o.id.slice(0, 8)}
                           </span>
                           {!o.paymentId && (
-                            <span className="ml-2 rounded bg-stone-100 px-1.5 py-0.5 text-[10px] font-medium text-stone-600">
+                            <span className="ml-2 rounded bg-highlight px-1.5 py-0.5 text-[10px] font-medium text-body-text">
                               no payment
                             </span>
                           )}
                         </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-stone-600">
+                        <td className="px-4 py-3 whitespace-nowrap text-body-text">
                           {new Date(o.createdAt).toLocaleDateString("en-CA", {
                             year: "numeric",
                             month: "short",
@@ -190,21 +190,21 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                           })}
                         </td>
                         <td className="px-4 py-3">
-                          <span className="font-mono text-xs text-stone-600">
+                          <span className="font-mono text-xs text-body-text">
                             {o.userId.slice(0, 12)}…
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-right tabular-nums text-stone-700">
+                        <td className="px-4 py-3 text-right tabular-nums text-body-text">
                           {o.items.reduce((n, i) => n + i.quantity, 0)}
                         </td>
-                        <td className="px-4 py-3 text-right font-medium tabular-nums text-stone-900">
+                        <td className="px-4 py-3 text-right font-medium tabular-nums text-heading-text">
                           {money(o.totalCents)}
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
                             <span
                               className={`rounded-full px-2 py-0.5 text-xs font-medium capitalize ${
-                                STATUS_STYLES[o.status] ?? "bg-stone-100 text-stone-600"
+                                STATUS_STYLES[o.status] ?? "bg-disabled text-disabled-text"
                               }`}
                             >
                               {o.status}
@@ -215,7 +215,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                               <button
                                 onClick={() => handleStatusChange(o.id, NEXT_STEP[o.status].next)}
                                 disabled={busyId === o.id}
-                                className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md bg-orange-600 px-2.5 py-1.5 text-xs font-semibold text-white transition hover:bg-orange-700 disabled:opacity-50"
+                                className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md bg-primary px-2.5 py-1.5 text-xs font-semibold text-primary-text transition hover:bg-primary-dark disabled:opacity-50"
                               >
                                 {busyId === o.id ? (
                                   <Loader2 className="h-3 w-3 animate-spin" />
@@ -231,7 +231,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                               value={o.status}
                               onChange={(e) => handleStatusChange(o.id, e.target.value)}
                               disabled={busyId === o.id}
-                              className="h-7 rounded-md border border-stone-300 bg-white px-1.5 text-xs text-stone-600 outline-none transition focus:border-orange-500 disabled:opacity-50"
+                              className="h-7 rounded-md border border-border bg-surface px-1.5 text-xs text-body-text outline-none transition focus:border-primary disabled:opacity-50"
                               title="Change status manually"
                             >
                               {ORDER_STATUSES.map((s) => (
@@ -242,7 +242,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                             </select>
 
                             {busyId === o.id && !NEXT_STEP[o.status] && (
-                              <Loader2 className="h-4 w-4 animate-spin text-stone-600" />
+                              <Loader2 className="h-4 w-4 animate-spin text-body-text" />
                             )}
                           </div>
                         </td>
@@ -250,18 +250,18 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
 
                       {/* Line items */}
                       {isOpen && (
-                        <tr className="bg-stone-50/80">
+                        <tr className="bg-highlight">
                           <td />
                           <td colSpan={6} className="px-4 py-3">
                             {o.items.length === 0 ? (
-                              <p className="text-xs text-stone-600">
+                              <p className="text-xs text-body-text">
                                 No line items recorded for this order.
                               </p>
                             ) : (
                               <ul className="space-y-2">
                                 {o.items.map((item) => (
                                   <li key={item.id} className="flex items-center gap-3">
-                                    <div className="h-9 w-9 shrink-0 overflow-hidden rounded border border-stone-200 bg-white">
+                                    <div className="h-9 w-9 shrink-0 overflow-hidden rounded border border-border bg-surface">
                                       {item.productImage && (
                                         // eslint-disable-next-line @next/next/no-img-element
                                         <img
@@ -271,11 +271,11 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                                         />
                                       )}
                                     </div>
-                                    <span className="flex-1 text-stone-700">
+                                    <span className="flex-1 text-body-text">
                                       {item.productName}
                                     </span>
-                                    <span className="text-stone-600">×{item.quantity}</span>
-                                    <span className="w-20 text-right tabular-nums text-stone-700">
+                                    <span className="text-body-text">×{item.quantity}</span>
+                                    <span className="w-20 text-right tabular-nums text-body-text">
                                       {money(item.unitPriceCents * item.quantity)}
                                     </span>
                                   </li>
@@ -283,7 +283,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                               </ul>
                             )}
                             {o.paymentId && (
-                              <p className="mt-3 flex items-center gap-1.5 text-xs text-stone-600">
+                              <p className="mt-3 flex items-center gap-1.5 text-xs text-body-text">
                                 <ShoppingCart className="h-3 w-3" />
                                 Payment ref{" "}
                                 <span className="font-mono">{o.paymentId}</span>
@@ -301,13 +301,13 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
 
           {/* Pagination — only shown once the list outgrows a single page */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between border-t border-stone-200 bg-stone-50 px-4 py-3">
-              <p className="text-xs text-stone-600">
-                Showing <span className="font-medium text-stone-700">{start + 1}</span>–
-                <span className="font-medium text-stone-700">
+            <div className="flex items-center justify-between border-t border-border bg-highlight px-4 py-3">
+              <p className="text-xs text-body-text">
+                Showing <span className="font-medium text-body-text">{start + 1}</span>–
+                <span className="font-medium text-body-text">
                   {Math.min(start + PAGE_SIZE, visible.length)}
                 </span>{" "}
-                of <span className="font-medium text-stone-700">{visible.length}</span>
+                of <span className="font-medium text-body-text">{visible.length}</span>
               </p>
 
               <div className="flex items-center gap-1">
@@ -317,12 +317,12 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                     setExpanded(null);
                   }}
                   disabled={safePage === 1}
-                  className="inline-flex items-center gap-1 rounded-md border border-stone-300 bg-white px-2.5 py-1.5 text-xs font-medium text-stone-600 transition hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center gap-1 rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs font-medium text-body-text transition hover:bg-highlight disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <ChevronLeft className="h-3.5 w-3.5" /> Previous
                 </button>
 
-                <span className="px-3 text-xs text-stone-600">
+                <span className="px-3 text-xs text-body-text">
                   Page {safePage} of {totalPages}
                 </span>
 
@@ -332,7 +332,7 @@ export default function OrderManager({ orders }: { orders: AdminOrder[] }) {
                     setExpanded(null);
                   }}
                   disabled={safePage === totalPages}
-                  className="inline-flex items-center gap-1 rounded-md border border-stone-300 bg-white px-2.5 py-1.5 text-xs font-medium text-stone-600 transition hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center gap-1 rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs font-medium text-body-text transition hover:bg-highlight disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Next <ChevronRight className="h-3.5 w-3.5" />
                 </button>

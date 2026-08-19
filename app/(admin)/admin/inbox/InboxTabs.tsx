@@ -15,9 +15,9 @@ function StatusBadge({ status }: { status: string }) {
   const colors: Record<string, string> = {
     unread:
       "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
-    read: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300",
+    read: "bg-disabled text-disabled-text",
     archived:
-      "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-300",
+      "bg-disabled text-disabled-text",
     pending:
       "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300",
     approved:
@@ -29,7 +29,7 @@ function StatusBadge({ status }: { status: string }) {
   return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${
-        colors[status] ?? "bg-gray-100 text-gray-800"
+        colors[status] ?? "bg-disabled text-disabled-text"
       }`}
     >
       {status}
@@ -51,8 +51,8 @@ function DetailField({ label, value }: { label: string; value?: string | null })
   if (!value) return null;
   return (
     <div>
-      <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">{label}</dt>
-      <dd className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap">{value}</dd>
+      <dt className="text-xs font-medium text-caption-text uppercase tracking-wider mb-1">{label}</dt>
+      <dd className="text-sm text-heading-text whitespace-pre-wrap">{value}</dd>
     </div>
   );
 }
@@ -97,14 +97,14 @@ function ContactDrawer({
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/30" onClick={onClose} />
       {/* Drawer panel */}
-      <div className="relative ml-auto w-full max-w-lg bg-white dark:bg-gray-900 shadow-xl overflow-y-auto">
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 py-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+      <div className="relative ml-auto w-full max-w-lg bg-surface shadow-xl overflow-y-auto">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-surface px-6 py-4">
+          <h3 className="text-lg font-semibold text-heading-text">
             Contact Submission
           </h3>
           <button
             onClick={onClose}
-            className="rounded-md p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800"
+            className="rounded-md p-1.5 text-caption-text hover:bg-highlight hover:text-body-text"
           >
             <X className="w-5 h-5" />
           </button>
@@ -114,25 +114,25 @@ function ContactDrawer({
           {/* Meta row */}
           <div className="flex items-center gap-3">
             <StatusBadge status={c.status} />
-            <span className="text-xs text-gray-400">{formatDate(c.createdAt)}</span>
+            <span className="text-xs text-caption-text">{formatDate(c.createdAt)}</span>
           </div>
 
           {/* Identity */}
           <dl className="space-y-4">
             <DetailField label="Full Name" value={`${c.firstName} ${c.lastName}`} />
             <div>
-              <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Email</dt>
-              <dd className="text-sm text-gray-900 dark:text-gray-100 flex items-center gap-1.5">
-                <Mail className="w-4 h-4 text-gray-400" />
-                <a href={`mailto:${c.email}`} className="text-orange-600 hover:underline">{c.email}</a>
+              <dt className="text-xs font-medium text-caption-text uppercase tracking-wider mb-1">Email</dt>
+              <dd className="text-sm text-heading-text flex items-center gap-1.5">
+                <Mail className="w-4 h-4 text-caption-text" />
+                <a href={`mailto:${c.email}`} className="text-accent-text hover:underline">{c.email}</a>
               </dd>
             </div>
             {c.phone && (
               <div>
-                <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Phone</dt>
-                <dd className="text-sm text-gray-900 dark:text-gray-100 flex items-center gap-1.5">
-                  <Phone className="w-4 h-4 text-gray-400" />
-                  <a href={`tel:${c.phone}`} className="text-orange-600 hover:underline">{c.phone}</a>
+                <dt className="text-xs font-medium text-caption-text uppercase tracking-wider mb-1">Phone</dt>
+                <dd className="text-sm text-heading-text flex items-center gap-1.5">
+                  <Phone className="w-4 h-4 text-caption-text" />
+                  <a href={`tel:${c.phone}`} className="text-accent-text hover:underline">{c.phone}</a>
                 </dd>
               </div>
             )}
@@ -140,9 +140,9 @@ function ContactDrawer({
           </dl>
 
           {/* Actions */}
-          <div className="border-t border-gray-200 dark:border-gray-700 pt-5 space-y-3">
+          <div className="border-t border-border pt-5 space-y-3">
             {feedback && (
-              <p className="text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 rounded-md px-3 py-2">
+              <p className="text-xs text-body-text bg-highlight rounded-md px-3 py-2">
                 {feedback}
               </p>
             )}
@@ -150,7 +150,7 @@ function ContactDrawer({
               <button
                 onClick={() => applyStatus("read")}
                 disabled={pending}
-                className="w-full rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700 disabled:opacity-60 transition"
+                className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-text hover:bg-primary-dark disabled:opacity-60 transition"
               >
                 Mark as Read
               </button>
@@ -159,7 +159,7 @@ function ContactDrawer({
               <button
                 onClick={() => applyStatus("archived")}
                 disabled={pending}
-                className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60 transition dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                className="w-full rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium text-body-text hover:bg-highlight disabled:opacity-60 transition"
               >
                 Archive
               </button>
@@ -199,14 +199,14 @@ function ApprovalDrawer({
   return (
     <div className="fixed inset-0 z-50 flex">
       <div className="absolute inset-0 bg-black/30" onClick={onClose} />
-      <div className="relative ml-auto w-full max-w-lg bg-white dark:bg-gray-900 shadow-xl overflow-y-auto">
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 py-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+      <div className="relative ml-auto w-full max-w-lg bg-surface shadow-xl overflow-y-auto">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-surface px-6 py-4">
+          <h3 className="text-lg font-semibold text-heading-text">
             {a.rodeoName}
           </h3>
           <button
             onClick={onClose}
-            className="rounded-md p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800"
+            className="rounded-md p-1.5 text-caption-text hover:bg-highlight hover:text-body-text"
           >
             <X className="w-5 h-5" />
           </button>
@@ -215,7 +215,7 @@ function ApprovalDrawer({
         <div className="px-6 py-5 space-y-6">
           <div className="flex items-center gap-3">
             <StatusBadge status={a.status} />
-            <span className="text-xs text-gray-400">{formatDate(a.createdAt)}</span>
+            <span className="text-xs text-caption-text">{formatDate(a.createdAt)}</span>
           </div>
 
           <dl className="space-y-4">
@@ -226,10 +226,10 @@ function ApprovalDrawer({
             <DetailField label="Committee Name" value={a.committeeName} />
             <DetailField label="Primary Contact" value={a.primaryContact} />
             <div>
-              <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Email</dt>
-              <dd className="text-sm text-gray-900 dark:text-gray-100 flex items-center gap-1.5">
-                <Mail className="w-4 h-4 text-gray-400" />
-                <a href={`mailto:${a.email}`} className="text-orange-600 hover:underline">{a.email}</a>
+              <dt className="text-xs font-medium text-caption-text uppercase tracking-wider mb-1">Email</dt>
+              <dd className="text-sm text-heading-text flex items-center gap-1.5">
+                <Mail className="w-4 h-4 text-caption-text" />
+                <a href={`mailto:${a.email}`} className="text-accent-text hover:underline">{a.email}</a>
               </dd>
             </div>
             <DetailField label="Phone" value={a.phone} />
@@ -254,18 +254,18 @@ function ApprovalDrawer({
           {/* Added money display */}
           {a.addedMoney && Object.keys(a.addedMoney).length > 0 && (
             <div>
-              <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+              <dt className="text-xs font-medium text-caption-text uppercase tracking-wider mb-2">
                 Added Money
               </dt>
               <dd>
-                <table className="w-full text-sm border border-gray-200 dark:border-gray-700 rounded-md">
-                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                <table className="w-full text-sm border border-border rounded-md">
+                  <tbody className="divide-y divide-border">
                     {Object.entries(a.addedMoney).map(([event, amount]) => (
                       <tr key={event}>
-                        <td className="px-3 py-2 text-gray-600 dark:text-gray-400">
+                        <td className="px-3 py-2 text-body-text">
                           {event.replace("addedMoney_", "")}
                         </td>
-                        <td className="px-3 py-2 text-right font-medium text-gray-900 dark:text-gray-100">
+                        <td className="px-3 py-2 text-right font-medium text-heading-text">
                           ${amount}
                         </td>
                       </tr>
@@ -277,9 +277,9 @@ function ApprovalDrawer({
           )}
 
           {/* Actions */}
-          <div className="border-t border-gray-200 dark:border-gray-700 pt-5 space-y-3">
+          <div className="border-t border-border pt-5 space-y-3">
             {feedback && (
-              <p className="text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 rounded-md px-3 py-2">
+              <p className="text-xs text-body-text bg-highlight rounded-md px-3 py-2">
                 {feedback}
               </p>
             )}
@@ -288,14 +288,14 @@ function ApprovalDrawer({
                 <button
                   onClick={() => applyStatus("approved")}
                   disabled={pending}
-                  className="w-full rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-60 transition"
+                  className="w-full rounded-md bg-success px-4 py-2 text-sm font-medium text-success-text hover:bg-success-dark disabled:opacity-60 transition"
                 >
                   Approve
                 </button>
                 <button
                   onClick={() => applyStatus("rejected")}
                   disabled={pending}
-                  className="w-full rounded-md border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-60 transition dark:border-red-800 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-950/30"
+                  className="w-full rounded-md border border-red-300 bg-surface px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-60 transition dark:border-red-800 dark:bg-surface dark:text-red-400 dark:hover:bg-red-950/30"
                 >
                   Reject
                 </button>
@@ -321,7 +321,7 @@ function ContactsTable({
 }) {
   if (contacts.length === 0) {
     return (
-      <p className="py-12 text-center text-sm text-stone-600">
+      <p className="py-12 text-center text-sm text-body-text">
         No contact submissions yet.
       </p>
     );
@@ -331,43 +331,43 @@ function ContactsTable({
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-gray-200 dark:border-gray-700">
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">
+          <tr className="border-b border-border">
+            <th className="px-4 py-3 text-left font-medium text-body-text">
               Name
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">
+            <th className="px-4 py-3 text-left font-medium text-body-text">
               Email
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">
+            <th className="px-4 py-3 text-left font-medium text-body-text">
               Status
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">
+            <th className="px-4 py-3 text-left font-medium text-body-text">
               Date
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+        <tbody className="divide-y divide-border">
           {contacts.map((c) => (
             <tr
               key={c.id}
               onClick={() => onSelect(c)}
-              className="hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors cursor-pointer"
+              className="hover:bg-highlight transition-colors cursor-pointer"
               tabIndex={0}
               role="button"
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") onSelect(c);
               }}
             >
-              <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
+              <td className="px-4 py-3 font-medium text-heading-text">
                 {c.firstName} {c.lastName}
               </td>
-              <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
+              <td className="px-4 py-3 text-body-text">
                 {c.email}
               </td>
               <td className="px-4 py-3">
                 <StatusBadge status={c.status} />
               </td>
-              <td className="px-4 py-3 text-gray-500 dark:text-gray-500">
+              <td className="px-4 py-3 text-caption-text">
                 {formatDate(c.createdAt)}
               </td>
             </tr>
@@ -387,7 +387,7 @@ function ApprovalsTable({
 }) {
   if (approvals.length === 0) {
     return (
-      <p className="py-12 text-center text-sm text-stone-600">
+      <p className="py-12 text-center text-sm text-body-text">
         No rodeo approval requests yet.
       </p>
     );
@@ -397,49 +397,49 @@ function ApprovalsTable({
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-gray-200 dark:border-gray-700">
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">
+          <tr className="border-b border-border">
+            <th className="px-4 py-3 text-left font-medium text-body-text">
               Rodeo Name
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">
+            <th className="px-4 py-3 text-left font-medium text-body-text">
               Committee
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">
+            <th className="px-4 py-3 text-left font-medium text-body-text">
               Contact
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">
+            <th className="px-4 py-3 text-left font-medium text-body-text">
               Status
             </th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600 dark:text-gray-400">
+            <th className="px-4 py-3 text-left font-medium text-body-text">
               Date
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+        <tbody className="divide-y divide-border">
           {approvals.map((a) => (
             <tr
               key={a.id}
               onClick={() => onSelect(a)}
-              className="hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors cursor-pointer"
+              className="hover:bg-highlight transition-colors cursor-pointer"
               tabIndex={0}
               role="button"
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") onSelect(a);
               }}
             >
-              <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
+              <td className="px-4 py-3 font-medium text-heading-text">
                 {a.rodeoName}
               </td>
-              <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
+              <td className="px-4 py-3 text-body-text">
                 {a.committeeName}
               </td>
-              <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
+              <td className="px-4 py-3 text-body-text">
                 {a.primaryContact}
               </td>
               <td className="px-4 py-3">
                 <StatusBadge status={a.status} />
               </td>
-              <td className="px-4 py-3 text-gray-500 dark:text-gray-500">
+              <td className="px-4 py-3 text-caption-text">
                 {formatDate(a.createdAt)}
               </td>
             </tr>
@@ -473,7 +473,7 @@ export function InboxTabs({
   return (
     <div>
       {/* Tab bar */}
-      <div className="flex gap-1 rounded-lg bg-gray-100 p-1 w-fit dark:bg-gray-800">
+      <div className="flex gap-1 rounded-lg bg-highlight p-1 w-fit">
         {tabs.map((tab) => (
           <button
             key={tab.key}
@@ -481,8 +481,8 @@ export function InboxTabs({
             onClick={() => setActive(tab.key)}
             className={`rounded-md px-4 py-2 text-sm font-medium transition ${
               active === tab.key
-                ? "bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-gray-100"
-                : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                ? "bg-surface text-heading-text shadow-sm"
+                : "text-body-text hover:text-heading-text"
             }`}
           >
             {tab.label}
@@ -491,7 +491,7 @@ export function InboxTabs({
       </div>
 
       {/* Tab content */}
-      <div className="mt-6 rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
+      <div className="mt-6 rounded-lg border border-border bg-surface">
         {active === "contacts" ? (
           <ContactsTable
             contacts={contacts}

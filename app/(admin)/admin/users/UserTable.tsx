@@ -10,9 +10,9 @@ const PAGE_SIZE = 10;
 // orange styling; all other roles render in neutral gray.
 function roleBadgeClass(role: string) {
   if (role === "superadmin") {
-    return "bg-orange-50 text-orange-700 border border-orange-200";
+    return "bg-accent text-accent-text border border-border";
   }
-  return "bg-gray-100 text-gray-700 border border-gray-200";
+  return "bg-highlight text-body-text border border-border";
 }
 
 // --- User Management Table ---
@@ -58,29 +58,29 @@ export default function UserTable({ users }: { users: User[] }) {
           setCurrentPage(1);
         }}
         placeholder="Search by email or user ID..."
-        className="w-full rounded-md border border-stone-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
+        className="w-full rounded-md border border-border bg-surface px-4 py-2.5 text-sm text-heading-text placeholder:text-caption-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
       />
 
       {/* Table / card list */}
       {paginatedUsers.length === 0 ? (
-        <p className="text-sm text-gray-500 mt-4">
+        <p className="text-sm text-body-text mt-4">
           {searchQuery ? "No users match that search." : "No users found."}
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-md border border-gray-200 bg-white shadow-sm mt-4">
+        <div className="overflow-x-auto rounded-md border border-border bg-surface shadow-sm mt-4">
           <table className="min-w-full text-sm">
-            <thead className="hidden sm:table-header-group bg-gray-50">
+            <thead className="hidden sm:table-header-group bg-highlight">
               <tr>
-                <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-caption-text">
                   User ID
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-caption-text">
                   Email
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-caption-text">
                   Current Role
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-caption-text">
                   Actions
                 </th>
               </tr>
@@ -89,28 +89,28 @@ export default function UserTable({ users }: { users: User[] }) {
               {paginatedUsers.map((user) => (
                 <tr
                   key={user.id}
-                  className="block mb-6 border border-stone-200 p-4 rounded-md bg-white sm:table-row sm:mb-0 sm:border-0 sm:p-0 sm:border-b sm:border-gray-100 sm:hover:bg-gray-50/50"
+                  className="block mb-6 border border-border p-4 rounded-md bg-surface sm:table-row sm:mb-0 sm:border-0 sm:p-0 sm:border-b sm:border-border sm:hover:bg-highlight"
                 >
                   {/* User ID — hidden on mobile, visible on desktop */}
                   <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-center">
-                    <span className="font-mono text-xs text-gray-900">
+                    <span className="font-mono text-xs text-heading-text">
                       {user.id}
                     </span>
                   </td>
 
                   {/* Email — wraps on mobile */}
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 text-center">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                       Email
                     </span>
-                    <span className="text-sm text-gray-900 break-all sm:break-normal">
+                    <span className="text-sm text-heading-text break-all sm:break-normal">
                       {user.email}
                     </span>
                   </td>
 
                   {/* Current Role */}
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-center">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                       Role
                     </span>
                     <span
@@ -122,7 +122,7 @@ export default function UserTable({ users }: { users: User[] }) {
 
                   {/* Actions */}
                   <td className="block mb-2 sm:table-cell sm:mb-0 px-6 py-4 whitespace-nowrap text-center">
-                    <span className="sm:hidden block text-xs font-semibold uppercase text-gray-500 mb-1">
+                    <span className="sm:hidden block text-xs font-semibold uppercase text-caption-text mb-1">
                       Actions
                     </span>
                     <RoleSelect userId={user.id} currentRole={user.role} />
@@ -141,12 +141,12 @@ export default function UserTable({ users }: { users: User[] }) {
             type="button"
             disabled={safePage <= 1}
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            className="rounded-md border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium text-body-text transition hover:bg-highlight disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Previous
           </button>
 
-          <span className="text-sm text-stone-600">
+          <span className="text-sm text-body-text">
             Page {safePage} of {totalPages}
           </span>
 
@@ -154,7 +154,7 @@ export default function UserTable({ users }: { users: User[] }) {
             type="button"
             disabled={safePage >= totalPages}
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            className="rounded-md border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium text-body-text transition hover:bg-highlight disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Next
           </button>
