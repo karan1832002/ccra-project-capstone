@@ -22,7 +22,7 @@ function StatusBadge({ status }: { status: string }) {
       "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300",
     approved:
       "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
-    rejected:
+    denied:
       "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
   };
 
@@ -293,7 +293,7 @@ function ApprovalDrawer({
                   Approve
                 </button>
                 <button
-                  onClick={() => applyStatus("rejected")}
+                  onClick={() => applyStatus("denied")}
                   disabled={pending}
                   className="w-full rounded-md border border-red-300 bg-surface px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-60 transition dark:border-red-800 dark:bg-surface dark:text-red-400 dark:hover:bg-red-950/30"
                 >
